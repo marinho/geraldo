@@ -38,6 +38,11 @@ Report attributes. Most of them have default values
 
     >>> Report.queryset
 
+Basic report methods
+
+    >>> Report.generate_by != None
+    True
+
 You must declare a class from Report class, setting some attributes
 
     >>> class MyReport(Report):

@@ -1,0 +1,56 @@
+A SIMPLE REPORT
+===============
+
+This is just a simple report, that uses the Geraldo API to format a report with
+the begin, summary, page header, page footer and detail bands.
+
+    >>> from django.contrib.auth.models import Permission
+
+    >>> from reportlab.lib.pagesizes import A4
+    >>> from reportlab.lib.units import cm
+    
+    >>> from geraldo import Report, ReportBand, Label
+
+Report class
+
+    >>> class PermissionsReport(Report):
+    ...     title = 'Permissions list'
+    ... 
+    ...     class band_begin(ReportBand):
+    ...         height = 2*cm
+    ...         widgets = [
+    ...             Label(text='Look those permissions please', top=0.1*cm,
+    ...                 left=8*cm),
+    ...         ]
+    ... 
+    ...     class band_summary(ReportBand):
+    ...         height = 2*cm
+    ...         widgets = [
+    ...             Label(text="That's all", top=0.1*cm, left=0),
+    ...         ]
+    ... 
+    ...     class band_page_header(ReportBand):
+    ...         height = 3*cm
+    ...         widgets = [
+    ...             Label(text='Permissions list', top=0.1*cm, left=8*cm,
+    ...                 font_name='Helvetica-Bold', font_size=14),
+    ...             Label(text="ID", top=0.8*cm, left=0),
+    ...             Label(text="Name", top=0.8*cm, left=3*cm),
+    ...         ]
+    ... 
+    ...     class band_page_footer(ReportBand):
+    ...         height = 1*cm
+    ...         widgets = [
+    ...             Label(text='Created with Geraldo Reports', top=0.1*cm,
+    ...                 right=0),
+    ...         ]
+    ... 
+    ...     class band_detail(ReportBand):
+    ...         height = 0.5*cm
+    ...         widgets = [
+    ...             Label(text="ID", top=0.8*cm, left=0),
+    ...             Label(text="Name", top=0.8*cm, left=3*cm),
+    ...         ]
+
+    >>> report = PermissionsReport(queryset=Permission.objects.all())
+

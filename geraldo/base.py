@@ -32,6 +32,15 @@ class Report(object):
     def __init__(self, queryset=None):
         self.queryset = queryset or self.queryset
 
+    def generate_by(self, generator_class, *args, **kwargs):
+        """This method uses a generator inherited class to generate a report
+        to a wanted format, like XML, HTML or PDF, for example.
+        
+        The arguments *args and **kwargs are passed to class initializer."""
+        generator = generator_class(self, *args, **kwargs)
+
+        return generator.execute()
+
 class ReportBand(object):
     """A band is a horizontal area in the report. It can be used to print
     things on the top, on summary, on page header, on page footer or one time

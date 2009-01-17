@@ -10,6 +10,12 @@ class Widget(object):
         """Used to returns the value that will show on the report"""
         pass
 
+    def __init__(self, **kwargs):
+        """This initializer is prepared to set arguments informed as attribute
+        values."""
+        for k,v in kwargs.items():
+            setattr(self, k, v)
+
 class Label(Widget):
     """A label is just a simple text"""
     text = ''
