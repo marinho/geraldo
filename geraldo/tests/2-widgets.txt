@@ -1,0 +1,38 @@
+REPORT WIDGETS
+==============
+
+Widgets are objects that show field or expression values.
+
+    >>> from geraldo.widgets import Widget, SYSTEM_REPORT_TITLE
+
+    >>> Widget.height
+    >>> Widget.width
+    >>> Widget.left
+    0
+    >>> Widget.top
+    0
+    >>> Widget.visible
+    True
+
+A label is just a simple text to show a word or sentence.
+
+    >>> from geraldo import Label
+
+    >>> Label.text
+    ''
+
+An object value is is field, method or property you can get from the model
+object, got from the QuerySet
+
+    >>> from geraldo import ObjectValue
+
+    >>> ObjectValue.attribute_name
+
+There are some kinds for a system field value, like the report title, the
+current date/time, page number, total of pages, etc.
+
+    >>> from geraldo import SystemField
+
+    >>> SystemField.kind == SYSTEM_REPORT_TITLE
+    True
+

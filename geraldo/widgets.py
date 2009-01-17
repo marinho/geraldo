@@ -1,0 +1,37 @@
+class Widget(object):
+    """A widget is a value representation on the report"""
+    height = None
+    width = None
+    left = 0
+    top = 0
+    visible = True
+
+    def get_value(self):
+        """Used to returns the value that will show on the report"""
+        pass
+
+class Label(Widget):
+    """A label is just a simple text"""
+    text = ''
+
+class ObjectValue(Widget):
+    """This shows the value from a method, field or property from objects got
+    from the queryset"""
+    attribute_name = None
+
+SYSTEM_REPORT_TITLE = 1
+SYSTEM_PAGE_NUMBER = 2
+SYSTEM_PAGE_COUNT = 3
+SYSTEM_CURRENT_DATETIME = 4
+SYSTEM_FIELD_CHOICES = {
+    SYSTEM_REPORT_TITLE: 'ReportTitle',
+    SYSTEM_PAGE_NUMBER: 'PageNumber',
+    SYSTEM_PAGE_COUNT: 'PageCount',
+    SYSTEM_CURRENT_DATETIME: 'CurrentDateTime',
+}
+
+class SystemField(Widget):
+    """This shows system informations, like the report title, current date/time,
+    page number, pages count, etc."""
+    kind = SYSTEM_REPORT_TITLE
+

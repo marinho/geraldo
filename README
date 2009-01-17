@@ -1,0 +1,11 @@
+Geraldo is a reports generator wrote to work like ReportBuilder, QuickReport or
+Jasper Reports. It has bands with fixed width and flexible height to show on
+top, summary, page header, page footer, in table or each one for an object.
+
+It is under GPL and works only with Django framework and Python language.
+
+It depends algos for ReportLab library.
+
+Marinho Brandao
+http://marinhobrandao.com/
+marinho@gmail.com
