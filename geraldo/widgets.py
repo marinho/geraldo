@@ -5,6 +5,7 @@ class Widget(object):
     left = 0
     top = 0
     visible = True
+    style = {}
 
     def get_value(self):
         """Used to returns the value that will show on the report"""
@@ -20,10 +21,15 @@ class Label(Widget):
     """A label is just a simple text"""
     text = ''
 
-class ObjectValue(Widget):
+class ObjectValue(Label):
     """This shows the value from a method, field or property from objects got
     from the queryset"""
     attribute_name = None
+    instance = None
+
+    @property
+    def text(self):
+        return unicode(getattr(self.instance, self.attribute_name))
 
 SYSTEM_REPORT_TITLE = 1
 SYSTEM_PAGE_NUMBER = 2
@@ -36,7 +42,7 @@ SYSTEM_FIELD_CHOICES = {
     SYSTEM_CURRENT_DATETIME: 'CurrentDateTime',
 }
 
-class SystemField(Widget):
+class SystemField(Label):
     """This shows system informations, like the report title, current date/time,
     page number, pages count, etc."""
     kind = SYSTEM_REPORT_TITLE

@@ -4,12 +4,15 @@ PDF GENERATION
 This is just a simple report, that uses the Geraldo API to format a report with
 the begin, summary, page header, page footer and detail bands.
 
+    >>> import os
+    >>> cur_dir = os.path.dirname(os.path.abspath(__file__))
+
     >>> from django.contrib.auth.models import Permission
 
     >>> from reportlab.lib.pagesizes import A4
     >>> from reportlab.lib.units import cm
     
-    >>> from geraldo import Report, ReportBand, Label
+    >>> from geraldo import Report, ReportBand, Label, ObjectValue
 
 Report class
 
@@ -17,20 +20,20 @@ Report class
     ...     title = 'Permissions list'
     ... 
     ...     class band_begin(ReportBand):
-    ...         height = 2*cm
+    ...         height = 1*cm
     ...         widgets = [
     ...             Label(text='Look those permissions please', top=0.1*cm,
     ...                 left=8*cm),
     ...         ]
     ... 
     ...     class band_summary(ReportBand):
-    ...         height = 2*cm
+    ...         height = 1*cm
     ...         widgets = [
     ...             Label(text="That's all", top=0.1*cm, left=0),
     ...         ]
     ... 
     ...     class band_page_header(ReportBand):
-    ...         height = 3*cm
+    ...         height = 2*cm
     ...         widgets = [
     ...             Label(text='Permissions list', top=0.1*cm, left=8*cm,
     ...                 style={'fontName': 'Helvetica-Bold', 'fontSize': 14}),
@@ -39,7 +42,7 @@ Report class
     ...         ]
     ... 
     ...     class band_page_footer(ReportBand):
-    ...         height = 1*cm
+    ...         height = 0.5*cm
     ...         widgets = [
     ...             Label(text='Created with Geraldo Reports', top=0.1*cm,
     ...                 right=0),
@@ -48,15 +51,15 @@ Report class
     ...     class band_detail(ReportBand):
     ...         height = 0.5*cm
     ...         widgets = [
-    ...             Label(text="ID", top=0.8*cm, left=0),
-    ...             Label(text="Name", top=0.8*cm, left=3*cm),
+    ...             ObjectValue(attribute_name='id', top=0.8*cm, left=0),
+    ...             ObjectValue(attribute_name='name', top=0.8*cm, left=3*cm),
     ...         ]
 
-    >>> report = PermissionsReport(queryset=Permission.objects.all())
+    >>> report = PermissionsReport(queryset=Permission.objects.order_by('id'))
 
 PDF generation
 
     >>> from geraldo.generators import PDFGenerator
 
-    >>> report.generate_by(PDFGenerator, filename='simple-report.pdf')
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'simple-report.pdf'))
 
