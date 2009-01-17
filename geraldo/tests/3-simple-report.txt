@@ -33,7 +33,7 @@ Report class
     ...         height = 3*cm
     ...         widgets = [
     ...             Label(text='Permissions list', top=0.1*cm, left=8*cm,
-    ...                 font_name='Helvetica-Bold', font_size=14),
+    ...                 style={'fontName': 'Helvetica-Bold', 'fontSize': 14}),
     ...             Label(text="ID", top=0.8*cm, left=0),
     ...             Label(text="Name", top=0.8*cm, left=3*cm),
     ...         ]

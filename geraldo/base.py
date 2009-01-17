@@ -11,6 +11,7 @@ class Report(object):
 
     # Report properties
     title = ''
+    author = ''
     
     # Page dimensions
     page_size = A4
