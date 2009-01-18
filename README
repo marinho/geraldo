@@ -26,7 +26,7 @@ Engine API
 - Support charts
 - Support aggregation fields (x)
 - Support expression (x)
-- Support calculated fields
+- Support calculated fields (x)
 - Support canvas draw
 - Support multiples group bands
 - Support subreports

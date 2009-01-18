@@ -72,8 +72,7 @@ class Image(Graphic):
     filename = None
     _image = None # PIL image object is stored here
 
-    @property
-    def image(self):
+    def _get_image(self):
         """Uses Python Imaging Library to load an image and get its informations"""
         if not self._image:
             try:
@@ -84,6 +83,11 @@ class Image(Graphic):
             self._image = PILImage.open(self.filename)
 
         return self._image
+
+    def _set_image(self, value):
+        self._image = value
+
+    image = property(_get_image, _set_image)
 
     def _get_height(self):
         ret = self._height or self.image.size[1]

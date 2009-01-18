@@ -193,8 +193,22 @@ class PDFGenerator(ReportGenerator):
         if not self.report.band_summary:
             return
 
+        # Check to force new page if there is no available space
+        force_new_page = self.get_available_height() < self.report.band_summary.height
+
+        if force_new_page:
+            # Ends the current page
+            self._current_top_position = 0
+            self.canvas.showPage()
+
+            # Starts a new one
+            self.start_new_page()
+
         # Call method that print the band area and its widgets
         self.generate_band(self.report.band_summary)
+
+        if force_new_page:
+            self.generate_page_footer()
 
     def generate_page_header(self):
         """Generate the report page header band if it exists"""
@@ -310,8 +324,8 @@ class PDFGenerator(ReportGenerator):
     def get_available_height(self):
         """Returns the available client height area from the current top position
         until the end of page, considering the bottom margin."""
-        ret = self.report.page_size[1] - self.report.margin_bottom - self.report.margin_top -\
-                self._current_top_position
+        ret = self.report.page_size[1] - self.report.margin_bottom -\
+                self.report.margin_top - self._current_top_position
 
         if self.report.band_page_header:
             ret -= self.report.band_page_header.height
