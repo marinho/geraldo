@@ -48,6 +48,8 @@ class ReportBand(object):
     per object from queryset."""
     height = 1*cm
     visible = True
+    borders = {'top': None, 'right': None, 'bottom': None, 'left': None,
+            'all': None}
 
 class TableBand(ReportBand):
     """This band must be used only as a detail band. It doesn't is repeated per

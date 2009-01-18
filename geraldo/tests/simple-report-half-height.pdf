@@ -1,0 +1,150 @@
+%PDF-1.3
+%“Œ‹ž ReportLab Generated PDF document http://www.reportlab.com
+% 'BasicFonts': class PDFDictionary 
+1 0 obj
+% The standard fonts dictionary
+<< /F1 2 0 R
+ /F2 3 0 R
+ /F3 4 0 R >>
+endobj
+% 'F1': class PDFType1Font 
+2 0 obj
+% Font Helvetica
+<< /BaseFont /Helvetica
+ /Encoding /WinAnsiEncoding
+ /Name /F1
+ /Subtype /Type1
+ /Type /Font >>
+endobj
+% 'F2': class PDFType1Font 
+3 0 obj
+% Font Helvetica-Bold
+<< /BaseFont /Helvetica-Bold
+ /Encoding /WinAnsiEncoding
+ /Name /F2
+ /Subtype /Type1
+ /Type /Font >>
+endobj
+% 'F3': class PDFType1Font 
+4 0 obj
+% Font Times-Roman
+<< /BaseFont /Times-Roman
+ /Encoding /WinAnsiEncoding
+ /Name /F3
+ /Subtype /Type1
+ /Type /Font >>
+endobj
+% 'Page1': class PDFPage 
+5 0 obj
+% Page dictionary
+<< /Contents 10 0 R
+ /MediaBox [ 0
+ 0
+ 595.2756
+ 420.9449 ]
+ /Parent 9 0 R
+ /Resources << /Font 1 0 R
+ /ProcSet [ /PDF
+ /Text
+ /ImageB
+ /ImageC
+ /ImageI ] >>
+ /Rotate 0
+ /Trans <<  >>
+ /Type /Page >>
+endobj
+% 'Page2': class PDFPage 
+6 0 obj
+% Page dictionary
+<< /Contents 11 0 R
+ /MediaBox [ 0
+ 0
+ 595.2756
+ 420.9449 ]
+ /Parent 9 0 R
+ /Resources << /Font 1 0 R
+ /ProcSet [ /PDF
+ /Text
+ /ImageB
+ /ImageC
+ /ImageI ] >>
+ /Rotate 0
+ /Trans <<  >>
+ /Type /Page >>
+endobj
+% 'R7': class PDFCatalog 
+7 0 obj
+% Document Root
+<< /Outlines 12 0 R
+ /PageMode /UseNone
+ /Pages 9 0 R
+ /Type /Catalog >>
+endobj
+% 'R8': class PDFInfo 
+8 0 obj
+<< /Author ()
+ /CreationDate (20090118090213)
+ /Keywords ()
+ /Producer (ReportLab http://www.reportlab.com)
+ /Subject (unspecified)
+ /Title (Permissions list) >>
+endobj
+% 'R9': class PDFPages 
+9 0 obj
+% page tree
+<< /Count 2
+ /Kids [ 5 0 R
+ 6 0 R ]
+ /Type /Pages >>
+endobj
+% 'R10': class PDFStream 
+10 0 obj
+% page stream
+<< /Filter [ /ASCII85Decode
+ /FlateDecode ]
+ /Length 816 >>
+stream
+GatUtgPX`>&;KWUH&&rc(-:"0m+WR1/>WTdJD$mSZq6eA?:s+h8n_*S%Ej"7L:o9u5(3-Cq2Yh]rhIsB],eP!iT3-&da3FFZ=orFKt$GinT276^I*-3A%hPC6GVMRb[3IA:o=?3HF_,Gct22QH*U_I<p'cbe*>thRN-WB-4ackE:YLf]?N<QqY^]Sbr@k=p,fY-o9UPY4"fXdl#Uu5/mtIGfV]PXG<H.$rEIUmLGrl.<="^Q'4%\lI-c%@J'>W+E#<DE*B<LDVkM;-/UVuJSW=H'4MWF_aB6iIDYsD<9_\LQi)![2__uYtQ).eMmJ.At7:*n[k#nlr]^GL?X]C,u;bRd<*G(R@1W=)G8$T]'DSJrQh/j((S0JWtnD(#\8%2LPVFf\]1r`(GLhiDr22lT!f0fRW?okiS6,au+3Mo^aUWDF7/Si`O-el6q;lbXM`,La&;/!Vn,%P(reM,8THl1>J<$IA;AU0>1UC'C$^DTd=UEV&nI)D2K@2.td>>a7#UX`-54B=SH.`aVu]/5Q(RTVEp)"bP)4Xl6@1TDQd#3VDb#&WC3cUhR]N@IJ]_g,kFTulssB#^ni<KM89n,!!Ip(L-7%pV%\8GS4egmBso$<#q^TU.Ut-@"3BPF.?)$;uOTTU3.LW/U5;@lBAta>oYuRSeKC7'E(L<XOZ94K9Mm-teqOM`1S^QF-g(2NTCZOiLU:?=Eg6BS@B3Z\DFF/lCCtbhL>'-C<17]<O6"K2b.Z*3uto5TcO0&r4t2Ba)70dlk?>6ap@on0K+O@2bbc.:b:sC2te^[mHEkVq48>>l4VgK+mh~>endstream
+
+endobj
+% 'R11': class PDFStream 
+11 0 obj
+% page stream
+<< /Filter [ /ASCII85Decode
+ /FlateDecode ]
+ /Length 625 >>
+stream
+GatUrgQ'`:&;KX(oc<1T"UX3,+*5&aKS0mfH%Dpf[TV^r,XI6qa,RMRLi2>,C=EW,1>dK)T?%:#r,DYm[;]?eRh#cq:u2:H-DC>Gn&t+\a**)2V.?!U>&"Vg0Va=22pMSS/f=<:9k]1B`ihb92RK=-E,J=hVM'h@NZo1%%W9#WTrlA?m^j("HCS;.q#KNWE:Z;:a&0Rqf>W<*@0MA=lN9;p,67PsH#>gZ4#&BT&-W_Jff[?BWqHC%\tt!f7TsIkBcT/:SsLAjrf"9"F$[r6KTXh'N42dlc8U4C0\4\Vs,0cS0U6HCO]FK(UK6Ir2#SJC2\!MH`Bp4D8"CtR,/nRF8$UmDlLo\7)b3A.e(tOsO`!1@72At9OYr(JKkYESc7KEE$D\cAb4UltL7#ANUflqQWuT2)NN:!^AVOEQ->"I@EZg8gXqHq].A::@R#Mg'JXgbjX'Og25PHE_':L>oWee%)JLkiO8dmRERhgFg,J>iLM\N>B1/(ok'*C#bC@Vj`e^FO_qOqY/%sS#X+/\SnksuFc=Qj4>4?BZ/HTo<@#hsuG+4]pY9eSu7RO7H*AAJD(a2L@>^AllsWuHYEA7u*s&sat>-EJmO8J)C1\0%s2quKkPEO#~>endstream
+
+endobj
+% 'R12': class PDFOutlines 
+12 0 obj
+<< /Count 0
+ /Type /Outlines >>
+endobj
+xref
+0 13
+0000000000 65535 f
+0000000113 00000 n
+0000000233 00000 n
+0000000398 00000 n
+0000000573 00000 n
+0000000740 00000 n
+0000001018 00000 n
+0000001296 00000 n
+0000001431 00000 n
+0000001641 00000 n
+0000001755 00000 n
+0000002715 00000 n
+0000003486 00000 n
+trailer
+<< /ID 
+ % ReportLab generated PDF document -- digest (http://www.reportlab.com) 
+ [(\307r\250c\020\025\260k\024S"\305\177\027\217\033) (\307r\250c\020\025\260k\024S"\305\177\027\217\033)] 
+
+ /Info 8 0 R
+ /Root 7 0 R
+ /Size 13 >>
+startxref
+3538
+%%EOF

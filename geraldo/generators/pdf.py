@@ -49,19 +49,56 @@ class PDFGenerator(ReportGenerator):
         """Generate a band having the current top position or informed as its
         top coordinate"""
 
+        # Coordinates and dimensions
         temp_top = top_position = top_position or self.get_top_pos()
+        band_rect = {
+                'left': self.report.margin_left,
+                'top': top_position,
+                'right': self.report.page_size[0] - self.report.margin_right,
+                'bottom': top_position - band.height,
+                }
+        # This should be done by a metaclass in Report domain TODO
+        band.width = self.report.page_size[0] - self.report.margin_left - self.report.margin_right
 
         # Loop at band widgets
         for widget in band.widgets:
+            # Set widget basic attributes
             widget.instance = self._current_object
-            widget.report = self.report
+            widget.generator = self
+            widget.report = self.report # This should be done by a metaclass in Band domain TODO
+            widget.band = band # This should be done by a metaclass in Band domain TODO
 
             if isinstance(widget, Label):
                 para = Paragraph(widget.text, ParagraphStyle(name='Normal', **widget.style))
-                para.wrapOn(self.canvas, widget.width or 10*cm, widget.height or 3*cm) # XXX
-                para.drawOn(self.canvas, self.report.margin_left + widget.left, temp_top - widget.top)
+                para.wrapOn(self.canvas, widget.width, widget.height)
+                para.drawOn(self.canvas, self.report.margin_left + widget.left, temp_top - widget.top - para.height)
 
-    def generate_begin(self): # TODO
+        # Band borders
+        if band.borders.get('all', None):
+            self.canvas.rect(
+                    band_rect['left'],
+                    band_rect['top'] - band.height,
+                    band_rect['right'] - band_rect['left'],
+                    band.height,
+                    )
+
+        if band.borders.get('top', None):
+            self.canvas.line(band_rect['left'], band_rect['top'], band_rect['right'],
+                    band_rect['top'])
+
+        if band.borders.get('right', None):
+            self.canvas.line(band_rect['right'], band_rect['top'], band_rect['right'],
+                    band_rect['bottom'])
+
+        if band.borders.get('bottom', None):
+            self.canvas.line(band_rect['left'], band_rect['bottom'], band_rect['right'],
+                    band_rect['bottom'])
+
+        if band.borders.get('left', None):
+            self.canvas.line(band_rect['left'], band_rect['top'], band_rect['left'],
+                    band_rect['bottom'])
+
+    def generate_begin(self):
         """Generate the report begin band if it exists"""
         if not self.report.band_begin:
             return
@@ -72,7 +109,7 @@ class PDFGenerator(ReportGenerator):
         # Update top position after this band
         self.update_top_pos(self.report.band_begin.height)
 
-    def generate_summary(self): # TODO
+    def generate_summary(self):
         """Generate the report summary band if it exists"""
         if not self.report.band_summary:
             return
@@ -80,7 +117,7 @@ class PDFGenerator(ReportGenerator):
         # Call method that print the band area and its widgets
         self.generate_band(self.report.band_summary)
 
-    def generate_page_header(self): # TODO
+    def generate_page_header(self):
         """Generate the report page header band if it exists"""
         if not self.report.band_page_header:
             return
@@ -91,7 +128,7 @@ class PDFGenerator(ReportGenerator):
                 self.report.page_size[1] - self.report.margin_top
                 )
 
-    def generate_page_footer(self): # TODO
+    def generate_page_footer(self):
         """Generate the report page footer band if it exists"""
         if not self.report.band_page_footer:
             return
@@ -102,12 +139,14 @@ class PDFGenerator(ReportGenerator):
                 self.report.margin_bottom + self.report.band_page_footer.height,
                 )
 
-    def generate_pages(self): # TODO
+    def generate_pages(self):
         """Loops into the queryset to create the report pages until the end"""
         # Preparing local auxiliar variables
         self._current_page_number = 0
         self._current_object_index = 0
-        objects = [object for object in self.report.queryset.all()]
+        objects = self.report.queryset and \
+                  [object for object in self.report.queryset] or\
+                  []
 
         # Loop for pages
         while self._current_object_index < len(objects):
@@ -186,7 +225,8 @@ class PDFGenerator(ReportGenerator):
     def get_available_height(self):
         """Returns the available client height area from the current top position
         until the end of page, considering the bottom margin."""
-        ret = self.report.page_size[1] - self.report.margin_bottom - self._current_top_position
+        ret = self.report.page_size[1] - self.report.margin_bottom - self.report.margin_top -\
+                self._current_top_position
 
         if self.report.band_page_header:
             ret -= self.report.band_page_header.height
@@ -207,4 +247,8 @@ class PDFGenerator(ReportGenerator):
 
         return self._current_top_position
 
+    def get_page_count(self): # TODO
+        """Calculate and returns the page count for this report. The challenge
+        here is do this calculate before to generate the pages."""
+        pass
 
