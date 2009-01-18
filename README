@@ -9,7 +9,7 @@ It is under GPL and works only with Django framework and Python language.
 
 It depends algos for ReportLab library.
 
-Our main long terms goals are:
+Our main long terms goals are (those with (x) are working):
 
 Engine API
 ----------
@@ -22,7 +22,7 @@ Engine API
  - Detail (x)
  - Table details
  - Group
-- Support graphics
+- Support graphics (x)
 - Support charts
 - Support aggregation fields (x)
 - Support expression (x)
