@@ -5,7 +5,9 @@ from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus import Paragraph
 from reportlab.lib.units import cm
 
-from geraldo.widgets import Label, ObjectValue, SystemField
+from geraldo.widgets import Widget, Label
+from geraldo.graphics import Graphic, RoundRect, Rect, Line, Circle, Arc,\
+        Ellipse, Image
 
 class PDFGenerator(ReportGenerator):
     """This is a generator to output a PDF using ReportLab library with
@@ -61,17 +63,94 @@ class PDFGenerator(ReportGenerator):
         band.width = self.report.page_size[0] - self.report.margin_left - self.report.margin_right
 
         # Loop at band widgets
-        for widget in band.widgets:
-            # Set widget basic attributes
-            widget.instance = self._current_object
-            widget.generator = self
-            widget.report = self.report # This should be done by a metaclass in Band domain TODO
-            widget.band = band # This should be done by a metaclass in Band domain TODO
+        for element in band.elements:
+            # Widget element
+            if isinstance(element, Widget):
+                widget = element
 
-            if isinstance(widget, Label):
-                para = Paragraph(widget.text, ParagraphStyle(name='Normal', **widget.style))
-                para.wrapOn(self.canvas, widget.width, widget.height)
-                para.drawOn(self.canvas, self.report.margin_left + widget.left, temp_top - widget.top - para.height)
+                # Set element colors
+                self.set_fill_color(self.report.default_font_color)
+
+                # Set widget basic attributes
+                widget.instance = self._current_object
+                widget.generator = self
+                widget.report = self.report # This should be done by a metaclass in Band domain TODO
+                widget.band = band # This should be done by a metaclass in Band domain TODO
+
+                if isinstance(widget, Label):
+                    para = Paragraph(widget.text, ParagraphStyle(name='Normal', **widget.style))
+                    para.wrapOn(self.canvas, widget.width, widget.height)
+                    para.drawOn(self.canvas, self.report.margin_left + widget.left, temp_top - widget.top - para.height)
+
+            # Graphic element
+            elif isinstance(element, Graphic):
+                graphic = element
+
+                # Set element colors
+                self.set_fill_color(graphic.fill_color or self.report.default_fill_color)
+                self.set_stroke_color(graphic.stroke_color or self.report.default_stroke_color)
+                self.set_stroke_width(graphic.stroke_width)
+
+                if isinstance(element, RoundRect):
+                    self.canvas.roundRect(
+                            self.report.margin_left + graphic.left,
+                            top_position - graphic.top - graphic.height,
+                            graphic.width,
+                            graphic.height,
+                            graphic.radius,
+                            graphic.stroke,
+                            graphic.fill,
+                            )
+                elif isinstance(element, Rect):
+                    self.canvas.rect(
+                            self.report.margin_left + graphic.left,
+                            top_position - graphic.top - graphic.height,
+                            graphic.width,
+                            graphic.height,
+                            graphic.stroke,
+                            graphic.fill,
+                            )
+                elif isinstance(element, Line):
+                    self.canvas.line(
+                            self.report.margin_left + graphic.left,
+                            top_position - graphic.top,
+                            self.report.margin_left + graphic.right,
+                            top_position - graphic.bottom,
+                            )
+                elif isinstance(element, Circle):
+                    self.canvas.circle(
+                            self.report.margin_left + graphic.left_center,
+                            top_position - graphic.top_center,
+                            graphic.radius,
+                            graphic.stroke,
+                            graphic.fill,
+                            )
+                elif isinstance(element, Arc):
+                    self.canvas.arc(
+                            self.report.margin_left + graphic.left,
+                            top_position - graphic.top,
+                            self.report.margin_left + graphic.right,
+                            top_position - graphic.bottom,
+                            graphic.start_angle,
+                            graphic.extent,
+                            )
+                elif isinstance(element, Ellipse):
+                    self.canvas.ellipse(
+                            self.report.margin_left + graphic.left,
+                            top_position - graphic.top,
+                            self.report.margin_left + graphic.right,
+                            top_position - graphic.bottom,
+                            graphic.stroke,
+                            graphic.fill,
+                            )
+                elif isinstance(element, Image):
+                    self.canvas.drawInlineImage(
+                            graphic.image,
+                            self.report.margin_left + graphic.left,
+                            top_position - graphic.top - graphic.height,
+                            graphic.width,
+                            graphic.height,
+                            )
 
         # Band borders
         if band.borders.get('all', None):
@@ -147,6 +226,12 @@ class PDFGenerator(ReportGenerator):
         objects = self.report.queryset and \
                   [object for object in self.report.queryset] or\
                   []
+
+        # Empty report
+        if self.report.print_if_empty and not objects:
+            self.start_new_page()
+            self.generate_begin()
+            self.end_current_page()
 
         # Loop for pages
         while self._current_object_index < len(objects):
@@ -251,4 +336,16 @@ class PDFGenerator(ReportGenerator):
         """Calculate and returns the page count for this report. The challenge
         here is do this calculate before to generate the pages."""
         pass
+
+    def set_fill_color(self, color):
+        """Sets the current fill on canvas. Used for fonts and shape fills"""
+        self.canvas.setFillColor(color)
+    
+    def set_stroke_color(self, color):
+        """Sets the current stroke on canvas"""
+        self.canvas.setStrokeColor(color)
+
+    def set_stroke_width(self, width):
+        """Sets the stroke/line width for shapes"""
+        self.canvas.setLineWidth(width)
 

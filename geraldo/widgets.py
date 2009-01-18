@@ -2,6 +2,7 @@ import datetime, types
 from sets import Set
 
 from reportlab.lib.units import cm
+from reportlab.lib.colors import black
 
 BAND_WIDTH = 'band-width'
 

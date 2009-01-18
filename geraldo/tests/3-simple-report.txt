@@ -23,14 +23,14 @@ Report class
     ... 
     ...     class band_begin(ReportBand):
     ...         height = 1*cm
-    ...         widgets = [
+    ...         elements = [
     ...             Label(text='Look those permissions please', top=0.1*cm,
     ...                 left=8*cm),
     ...         ]
     ... 
     ...     class band_summary(ReportBand):
     ...         height = 0.7*cm
-    ...         widgets = [
+    ...         elements = [
     ...             Label(text="That's all", top=0.1*cm, left=0),
     ...             ObjectValue(attribute_name='name', top=0.1*cm, left=3*cm,\
     ...                 action=FIELD_ACTION_COUNT, display_format='%s permissions found'),
@@ -39,7 +39,7 @@ Report class
     ... 
     ...     class band_page_header(ReportBand):
     ...         height = 1.3*cm
-    ...         widgets = [
+    ...         elements = [
     ...             SystemField(kind=SYSTEM_REPORT_TITLE, top=0.1*cm, left=0, width=BAND_WIDTH,
     ...                 style={'fontName': 'Helvetica-Bold', 'fontSize': 14, 'alignment': TA_CENTER}),
     ...             Label(text="ID", top=0.8*cm, left=0),
@@ -49,7 +49,7 @@ Report class
     ... 
     ...     class band_page_footer(ReportBand):
     ...         height = 0.5*cm
-    ...         widgets = [
+    ...         elements = [
     ...             Label(text='Created with Geraldo Reports', top=0.1*cm,
     ...                 right=0),
     ...         ]
@@ -57,7 +57,7 @@ Report class
     ... 
     ...     class band_detail(ReportBand):
     ...         height = 0.5*cm
-    ...         widgets = [
+    ...         elements = [
     ...             ObjectValue(attribute_name='id', top=0, left=0),
     ...             ObjectValue(attribute_name='name', top=0, left=3*cm),
     ...         ]

@@ -11,8 +11,8 @@ It depends algos for ReportLab library.
 
 Our main long terms goals are:
 
-API
----
+Engine API
+----------
 
 - Support to basic bands:
  - Page header (x)
@@ -47,6 +47,12 @@ User interaction
 - Have a GUI tool to design reports, if possible to be used in a web browser
 - Have a way to create and print reports using a server, with no low leve coding
 - Have a explicit, clear and full documentation
+
+Dependencies
+------------
+
+- ReportLab
+- If you use Image graphic element, Python Imaging Library (PIL) is also necessary
 
 Marinho Brandao
 http://marinhobrandao.com/

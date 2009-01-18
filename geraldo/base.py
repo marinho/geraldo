@@ -1,5 +1,6 @@
 from reportlab.lib.units import cm
 from reportlab.lib.pagesizes import A4
+from reportlab.lib.colors import black
 
 class Report(object):
     """This class must be inherited to be used as a new report.
@@ -29,6 +30,13 @@ class Report(object):
 
     # Data source driver
     queryset = None
+    print_if_empty = False # This means if a queryset is empty, the report will
+                           # be generated or not
+
+    # Colors
+    default_font_color = black
+    default_stroke_color = black
+    default_fill_color = black
 
     def __init__(self, queryset=None):
         self.queryset = queryset or self.queryset

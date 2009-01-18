@@ -7,5 +7,4 @@ from widgets import SYSTEM_REPORT_TITLE, SYSTEM_PAGE_NUMBER, SYSTEM_PAGE_COUNT,\
         FIELD_ACTION_COUNT, FIELD_ACTION_AVG, FIELD_ACTION_MIN,\
         FIELD_ACTION_MAX, FIELD_ACTION_SUM, FIELD_ACTION_DISTINCT_COUNT,\
         BAND_WIDTH
-from graphics import RoundRect, Rect, Line
-
+from graphics import RoundRect, Rect, Line, Circle, Arc, Ellipse, Image
