@@ -47,7 +47,7 @@ class PDFGenerator(ReportGenerator):
 
         self._is_first_page = True
 
-    def generate_band(self, band, top_position=None):
+    def generate_band(self, band, top_position=None, update_top=True):
         """Generate a band having the current top position or informed as its
         top coordinate"""
 
@@ -177,48 +177,79 @@ class PDFGenerator(ReportGenerator):
             self.canvas.line(band_rect['left'], band_rect['top'], band_rect['left'],
                     band_rect['bottom'])
 
+        # Updates top position
+        if update_top:
+            self.update_top_pos(band.height)
+
+        # Child bands
+        for child_band in band.child_bands:
+            # Doesn't generate if it is not visible
+            if not child_band.visible:
+                continue
+
+            self.force_new_blank_page(child_band.height)
+
+            self.generate_band(child_band)
+
+    def force_new_blank_page(self, height):
+        """Check if the height is in client available report height and
+        makes a new page if necessary"""
+        force_new_page = self.get_available_height() < height
+
+        if not force_new_page:
+            return
+
+        # Ends the current page
+        self._current_top_position = 0
+        self.canvas.showPage()
+
+        # Starts a new one
+        self.start_new_page()
+
+        # Page footer
+        self.generate_page_footer()
+
     def generate_begin(self):
         """Generate the report begin band if it exists"""
         if not self.report.band_begin:
             return
 
+        # Doesn't generate this band if it is not visible
+        if not self.report.band_begin.visible:
+            return
+
         # Call method that print the band area and its widgets
         self.generate_band(self.report.band_begin)
-        
-        # Update top position after this band
-        self.update_top_pos(self.report.band_begin.height)
 
     def generate_summary(self):
         """Generate the report summary band if it exists"""
         if not self.report.band_summary:
             return
 
+        # Doesn't generate this band if it is not visible
+        if not self.report.band_summary.visible:
+            return
+
         # Check to force new page if there is no available space
-        force_new_page = self.get_available_height() < self.report.band_summary.height
-
-        if force_new_page:
-            # Ends the current page
-            self._current_top_position = 0
-            self.canvas.showPage()
-
-            # Starts a new one
-            self.start_new_page()
+        self.force_new_blank_page(self.report.band_summary.height)
 
         # Call method that print the band area and its widgets
         self.generate_band(self.report.band_summary)
-
-        if force_new_page:
-            self.generate_page_footer()
 
     def generate_page_header(self):
         """Generate the report page header band if it exists"""
         if not self.report.band_page_header:
             return
 
+        # Doesn't generate this band if it is not visible
+        if not self.report.band_page_header.visible:
+            return
+
         # Call method that print the band area and its widgets
         self.generate_band(
                 self.report.band_page_header,
-                self.report.page_size[1] - self.report.margin_top
+                self.report.page_size[1] - self.report.margin_top,
+                update_top=False,
                 )
 
     def generate_page_footer(self):
@@ -226,10 +257,15 @@ class PDFGenerator(ReportGenerator):
         if not self.report.band_page_footer:
             return
 
+        # Doesn't generate this band if it is not visible
+        if not self.report.band_page_footer.visible:
+            return
+
         # Call method that print the band area and its widgets
         self.generate_band(
                 self.report.band_page_footer,
                 self.report.margin_bottom + self.report.band_page_footer.height,
+                update_top=False,
                 )
 
     def generate_pages(self):
@@ -265,11 +301,10 @@ class PDFGenerator(ReportGenerator):
                 # Get current object from list
                 self._current_object = objects[self._current_object_index]
 
-                # Generates the detail band
-                self.generate_band(self.report.band_detail)
-
-                # Updates top position
-                self.update_top_pos(self.report.band_detail.height)
+                # Generate this band only if it is visible
+                if self.report.band_detail.visible:
+                    # Generates the detail band
+                    self.generate_band(self.report.band_detail)
 
                 # Next object
                 self._current_object_index += 1

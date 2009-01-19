@@ -58,8 +58,14 @@ class ReportBand(object):
     visible = True
     borders = {'top': None, 'right': None, 'bottom': None, 'left': None,
             'all': None}
+    elements = []
+    child_bands = []
 
-class TableBand(ReportBand):
+    def __init__(self, **kwargs):
+        for k,v in kwargs.items():
+            setattr(self, k, v)
+
+class TableBand(ReportBand): # TODO
     """This band must be used only as a detail band. It doesn't is repeated per
     object, but instead of it is streched and have its rows increased."""
     pass

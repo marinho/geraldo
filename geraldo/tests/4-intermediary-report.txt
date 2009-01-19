@@ -105,9 +105,9 @@ PDF generation with empty queryset
 Creating some users
 
     >>> len([User.objects.create(username='Leticia'),
-    ... User.objects.create(username='Tarsila'),
-    ... User.objects.create(username='Mychelle'),
-    ... User.objects.create(username='Mychell'),
+    ... User.objects.create(username='Tarsila', is_staff=True),
+    ... User.objects.create(username='Mychelle', is_staff=True),
+    ... User.objects.create(username='Mychell', is_staff=True),
     ... User.objects.create(username='Marta'),
     ... User.objects.create(username='Davi'),
     ... User.objects.create(username='Verinha'),

@@ -3,6 +3,8 @@ from reportlab.lib.units import cm
 
 class Graphic(object):
     """Base graphic class"""
+    visible = True
+
     stroke = True
     stroke_color = black
     stroke_width = 1

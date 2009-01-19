@@ -22,8 +22,9 @@ Engine API
  - Detail (x)
  - Table details
  - Group
+ - Child bands (x)
 - Support graphics (x)
-- Support charts
+- Support charts - use graphics.Image to set a rendered char image (x)
 - Support aggregation fields (x)
 - Support expression (x)
 - Support calculated fields (x)
@@ -33,11 +34,12 @@ Engine API
 - Support band-width in widgets (x)
 - Support stylizing widgets (font, colors, borders and alignments) (x)
 - Report composition (many reports at once)
+- Report inheritance
 
 Generators
 ----------
 
-- Best use of PDF generator, with possible canvas customizations
+- Best use of PDF generator (x)
 - Export to HTML and maybe to TXT
 - Export/import structure to/from a XMLized format
 

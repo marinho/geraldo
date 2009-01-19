@@ -1,4 +1,4 @@
-__version__ = '0.1-design'
+__version__ = '0.1-yet_a_baby'
 
 from base import Report, ReportBand, TableBand
 from widgets import Label, ObjectValue, SystemField
