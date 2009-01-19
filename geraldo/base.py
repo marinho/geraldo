@@ -9,10 +9,10 @@ REPORT_PAGE_BREAK = 'report-page-break'
 class Report(object):
     """This class must be inherited to be used as a new report.
     
-    A report have bands and is driven by a QuerySet. It can have a title and
+    A report has bands and is driven by a QuerySet. It can have a title and
     margins definitions.
     
-    Depends on ReportLab to works properly"""
+    Depends on ReportLab to work properly"""
 
     # Report properties
     title = ''
@@ -47,7 +47,7 @@ class Report(object):
 
     def generate_by(self, generator_class, *args, **kwargs):
         """This method uses a generator inherited class to generate a report
-        to a wanted format, like XML, HTML or PDF, for example.
+        to a desired format, like XML, HTML or PDF, for example.
         
         The arguments *args and **kwargs are passed to class initializer."""
         generator = generator_class(self, *args, **kwargs)
