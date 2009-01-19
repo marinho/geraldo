@@ -1,0 +1,150 @@
+%PDF-1.3
+%“Œ‹ž ReportLab Generated PDF document http://www.reportlab.com
+% 'BasicFonts': class PDFDictionary 
+1 0 obj
+% The standard fonts dictionary
+<< /F1 2 0 R
+ /F2 3 0 R
+ /F3 4 0 R >>
+endobj
+% 'F1': class PDFType1Font 
+2 0 obj
+% Font Helvetica
+<< /BaseFont /Helvetica
+ /Encoding /WinAnsiEncoding
+ /Name /F1
+ /Subtype /Type1
+ /Type /Font >>
+endobj
+% 'F2': class PDFType1Font 
+3 0 obj
+% Font Helvetica-Bold
+<< /BaseFont /Helvetica-Bold
+ /Encoding /WinAnsiEncoding
+ /Name /F2
+ /Subtype /Type1
+ /Type /Font >>
+endobj
+% 'F3': class PDFType1Font 
+4 0 obj
+% Font Times-Roman
+<< /BaseFont /Times-Roman
+ /Encoding /WinAnsiEncoding
+ /Name /F3
+ /Subtype /Type1
+ /Type /Font >>
+endobj
+% 'Page1': class PDFPage 
+5 0 obj
+% Page dictionary
+<< /Contents 10 0 R
+ /MediaBox [ 0
+ 0
+ 595.2756
+ 420.9449 ]
+ /Parent 9 0 R
+ /Resources << /Font 1 0 R
+ /ProcSet [ /PDF
+ /Text
+ /ImageB
+ /ImageC
+ /ImageI ] >>
+ /Rotate 0
+ /Trans <<  >>
+ /Type /Page >>
+endobj
+% 'Page2': class PDFPage 
+6 0 obj
+% Page dictionary
+<< /Contents 11 0 R
+ /MediaBox [ 0
+ 0
+ 595.2756
+ 420.9449 ]
+ /Parent 9 0 R
+ /Resources << /Font 1 0 R
+ /ProcSet [ /PDF
+ /Text
+ /ImageB
+ /ImageC
+ /ImageI ] >>
+ /Rotate 0
+ /Trans <<  >>
+ /Type /Page >>
+endobj
+% 'R7': class PDFCatalog 
+7 0 obj
+% Document Root
+<< /Outlines 12 0 R
+ /PageMode /UseNone
+ /Pages 9 0 R
+ /Type /Catalog >>
+endobj
+% 'R8': class PDFInfo 
+8 0 obj
+<< /Author ()
+ /CreationDate (20090119061240)
+ /Keywords ()
+ /Producer (ReportLab http://www.reportlab.com)
+ /Subject (unspecified)
+ /Title (Child bands demonstration) >>
+endobj
+% 'R9': class PDFPages 
+9 0 obj
+% page tree
+<< /Count 2
+ /Kids [ 5 0 R
+ 6 0 R ]
+ /Type /Pages >>
+endobj
+% 'R10': class PDFStream 
+10 0 obj
+% page stream
+<< /Filter [ /ASCII85Decode
+ /FlateDecode ]
+ /Length 1025 >>
+stream
+GatUu?#S1G'Sc',ofr4l+O0!B1Z=LV9qW!4(-l,Z2I1shA0`%KIm5S)E=iKRph821WjdG)qOBU,""\MC0`>?#fW11K\,Z_bQ!4HM.orh*lZ0PWVF5pG>^Tm2i9<TQk>E1/R'`/`,BGf^'_#fq+O#X?2se?]KH#4=Lr\Jjk1l=j\j3f7-YL&'^L:KMFu-?sIH]Bnm&RDUg1RMb`ldK2oZn%1cL/UB$Hu@O?3lXD3Bg/71<BA-:YqWAV?_&?P07+n1u--Fmb@#'7m_p\*$>J)oV1T*OWgs70KdsTU1%+<NiH[9FY55)H8AUVmGGkU\6h)%.VB!`NH(Tmk-t'N-J30-:=5<:!P6kgYZ3hEl__OCR\#WRr=KNdXb:0?Fg6)5SqQ/nVKEMHTLD^kA^q=9*cFYccO?k38UFO'HG7l2g/b(qB$u.u&hT"A]DAqleb_LY!=(D:_lb3#?590&"B-LG>_jr51DEk)M>$!;X%G>\1Ge5E.Qts!eWXIc-n]AjR]FiA#dCA0+42U3Y\")o77DmC-UK9WCR%_RCT1;HcCd$lB]mp,#-CH9%h*fB8UF=!@M2?@`JrV--K-N0'SZ7[m[JBTs%Q)FR:05QBePBB:P(-AAXmA#K$2QI.($$e5<<#r--is7G\G`19\S6q'SNq!\`R%,e!d&Ig*4p.=)#+9YT=^i'pYA-OU=^bAR%qVESZ<WXc%d8eLgWd"kJ!-=B/&KX.g;lTLroNKh+>35bD2@E,W?oMcQ[V#DQ6tUqJ6M0a[`"&=TX^9=pYqoW\Q+pV+4/hckZ=*Z0&8PP2.-`MC#d1cMBm$%P4I+Q4s=Y.mCI=o_Zc%,6Y2HWu_T&o>,%UFgTQ.Yp9u+Q9Jmp(k?PE4Z9L%*FH"ca$*l,])7A,:2e@chb3klOEaEN&u2cpXO`AZ0V7hlc4K3c-^S5-+J]H'ZU^gk4^'k$lD!]JE-r&"'^!DmJ&HFf+`0SKqs8cZ+IS31rI[^mD-/J#+PXA9s3B,e[d`SXlIE)YcP#M^Ep<n490X5Pa_~>endstream
+
+endobj
+% 'R11': class PDFStream 
+11 0 obj
+% page stream
+<< /Filter [ /ASCII85Decode
+ /FlateDecode ]
+ /Length 476 >>
+stream
+GatUogJ5UN&;KXFq@7S'-EK:UY*Yk"'5j'2!37\J6X+EniUL2''FY:"Cpr#Tam=ET9`IDOmU1+NAoJF"eH>mj6utUZ"@Q1uMh1tH1<N$>p]q)6H,L-M64!g#CSDP&Y!eJXbB=&o7>tL)bQ4(]h#Q*=4DI6J$Frfc@Mk,lkphE(S&Z8^8QOnP?.q=kndC91+M*6Rrs*=^O3Q:M;/-_!j;f-t&ih)j8K9qLDWr0$6r(7S`XhfK-"Uu#UaMBu8Iu@-5ppALeSkSULPcp?KcbJQ:SUO"Lbqg&;.m;-cOYm.^0`/5_E\<'.0g3b%BX$hjYiumC1_OI\8dqh3f2fWXd="!P]dcXn<CR%AR->,//XKdWc2<e)sa2d1Z]ONltk-OOLhj-?V^2:\aI'c!f?&uqr)\TASHXV_7s"CCGrL`C%dscgoM;5`Gt@P%:nA/gK5Ql8kKp8g2f+$3FhSF,F+$H#R8&Z6u0U~>endstream
+
+endobj
+% 'R12': class PDFOutlines 
+12 0 obj
+<< /Count 0
+ /Type /Outlines >>
+endobj
+xref
+0 13
+0000000000 65535 f
+0000000113 00000 n
+0000000233 00000 n
+0000000398 00000 n
+0000000573 00000 n
+0000000740 00000 n
+0000001018 00000 n
+0000001296 00000 n
+0000001431 00000 n
+0000001650 00000 n
+0000001764 00000 n
+0000002934 00000 n
+0000003556 00000 n
+trailer
+<< /ID 
+ % ReportLab generated PDF document -- digest (http://www.reportlab.com) 
+ [(.\211=\363v\\\341a\334yy\364\366\013,0) (.\211=\363v\\\341a\334yy\364\366\013,0)] 
+
+ /Info 8 0 R
+ /Root 7 0 R
+ /Size 13 >>
+startxref
+3608
+%%EOF
