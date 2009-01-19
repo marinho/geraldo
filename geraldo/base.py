@@ -1,6 +1,10 @@
+import copy
+
 from reportlab.lib.units import cm
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.colors import black
+
+REPORT_PAGE_BREAK = 'report-page-break'
 
 class Report(object):
     """This class must be inherited to be used as a new report.
@@ -58,13 +62,20 @@ class ReportBand(object):
     visible = True
     borders = {'top': None, 'right': None, 'bottom': None, 'left': None,
             'all': None}
-    elements = []
-    child_bands = []
+    elements = None
+    child_bands = None
     force_new_page = False
 
     def __init__(self, **kwargs):
         for k,v in kwargs.items():
             setattr(self, k, v)
+
+        self.elements = self.elements or []
+        self.child_bands = self.child_bands or []
+
+    def clone(self):
+        """Does a deep copy of this band to be rendered"""
+        return copy.deepcopy(self)
 
 class TableBand(ReportBand): # TODO
     """This band must be used only as a detail band. It doesn't is repeated per

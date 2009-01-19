@@ -3,7 +3,7 @@ REPORT WIDGETS
 
 Widgets are objects that show field or expression values.
 
-    >>> from geraldo.widgets import Widget, SYSTEM_REPORT_TITLE
+    >>> from geraldo.widgets import Widget
     >>> from reportlab.lib.units import cm
 
     >>> Widget.height == 0.5*cm
@@ -45,7 +45,7 @@ current date/time, page number, total of pages, etc.
 
     >>> from geraldo import SystemField
 
-    >>> SystemField.kind == SYSTEM_REPORT_TITLE
+    >>> SystemField.expression == r'%(report_title)s'
     True
 
 

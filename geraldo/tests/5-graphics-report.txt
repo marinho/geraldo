@@ -13,8 +13,7 @@ This is just a report with every graphic elements
     >>> from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY
     
     >>> from geraldo import Report, ReportBand, RoundRect, Rect, Line, Circle,\
-    ...     Arc, Ellipse, SystemField, Label, SYSTEM_REPORT_TITLE, BAND_WIDTH,\
-    ...     Image
+    ...     Arc, Ellipse, SystemField, Label, BAND_WIDTH, Image
 
 Report class
 
@@ -54,7 +53,7 @@ Report class
     ...     class band_page_header(ReportBand):
     ...         height = 1.4*cm
     ...         elements = [
-    ...             SystemField(kind=SYSTEM_REPORT_TITLE, top=0.1*cm, left=0,
+    ...             SystemField(expression='%(report_title)s', top=0.1*cm, left=0,
     ...                 width=BAND_WIDTH, style={'fontName': 'Helvetica-Bold',
     ...                     'fontSize': 14, 'alignment': TA_CENTER}),
     ...             Label(text="ID", top=0.8*cm, left=0, width=1*cm,

@@ -11,10 +11,10 @@ the begin, summary, page header, page footer and detail bands.
 
     >>> from reportlab.lib.pagesizes import A4
     >>> from reportlab.lib.units import cm
-    >>> from reportlab.lib.enums import TA_CENTER
+    >>> from reportlab.lib.enums import TA_CENTER, TA_RIGHT
     
     >>> from geraldo import Report, ReportBand, Label, ObjectValue, SystemField,\
-    ...     SYSTEM_REPORT_TITLE, FIELD_ACTION_COUNT, BAND_WIDTH
+    ...     FIELD_ACTION_COUNT, BAND_WIDTH
 
 Report class
 
@@ -40,7 +40,7 @@ Report class
     ...     class band_page_header(ReportBand):
     ...         height = 1.3*cm
     ...         elements = [
-    ...             SystemField(kind=SYSTEM_REPORT_TITLE, top=0.1*cm, left=0, width=BAND_WIDTH,
+    ...             SystemField(expression='%(report_title)s', top=0.1*cm, left=0, width=BAND_WIDTH,
     ...                 style={'fontName': 'Helvetica-Bold', 'fontSize': 14, 'alignment': TA_CENTER}),
     ...             Label(text="ID", top=0.8*cm, left=0),
     ...             Label(text="Name", top=0.8*cm, left=3*cm),
@@ -50,8 +50,9 @@ Report class
     ...     class band_page_footer(ReportBand):
     ...         height = 0.5*cm
     ...         elements = [
-    ...             Label(text='Created with Geraldo Reports', top=0.1*cm,
-    ...                 right=0),
+    ...             Label(text='Created with Geraldo Reports', top=0.1*cm, left=0),
+    ...             SystemField(expression='Page # %(page_number)d of %(page_count)d', top=0.1*cm,
+    ...                 width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
     ...         ]
     ...         borders = {'top': True}
     ... 

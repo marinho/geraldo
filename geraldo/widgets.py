@@ -141,38 +141,46 @@ class ObjectValue(Label):
         text = unicode(getattr(self, 'action_'+self.action)())
         return self.display_format%text
 
-SYSTEM_REPORT_TITLE = 1
-SYSTEM_PAGE_NUMBER = 2
-SYSTEM_PAGE_COUNT = 3
-SYSTEM_CURRENT_DATETIME = 4
-SYSTEM_REPORT_AUTHOR = 5
 SYSTEM_FIELD_CHOICES = {
-    SYSTEM_REPORT_TITLE: 'ReportTitle',
-    SYSTEM_PAGE_NUMBER: 'PageNumber',
-    SYSTEM_PAGE_COUNT: 'PageCount',
-    SYSTEM_CURRENT_DATETIME: 'CurrentDateTime',
-    SYSTEM_REPORT_AUTHOR: 'Author',
+    'report_title': 'ReportTitle',
+    'page_number': 'PageNumber',
+    'page_count': 'PageCount',
+    'current_datetime': 'CurrentDateTime',
+    'report_author': 'Author',
 }
 
 class SystemField(Label):
     """This shows system informations, like the report title, current date/time,
     page number, pages count, etc.
     
-    'get_value' lambda must have 'kind' and 'fields' argument."""
-    kind = SYSTEM_REPORT_TITLE
+    'get_value' lambda must have 'expression' and 'fields' argument."""
+    expression = '%(report_title)s'
+
+    fields = {
+            'report_title': None,
+            'page_number': None,
+            'page_count': None,
+            'current_datetime': None,
+            'report_author': None,
+        }
+
+    def __init__(self, **kwargs):
+        super(SystemField, self).__init__(**kwargs)
+
+        self.fields['current_datetime'] = datetime.datetime.now()
 
     @property
     def text(self):
-        fields =  {
-            SYSTEM_REPORT_TITLE: self.report.title,
-            SYSTEM_PAGE_NUMBER: self.generator._current_page_number,
-            SYSTEM_PAGE_COUNT: self.generator.get_page_count(),
-            SYSTEM_CURRENT_DATETIME: datetime.datetime.now(),
-            SYSTEM_REPORT_AUTHOR: self.report.author,
+        fields = {
+            'report_title': self.fields.get('report_title') or self.report.title,
+            'page_number': self.fields.get('page_number') or self.generator._current_page_number + 1,
+            'page_count': self.fields.get('page_count') or self.generator.get_page_count(),
+            'current_datetime': self.fields.get('current_datetime') or datetime.datetime.now(),
+            'report_author': self.fields.get('report_author') or self.report.author,
         }
         
         if self.get_value:
-            return self.get_value(self.kind, fields)
+            return self.get_value(self.expression, fields)
 
-        return fields[self.kind]
+        return self.expression%fields
 
