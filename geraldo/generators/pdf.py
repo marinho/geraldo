@@ -187,18 +187,18 @@ class PDFGenerator(ReportGenerator):
             if not child_band.visible:
                 continue
 
-            self.force_new_blank_page(child_band.height)
+            self.force_blank_page_by_height(child_band.height)
 
             self.generate_band(child_band)
 
-    def force_new_blank_page(self, height):
+    def force_blank_page_by_height(self, height):
         """Check if the height is in client available report height and
         makes a new page if necessary"""
-        force_new_page = self.get_available_height() < height
+        if self.get_available_height() < height:
+            self.force_new_page()
 
-        if not force_new_page:
-            return
-
+    def force_new_page(self):
+        """Starts a new blank page"""
         # Ends the current page
         self._current_top_position = 0
         self.canvas.showPage()
@@ -231,7 +231,7 @@ class PDFGenerator(ReportGenerator):
             return
 
         # Check to force new page if there is no available space
-        self.force_new_blank_page(self.report.band_summary.height)
+        self.force_blank_page_by_height(self.report.band_summary.height)
 
         # Call method that print the band area and its widgets
         self.generate_band(self.report.band_summary)

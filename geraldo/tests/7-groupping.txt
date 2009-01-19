@@ -1,0 +1,111 @@
+GROUPPING BANDS
+===============
+
+YET IN DEVELOPMENT PROCESS
+
+This is a simple test for groupping bands. We must have support to multiple
+groups in a report.
+
+Groupping is something like this:
+
+- Country
+ - City
+  - Soccer team
+
+As you can see above we have 2 grouppings: by country and by city (under
+country).
+
+In this test we work with users as following:
+
+- If staff
+ - If superuser
+  - User
+
+    >>> import os
+    >>> cur_dir = os.path.dirname(os.path.abspath(__file__))
+
+    >>> from django.contrib.auth.models import User
+
+    >>> from reportlab.lib.pagesizes import A4
+    >>> from reportlab.lib.units import cm
+    >>> from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY
+    >>> from reportlab.lib.colors import navy, yellow, red
+    
+    >>> from geraldo import Report, ReportBand, Label, ObjectValue, SystemField,\
+    ...     SYSTEM_REPORT_TITLE, FIELD_ACTION_COUNT, BAND_WIDTH, Line,\
+    ...     ReportGroup
+
+Report class
+
+    >>> class GrouppingReport(Report):
+    ...     title = 'Child bands demonstration'
+    ... 
+    ...     class band_summary(ReportBand):
+    ...         height = 0.8*cm
+    ...         elements = [
+    ...             Label(text="Users count:", top=0.1*cm, left=0),
+    ...             ObjectValue(attribute_name='username', top=0.1*cm, left=4*cm,\
+    ...                 action=FIELD_ACTION_COUNT, display_format='%s permissions found'),
+    ...         ]
+    ...         borders = {'all': True}
+    ... 
+    ...     class band_page_header(ReportBand):
+    ...         height = 1.3*cm
+    ...         elements = [
+    ...             SystemField(kind=SYSTEM_REPORT_TITLE, top=0.1*cm, left=0, width=BAND_WIDTH,
+    ...                 style={'fontName': 'Helvetica-Bold', 'fontSize': 14, 'alignment': TA_CENTER}),
+    ...             Label(text="ID", top=0.8*cm, left=0),
+    ...             Label(text="Username", top=0.8*cm, left=3*cm),
+    ...             Label(text="First name", top=0.8*cm, left=8*cm),
+    ...             Label(text="Last name", top=0.8*cm, left=13*cm),
+    ...             Label(text="Staff", top=0.8*cm, left=18*cm),
+    ...         ]
+    ...         borders = {'bottom': Line(strokeColor=red, stroke=3)}
+    ... 
+    ...     class band_page_footer(ReportBand):
+    ...         height = 0.5*cm
+    ...         elements = [
+    ...             Label(text='Created with Geraldo Reports', top=0.1*cm),
+    ...         ]
+    ...         borders = {'top': Line(strokeColor=navy)}
+    ... 
+    ...     class band_detail(ReportBand):
+    ...         height = 0.7*cm
+    ...         elements = [
+    ...             ObjectValue(attribute_name='id', top=0, left=0),
+    ...             ObjectValue(attribute_name='username', top=0, left=3*cm),
+    ...             ObjectValue(attribute_name='first_name', top=0, left=8*cm),
+    ...             ObjectValue(attribute_name='last_name', top=0, left=13*cm),
+    ...             ObjectValue(attribute_name='is_staff', top=0, left=18*cm,
+    ...                 get_value=lambda instance: instance.is_staff and 'Yes' or 'No'),
+    ...         ]
+    ... 
+    ...     groups = [
+    ...         ReportGroup(attribute_name='is_staff', 
+    ...             band_header=ReportBand(),
+    ...             band_footer=ReportBand(),
+    ...         ),
+    ...         ReportGroup(attribute_name='is_superuser', 
+    ...             band_header=ReportBand(),
+    ...             band_footer=ReportBand(),
+    ...         ),
+    ...     ]
+
+    >>> queryset = User.objects.order_by('id')
+
+    >>> report = GrouppingReport(queryset=queryset)
+
+PDF common generation with users
+
+    >>> from geraldo.generators import PDFGenerator
+
+    >>> report.queryset = User.objects.order_by('id')
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'groupping-report.pdf'))
+
+Page with half height
+
+    >>> report.page_size = (A4[0], A4[1] / 2)
+
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'groupping-report-half-height.pdf'))
+
+

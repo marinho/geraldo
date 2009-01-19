@@ -30,7 +30,7 @@ A label is just a simple text to show a word or sentence.
     >>> Label.text.__class__.__name__
     'property'
 
-An object value is is field, method or property you can get from the model
+An object value is a field, method or property you can get from the model
 object, got from the QuerySet. There are actions to do with that field:
 Value, Count, Avg, Min, Max and Sum. Default action is "Value".
 

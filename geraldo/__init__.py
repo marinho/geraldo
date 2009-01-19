@@ -1,6 +1,6 @@
 __version__ = '0.1-yet_a_baby'
 
-from base import Report, ReportBand, TableBand
+from base import Report, ReportBand, TableBand, ReportGroup
 from widgets import Label, ObjectValue, SystemField
 from widgets import SYSTEM_REPORT_TITLE, SYSTEM_PAGE_NUMBER, SYSTEM_PAGE_COUNT,\
         SYSTEM_CURRENT_DATETIME, SYSTEM_REPORT_AUTHOR, FIELD_ACTION_VALUE,\

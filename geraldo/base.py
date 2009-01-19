@@ -60,6 +60,7 @@ class ReportBand(object):
             'all': None}
     elements = []
     child_bands = []
+    force_new_page = False
 
     def __init__(self, **kwargs):
         for k,v in kwargs.items():
@@ -69,4 +70,17 @@ class TableBand(ReportBand): # TODO
     """This band must be used only as a detail band. It doesn't is repeated per
     object, but instead of it is streched and have its rows increased."""
     pass
+
+class ReportGroup(object): # TODO
+    """This a report grouper class. A report can be multiple groupped by
+    attribute values.
+    
+    Yet in development process."""
+    attribute_name = None
+    band_header = None
+    band_footer = None
+
+    def __init__(self, **kwargs):
+        for k,v in kwargs.items():
+            setattr(self, k, v)
 
