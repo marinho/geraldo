@@ -11,7 +11,7 @@ customized widget values and some stylized elements.
 
     >>> from reportlab.lib.pagesizes import A4
     >>> from reportlab.lib.units import cm
-    >>> from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY
+    >>> from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY, TA_RIGHT
     >>> from reportlab.lib.colors import navy, yellow, red
     
     >>> from geraldo import Report, ReportBand, Label, ObjectValue, SystemField,\
@@ -76,6 +76,8 @@ Report class
     ...         elements = [
     ...             Label(text='Created with Geraldo Reports', top=0.1*cm,
     ...                 right=0),
+    ...             SystemField(expression='Printed in %(now:Y, b d)s at %(now:H:i)s', top=0.1*cm,
+    ...                 width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
     ...         ]
     ...         borders = {'top': Line(strokeColor=navy)}
     ... 
