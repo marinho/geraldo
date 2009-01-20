@@ -20,19 +20,19 @@ Engine API
  - Report top/begin (x)
  - Report summary (x)
  - Detail (x)
- - Table details
- - Group
+ - Group (x)
  - Child bands (x)
+ - Table details
 - Support graphics (x)
 - Support charts - use graphics.Image to set a rendered char image (x)
 - Support aggregation fields (x)
 - Support expression (x)
 - Support calculated fields (x)
-- Support canvas draw
-- Support multiples group bands
-- Support subreports
+- Support multiples group bands (x)
 - Support band-width in widgets (x)
 - Support stylizing widgets (font, colors, borders and alignments) (x)
+- Support canvas draw
+- Support subreports
 - Report composition (many reports at once)
 - Report inheritance
 
