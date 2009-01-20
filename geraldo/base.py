@@ -104,7 +104,7 @@ class TableBand(ReportBand): # TODO
     object, but instead of it is streched and have its rows increased."""
     pass
 
-class ReportGroup(object): # TODO
+class ReportGroup(object):
     """This a report grouper class. A report can be multiple groupped by
     attribute values.
     

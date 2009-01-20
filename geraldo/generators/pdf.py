@@ -30,7 +30,11 @@ class PDFGenerator(ReportGenerator):
     _current_page_number = 0
     _current_object = None
     _generation_datetime = None
+
+    # Groupping
     _groups_values = None
+    _groups_changed = None
+    _groups_stack = None
 
     # The rendered report have pages, each page is a ReportPage instance
     _rendered_pages = None
@@ -41,6 +45,8 @@ class PDFGenerator(ReportGenerator):
         self._rendered_pages = []
         self.filename = filename
         self._groups_values = {}
+        self._groups_changed = {}
+        self._groups_stack = []
 
     def execute(self):
         """Generate a PDF file using ReportLab pdfgen package."""
@@ -423,7 +429,7 @@ class PDFGenerator(ReportGenerator):
         while self._current_object_index < len(objects):
             # Starts a new page and generates the page header band
             self.start_new_page()
-            first_obejec_on_page = True
+            first_object_on_page = True
 
             # Generate the report begin band
             if self._current_page_number == 0:
@@ -439,7 +445,12 @@ class PDFGenerator(ReportGenerator):
                 self._current_object = objects[self._current_object_index]
 
                 # Renders group bands for changed values
-                self.render_groups(first_obejec_on_page)
+                self.calc_changed_groups(first_object_on_page)
+
+                if not first_object_on_page:
+                    self.render_groups_footers()
+
+                self.render_groups_headers()
 
                 # Generate this band only if it is visible
                 if self.report.band_detail.visible:
@@ -448,7 +459,7 @@ class PDFGenerator(ReportGenerator):
 
                 # Next object
                 self._current_object_index += 1
-                first_obejec_on_page = False
+                first_object_on_page = False
 
                 # Break is this is the end of this page
                 if self.get_available_height() < self.report.band_detail.height:
@@ -456,6 +467,10 @@ class PDFGenerator(ReportGenerator):
 
             # Sets this is the latest page or not
             self._is_latest_page = self._current_object_index >= len(objects)
+
+            # Renders the finish group footer bands
+            if self._is_latest_page:
+                self.render_groups_footers(force=True)
 
             # Ends the current page, printing footer and summary and necessary
             self.render_end_current_page()
@@ -466,23 +481,6 @@ class PDFGenerator(ReportGenerator):
 
             # Increment page number
             self._current_page_number += 1
-
-    def render_groups(self, force_no_changed=False):
-        """Render reports groups - only group headers for a while"""
-        changed = force_no_changed
-
-        # Loops on groups until find the first changed, then all under it are considered
-        # changed also
-        for group in self.report.groups: # XXX self._groups_values
-            # Gets the current value to compare with the old one
-            current_value = get_attr_value(self._current_object, group.attribute_name)
-
-            # Set changed as True if if wasn't and there is a change
-            changed = changed or current_value != self._groups_values.get(group, None)
-
-            if changed:
-                self._groups_values[group] = current_value
-                self.render_band(group.band_header)
 
     def start_new_page(self, with_header=True, with_groups=True):
         """Do everything necessary to be done to start a new page"""
@@ -531,6 +529,8 @@ class PDFGenerator(ReportGenerator):
         here is do this calculate before to generate the pages."""
         return len(self._rendered_pages)
 
+    # Stylizing
+
     def set_fill_color(self, color):
         """Sets the current fill on canvas. Used for fonts and shape fills"""
         self.canvas.setFillColor(color)
@@ -542,4 +542,71 @@ class PDFGenerator(ReportGenerator):
     def set_stroke_width(self, width):
         """Sets the stroke/line width for shapes"""
         self.canvas.setLineWidth(width)
+
+    # Groups topic
+
+    def calc_changed_groups(self, force_no_changed=False):
+        """Render reports groups - only group headers for a while"""
+        changed = force_no_changed
+
+        # Loops on groups until find the first changed, then all under it are considered
+        # changed also
+        for group in self.report.groups:
+            # Gets the current value to compare with the old one
+            current_value = get_attr_value(self._current_object, group.attribute_name)
+
+            # Set changed as True if if wasn't and there is a change
+            changed = changed or current_value != self._groups_values.get(group, None)
+
+            # Stores new values
+            self._groups_changed[group] = changed
+            self._groups_values[group] = current_value
+
+            # Appends to the stack
+            if changed:
+                self._groups_stack.append(group)
+
+    def render_groups_headers(self):
+        """Renders the report headers using 'changed' definition calculated by
+        'calc_changed_groups'"""
+
+        # Loops on groups to render changed ones
+        for group in self.report.groups:
+            if self._groups_changed.get(group, None) and group.band_header:
+                self.render_band(group.band_header)
+
+    def render_groups_footers(self, force=False):
+        """Renders the report footers using previous 'changed' definition calculated by
+        'calc_changed_groups'"""
+
+        reversed_groups = [group for group in self.report.groups]
+        reversed_groups.reverse()
+
+        # Loops on groups to render changed ones
+        for group in reversed_groups:
+            if force or ( self._groups_changed.get(group, None) and\
+                          self._groups_stack and\
+                          self._groups_stack[-1] == group ):
+                #if not force and (not self._groups_stack or self._groups_stack[-1] != group):
+                #    continue
+                
+                if group.band_footer:
+                    self.render_band(group.band_footer)
+
+                self._groups_stack.pop()
+
+    def get_objects_in_group(self):
+        """Return objects filtered in the current group or all if there is no
+        group"""
+        if not self._groups_stack:
+            return self.report.queryset
+
+        def filter_object(obj):
+            for group in self._groups_stack:
+                if get_attr_value(obj, group.attribute_name) != self._groups_values.get(group, None):
+                    return False
+
+            return obj
+
+        return [obj for obj in self.report.queryset if filter_object(obj)]
 

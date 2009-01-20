@@ -88,6 +88,7 @@ class ObjectValue(Label):
     attribute_name = None
     action = FIELD_ACTION_VALUE
     display_format = '%s'
+    objects = None
 
     def get_object_value(self, instance=None):
         """Return the attribute value for just an object"""
@@ -106,8 +107,9 @@ class ObjectValue(Label):
 
     def get_queryset_values(self):
         """Uses the method 'get_object_value' to get the attribute value from
-        all objects in the report queryset, as a list"""
-        return [self.get_object_value(instance) for instance in self.report.queryset]
+        all objects in the objects list, as a list"""
+        return [self.get_object_value(instance) for instance in
+                self.generator.get_objects_in_group()]
 
     def action_value(self):
         return self.get_object_value()
