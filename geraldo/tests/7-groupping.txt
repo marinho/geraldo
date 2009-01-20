@@ -37,7 +37,7 @@ In this test we work with users as following:
 Report class
 
     >>> class GrouppingReport(Report):
-    ...     title = 'Child bands demonstration'
+    ...     title = 'Groupping demonstration'
     ... 
     ...     class band_summary(ReportBand):
     ...         height = 0.8*cm
@@ -56,7 +56,7 @@ Report class
     ...             Label(text="ID", top=0.8*cm, left=0),
     ...             Label(text="Username", top=0.8*cm, left=3*cm),
     ...             Label(text="First name", top=0.8*cm, left=8*cm),
-    ...             Label(text="Last name", top=0.8*cm, left=13*cm),
+    ...             Label(text="Superuser", top=0.8*cm, left=13*cm),
     ...             Label(text="Staff", top=0.8*cm, left=18*cm),
     ...         ]
     ...         borders = {'bottom': Line(strokeColor=red, stroke=3)}
@@ -71,26 +71,47 @@ Report class
     ...     class band_detail(ReportBand):
     ...         height = 0.7*cm
     ...         elements = [
-    ...             ObjectValue(attribute_name='id', top=0, left=0),
+    ...             ObjectValue(attribute_name='id', top=0, left=1*cm),
     ...             ObjectValue(attribute_name='username', top=0, left=3*cm),
     ...             ObjectValue(attribute_name='first_name', top=0, left=8*cm),
-    ...             ObjectValue(attribute_name='last_name', top=0, left=13*cm),
+    ...             ObjectValue(attribute_name='is_superuser', top=0, left=13*cm,
+    ...                 get_value=lambda instance: instance.is_superuser and 'Yes' or 'No'),
     ...             ObjectValue(attribute_name='is_staff', top=0, left=18*cm,
     ...                 get_value=lambda instance: instance.is_staff and 'Yes' or 'No'),
     ...         ]
     ... 
     ...     groups = [
-    ...         ReportGroup(attribute_name='is_staff', 
-    ...             band_header=ReportBand(),
-    ...             band_footer=ReportBand(),
-    ...         ),
     ...         ReportGroup(attribute_name='is_superuser', 
-    ...             band_header=ReportBand(),
-    ...             band_footer=ReportBand(),
+    ...             band_header=ReportBand(
+    ...                 height=0.7*cm,
+    ...                 elements=[
+    ...                     ObjectValue(attribute_name='is_superuser', left=0, top=0.1*cm,
+    ...                         get_value=lambda instance: instance.is_superuser and 'Yes' or 'No')
+    ...                 ],
+    ...                 borders={'bottom': True},
+    ...             ),
+    ...         ),
+    ...         ReportGroup(attribute_name='is_staff', 
+    ...             band_header=ReportBand(
+    ...                 height=0.7*cm,
+    ...                 elements=[
+    ...                     ObjectValue(attribute_name='is_staff', left=0.5*cm, top=0.1*cm,
+    ...                         get_value=lambda instance: instance.is_staff and 'Yes' or 'No')
+    ...                 ],
+    ...                 borders={'bottom': True},
+    ...             ),
+    ...             band_footer=ReportBand(
+    ...                 height=0.7*cm,
+    ...                 elements=[
+    ...                     ObjectValue(attribute_name='is_staff', action=FIELD_ACTION_COUNT,
+    ...                         display_format='%s staffs', left=0, top=0.1*cm)
+    ...                 ],
+    ...                 borders={'bottom': True},
+    ...             ),
     ...         ),
     ...     ]
 
-    >>> queryset = User.objects.order_by('id')
+    >>> queryset = User.objects.order_by('is_superuser','is_staff','id')
 
     >>> report = GrouppingReport(queryset=queryset)
 
@@ -98,13 +119,15 @@ PDF common generation with users
 
     >>> from geraldo.generators import PDFGenerator
 
-    >>> report.queryset = User.objects.order_by('id')
     >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'groupping-report.pdf'))
 
 Page with half height
 
     >>> report.page_size = (A4[0], A4[1] / 2)
-
     >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'groupping-report-half-height.pdf'))
 
+Page with half height with new group in the begin of second page
+
+    >>> report.queryset = report.queryset.exclude(username='Betty')
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'groupping-report-half-height-2.pdf'))
 

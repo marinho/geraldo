@@ -1,10 +1,20 @@
-import copy
+import copy, types
 
 from reportlab.lib.units import cm
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.colors import black
 
 REPORT_PAGE_BREAK = 'report-page-break'
+
+def get_attr_value(obj, attr):
+    """This function returns a value from a object doesn't matters if the
+    attribute is a function or not"""
+    value = getattr(obj, attr)
+    
+    if type(value) == types.MethodType:
+        return value()
+
+    return value
 
 class Report(object):
     """This class must be inherited to be used as a new report.
@@ -31,6 +41,7 @@ class Report(object):
     band_page_header = None
     band_page_footer = None
     band_detail = None
+    groups = None
 
     # Data source driver
     queryset = None
@@ -44,6 +55,7 @@ class Report(object):
 
     def __init__(self, queryset=None):
         self.queryset = queryset or self.queryset
+        self.groups = self.groups or []
 
     def generate_by(self, generator_class, *args, **kwargs):
         """This method uses a generator inherited class to generate a report
@@ -53,6 +65,16 @@ class Report(object):
         generator = generator_class(self, *args, **kwargs)
 
         return generator.execute()
+
+    def get_objects_list(self):
+        """Returns the list with objects to be rendered.
+        
+        This should be refactored in the future to support big amounts of
+        records."""
+        if not self.queryset:
+            return []
+
+        return [object for object in self.queryset]
 
 class ReportBand(object):
     """A band is a horizontal area in the report. It can be used to print

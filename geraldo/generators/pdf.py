@@ -6,6 +6,7 @@ from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus import Paragraph
 from reportlab.lib.units import cm
 
+from geraldo.base import get_attr_value
 from geraldo.widgets import Widget, Label, SystemField
 from geraldo.graphics import Graphic, RoundRect, Rect, Line, Circle, Arc,\
         Ellipse, Image
@@ -29,6 +30,7 @@ class PDFGenerator(ReportGenerator):
     _current_page_number = 0
     _current_object = None
     _generation_datetime = None
+    _groups_values = None
 
     # The rendered report have pages, each page is a ReportPage instance
     _rendered_pages = None
@@ -38,6 +40,7 @@ class PDFGenerator(ReportGenerator):
 
         self._rendered_pages = []
         self.filename = filename
+        self._groups_values = {}
 
     def execute(self):
         """Generate a PDF file using ReportLab pdfgen package."""
@@ -404,14 +407,11 @@ class PDFGenerator(ReportGenerator):
             self.canvas.showPage()
  
     def render_bands(self):
-        """Loops into the queryset to create the report pages until the end"""
+        """Loops into the objects list to create the report pages until the end"""
         # Preparing local auxiliar variables
         self._current_page_number = 0
         self._current_object_index = 0
-        objects = self.report.queryset and \
-                  [object for object in self.report.queryset] or\
-                  []
-        #self._rendered_pages.append(ReportPage())
+        objects = self.report.get_objects_list()
 
         # Empty report
         if self.report.print_if_empty and not objects:
@@ -423,6 +423,7 @@ class PDFGenerator(ReportGenerator):
         while self._current_object_index < len(objects):
             # Starts a new page and generates the page header band
             self.start_new_page()
+            first_obejec_on_page = True
 
             # Generate the report begin band
             if self._current_page_number == 0:
@@ -437,6 +438,9 @@ class PDFGenerator(ReportGenerator):
                 # Get current object from list
                 self._current_object = objects[self._current_object_index]
 
+                # Renders group bands for changed values
+                self.render_groups(first_obejec_on_page)
+
                 # Generate this band only if it is visible
                 if self.report.band_detail.visible:
                     # Generates the detail band
@@ -444,6 +448,7 @@ class PDFGenerator(ReportGenerator):
 
                 # Next object
                 self._current_object_index += 1
+                first_obejec_on_page = False
 
                 # Break is this is the end of this page
                 if self.get_available_height() < self.report.band_detail.height:
@@ -462,7 +467,24 @@ class PDFGenerator(ReportGenerator):
             # Increment page number
             self._current_page_number += 1
 
-    def start_new_page(self, with_header=True):
+    def render_groups(self, force_no_changed=False):
+        """Render reports groups - only group headers for a while"""
+        changed = force_no_changed
+
+        # Loops on groups until find the first changed, then all under it are considered
+        # changed also
+        for group in self.report.groups: # XXX self._groups_values
+            # Gets the current value to compare with the old one
+            current_value = get_attr_value(self._current_object, group.attribute_name)
+
+            # Set changed as True if if wasn't and there is a change
+            changed = changed or current_value != self._groups_values.get(group, None)
+
+            if changed:
+                self._groups_values[group] = current_value
+                self.render_band(group.band_header)
+
+    def start_new_page(self, with_header=True, with_groups=True):
         """Do everything necessary to be done to start a new page"""
         self._rendered_pages.append(ReportPage())
 

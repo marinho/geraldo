@@ -108,13 +108,14 @@ Creating some users
     ... User.objects.create(username='Tarsila', is_staff=True),
     ... User.objects.create(username='Mychelle', is_staff=True),
     ... User.objects.create(username='Mychell', is_staff=True),
+    ... User.objects.create(username='Betty', is_staff=True),
     ... User.objects.create(username='Marta'),
     ... User.objects.create(username='Davi'),
     ... User.objects.create(username='Verinha'),
     ... User.objects.create(username='Miltinho'),
     ... User.objects.create(username='Waltinho'),
     ... User.objects.create(username='Leni')])
-    10
+    11
 
 PDF common generation with users
 
@@ -124,7 +125,6 @@ PDF common generation with users
 Page with half height
 
     >>> report.page_size = (A4[0], A4[1] / 2)
-
     >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'users-report-half-height.pdf'))
 
 
