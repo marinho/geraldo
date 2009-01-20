@@ -32,7 +32,7 @@ In this test we work with users as following:
     >>> from reportlab.lib.colors import navy, yellow, red
     
     >>> from geraldo import Report, ReportBand, Label, ObjectValue, SystemField,\
-    ...     FIELD_ACTION_COUNT, BAND_WIDTH, Line, ReportGroup
+    ...     FIELD_ACTION_COUNT, FIELD_ACTION_SUM, BAND_WIDTH, Line, ReportGroup
 
 Report class
 
@@ -43,8 +43,8 @@ Report class
     ...         height = 0.8*cm
     ...         elements = [
     ...             Label(text="Users count:", top=0.1*cm, left=0),
-    ...             ObjectValue(attribute_name='username', top=0.1*cm, left=4*cm,\
-    ...                 action=FIELD_ACTION_COUNT, display_format='%s permissions found'),
+    ...             ObjectValue(attribute_name='id', top=0.1*cm, left=4*cm,\
+    ...                 action=FIELD_ACTION_COUNT, display_format='%s users found'),
     ...         ]
     ...         borders = {'all': True}
     ... 
@@ -95,7 +95,9 @@ Report class
     ...                 height=0.7*cm,
     ...                 elements=[
     ...                     ObjectValue(attribute_name='id', action=FIELD_ACTION_COUNT,
-    ...                         display_format='%s superusers', left=0*cm, top=0.1*cm)
+    ...                         display_format='%s superusers', left=0*cm, top=0.1*cm),
+    ...                     ObjectValue(attribute_name='id', action=FIELD_ACTION_SUM,
+    ...                         display_format='%s is the sum of IDs above', left=4*cm, top=0.1*cm),
     ...                 ],
     ...                 borders={'top': True},
     ...             ),

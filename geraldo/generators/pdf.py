@@ -33,6 +33,8 @@ class PDFGenerator(ReportGenerator):
 
     # Groupping
     _groups_values = None
+    _groups_previous_values = None
+    _groups_values = None
     _groups_changed = None
     _groups_stack = None
 
@@ -45,6 +47,7 @@ class PDFGenerator(ReportGenerator):
         self._rendered_pages = []
         self.filename = filename
         self._groups_values = {}
+        self._groups_previous_values = {}
         self._groups_changed = {}
         self._groups_stack = []
 
@@ -257,6 +260,9 @@ class PDFGenerator(ReportGenerator):
         # Doesn't generate this band if it is not visible
         if not self.report.band_summary.visible:
             return
+
+        # Clears groups stack
+        self._groups_stack = []
 
         # Check to force new page if there is no available space
         self.force_blank_page_by_height(self.report.band_summary.height)
@@ -549,6 +555,9 @@ class PDFGenerator(ReportGenerator):
         """Render reports groups - only group headers for a while"""
         changed = force_no_changed
 
+        # Stores the previous group values
+        self._groups_previous_values = self._groups_values.copy()
+
         # Loops on groups until find the first changed, then all under it are considered
         # changed also
         for group in self.report.groups:
@@ -573,6 +582,7 @@ class PDFGenerator(ReportGenerator):
         # Loops on groups to render changed ones
         for group in self.report.groups:
             if self._groups_changed.get(group, None) and group.band_header:
+                self.force_blank_page_by_height(group.band_header.height)
                 self.render_band(group.band_header)
 
     def render_groups_footers(self, force=False):
@@ -591,6 +601,7 @@ class PDFGenerator(ReportGenerator):
                 #    continue
                 
                 if group.band_footer:
+                    self.force_blank_page_by_height(group.band_footer.height)
                     self.render_band(group.band_footer)
 
                 self._groups_stack.pop()
@@ -601,9 +612,12 @@ class PDFGenerator(ReportGenerator):
         if not self._groups_stack:
             return self.report.queryset
 
+        filter = dict([(group.attribute_name, self._groups_previous_values.get(group, None))\
+                for group in self.report.groups if group in self._groups_stack])
+
         def filter_object(obj):
-            for group in self._groups_stack:
-                if get_attr_value(obj, group.attribute_name) != self._groups_values.get(group, None):
+            for k,v in filter.items():
+                if get_attr_value(obj, k) != v:
                     return False
 
             return obj
