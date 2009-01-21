@@ -307,6 +307,7 @@ class PDFGenerator(ReportGenerator):
         """Closes the current page, using page breaker constant. Everything done after
         this will draw into a new page. Before this, using the generate_page_footer
         method to draw the footer"""
+
         self.render_page_footer()
 
         if self._is_latest_page:

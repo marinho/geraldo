@@ -6,6 +6,9 @@ from reportlab.lib.colors import black
 
 REPORT_PAGE_BREAK = 'report-page-break'
 
+def landscape(page_size):
+    return page_size[1], page_size[0]
+
 def get_attr_value(obj, attr):
     """This function returns a value from a object doesn't matters if the
     attribute is a function or not"""
