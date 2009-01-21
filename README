@@ -31,8 +31,8 @@ Engine API
 - Support multiples group bands (x)
 - Support band-width in widgets (x)
 - Support stylizing widgets (font, colors, borders and alignments) (x)
+- Support subreports (x)
 - Support canvas draw
-- Support subreports
 - Report composition (many reports at once)
 - Report inheritance
 
