@@ -1,8 +1,6 @@
 GROUPPING BANDS
 ===============
 
-YET IN DEVELOPMENT PROCESS
-
 This is a simple test for groupping bands. We must have support to multiple
 groups in a report.
 

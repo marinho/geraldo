@@ -16,24 +16,13 @@ def get_attr_value(obj, attr):
 
     return value
 
-class Report(object):
+class BaseReport(object):
     """This class must be inherited to be used as a new report.
     
     A report has bands and is driven by a QuerySet. It can have a title and
     margins definitions.
     
     Depends on ReportLab to work properly"""
-
-    # Report properties
-    title = ''
-    author = ''
-    
-    # Page dimensions
-    page_size = A4
-    margin_top = 1*cm
-    margin_bottom = 1*cm
-    margin_left = 1*cm
-    margin_right = 1*cm
 
     # Bands - is not possible to have more than one band from the same kind
     band_begin = None
@@ -57,15 +46,6 @@ class Report(object):
         self.queryset = queryset or self.queryset
         self.groups = self.groups or []
 
-    def generate_by(self, generator_class, *args, **kwargs):
-        """This method uses a generator inherited class to generate a report
-        to a desired format, like XML, HTML or PDF, for example.
-        
-        The arguments *args and **kwargs are passed to class initializer."""
-        generator = generator_class(self, *args, **kwargs)
-
-        return generator.execute()
-
     def get_objects_list(self):
         """Returns the list with objects to be rendered.
         
@@ -75,6 +55,36 @@ class Report(object):
             return []
 
         return [object for object in self.queryset]
+
+class Report(BaseReport):
+    """Class to be inherited and used to make reports"""
+    # Report properties
+    title = ''
+    author = ''
+    
+    # Page dimensions
+    page_size = A4
+    margin_top = 1*cm
+    margin_bottom = 1*cm
+    margin_left = 1*cm
+    margin_right = 1*cm
+
+    def generate_by(self, generator_class, *args, **kwargs):
+        """This method uses a generator inherited class to generate a report
+        to a desired format, like XML, HTML or PDF, for example.
+        
+        The arguments *args and **kwargs are passed to class initializer."""
+        generator = generator_class(self, *args, **kwargs)
+
+        return generator.execute()
+
+class SubReport(BaseReport):
+    """Class to be used for subreport objects. It doesn't need to be inherited"""
+    queryset_string = None
+
+    def __init__(self, **kwargs):
+        for k,v in kwargs.items():
+            setattr(self, k, v)
 
 class ReportBand(object):
     """A band is a horizontal area in the report. It can be used to print

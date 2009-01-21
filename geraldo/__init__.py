@@ -8,7 +8,7 @@ __license__ = 'GNU Lesser General Public License (LGPL)'
 __url__ = 'http://github.com/marinho/django-geraldo/'
 __version__ = get_version()
 
-from base import Report, ReportBand, TableBand, ReportGroup
+from base import Report, ReportBand, TableBand, ReportGroup, SubReport
 from widgets import Label, ObjectValue, SystemField
 from widgets import FIELD_ACTION_VALUE, FIELD_ACTION_COUNT, FIELD_ACTION_AVG,\
         FIELD_ACTION_MIN, FIELD_ACTION_MAX, FIELD_ACTION_SUM,\
