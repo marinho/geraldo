@@ -69,6 +69,13 @@ class Report(BaseReport):
     margin_left = 1*cm
     margin_right = 1*cm
 
+    subreports = None
+
+    def __init__(self, queryset=None):
+        super(Report, self).__init__(queryset)
+
+        self.subreports = self.subreports or []
+
     def generate_by(self, generator_class, *args, **kwargs):
         """This method uses a generator inherited class to generate a report
         to a desired format, like XML, HTML or PDF, for example.
@@ -79,12 +86,58 @@ class Report(BaseReport):
         return generator.execute()
 
 class SubReport(BaseReport):
-    """Class to be used for subreport objects. It doesn't need to be inherited"""
-    queryset_string = None
+    """Class to be used for subreport objects. It doesn't need to be inherited.
+    
+    'queryset_string' must be a string with path for Python compatible queryset.
+    
+    Examples:
+    
+        * '%(object)s.user_permissions.all()'
+        * '%(object)s.groups.all()'
+        * 'Message.objects.filter(user=%(object)s)'
+        * 'Message.objects.filter(user__id=%(object)s.id)'
+    """
+    _queryset_string = None
+    _parent_object = None
+    _queryset = None
 
     def __init__(self, **kwargs):
         for k,v in kwargs.items():
             setattr(self, k, v)
+
+    @property
+    def queryset(self):
+        if not self._queryset and self.parent_object and self.queryset_string:
+            # Replaces the string representer to a local variable identifier
+            queryset_string = self.queryset_string%{'object': 'parent_object'}
+
+            # Loads the queryset from string
+            self._queryset = eval(
+                    queryset_string,
+                    {'parent_object': self.parent_object},
+                    )
+
+        return self._queryset
+
+    def _get_parent_object(self):
+        return self._parent_object
+
+    def _set_parent_object(self, value):
+        # Clears queryset
+        self._queryset = None
+        self._parent_object = value
+
+    parent_object = property(_get_parent_object, _set_parent_object)
+
+    def _get_queryset_string(self):
+        return self._queryset_string
+
+    def _set_queryset_string(self, value):
+        # Clears queryset
+        self._queryset = None
+        self._queryset_string = value
+
+    queryset_string = property(_get_queryset_string, _set_queryset_string)
 
 class ReportBand(object):
     """A band is a horizontal area in the report. It can be used to print

@@ -80,9 +80,10 @@ class PDFGenerator(ReportGenerator):
         self.canvas.setTitle(self.report.title)
         self.canvas.setAuthor(self.report.author)
 
-    def render_band(self, band, top_position=None, update_top=True):
+    def render_band(self, band, top_position=None, update_top=True, current_object=None):
         """Generate a band having the current top position or informed as its
         top coordinate"""
+        current_object = current_object or self._current_object
 
         # Coordinates and dimensions
         temp_top = top_position = top_position or self.get_top_pos()
@@ -93,8 +94,8 @@ class PDFGenerator(ReportGenerator):
                 'bottom': top_position - band.height,
                 }
         # This should be done by a metaclass in Report domain TODO
-        self._rendered_pages[-1].width = band.width = self.report.page_size[0] - self.report.margin_left -\
-                self.report.margin_right
+        self._rendered_pages[-1].width = band.width = self.report.page_size[0] -\
+                self.report.margin_left - self.report.margin_right
 
         # Loop at band widgets
         for element in band.elements:
@@ -106,7 +107,7 @@ class PDFGenerator(ReportGenerator):
                 widget.font_color = self.report.default_font_color
 
                 # Set widget basic attributes
-                widget.instance = self._current_object
+                widget.instance = current_object
                 widget.generator = self
                 widget.report = self.report # This should be done by a metaclass in Band domain TODO
                 widget.band = band # This should be done by a metaclass in Band domain TODO
@@ -463,6 +464,9 @@ class PDFGenerator(ReportGenerator):
                     # Generates the detail band
                     self.render_band(self.report.band_detail)
 
+                # Renders subreports
+                self.render_subreports()
+
                 # Next object
                 self._current_object_index += 1
                 first_object_on_page = False
@@ -623,4 +627,30 @@ class PDFGenerator(ReportGenerator):
             return obj
 
         return [obj for obj in self.report.queryset if filter_object(obj)]
+
+    # SubReports
+
+    def render_subreports(self):
+        """Renders subreports bands for the current object in, usings its
+        own queryset.
+        
+        For a while just the detail band is rendered. Maybe in future we
+        change this to accept header and footer."""
+        for subreport in self.report.subreports:
+            # Subreports must have detail band
+            if not subreport.detail_band:
+                continue
+
+            # Sets the parent object and automatically clear the queryset
+            # in memory
+            subreport.parent_object = self._current_object
+
+            # Loops objects
+            for obj in subreport.get_objects_list():
+                # Forces new page if there is no available space
+                if self.get_available_height() < subreport.detail_band.height:
+                    self.force_new_page()
+
+                # Renders the detail band
+                self.render_band(subreport.detail_band, current_object=obj)
 

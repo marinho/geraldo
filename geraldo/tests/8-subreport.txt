@@ -71,9 +71,9 @@ Report class
     ... 
     ...     subreports = [
     ...         SubReport(
-    ...             queryset_string = 'user_permissions.all()',
+    ...             queryset_string = '%(object)s.user_permissions.all()',
     ...             detail_band = ReportBand(
-    ...                     height=1*cm,
+    ...                     height=0.5*cm,
     ...                     elements=[
     ...                         ObjectValue(attribute_name='id', top=0, left=0),
     ...                         ObjectValue(attribute_name='name', top=0, left=4*cm),
@@ -87,11 +87,13 @@ Report class
 
 Setting permissions
 
-    >>> user = User.objects.get(id=1)
-    >>> user.user_permissions.add(Permission.objects.get(id=1))
-    >>> user.user_permissions.add(Permission.objects.get(id=2))
-    >>> user.user_permissions.add(Permission.objects.get(id=3))
-    >>> user.user_permissions.add(Permission.objects.get(id=4))
+    >>> u1 = User.objects.get(id=1)
+    >>> for perm in Permission.objects.all()[:25]:
+    ...     u1.user_permissions.add(perm)
+
+    >>> u5 = User.objects.get(id=5)
+    >>> for perm in Permission.objects.all()[:5]:
+    ...     u5.user_permissions.add(perm)
 
 Initializing report
 
