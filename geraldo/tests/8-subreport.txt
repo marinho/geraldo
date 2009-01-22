@@ -36,7 +36,7 @@ Report class
     ...             ObjectValue(attribute_name='id', top=0.1*cm, left=4*cm,\
     ...                 action=FIELD_ACTION_COUNT, display_format='%s users found'),
     ...         ]
-    ...         borders = {'top': Line(strokeColor=red, stroke=3)}
+    ...         borders = {'top': Line(stroke_color=red, stroke_width=3)}
     ... 
     ...     class band_page_header(ReportBand):
     ...         height = 0.8*cm
@@ -46,7 +46,7 @@ Report class
     ...             SystemField(expression='Page # %(page_number)d of %(page_count)d', top=0.1*cm,
     ...                 width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
     ...         ]
-    ...         borders = {'bottom': Line(strokeColor=red, stroke=3)}
+    ...         borders = {'bottom': Line(stroke_color=red, stroke_width=3)}
     ... 
     ...     class band_page_footer(ReportBand):
     ...         height = 0.5*cm
@@ -55,7 +55,7 @@ Report class
     ...             SystemField(expression='Printed in %(now:Y, b d)s at %(now:H:i)s', top=0.1*cm,
     ...                 width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
     ...         ]
-    ...         borders = {'top': Line(strokeColor=navy)}
+    ...         borders = {'top': Line(stroke_color=navy)}
     ... 
     ...     class band_detail(ReportBand):
     ...         height = 2*cm
@@ -67,7 +67,7 @@ Report class
     ...             ObjectValue(attribute_name='first_name', top=1*cm, left=4*cm, style={'fontName': 'Helvetica'}),
     ...             ObjectValue(attribute_name='last_name', top=1.5*cm, left=4*cm, style={'fontName': 'Helvetica'}),
     ...         ]
-    ...         borders = {'bottom': Line(strokeColor=navy)}
+    ...         borders = {'bottom': Line(stroke_color=navy)}
     ... 
     ...     subreports = [
     ...         SubReport(

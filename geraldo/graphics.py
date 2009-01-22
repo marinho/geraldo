@@ -16,6 +16,10 @@ class Graphic(object):
         for k,v in kwargs.items():
             setattr(self, k, v)
 
+    def set_rect(self, **kwargs):
+        """This method will adapt the graphic element in a rect."""
+        raise Exception('Must be implemented in graphic class')
+
 class Rect(Graphic):
     """A simple rectangle"""
     left = None
@@ -23,17 +27,51 @@ class Rect(Graphic):
     width = None
     height = None
 
+    def set_rect(self, **kwargs):
+        self.left = kwargs.get('left', self.left)
+        self.top = kwargs.get('top', self.top)
+
+        if 'width' in kwargs:
+            self.width = kwargs['width']
+        elif 'right' in kwargs:
+            self.width = kwargs['right'] - self.left
+
+        if 'height' in kwargs:
+            self.height = kwargs['height']
+        elif 'bottom' in kwargs:
+            self.height = kwargs['bottom'] - self.top
+
 class RoundRect(Rect):
     """A rectangle graphic element that is possible set its radius and have
     round corners"""
     radius = 0.5
 
-class Line(Graphic):
-    """A simple line"""
+class Fixed(Graphic):
+    """A fixed graphic is base on right and bottom coordinates instead of width
+    and height.
+    
+    It is just a reference class and shouldn't be used directly in reports."""
     left = None
     top = None
     right = None
     bottom = None
+
+    def set_rect(self, **kwargs):
+        self.left = kwargs.get('left', self.left)
+        self.top = kwargs.get('top', self.top)
+
+        if 'right' in kwargs:
+            self.right = kwargs['right']
+        elif 'width' in kwargs:
+            self.right = kwargs['width'] + self.left
+
+        if 'bottom' in kwargs:
+            self.bottom = kwargs['bottom']
+        elif 'height' in kwargs:
+            self.bottom = kwargs['height'] + self.top
+
+class Line(Fixed):
+    """A simple line"""
 
     @property
     def height(self):
@@ -49,23 +87,16 @@ class Circle(Graphic):
     top_center = None
     radius = None
 
-class Arc(Graphic):
+class Arc(Fixed):
     """A simple circle"""
-    left = None
-    top = None
-    right = None
-    bottom = None
     start_angle = 0
     extent = 90
 
-class Ellipse(Graphic):
+class Ellipse(Fixed):
     """A simple circle"""
-    left = None
-    top = None
-    right = None
-    bottom = None
+    pass
 
-class Image(Graphic):
+class Image(Rect):
     """A image"""
     left = None
     top = None

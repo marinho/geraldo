@@ -57,14 +57,14 @@ Report class
     ...             Label(text="Superuser", top=0.8*cm, left=13*cm),
     ...             Label(text="Staff", top=0.8*cm, left=18*cm),
     ...         ]
-    ...         borders = {'bottom': Line(strokeColor=red, stroke=3)}
+    ...         borders = {'bottom': Line(stroke_color=red, stroke_width=3)}
     ... 
     ...     class band_page_footer(ReportBand):
     ...         height = 0.5*cm
     ...         elements = [
     ...             Label(text='Created with Geraldo Reports', top=0.1*cm),
     ...         ]
-    ...         borders = {'top': Line(strokeColor=navy)}
+    ...         borders = {'top': Line(stroke_color=navy)}
     ... 
     ...     class band_detail(ReportBand):
     ...         height = 0.7*cm
