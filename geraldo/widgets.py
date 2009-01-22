@@ -4,8 +4,6 @@ from sets import Set
 from reportlab.lib.units import cm
 from reportlab.lib.colors import black
 
-from django.template.defaultfilters import date
-
 BAND_WIDTH = 'band-width'
 
 class Widget(object):
@@ -186,17 +184,19 @@ class SystemField(Label):
         if self.get_value:
             return self.get_value(self.expression, fields)
 
-        return self.expression%SystemFieldDict(fields)
+        return self.expression%SystemFieldDict(self, fields)
 
 class SystemFieldDict(dict):
+    widget = None
     fields = None
 
-    def __init__(self, fields):
+    def __init__(self, widget, fields):
+        self.widget = widget
         self.fields = fields or {}
 
     def __getitem__(self, key):
         if key.startswith('now:'):
-            return date(
+            return self.widget.report.format_date(
                     self.fields.get('current_datetime', datetime.datetime.now()),
                     key[4:]
                     )

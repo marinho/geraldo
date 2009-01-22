@@ -1,4 +1,4 @@
-# django-geraldo setup
+# Geraldo setup
 
 from distutils.core import setup
 from geraldo import get_version
