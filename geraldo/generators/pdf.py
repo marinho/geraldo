@@ -97,6 +97,62 @@ class PDFGenerator(ReportGenerator):
         self._rendered_pages[-1].width = band.width = self.report.page_size[0] -\
                 self.report.margin_left - self.report.margin_right
 
+        # Band borders
+        b_all = band.borders.get('all', None)
+        if b_all:
+            graphic = isinstance(b_all, Graphic) and b_all or Rect()
+            graphic.set_rect(
+                    left=band_rect['left'],
+                    top=band_rect['top'] - band.height,
+                    width=band_rect['right'] - band_rect['left'],
+                    height=band.height
+                    )
+            self._rendered_pages[-1].elements.append(graphic)
+
+        b_left = band.borders.get('left', None)
+        if b_left:
+            graphic = isinstance(b_left, Graphic) and b_left or Line()
+            graphic.set_rect(
+                    left=band_rect['left'],
+                    top=band_rect['top'],
+                    right=band_rect['left'],
+                    bottom=band_rect['bottom']
+                    )
+            self._rendered_pages[-1].elements.append(graphic)
+
+        b_top = band.borders.get('top', None)
+        if b_top:
+            graphic = isinstance(b_top, Graphic) and b_top or Line()
+            graphic.set_rect(
+                    left=band_rect['left'],
+                    top=band_rect['top'],
+                    right=band_rect['right'],
+                    bottom=band_rect['top']
+                    )
+            self._rendered_pages[-1].elements.append(graphic)
+
+        b_right = band.borders.get('right', None)
+        if b_right:
+            graphic = isinstance(b_right, Graphic) and b_right or Line()
+            graphic.set_rect(
+                    left=band_rect['right'],
+                    top=band_rect['top'],
+                    right=band_rect['right'],
+                    bottom=band_rect['bottom']
+                    )
+            self._rendered_pages[-1].elements.append(graphic)
+
+        b_bottom = band.borders.get('bottom', None)
+        if b_bottom:
+            graphic = isinstance(b_right, Graphic) and b_right or Line()
+            graphic.set_rect(
+                    left=band_rect['left'],
+                    top=band_rect['bottom'],
+                    right=band_rect['right'],
+                    bottom=band_rect['bottom']
+                    )
+            self._rendered_pages[-1].elements.append(graphic)
+
         # Loop at band widgets
         for element in band.elements:
             # Widget element
@@ -161,62 +217,6 @@ class PDFGenerator(ReportGenerator):
                     graphic.top = top_position - graphic.top - graphic.height
 
                 self._rendered_pages[-1].elements.append(graphic)
-
-        # Band borders
-        b_all = band.borders.get('all', None)
-        if b_all:
-            graphic = isinstance(b_all, Graphic) and b_all or Rect()
-            graphic.set_rect(
-                    left=band_rect['left'],
-                    top=band_rect['top'] - band.height,
-                    width=band_rect['right'] - band_rect['left'],
-                    height=band.height
-                    )
-            self._rendered_pages[-1].elements.append(graphic)
-
-        b_left = band.borders.get('left', None)
-        if b_left:
-            graphic = isinstance(b_left, Graphic) and b_left or Line()
-            graphic.set_rect(
-                    left=band_rect['left'],
-                    top=band_rect['top'],
-                    right=band_rect['left'],
-                    bottom=band_rect['bottom']
-                    )
-            self._rendered_pages[-1].elements.append(graphic)
-
-        b_top = band.borders.get('top', None)
-        if b_top:
-            graphic = isinstance(b_top, Graphic) and b_top or Line()
-            graphic.set_rect(
-                    left=band_rect['left'],
-                    top=band_rect['top'],
-                    right=band_rect['right'],
-                    bottom=band_rect['top']
-                    )
-            self._rendered_pages[-1].elements.append(graphic)
-
-        b_right = band.borders.get('right', None)
-        if b_right:
-            graphic = isinstance(b_right, Graphic) and b_right or Line()
-            graphic.set_rect(
-                    left=band_rect['right'],
-                    top=band_rect['top'],
-                    right=band_rect['right'],
-                    bottom=band_rect['bottom']
-                    )
-            self._rendered_pages[-1].elements.append(graphic)
-
-        b_bottom = band.borders.get('bottom', None)
-        if b_bottom:
-            graphic = isinstance(b_right, Graphic) and b_right or Line()
-            graphic.set_rect(
-                    left=band_rect['left'],
-                    top=band_rect['bottom'],
-                    right=band_rect['right'],
-                    bottom=band_rect['bottom']
-                    )
-            self._rendered_pages[-1].elements.append(graphic)
 
         # Updates top position
         if update_top:

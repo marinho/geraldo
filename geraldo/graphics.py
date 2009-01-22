@@ -18,16 +18,6 @@ class Graphic(object):
 
     def set_rect(self, **kwargs):
         """This method will adapt the graphic element in a rect."""
-        raise Exception('Must be implemented in graphic class')
-
-class Rect(Graphic):
-    """A simple rectangle"""
-    left = None
-    top = None
-    width = None
-    height = None
-
-    def set_rect(self, **kwargs):
         self.left = kwargs.get('left', self.left)
         self.top = kwargs.get('top', self.top)
 
@@ -40,6 +30,13 @@ class Rect(Graphic):
             self.height = kwargs['height']
         elif 'bottom' in kwargs:
             self.height = kwargs['bottom'] - self.top
+
+class Rect(Graphic):
+    """A simple rectangle"""
+    left = None
+    top = None
+    width = None
+    height = None
 
 class RoundRect(Rect):
     """A rectangle graphic element that is possible set its radius and have
@@ -96,7 +93,7 @@ class Ellipse(Fixed):
     """A simple circle"""
     pass
 
-class Image(Rect):
+class Image(Graphic):
     """A image"""
     left = None
     top = None
