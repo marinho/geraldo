@@ -1,7 +1,7 @@
-VERSION = (0, 1, 1, 'alpha')
+VERSION = (0, 1, 'alpha', 2)
 
 def get_version():
-    return '%d.%d.%d-%s'%VERSION
+    return '%d.%d-%s(%d)'%VERSION
 
 __author__ = 'Marinho Brandao'
 __license__ = 'GNU Lesser General Public License (LGPL)'
