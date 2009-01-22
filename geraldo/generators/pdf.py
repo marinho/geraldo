@@ -52,7 +52,7 @@ class PDFGenerator(ReportGenerator):
         self._groups_stack = []
 
     def execute(self):
-        """Generate a PDF file using ReportLab pdfgen package."""
+        """Generates a PDF file using ReportLab pdfgen package."""
 
         # Initializes pages
         self._is_first_page = True
@@ -238,12 +238,14 @@ class PDFGenerator(ReportGenerator):
         if self.get_available_height() < height:
             self.force_new_page()
 
-    def force_new_page(self):
+    def force_new_page(self, insert_new_page=True):
         """Starts a new blank page"""
         # Ends the current page
         self._current_top_position = 0
 
-        self._rendered_pages.append(ReportPage())
+        # Creates the new page
+        if insert_new_page:
+            self._rendered_pages.append(ReportPage())
 
         # Starts a new one
         self.start_new_page()
@@ -503,7 +505,7 @@ class PDFGenerator(ReportGenerator):
             # Increment page number
             self._current_page_number += 1
 
-    def start_new_page(self, with_header=True, with_groups=True):
+    def start_new_page(self, with_header=True):
         """Do everything necessary to be done to start a new page"""
         self._rendered_pages.append(ReportPage())
 
@@ -660,7 +662,8 @@ class PDFGenerator(ReportGenerator):
             for obj in subreport.get_objects_list():
                 # Forces new page if there is no available space
                 if self.get_available_height() < subreport.detail_band.height:
-                    self.force_new_page()
+                    self.render_page_footer()
+                    self.force_new_page(insert_new_page=False)
 
                 # Renders the detail band
                 self.render_band(subreport.detail_band, current_object=obj)
