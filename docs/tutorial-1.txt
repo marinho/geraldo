@@ -1,0 +1,203 @@
+Tutorial 1
+==========
+
+THIS DOCUMENT IS STILL BEING WRITED
+
+Once you have Geraldo installed and its dependencies resolved (read
+Installation document to know about dependency for ReportLab, Python Imaging
+Library and Django) you can start opening the **settings.py** from your
+project to edit.
+
+    **Attention:** this tutorial is pressuposes you are going to use Geraldo
+    with a Django project, but in fact you can just ignore the Django parts
+    and all the rest is exactly the same for Django and non-Django cases.
+
+Step 1. Preparing your project
+------------------------------
+
+To install Geraldo in your Django project, you must change the setting
+**INSTALLED_APPS** in your **settings.py** file and this shoul be enough.
+
+But let's create a new URL to load a report PDF online.
+
+    **Attention:** Geraldo can work with online or not onfile ways to get PDF.
+    You are no dependent for a URL or view to generate reports from Geraldo.
+    This is just one of many ways you can do it.
+
+We are going to work with a common example for this kind of solution: a
+purchasing application.
+
+Let's say you have the following model classes:
+
+::
+
+    class Product(models.Model):
+        name = models.CharField(max_length=100)
+    
+    class Customer(models.Model):
+        name = models.CharField(max_length=100)
+    
+    class Purchase(models.Model):
+        customer = models.ForeignKey('Customer')
+        delivery_address = models.CharField(max_length=70, blank=True)
+        data_creation = models.DateField(blank=True, default=date.today())
+        date_bill = models.DateField(blank=True, null=True)
+        date_delivery = models.DateField(blank=True, null=True)
+        taxes = models.DecimalField(max_digits=12, decimal_places=2, blank=True, default=0)
+        sub_total_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, default=0)
+        total_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, default=0)
+    
+    class PurchaseItem(models.Model):
+        purchase = models.ForeignKey('Purchase')
+        product = models.ForeignKey('Producto')
+        unit_price = models.DecimalField(max_digits=12, decimal_places=2)
+        quantity = models.DecimalField(max_digits=12, decimal_places=2)
+        total_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, default=0)
+
+First you declare a new URL, this for example:
+
+::
+
+    urlpatterns = patterns('purchase.views',
+        url('^purchase-report/$', 'purchase_report'),
+    )
+
+The next step is you have a *view* for the created URL, like this:
+
+::
+
+    from django.http import HttpResponse
+    
+    from reports import PurchaseReport
+    from geraldo.generators import PDFGenerator
+    from models import Purchase
+    
+    def purchase_report(request):
+        resp = HttpResponse(mimetype='application/pdf')
+    
+        purchases = Purchase.objects.order_by('customer','id')
+        report = PurchaseReport(queryset=purchases)
+        report.generate_by(PDFGenerator, filename=resp)
+    
+        return resp
+
+You can see you first imported two important things:
+
+::
+
+    from reports import PurchaseReport
+    from geraldo.generators import PDFGenerator
+
+Your report class (we will create it in next step) and the generator class
+**PDFGenerator** you will need to generate a PDF file. In the future we will
+have other generators, for other formats of file.
+
+The next thing is you note you are going to return a PDF format **HttpResponse**,
+look:
+
+::
+
+        resp = HttpResponse(mimetype='application/pdf')
+    
+
+Now you are going to work your report instance:
+
+::
+
+        purchases = Purchase.objects.order_by('customer','id')
+        report = PurchaseReport(queryset=purchases)
+        report.generate_by(PDFGenerator, filename=resp)
+
+- The first thing you did is get all purchases, ordered by 'customer' and 'id'
+  fields;
+- After, you got a **report** instance from your report class
+  **PurchaseReport**, using purchases queryset as report driver queryset;
+- And latest, you called the 'generate_by', using the generator class.
+
+Now you have a prepared Django application to use a report you are going to
+create at the next step!
+
+Declaring the report class
+--------------------------
+
+The report class must be an inheritance from **geraldo.Report** class. You can
+create a new file 'reports.py' to declare your report classes inside.
+
+::
+
+    from geraldo import Report
+
+    class PurchaseReport(Report):
+        title = 'Purchases list'
+        author = 'John Smith Corporation'
+
+Going to see something more complex, you can set the page size, margins and
+other report attributes, like below:
+
+::
+
+    from geraldo import Report, landscape
+    from reportlab.lib.pagesizes import A5
+    from reportlab.lib.units import cm
+
+    class PurchaseReport(Report):
+        title = 'Purchases list'
+        author = 'John Smith Corporation'
+        
+        page_size = landscape(A5)
+        margin_left = 2*cm
+        margin_top = 0.5*cm
+        margin_right = 0.5*cm
+        margin_bottom = 0.5*cm
+
+As you can see, we use most we can from ReportLab libraries, their units, page
+sizes, stylizing, etc.
+
+A report is driven by **bands**. If you are used to work with other report
+engines you know what is a band.
+
+A band is a row with elements in the report canvas. Bands in essence are the
+same but their use vary depending you are using a band as the Page Header or
+Report Summary, for example.
+
+A report can have a band for each one of following attributes:
+
+Detail Band
+-----------
+
+The detail band is the most important band in a report. This is because the
+detail band is the reason of the existency of every report.
+
+The detail band is used most of times to show object field values. This is the
+same for a detailing info page or just a list or grid.
+
+The detail band is rendered one time per each object in the queryset attribute.
+So, if you have 10 objects in the queryset, you will have detail band rendered
+10 times, one time per each object.
+
+Let's change our report to have a detail band, see below:
+
+::
+
+    from geraldo import Report, landscape, ReportBand, ObjectValue
+    from reportlab.lib.pagesizes import A5
+    from reportlab.lib.units import cm
+
+    class PurchaseReport(Report):
+        title = 'Purchases list'
+        author = 'John Smith Corporation'
+        
+        page_size = landscape(A5)
+        margin_left = 2*cm
+        margin_top = 0.5*cm
+        margin_right = 0.5*cm
+        margin_bottom = 0.5*cm
+    
+        class band_detail(ReportBand):
+            height = 0.5*cm
+            elements=(
+                ObjectValue(attribute_name='id', left=0.5*cm),
+                ObjectValue(attribute_name='date_creation', left=3*cm,
+                    get_value=lambda instance: instance.data_lancamento.strftime('%m/%d/%Y')),
+                )
+

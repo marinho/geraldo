@@ -48,6 +48,8 @@ date formatting method, otherwise you will have to specify your own one.
 A very little demo with how Geraldo works
 -----------------------------------------
 
+::
+
     from geraldo import Report
     from geraldo.generators import PDFGenerator
 
@@ -64,6 +66,8 @@ This code above will output your report, driven by the queryset 'objects_list',
 into file 'cars_list.pdf'.
 
 Now, an example in a Django's view:
+
+::
 
     from django.http import HttpResponse
     from geraldo import Report
