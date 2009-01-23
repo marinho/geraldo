@@ -1,7 +1,7 @@
 Graphics Reference
 ==================
 
-Graphics elements are the way you have to draw images ad shapes on the report
+Graphics elements are the way you have to draw images ad shapes on the band
 canvas.
 
 They can be useful also to make customized borders in bands.
