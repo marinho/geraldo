@@ -23,12 +23,7 @@ def get_attr_value(obj, attr):
     return value
 
 class BaseReport(object):
-    """This class must be inherited to be used as a new report.
-    
-    A report has bands and is driven by a QuerySet. It can have a title and
-    margins definitions.
-    
-    Depends on ReportLab to work properly"""
+    """Basic Report class, inherited and used to make reports adn subreports"""
 
     # Bands - is not possible to have more than one band from the same kind
     band_begin = None
@@ -71,7 +66,12 @@ class BaseReport(object):
         raise Exception('If Django is not found, you must declare your own date formatting method in your Report class')
 
 class Report(BaseReport):
-    """Class to be inherited and used to make reports"""
+    """This class must be inherited to be used as a new report.
+    
+    A report has bands and is driven by a QuerySet. It can have a title and
+    margins definitions.
+    
+    Depends on ReportLab to work properly"""
     # Report properties
     title = ''
     author = ''
@@ -183,9 +183,7 @@ class TableBand(ReportBand): # TODO
 
 class ReportGroup(object):
     """This a report grouper class. A report can be multiple groupped by
-    attribute values.
-    
-    Yet in development process."""
+    attribute values."""
     attribute_name = None
     band_header = None
     band_footer = None

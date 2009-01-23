@@ -88,3 +88,19 @@ Now, an example in a Django's view:
 
 As you can see, now returned the PDF output to HttpResponse, instead of a file.
 
+License
+-------
+
+Geraldo is under **Lesser Gnu Public License**, take a look on the following URL
+to read it:
+
+    http://www.gnu.org/copyleft/lesser.html
+
+Authors
+-------
+
+Geraldo has been created by **Marinho Brandao** a brazilian Django and Python
+enthusiast.
+
+Home page: **http://marinhobrandao.com/**
+E-mail: **marinho at gmail dot com**

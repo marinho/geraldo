@@ -1,0 +1,27 @@
+Generators Reference
+====================
+
+Generators are classes to generate a report instance to some data format. In
+future we will have generators to XML, HTML, TXT, PS, images and so on.
+
+PDF Generator
+-------------
+
+Path: **geraldo.generators.PDFGenerator**
+
+This is our once currently available generator. It uses ReportLab awesome
+library to create them.
+
+To use it you just do something like this:
+
+    >>> my_report_instance.generate_by(PDFGenerator, filename='file.pdf')
+
+In **filename** argument you can use a file path string or a file output object.
+Examples:
+
+    >>> fp = file('test.pdf', 'w')
+    >>> my_report_instance.generate_by(PDFGenerator, filename=fp)
+    >>> 
+    >>> resp = HttpResponse(mimetype='application/pdf')
+    >>> my_report_instance.generate_by(PDFGenerator, filename=resp)
+

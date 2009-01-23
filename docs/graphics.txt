@@ -1,0 +1,136 @@
+Graphics Reference
+==================
+
+Graphics elements are the way you have to draw images ad shapes on the report
+canvas.
+
+They can be useful also to make customized borders in bands.
+
+Graphic
+-------
+
+This is the basic graphic class. You should use it only when inheriting to
+create your own graphic class, never use it directly.
+
+Its rect area is based on **left-width-top-height** dimensions.
+
+Path: **geraldo.graphics.Graphic**
+
+**Attributes**
+
+- **visible** - Default: True
+- **stroke** - Default: True
+- **stroke_color** - Default: reportlab.lib.colors.black
+- **stroke_width** - Default: 1
+- **fill** - Default: False
+- **fill_color** - Default: reportlab.lib.colors.black
+
+**Methods**
+
+- **set_rect(**kwargs)**
+
+    Used to generator set the hard rectangle when rendering pages. Override it
+    to set your own rule if you need.
+
+Fixed
+-----
+
+Path: **geraldo.graphics.Fixed**
+
+In the same way of Graphic class, you should use this just to inhert and create
+your own graphic. This is a graphic with rect with **left-right-top-bottom**
+dimensioning.
+
+Rect
+----
+
+Path: **geraldo.Rect**
+
+A rectangle with square borders on the canvas.
+
+**Attributes**
+
+- **left** - Default: None
+- **width** - Default: None
+- **top** - Default: None
+- **height** - Default: None
+
+RoundRect
+---------
+
+Path: **geraldo.RoundRect**
+
+A rectangle with rounded borders on the canvas.
+
+**Attributes**
+
+- **left** - Default: None
+- **width** - Default: None
+- **top** - Default: None
+- **height** - Default: None
+- **radius**
+
+    Inform the radius number for the round corners.
+
+Line
+----
+
+Path: **geraldo.Line**
+
+**Attributes**
+
+- **left** - Default: None
+- **width** - Default: None
+- **right** - Default: None
+- **bottom** - Default: None
+
+Circle
+------
+
+Path: **geraldo.Circle**
+
+**Attributes**
+
+- **left_center** - Default: None
+- **width_center** - Default: None
+- **radius** - Default: None
+
+Arc
+---
+
+Path: **geraldo.Arc**
+
+**Attributes**
+
+- **left** - Default: None
+- **width** - Default: None
+- **right** - Default: None
+- **bottom** - Default: None
+- **start_angle** - Default: 0
+- **extent** - Default: 90
+
+Ellipse
+-------
+
+Path: **geraldo.Ellipse**
+
+**Attributes**
+
+- **left** - Default: None
+- **width** - Default: None
+- **right** - Default: None
+- **bottom** - Default: None
+
+Image
+-----
+
+Path: **geraldo.Image**
+
+**Attributes**
+
+- **left** - Default: None
+- **width** - Default: None
+- **top** - Default: None
+- **height** - Default: None
+- **filename** - Default: None
+
