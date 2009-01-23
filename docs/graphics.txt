@@ -48,12 +48,16 @@ Path: **geraldo.Rect**
 
 A rectangle with square borders on the canvas.
 
+**Example of use**
+
+    >>> Rect(left=1*cm, top=0.5*cm, width=10*cm, height=0.5*cm, fill=True, fill_color=yellow)
+
 **Attributes**
 
-- **left** - Default: None
-- **width** - Default: None
-- **top** - Default: None
-- **height** - Default: None
+- **left** - Required
+- **width** - Required
+- **top** - Required
+- **height** - Required
 
 RoundRect
 ---------
@@ -62,13 +66,17 @@ Path: **geraldo.RoundRect**
 
 A rectangle with rounded borders on the canvas.
 
+**Example of use**
+
+    >>> RoundRect(left=1*cm, top=0.5*cm, width=10*cm, height=0.5*cm, stroke=True, stroke_width=3, stroke_color=blue)
+
 **Attributes**
 
-- **left** - Default: None
-- **width** - Default: None
-- **top** - Default: None
-- **height** - Default: None
-- **radius**
+- **left** - Required
+- **width** - Required
+- **top** - Required
+- **height** - Required
+- **radius** - Required
 
     Inform the radius number for the round corners.
 
@@ -77,35 +85,47 @@ Line
 
 Path: **geraldo.Line**
 
+**Example of use**
+
+    >>> Line(left=1*cm, top=0.5*cm, right=10*cm, bottom=0.5*cm)
+
 **Attributes**
 
-- **left** - Default: None
-- **width** - Default: None
-- **right** - Default: None
-- **bottom** - Default: None
+- **left** - Required
+- **width** - Required
+- **right** - Required
+- **bottom** - Required
 
 Circle
 ------
 
 Path: **geraldo.Circle**
 
+**Example of use**
+
+    >>> Circle(left_center=6*cm, top_center=3.5*cm, radius=3*cm)
+
 **Attributes**
 
-- **left_center** - Default: None
-- **width_center** - Default: None
-- **radius** - Default: None
+- **left_center** - Required
+- **top_center** - Required
+- **radius** - Required
 
 Arc
 ---
 
 Path: **geraldo.Arc**
 
+**Example of use**
+
+    >>> Arc(left=1*cm, top=0.5*cm, right=10*cm, bottom=0.5*cm, extent=50, start_angle=5)
+
 **Attributes**
 
-- **left** - Default: None
-- **width** - Default: None
-- **right** - Default: None
-- **bottom** - Default: None
+- **left** - Required
+- **width** - Required
+- **right** - Required
+- **bottom** - Required
 - **start_angle** - Default: 0
 - **extent** - Default: 90
 
@@ -114,23 +134,34 @@ Ellipse
 
 Path: **geraldo.Ellipse**
 
+**Example of use**
+
+    >>> Ellipse(left=1*cm, top=0.5*cm, right=10*cm, bottom=0.5*cm)
+
 **Attributes**
 
-- **left** - Default: None
-- **width** - Default: None
-- **right** - Default: None
-- **bottom** - Default: None
+- **left** - Required
+- **width** - Required
+- **right** - Required
+- **bottom** - Required
 
 Image
 -----
 
 Path: **geraldo.Image**
 
+**Example of use**
+
+    >>> Image(left=1*cm, top=0.5*cm, right=10*cm, bottom=0.5*cm, filename='path/to/file.jpg')
+
 **Attributes**
 
-- **left** - Default: None
-- **width** - Default: None
-- **top** - Default: None
-- **height** - Default: None
-- **filename** - Default: None
+- **left** - Required
+- **width** - Required
+- **top** - Required
+- **height** - Required
+- **filename** - Required
+
+    You can inform a filename path or a Python Imaging Library Image instance.
+    Then you have to have this library installed.
 

@@ -1,6 +1,10 @@
 Widgets Reference
 =================
 
+Widgets are report elements to show text values on report canvas.
+
+All widget classes can be initialized with their attributes as class arguments.
+
 Widget
 ------
 
@@ -57,6 +61,10 @@ Path: **geraldo.Label**
 
 A label is just a simple text.
 
+**Example of use**
+
+    >>> Label(text='Taxes we have paid', left=1*cm, top=0.5*cm, width=10*cm, height=0.5*cm)
+
 **Attributes**
 
 - **height** - Default: 0.5*cm
@@ -83,6 +91,10 @@ You can also use 'display_format' attribute to set a friendly string formating,
 with a mask or additional text.
 
 'get_value' lambda must have 'instance' argument.
+
+**Example of use**
+
+    >>> ObjectValue(attribute_name='name', left=1*cm, top=0.5*cm, width=10*cm, height=0.5*cm)
 
 **Attributes**
 
@@ -130,6 +142,10 @@ This shows system informations, like the report title, current date/time, page
 number, pages count, etc.
     
 'get_value' must have 'expression' and 'fields' argument.
+
+**Example of use**
+
+    >>> ObjectValue(expression='%(report_title)s', left=1*cm, top=0.5*cm, width=10*cm, height=0.5*cm)
 
 **Attributes**
 
