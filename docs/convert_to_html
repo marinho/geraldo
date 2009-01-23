@@ -1,0 +1,7 @@
+#!/bin/sh
+for filename in `ls *.txt`
+    do
+        rst2html $filename --config=docutils.conf > $filename.html
+    done
+
+# rst2html *.txt --config=docutils.conf

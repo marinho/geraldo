@@ -7,7 +7,7 @@ top, summary, page header, page footer, in table or each one for an object.
 
 It is under GPL and works only with Django framework and Python language.
 
-It depends algos for ReportLab library.
+It depends on ReportLab library to work.
 
 Our main long terms goals are (those with (x) are working):
 
@@ -48,7 +48,7 @@ User interaction
 
 - Have a GUI tool to design reports, if possible to be used in a web browser
 - Have a way to create and print reports using a server, with no low leve coding
-- Have a explicit, clear and full documentation
+- Have a explicit, clear and full documentation (x)
 
 Dependencies
 ------------
