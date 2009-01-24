@@ -30,13 +30,12 @@ like JPG, PNG, GIF, etc.
 Method to get chart
 
     >>> def get_chart_for_user(graphic):
-    ...     user = graphic.generator._current_object
-    ...     data = [dic['id'] for dic in user.user_permissions.values('id')]
+    ...     data = [dic['id'] for dic in graphic.instance.user_permissions.values('id')]
     ... 
     ...     if not data:
     ...         return None
     ... 
-    ...     filename = os.path.join(cur_dir, 'user-chart-%d.png'%user.id)
+    ...     filename = os.path.join(cur_dir, 'user-chart-%d.png'%graphic.instance.id)
     ... 
     ...     bar_plot(filename, data, 400, 300, border = 20, grid = True, rounded_corners = True)
     ... 
@@ -47,7 +46,7 @@ Report class
     >>> class UsersReport(Report):
     ...     title = 'Using chart from CairoPlot'
     ...     borders = {'all': True}
-    ...     default_style = {}
+    ...     default_style = {'fontName': 'Helvetica'}
     ...     _test_temp = True
     ... 
     ...     class band_summary(ReportBand):
@@ -87,7 +86,6 @@ Report class
     ...     class band_detail(ReportBand):
     ...         height = 8.5*cm
     ...         force_new_page = True
-    ...         default_style = {'fontName': 'Helvetica'}
     ...         elements = [
     ...             # check why BAND_WIDTH doesn't work XXX
     ...             Rect(width=19*cm, height=1.6*cm, left=0, top=0, fill_color=yellow, fill=True),
@@ -95,7 +93,7 @@ Report class
     ...                 get_value=lambda instance: instance.get_full_name().strip() or instance.username,
     ...                 style={'fontName': 'Helvetica-Bold', 'fontSize': 16, 'textColor': navy}),
     ...             Image(left=0.5*cm, top=2*cm,
-    ...                 get_image=lambda graphic: PILImage.open(os.path.join(cur_dir, 'photo2.jpg'))),
+    ...                 get_image=lambda graphic: PILImage.open(os.path.join(cur_dir, '%d.jpg'%graphic.instance.id))),
     ...
     ...             Label(text='First name:', top=2*cm, left=5*cm),
     ...             ObjectValue(attribute_name='first_name', width=BAND_WIDTH, top=2*cm, left=7*cm),
@@ -164,7 +162,7 @@ Getting data
 Building the chart
 
     >>> data = dict([(user['username'], user['id']) for user in report.queryset.values('id', 'username')])
-    >>> pie_plot(os.path.join(cur_dir, 'cairoplot.png'), data, 400, 300)
+    >>> pie_plot(os.path.join(cur_dir, 'cairoplot.png'), data, 350, 200)
 
 PDF generation
 

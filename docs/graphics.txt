@@ -25,6 +25,16 @@ Path: **geraldo.graphics.Graphic**
 - **fill** - Default: False
 - **fill_color** - Default: reportlab.lib.colors.black
 
+**Rendering attributes**
+
+They are read-only attributes you can use in render time.
+
+- **instance** - current object being rendered
+- **generator** - generator instance
+- **report** - report instance this element is in
+- **band** - band this element is in
+- **page** - current page
+
 **Methods**
 
 - **set_rect(**kwargs)**

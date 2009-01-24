@@ -47,6 +47,7 @@ You can also override some methods to customize some things.
 - **default_font_color** - Default: black
 - **default_stroke_color** - Default: black
 - **default_fill_color** - Default: black
+- **default_style** - Default: None
 
 **Methods**
 
@@ -94,6 +95,7 @@ queryset.
 - **elements** - Default: []
 - **child_bands** - Default: []
 - **force_new_page** - Default: False
+- **default_style** - Default: None
 
 ReportGroup
 -----------

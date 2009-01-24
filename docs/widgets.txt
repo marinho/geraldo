@@ -54,6 +54,16 @@ own widgets, otherwise you shouldn't use it directly.
     This is the way you have to customize easily the widget output. Be careful
     with this attribute, because each one widget has its own set of arguments.
 
+**Rendering attributes**
+
+They are read-only attributes you can use in render time.
+
+- **instance** - current object being rendered
+- **generator** - generator instance
+- **report** - report instance this element is in
+- **band** - band this element is in
+- **page** - current page
+
 Label
 -----
 

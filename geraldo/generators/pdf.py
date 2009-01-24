@@ -682,7 +682,7 @@ class PDFGenerator(ReportGenerator):
 
     def make_paragraph_style(self, band, style=None):
         """Merge report default_style + band default_style + widget style"""
-        d_style = self.report.default_style or {}
+        d_style = self.report.default_style.copy()
 
         if band.default_style:
             for k,v in band.default_style.items():

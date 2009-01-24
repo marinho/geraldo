@@ -88,6 +88,7 @@ class Report(BaseReport):
         super(Report, self).__init__(queryset)
 
         self.subreports = self.subreports or []
+        self.default_style = self.default_style or {}
 
     def generate_by(self, generator_class, *args, **kwargs):
         """This method uses a generator inherited class to generate a report
@@ -190,6 +191,7 @@ class ReportBand(object):
 
         self.elements = self.elements or []
         self.child_bands = self.child_bands or []
+        self.default_style = self.default_style or {}
 
     def clone(self):
         """Does a deep copy of this band to be rendered"""
