@@ -184,6 +184,13 @@ class PDFGenerator(ReportGenerator):
             elif isinstance(element, Graphic):
                 graphic = copy.deepcopy(element)
 
+                # Set widget basic attributes
+                graphic.instance = current_object
+                graphic.generator = self
+                graphic.report = self.report # This should be done by a metaclass in Band domain TODO
+                graphic.band = band # This should be done by a metaclass in Band domain TODO
+                graphic.page = self._rendered_pages[-1]
+
                 # Set graphic colors
                 graphic.fill_color = graphic.fill_color or self.report.default_fill_color
                 graphic.stroke_color = graphic.stroke_color or self.report.default_stroke_color

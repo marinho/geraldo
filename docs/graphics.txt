@@ -165,3 +165,8 @@ Path: **geraldo.Image**
     You can inform a filename path or a Python Imaging Library Image instance.
     Then you have to have this library installed.
 
+- **get_image** - Default: None
+
+    You should inform a function or lambda object to this attribute when you
+    want to work with Images or Charts based on object values or logic.
+

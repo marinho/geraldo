@@ -101,9 +101,14 @@ class Image(Graphic):
     _height = None
     filename = None
     _image = None # PIL image object is stored here
+    get_image = None # To be overrided
 
     def _get_image(self):
-        """Uses Python Imaging Library to load an image and get its informations"""
+        """Uses Python Imaging Library to load an image and get its
+        informations"""
+        if self.get_image:
+            return get_image()
+
         if not self._image:
             try:
                 import Image as PILImage

@@ -2,3 +2,10 @@
 --------------------------------
 * Removed all Django dependecy. Now when use '%(now:)s' macro in SystemField
   instances you have to use Python date formatting standards.
+
+* Fixed PDF generator to set some report reference instances to graphic
+  elements. This is important to make graphic elements in a detail band.
+
+* graphics.Image with a new attribute 'get_image' to set manually functions
+  to return image instead of load from PIL object or image. This is important
+  to show images and charts depending on object values and logic.
