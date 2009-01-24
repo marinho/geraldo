@@ -81,15 +81,6 @@ Get it from the following URL:
 
 The tested version is **2.1**.
 
-**Django**
-
-Geraldo is not a Django dependent, but since it has been created as a pluggable
-application, you can use better if you have Django installed.
-
-Being honest the one thing you are going to lose if you haven't Django
-installed is the date formatting fuction for **SystemField** widget, and
-Geraldo has a way for you live without this.
-
 **Python Imaging Library**
 
 Geraldo depends on PIL for works with Images manipulation on the canvas. If you

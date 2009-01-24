@@ -166,12 +166,18 @@ number, pages count, etc.
     - %(page_number)s
     - %(page_count)s
     - %(report_author)s
-    - %(now:FORMAT)s - in replace of 'FORMAT' you can use Django standard
-      template filter date formatting. But if you are using your own
-      **Report.format_date** method, this will use it.
+    - %(now:FORMAT)s - in replace of 'FORMAT' you can use date formatting
+      standard template filter date formatting. But if you are using your
+      own **Report.format_date** method, this will use it.
 
         Examples:
         
-        - '%(now:Y)' - shows the 4-based current year
-        - '%(now:m/d/Y)' - shows something like '01/23/2009'
+        - '%(now:%Y)' - shows the 4-based current year
+        - '%(now:%m/%d/%Y)' - shows something like '01/23/2009'
+
+        **Note:** this is changed now. Before this function used Django
+        template filter 'date' to format datetime, but once we were
+        going to use two standards, this wouldn't be nice. If you want 
+        to use Django's template filter, you can override method
+        **Report.format_date(date, expression)** and use it.
 

@@ -42,8 +42,8 @@ Dependencies
 Geraldo is fully dependent from ReportLab, not only because its PDF generation,
 but also its units and styles library. We have tested with ReportLab version 2.1
 
-Geraldo is not Django dependent, but it depends on Django to use its default
-date formatting method, otherwise you will have to specify your own one.
+Geraldo is not Django dependent, but it can work as a Django pluggable
+application.
 
 A very little demo with how Geraldo works
 -----------------------------------------

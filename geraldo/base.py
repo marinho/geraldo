@@ -4,11 +4,6 @@ from reportlab.lib.units import cm
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.colors import black
 
-try:
-    from django.template.defaultfilters import date as format_date
-except ImportError:
-    format_date = None
-
 def landscape(page_size):
     return page_size[1], page_size[0]
 
@@ -58,12 +53,8 @@ class BaseReport(object):
         return [object for object in self.queryset]
 
     def format_date(self, date, expression):
-        """Use a Django template filter or a manually declared function to
-        return formatted datetime"""
-        if format_date:
-            return format_date(date, expression)
-        
-        raise Exception('If Django is not found, you must declare your own date formatting method in your Report class')
+        """Use a date format string method to return formatted datetime"""
+        return date.strftime(expression)
 
 class Report(BaseReport):
     """This class must be inherited to be used as a new report.

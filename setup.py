@@ -6,8 +6,8 @@ from geraldo import get_version
 setup(
     name = 'Geraldo',
     version = get_version(),
-    description = 'Geraldo is a reports engine for Django applications',
-    long_description = 'Geraldo is a pluggable application for Django Web Framework that works with ReportLab to generate complex reports.',
+    description = 'Geraldo is a reports engine for Python and Django applications',
+    long_description = 'Geraldo is a Python and Django pluggable application for that works with ReportLab to generate complex reports.',
     author = 'Marinho Brandao',
     author_email = 'marinho@gmail.com',
     url = 'http://github.com/marinho/django-geraldo/',

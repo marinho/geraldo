@@ -2,8 +2,8 @@ Tutorial 1
 ==========
 
 Once you have Geraldo installed and its dependencies resolved (read
-Installation document to know about dependency for ReportLab, Python Imaging
-Library and Django) you can start opening the **settings.py** from your
+Installation document to know about dependency for ReportLab and Python
+Imaging Library) you can start opening the **settings.py** from your
 project to edit.
 
     **Attention:** this tutorial is pressuposes you are going to use Geraldo
@@ -241,7 +241,7 @@ Add this code block to the end of report class to have both bands:
             height = 0.5*cm
             elements = [
                     Label(text='Geraldo Reports', top=0.1*cm),
-                    SystemField(expression=u'Printed in %(now:Y, b d)s at %(now:H:i)s', top=0.1*cm,
+                    SystemField(expression=u'Printed in %(now:%Y, %b %d)s at %(now:%H:%M)s', top=0.1*cm,
                         width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
                     ]
             borders = {'top': True}

@@ -41,7 +41,7 @@ Band classes
     ...     height = 0.5*cm
     ...     elements = [
     ...         Label(text='Created with Geraldo Reports', top=0.1*cm),
-    ...         SystemField(expression='Printed in %(now:Y, b d)s at %(now:H:i)s', top=0.1*cm,
+    ...         SystemField(expression='Printed in %(now:%Y, %b %d)s at %(now:%H:%M)s', top=0.1*cm,
     ...             width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
     ...     ]
     ...     borders = {'top': True}
