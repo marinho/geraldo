@@ -35,10 +35,7 @@ class Graphic(Element):
 
 class Rect(Graphic):
     """A simple rectangle"""
-    left = None
-    top = None
-    width = None
-    height = None
+    pass
 
 class RoundRect(Rect):
     """A rectangle graphic element that is possible set its radius and have

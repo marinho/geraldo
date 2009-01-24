@@ -47,7 +47,6 @@ Report class
     ...     title = 'Using chart from CairoPlot'
     ...     borders = {'all': True}
     ...     default_style = {'fontName': 'Helvetica'}
-    ...     _test_temp = True
     ... 
     ...     class band_summary(ReportBand):
     ...         height = 5*cm
@@ -88,7 +87,7 @@ Report class
     ...         force_new_page = True
     ...         elements = [
     ...             # check why BAND_WIDTH doesn't work XXX
-    ...             Rect(width=19*cm, height=1.6*cm, left=0, top=0, fill_color=yellow, fill=True),
+    ...             Rect(width=BAND_WIDTH, height=1.6*cm, left=0, top=0, fill_color=yellow, fill=True, _test_temp=True),
     ...             ObjectValue(attribute_name='username', width=BAND_WIDTH, left=0.4*cm, top=0.4*cm,
     ...                 get_value=lambda instance: instance.get_full_name().strip() or instance.username,
     ...                 style={'fontName': 'Helvetica-Bold', 'fontSize': 16, 'textColor': navy}),
@@ -104,7 +103,7 @@ Report class
     ...             Label(text='Username:', top=3*cm, left=5*cm),
     ...             ObjectValue(attribute_name='username', width=BAND_WIDTH, top=3*cm, left=7*cm),
     ... 
-    ...             Image(left=10.5*cm, top=2*cm, get_image=get_chart_for_user, _test_temp=True),
+    ...             Image(left=10.5*cm, top=2*cm, get_image=get_chart_for_user),
     ...         ]
     ...         borders = {'bottom': True}
     ...         child_bands = [
@@ -112,8 +111,8 @@ Report class
     ...                 default_style={'textColor': white, 'fontName': 'Helvetica-Bold'},
     ...                 height = 0.6*cm,
     ...                 elements = [
-    ...                     Rect(left=0, top=0, width=19*cm, height=0.6*cm,
-    ...                         fill_color=navy, fill=True),
+    ...                     Rect(left=0, top=0, width=BAND_WIDTH, height=0.6*cm,
+    ...                         fill_color=navy, fill=True, _test_temp=True),
     ...                     Label(text="ID", top=0.1*cm, left=0.5*cm),
     ...                     Label(text="Permission", top=0.1*cm, left=4*cm),
     ...                 ],

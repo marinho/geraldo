@@ -215,6 +215,8 @@ class ReportGroup(object):
 
 class Element(object):
     """The base class for widgets and graphics"""
+    left = 0
+    top = 0
     _width = 0
     _height = 0
 
@@ -241,4 +243,8 @@ class Element(object):
         self._height = value
 
     height = property(_get_height, _set_height)
+
+    def clone(self):
+        """Uses deepcopy to return a copy of this element"""
+        return copy.deepcopy(self)
 

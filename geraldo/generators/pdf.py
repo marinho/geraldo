@@ -1,4 +1,4 @@
-import copy, datetime
+import datetime
 from base import ReportGenerator
 
 from reportlab.pdfgen.canvas import Canvas
@@ -155,7 +155,7 @@ class PDFGenerator(ReportGenerator):
         for element in band.elements:
             # Widget element
             if isinstance(element, Widget):
-                widget = copy.deepcopy(element)
+                widget = element.clone()
 
                 # Set widget colors
                 widget.font_color = self.report.default_font_color
@@ -180,7 +180,7 @@ class PDFGenerator(ReportGenerator):
 
             # Graphic element
             elif isinstance(element, Graphic):
-                graphic = copy.deepcopy(element)
+                graphic = element.clone()
 
                 # Set widget basic attributes
                 graphic.instance = current_object
