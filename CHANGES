@@ -1,0 +1,4 @@
+2009-01-23: Version 0.2-alpha(4)
+--------------------------------
+* Removed all Django dependecy. Now when use '%(now:)s' macro in SystemField
+  instances you have to use Python date formatting standards.
