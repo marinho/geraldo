@@ -1,9 +1,7 @@
 # coding: utf-8
 # Daniel Vainsencher
 
-import doctest, unittest
-import os
-import glob
+import doctest, unittest, os, glob, sys
 
 here = os.path.dirname(__file__)
 

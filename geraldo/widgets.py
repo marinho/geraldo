@@ -4,11 +4,11 @@ from sets import Set
 from reportlab.lib.units import cm
 from reportlab.lib.colors import black
 
-BAND_WIDTH = 'band-width'
+from base import BAND_WIDTH, BAND_HEIGHT, Element
 
-class Widget(object):
+class Widget(Element):
     """A widget is a value representation on the report"""
-    height = 0.5*cm
+    _height = 0.5*cm
     _width = 5*cm
     left = 0
     top = 0
@@ -27,18 +27,6 @@ class Widget(object):
         values."""
         for k,v in kwargs.items():
             setattr(self, k, v)
-
-    # 'width' property
-    def _get_width(self):
-        if self._width == BAND_WIDTH and self.band:
-            return self.band.width
-
-        return self._width
-
-    def _set_width(self, value):
-        self._width = value
-
-    width = property(_get_width, _set_width)
 
 class Label(Widget):
     """A label is just a simple text.

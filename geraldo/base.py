@@ -4,6 +4,9 @@ from reportlab.lib.units import cm
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.colors import black
 
+BAND_WIDTH = 'band-width'
+BAND_HEIGHT = 'band-height'
+
 def landscape(page_size):
     return page_size[1], page_size[0]
 
@@ -33,10 +36,11 @@ class BaseReport(object):
     print_if_empty = False # This means if a queryset is empty, the report will
                            # be generated or not
 
-    # Colors
+    # Style and colors
     default_font_color = black
     default_stroke_color = black
     default_fill_color = black
+    borders = None
 
     def __init__(self, queryset=None):
         self.queryset = queryset or self.queryset
@@ -73,8 +77,12 @@ class Report(BaseReport):
     margin_bottom = 1*cm
     margin_left = 1*cm
     margin_right = 1*cm
+    _page_rect = None
 
+    # SubReports
     subreports = None
+
+    default_style = None
 
     def __init__(self, queryset=None):
         super(Report, self).__init__(queryset)
@@ -89,6 +97,25 @@ class Report(BaseReport):
         generator = generator_class(self, *args, **kwargs)
 
         return generator.execute()
+
+    def get_page_rect(self):
+        """Calculates a dictionary with page dimensions inside the margins
+        and returns. It is used to make page borders."""
+        if not self._page_rect:
+            client_width = self.page_size[0] - self.margin_left - self.margin_right
+            client_height = self.page_size[1] - self.margin_top - self.margin_bottom
+
+            self._page_rect = {
+                'left': self.margin_left,
+                'top': self.margin_top,
+                'right': self.page_size[0] - self.margin_right,
+                'bottom': self.page_size[1] - self.margin_bottom,
+                'width': client_width,
+                'height': client_height,
+                }
+
+        return self._page_rect
+
 
 class SubReport(BaseReport):
     """Class to be used for subreport objects. It doesn't need to be inherited.
@@ -155,6 +182,7 @@ class ReportBand(object):
     elements = None
     child_bands = None
     force_new_page = False
+    default_style = None
 
     def __init__(self, **kwargs):
         for k,v in kwargs.items():
@@ -182,4 +210,33 @@ class ReportGroup(object):
     def __init__(self, **kwargs):
         for k,v in kwargs.items():
             setattr(self, k, v)
+
+class Element(object):
+    """The base class for widgets and graphics"""
+    _width = 0
+    _height = 0
+
+    # 'width' property
+    def _get_width(self):
+        if self._width == BAND_WIDTH and self.band:
+            return self.band.width
+
+        return self._width
+
+    def _set_width(self, value):
+        self._width = value
+
+    width = property(_get_width, _set_width)
+
+    # 'height' property
+    def _get_height(self):
+        if self._height == BAND_HEIGHT and self.band:
+            return self.band.height
+
+        return self._height
+
+    def _set_height(self, value):
+        self._height = value
+
+    height = property(_get_height, _set_height)
 

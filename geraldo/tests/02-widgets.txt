@@ -6,8 +6,8 @@ Widgets are objects that show field or expression values.
     >>> from geraldo.widgets import Widget
     >>> from reportlab.lib.units import cm
 
-    >>> Widget.height == 0.5*cm
-    True
+    >>> Widget.height.__class__.__name__
+    'property'
     >>> Widget.width.__class__.__name__
     'property'
     >>> Widget.left

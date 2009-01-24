@@ -80,9 +80,6 @@ Report class
     ...                     ]
     ...                 ),
     ...         ),
-    ...         #SubReport(
-    ...         #    queryset_string = 'groups.all()'
-    ...         #),
     ...     ]
 
 Setting permissions

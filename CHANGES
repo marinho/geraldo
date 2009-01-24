@@ -9,3 +9,5 @@
 * graphics.Image with a new attribute 'get_image' to set manually functions
   to return image instead of load from PIL object or image. This is important
   to show images and charts depending on object values and logic.
+
+* Added support to border in Report class to make borders around the margin.

@@ -40,6 +40,7 @@ class PDFGenerator(ReportGenerator):
 
     # The rendered report have pages, each page is a ReportPage instance
     _rendered_pages = None
+    _page_rect = None
 
     def __init__(self, report, filename):
         super(PDFGenerator, self).__init__(report)
@@ -80,6 +81,55 @@ class PDFGenerator(ReportGenerator):
         self.canvas.setTitle(self.report.title)
         self.canvas.setAuthor(self.report.author)
 
+    def render_border(self, borders_dict, rect_dict):
+        """Renders a border in the coordinates setted in the rect."""
+        b_all = borders_dict.get('all', None)
+        if b_all:
+            graphic = isinstance(b_all, Graphic) and b_all or Rect()
+            graphic.set_rect(
+                    left=rect_dict['left'],
+                    top=rect_dict['top'] - rect_dict['height'],
+                    width=rect_dict['right'] - rect_dict['left'],
+                    height=rect_dict['height'],
+                    )
+            self._rendered_pages[-1].elements.append(graphic)
+
+        b_left = borders_dict.get('left', None)
+        if b_left:
+            graphic = isinstance(b_left, Graphic) and b_left or Line()
+            graphic.set_rect(
+                    left=rect_dict['left'], top=rect_dict['top'],
+                    right=rect_dict['left'], bottom=rect_dict['bottom']
+                    )
+            self._rendered_pages[-1].elements.append(graphic)
+
+        b_top = borders_dict.get('top', None)
+        if b_top:
+            graphic = isinstance(b_top, Graphic) and b_top or Line()
+            graphic.set_rect(
+                    left=rect_dict['left'], top=rect_dict['top'],
+                    right=rect_dict['right'], bottom=rect_dict['top']
+                    )
+            self._rendered_pages[-1].elements.append(graphic)
+
+        b_right = borders_dict.get('right', None)
+        if b_right:
+            graphic = isinstance(b_right, Graphic) and b_right or Line()
+            graphic.set_rect(
+                    left=rect_dict['right'], top=rect_dict['top'],
+                    right=rect_dict['right'], bottom=rect_dict['bottom']
+                    )
+            self._rendered_pages[-1].elements.append(graphic)
+
+        b_bottom = borders_dict.get('bottom', None)
+        if b_bottom:
+            graphic = isinstance(b_right, Graphic) and b_right or Line()
+            graphic.set_rect(
+                    left=rect_dict['left'], top=rect_dict['bottom'],
+                    right=rect_dict['right'], bottom=rect_dict['bottom']
+                    )
+            self._rendered_pages[-1].elements.append(graphic)
+
     def render_band(self, band, top_position=None, update_top=True, current_object=None):
         """Generate a band having the current top position or informed as its
         top coordinate"""
@@ -92,66 +142,14 @@ class PDFGenerator(ReportGenerator):
                 'top': top_position,
                 'right': self.report.page_size[0] - self.report.margin_right,
                 'bottom': top_position - band.height,
+                'height': band.height,
                 }
         # This should be done by a metaclass in Report domain TODO
         self._rendered_pages[-1].width = band.width = self.report.page_size[0] -\
                 self.report.margin_left - self.report.margin_right
 
         # Band borders
-        b_all = band.borders.get('all', None)
-        if b_all:
-            graphic = isinstance(b_all, Graphic) and b_all or Rect()
-            graphic.set_rect(
-                    left=band_rect['left'],
-                    top=band_rect['top'] - band.height,
-                    width=band_rect['right'] - band_rect['left'],
-                    height=band.height
-                    )
-            self._rendered_pages[-1].elements.append(graphic)
-
-        b_left = band.borders.get('left', None)
-        if b_left:
-            graphic = isinstance(b_left, Graphic) and b_left or Line()
-            graphic.set_rect(
-                    left=band_rect['left'],
-                    top=band_rect['top'],
-                    right=band_rect['left'],
-                    bottom=band_rect['bottom']
-                    )
-            self._rendered_pages[-1].elements.append(graphic)
-
-        b_top = band.borders.get('top', None)
-        if b_top:
-            graphic = isinstance(b_top, Graphic) and b_top or Line()
-            graphic.set_rect(
-                    left=band_rect['left'],
-                    top=band_rect['top'],
-                    right=band_rect['right'],
-                    bottom=band_rect['top']
-                    )
-            self._rendered_pages[-1].elements.append(graphic)
-
-        b_right = band.borders.get('right', None)
-        if b_right:
-            graphic = isinstance(b_right, Graphic) and b_right or Line()
-            graphic.set_rect(
-                    left=band_rect['right'],
-                    top=band_rect['top'],
-                    right=band_rect['right'],
-                    bottom=band_rect['bottom']
-                    )
-            self._rendered_pages[-1].elements.append(graphic)
-
-        b_bottom = band.borders.get('bottom', None)
-        if b_bottom:
-            graphic = isinstance(b_right, Graphic) and b_right or Line()
-            graphic.set_rect(
-                    left=band_rect['left'],
-                    top=band_rect['bottom'],
-                    right=band_rect['right'],
-                    bottom=band_rect['bottom']
-                    )
-            self._rendered_pages[-1].elements.append(graphic)
+        self.render_border(band.borders, band_rect)
 
         # Loop at band widgets
         for element in band.elements:
@@ -173,7 +171,7 @@ class PDFGenerator(ReportGenerator):
                     widget.left = self.report.margin_left + widget.left
                     widget.top = temp_top - widget.top
                 elif isinstance(widget, Label):
-                    widget.para = Paragraph(widget.text, ParagraphStyle(name='Normal', **widget.style))
+                    widget.para = Paragraph(widget.text, self.make_paragraph_style(band, widget.style))
                     widget.para.wrapOn(self.canvas, widget.width, widget.height)
                     widget.left = self.report.margin_left + widget.left
                     widget.top = temp_top - widget.top - widget.para.height
@@ -332,8 +330,6 @@ class PDFGenerator(ReportGenerator):
         if self._is_latest_page:
             self.render_summary()
 
-        #self._rendered_pages.append(ReportPage())
-
         self._current_page_number += 1
         self._is_first_page = False
         self.update_top_pos(set=0) # <---- update top position
@@ -361,7 +357,7 @@ class PDFGenerator(ReportGenerator):
                         widget.fields['current_datetime'] = self._generation_datetime
                         widget.fields['report_author'] = self.report.author
 
-                        para = Paragraph(widget.text, ParagraphStyle(name='Normal', **widget.style))
+                        para = Paragraph(widget.text, self.make_paragraph_style(widget.band, widget.style))
                         para.wrapOn(self.canvas, widget.width, widget.height)
                         para.drawOn(self.canvas, widget.left, widget.top - para.height)
                     elif isinstance(widget, Label):
@@ -428,7 +424,7 @@ class PDFGenerator(ReportGenerator):
                                 graphic.stroke,
                                 graphic.fill,
                                 )
-                    elif isinstance(element, Image):
+                    elif isinstance(element, Image) and graphic.image:
                         self.canvas.drawInlineImage(
                                 graphic.image,
                                 graphic.left,
@@ -481,7 +477,6 @@ class PDFGenerator(ReportGenerator):
 
                 # Generate this band only if it is visible
                 if self.report.band_detail.visible:
-                    # Generates the detail band
                     self.render_band(self.report.band_detail)
 
                 # Renders subreports
@@ -492,7 +487,8 @@ class PDFGenerator(ReportGenerator):
                 first_object_on_page = False
 
                 # Break is this is the end of this page
-                if self.get_available_height() < self.report.band_detail.height:
+                if self.get_available_height() < self.report.band_detail.height or\
+                   (self.report.band_detail.force_new_page and self._current_object_index < len(objects)):
                     break
 
             # Sets this is the latest page or not
@@ -518,6 +514,15 @@ class PDFGenerator(ReportGenerator):
 
         if with_header:
             self.render_page_header()
+
+        # Page borders
+        if self.report.borders:
+            if not self._page_rect:
+                self._page_rect = self.report.get_page_rect()
+                self._page_rect['top'] = self.report.page_size[1] - self._page_rect['top']
+                self._page_rect['bottom'] = self.report.page_size[1] - self._page_rect['bottom']
+
+            self.render_border(self.report.borders, self._page_rect)
 
     def get_top_pos(self):
         """Since the coordinates are bottom-left on PDF, we have to use this to get
@@ -674,4 +679,20 @@ class PDFGenerator(ReportGenerator):
 
                 # Renders the detail band
                 self.render_band(subreport.detail_band, current_object=obj)
+
+    def make_paragraph_style(self, band, style=None):
+        """Merge report default_style + band default_style + widget style"""
+        d_style = self.report.default_style or {}
+
+        if band.default_style:
+            for k,v in band.default_style.items():
+                d_style[k] = v
+
+        if style:
+            for k,v in style.items():
+                d_style[k] = v
+
+        import datetime
+
+        return ParagraphStyle(name=datetime.datetime.now().strftime('%H%m%s'), **d_style)
 

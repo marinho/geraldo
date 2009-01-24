@@ -1,7 +1,9 @@
 from reportlab.lib.colors import black
 from reportlab.lib.units import cm
 
-class Graphic(object):
+from base import BAND_WIDTH, BAND_HEIGHT, Element
+
+class Graphic(Element):
     """Base graphic class"""
     visible = True
 
@@ -107,9 +109,9 @@ class Image(Graphic):
         """Uses Python Imaging Library to load an image and get its
         informations"""
         if self.get_image:
-            return get_image()
+            self._image = self.get_image(self)
 
-        if not self._image:
+        if not self._image and self.filename:
             try:
                 import Image as PILImage
             except ImportError:
@@ -125,7 +127,7 @@ class Image(Graphic):
     image = property(_get_image, _set_image)
 
     def _get_height(self):
-        ret = self._height or self.image.size[1]
+        ret = self._height or (self.image and self.image.size[1] or 0)
         return ret * 0.02*cm
 
     def _set_height(self, value):
@@ -134,7 +136,7 @@ class Image(Graphic):
     height = property(_get_height, _set_height)
 
     def _get_width(self):
-        ret = self._width or self.image.size[0]
+        ret = self._width or (self.image and self.image.size[0] or 0)
         return ret * 0.02*cm
 
     def _set_width(self, value):

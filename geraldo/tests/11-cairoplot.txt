@@ -12,22 +12,43 @@ like JPG, PNG, GIF, etc.
     >>> import os
     >>> cur_dir = os.path.dirname(os.path.abspath(__file__))
 
+    >>> import Image as PILImage
+    >>> from CairoPlot import pie_plot, bar_plot
+
     >>> from django.contrib.auth.models import User
 
     >>> from reportlab.lib.pagesizes import A4
     >>> from reportlab.lib.units import cm
     >>> from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY, TA_RIGHT
-    >>> from reportlab.lib.colors import navy, yellow, red
+    >>> from reportlab.lib.colors import navy, yellow, red, white
     
     >>> from geraldo import Report, ReportBand, Label, ObjectValue, SystemField,\
-    ...     FIELD_ACTION_COUNT, FIELD_ACTION_AVG, FIELD_ACTION_MIN,\
-    ...     FIELD_ACTION_MAX, FIELD_ACTION_SUM, FIELD_ACTION_DISTINCT_COUNT, BAND_WIDTH,\
-    ...     RoundRect, Line, Image
+    ...     SubReport, FIELD_ACTION_COUNT, FIELD_ACTION_AVG, FIELD_ACTION_MIN,\
+    ...     FIELD_ACTION_MAX, FIELD_ACTION_SUM, FIELD_ACTION_DISTINCT_COUNT,\
+    ...     BAND_WIDTH, Rect, Line, Image
+
+Method to get chart
+
+    >>> def get_chart_for_user(graphic):
+    ...     user = graphic.generator._current_object
+    ...     data = [dic['id'] for dic in user.user_permissions.values('id')]
+    ... 
+    ...     if not data:
+    ...         return None
+    ... 
+    ...     filename = os.path.join(cur_dir, 'user-chart-%d.png'%user.id)
+    ... 
+    ...     bar_plot(filename, data, 400, 300, border = 20, grid = True, rounded_corners = True)
+    ... 
+    ...     return PILImage.open(filename)
 
 Report class
 
     >>> class UsersReport(Report):
     ...     title = 'Using chart from CairoPlot'
+    ...     borders = {'all': True}
+    ...     default_style = {}
+    ...     _test_temp = True
     ... 
     ...     class band_summary(ReportBand):
     ...         height = 5*cm
@@ -55,42 +76,68 @@ Report class
     ...         ]
     ...         borders = {'top': True}
     ... 
-    ...     class band_page_header(ReportBand):
-    ...         height = 1.3*cm
-    ...         elements = [
-    ...             SystemField(expression='%(report_title)s', top=0.1*cm, left=0, width=BAND_WIDTH,
-    ...                 style={'fontName': 'Helvetica-Bold', 'fontSize': 14, 'alignment': TA_CENTER,
-    ...                     'textColor': navy}),
-    ...             Label(text="ID", top=0.8*cm, left=0),
-    ...             Label(text="Username", top=0.8*cm, left=3*cm),
-    ...             Label(text="First name", top=0.8*cm, left=8*cm),
-    ...             Label(text="Last name", top=0.8*cm, left=13*cm),
-    ...             Label(text="Staff", top=0.8*cm, left=18*cm),
-    ...         ]
-    ...         borders = {'bottom': Line(stroke_color=navy)}
-    ... 
     ...     class band_page_footer(ReportBand):
-    ...         height = 0.5*cm
+    ...         height = 1*cm
     ...         elements = [
-    ...             Label(text='Created with Geraldo Reports', top=0.1*cm,
-    ...                 right=0),
-    ...             SystemField(expression='Printed in %(now:%Y, %b %d)s at %(now:%H:%M)s', top=0.1*cm,
-    ...                 width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
+    ...             Label(text='Created with Geraldo Reports', top=0, left=0.5*cm),
+    ...             SystemField(expression='Printed in %(now:%Y, %b %d)s at %(now:%H:%M)s  ', top=0,
+    ...                 width=BAND_WIDTH, style={'alignment': TA_RIGHT, 'rightIndent': 0.5*cm}),
     ...         ]
-    ...         borders = {'top': True}
     ... 
     ...     class band_detail(ReportBand):
-    ...         height = 0.7*cm
+    ...         height = 8.5*cm
+    ...         force_new_page = True
+    ...         default_style = {'fontName': 'Helvetica'}
     ...         elements = [
-    ...             ObjectValue(attribute_name='id', top=0, left=0),
-    ...             ObjectValue(attribute_name='username', top=0, left=3*cm, display_format='<font size=14 name=Helvetica>%s</font>'),
-    ...             ObjectValue(attribute_name='first_name', top=0, left=8*cm),
-    ...             ObjectValue(attribute_name='last_name', top=0, left=13*cm),
-    ...             ObjectValue(attribute_name='is_staff', top=0, left=18*cm,
-    ...                 get_value=lambda instance: instance.is_staff and 'Yes' or 'No'),
+    ...             # check why BAND_WIDTH doesn't work XXX
+    ...             Rect(width=19*cm, height=1.6*cm, left=0, top=0, fill_color=yellow, fill=True),
+    ...             ObjectValue(attribute_name='username', width=BAND_WIDTH, left=0.4*cm, top=0.4*cm,
+    ...                 get_value=lambda instance: instance.get_full_name().strip() or instance.username,
+    ...                 style={'fontName': 'Helvetica-Bold', 'fontSize': 16, 'textColor': navy}),
+    ...             Image(left=0.5*cm, top=2*cm,
+    ...                 get_image=lambda graphic: PILImage.open(os.path.join(cur_dir, 'photo2.jpg'))),
+    ...
+    ...             Label(text='First name:', top=2*cm, left=5*cm),
+    ...             ObjectValue(attribute_name='first_name', width=BAND_WIDTH, top=2*cm, left=7*cm),
+    ...
+    ...             Label(text='Last name:', top=2.5*cm, left=5*cm),
+    ...             ObjectValue(attribute_name='last_name', width=BAND_WIDTH, top=2.5*cm, left=7*cm),
+    ...
+    ...             Label(text='Username:', top=3*cm, left=5*cm),
+    ...             ObjectValue(attribute_name='username', width=BAND_WIDTH, top=3*cm, left=7*cm),
+    ... 
+    ...             Image(left=10.5*cm, top=2*cm, get_image=get_chart_for_user, _test_temp=True),
     ...         ]
+    ...         borders = {'bottom': True}
+    ...         child_bands = [
+    ...             ReportBand(
+    ...                 default_style={'textColor': white, 'fontName': 'Helvetica-Bold'},
+    ...                 height = 0.6*cm,
+    ...                 elements = [
+    ...                     Rect(left=0, top=0, width=19*cm, height=0.6*cm,
+    ...                         fill_color=navy, fill=True),
+    ...                     Label(text="ID", top=0.1*cm, left=0.5*cm),
+    ...                     Label(text="Permission", top=0.1*cm, left=4*cm),
+    ...                 ],
+    ...                 borders={'bottom': True}),
+    ...             ]
+    ... 
+    ...     subreports = [
+    ...         SubReport(
+    ...             queryset_string = '%(object)s.user_permissions.all()',
+    ...             detail_band = ReportBand(
+    ...                     default_style={'fontName': 'Helvetica'},
+    ...                     height=0.5*cm,
+    ...                     elements=[
+    ...                         ObjectValue(attribute_name='id', top=0, left=0.5*cm),
+    ...                         ObjectValue(attribute_name='name', top=0, left=4*cm),
+    ...                     ],
+    ...                     borders={'bottom': True},
+    ...                 ),
+    ...         ),
+    ...     ]
 
-    >>> queryset = User.objects.order_by('id')
+    >>> queryset = User.objects.filter(id__in=[1,5]).order_by('-id')
 
     >>> report = UsersReport(queryset=queryset)
 
@@ -112,11 +159,9 @@ Creating some users
 Getting data
 
     >>> from geraldo.generators import PDFGenerator
-    >>> report.queryset = User.objects.order_by('id')
+    >>> report.queryset = queryset
 
 Building the chart
-
-    >>> from CairoPlot import pie_plot
 
     >>> data = dict([(user['username'], user['id']) for user in report.queryset.values('id', 'username')])
     >>> pie_plot(os.path.join(cur_dir, 'cairoplot.png'), data, 400, 300)
