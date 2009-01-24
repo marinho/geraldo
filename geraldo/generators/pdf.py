@@ -349,19 +349,7 @@ class PDFGenerator(ReportGenerator):
                     # Set element colors
                     self.set_fill_color(widget.font_color)
     
-                    if isinstance(widget, SystemField):
-                        # Sets system fields
-                        widget.fields['report_title'] = self.report.title
-                        widget.fields['page_number'] = num + 1
-                        widget.fields['page_count'] = self.get_page_count()
-                        widget.fields['current_datetime'] = self._generation_datetime
-                        widget.fields['report_author'] = self.report.author
-
-                        para = Paragraph(widget.text, self.make_paragraph_style(widget.band, widget.style))
-                        para.wrapOn(self.canvas, widget.width, widget.height)
-                        para.drawOn(self.canvas, widget.left, widget.top - para.height)
-                    elif isinstance(widget, Label):
-                        widget.para.drawOn(self.canvas, widget.left, widget.top)
+                    self.generate_widget(widget, self.canvas, num)
     
                 # Graphic element
                 elif isinstance(element, Graphic):
@@ -372,66 +360,7 @@ class PDFGenerator(ReportGenerator):
                     self.set_stroke_color(graphic.stroke_color)
                     self.set_stroke_width(graphic.stroke_width)
     
-                    if isinstance(element, RoundRect):
-                        self.canvas.roundRect(
-                                graphic.left,
-                                graphic.top,
-                                graphic.width,
-                                graphic.height,
-                                graphic.radius,
-                                graphic.stroke,
-                                graphic.fill,
-                                )
-                    elif isinstance(element, Rect):
-                        self.canvas.rect(
-                                graphic.left,
-                                graphic.top,
-                                graphic.width,
-                                graphic.height,
-                                graphic.stroke,
-                                graphic.fill,
-                                )
-                    elif isinstance(element, Line):
-                        self.canvas.line(
-                                graphic.left,
-                                graphic.top,
-                                graphic.right,
-                                graphic.bottom,
-                                )
-                    elif isinstance(element, Circle):
-                        self.canvas.circle(
-                                graphic.left_center,
-                                graphic.top_center,
-                                graphic.radius,
-                                graphic.stroke,
-                                graphic.fill,
-                                )
-                    elif isinstance(element, Arc):
-                        self.canvas.arc(
-                                graphic.left,
-                                graphic.top,
-                                graphic.right,
-                                graphic.bottom,
-                                graphic.start_angle,
-                                graphic.extent,
-                                )
-                    elif isinstance(element, Ellipse):
-                        self.canvas.ellipse(
-                                graphic.left,
-                                graphic.top,
-                                graphic.right,
-                                graphic.bottom,
-                                graphic.stroke,
-                                graphic.fill,
-                                )
-                    elif isinstance(element, Image) and graphic.image:
-                        self.canvas.drawInlineImage(
-                                graphic.image,
-                                graphic.left,
-                                graphic.top,
-                                graphic.width,
-                                graphic.height,
-                                )
+                    self.generate_graphic(graphic, self.canvas)
 
             self.canvas.showPage()
  
@@ -695,4 +624,85 @@ class PDFGenerator(ReportGenerator):
         import datetime
 
         return ParagraphStyle(name=datetime.datetime.now().strftime('%H%m%s'), **d_style)
+
+    def generate_widget(self, widget, canvas=None, page_number=0):
+        """Renders a widget element on canvas"""
+        if isinstance(widget, SystemField):
+            # Sets system fields
+            widget.fields['report_title'] = self.report.title
+            widget.fields['page_number'] = page_number + 1
+            widget.fields['page_count'] = self.get_page_count()
+            widget.fields['current_datetime'] = self._generation_datetime
+            widget.fields['report_author'] = self.report.author
+
+            para = Paragraph(widget.text, self.make_paragraph_style(widget.band, widget.style))
+            para.wrapOn(canvas, widget.width, widget.height)
+            para.drawOn(canvas, widget.left, widget.top - para.height)
+        elif isinstance(widget, Label):
+            widget.para.drawOn(canvas, widget.left, widget.top)
+
+    def generate_graphic(self, graphic, canvas=None):
+        """Renders a graphic element"""
+        canvas = canvas or self.canvas
+
+        if isinstance(graphic, RoundRect):
+            canvas.roundRect(
+                    graphic.left,
+                    graphic.top,
+                    graphic.width,
+                    graphic.height,
+                    graphic.radius,
+                    graphic.stroke,
+                    graphic.fill,
+                    )
+        elif isinstance(graphic, Rect):
+            canvas.rect(
+                    graphic.left,
+                    graphic.top,
+                    graphic.width,
+                    graphic.height,
+                    graphic.stroke,
+                    graphic.fill,
+                    )
+        elif isinstance(graphic, Line):
+            canvas.line(
+                    graphic.left,
+                    graphic.top,
+                    graphic.right,
+                    graphic.bottom,
+                    )
+        elif isinstance(graphic, Circle):
+            canvas.circle(
+                    graphic.left_center,
+                    graphic.top_center,
+                    graphic.radius,
+                    graphic.stroke,
+                    graphic.fill,
+                    )
+        elif isinstance(graphic, Arc):
+            canvas.arc(
+                    graphic.left,
+                    graphic.top,
+                    graphic.right,
+                    graphic.bottom,
+                    graphic.start_angle,
+                    graphic.extent,
+                    )
+        elif isinstance(graphic, Ellipse):
+            canvas.ellipse(
+                    graphic.left,
+                    graphic.top,
+                    graphic.right,
+                    graphic.bottom,
+                    graphic.stroke,
+                    graphic.fill,
+                    )
+        elif isinstance(graphic, Image) and graphic.image:
+            canvas.drawInlineImage(
+                    graphic.image,
+                    graphic.left,
+                    graphic.top,
+                    graphic.width,
+                    graphic.height,
+                    )
 
