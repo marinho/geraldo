@@ -32,7 +32,7 @@ Engine API
 - Support band-width in widgets (x)
 - Support stylizing widgets (font, colors, borders and alignments) (x)
 - Support subreports (x)
-- Report inheritance (x)
+- Report inheritance and composition (x)
 - Support canvas draw
 - Reports merging (many reports at once)
 - Multiple columns

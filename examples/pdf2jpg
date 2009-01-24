@@ -12,4 +12,6 @@ convert users-report-half-height.pdf users-report-half-height.jpg
 convert users-report.pdf users-report.jpg
 convert subreports-report-half-height.pdf subreports-report-half-height.jpg
 convert subreports-report.pdf subreports-report.jpg
+convert charts-cairoplot-report.pdf charts-cairoplot-report.jpg
+convert charts-matplotlib-report.pdf charts-matplotlib-report.jpg
 
