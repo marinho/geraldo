@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.4.1: http://docutils.sourceforge.net/" />
+<title>Tutorial 1</title>
+<style type="text/css">
+
+/*
+:Author: David Goodger
+:Contact: goodger@users.sourceforge.net
+:Date: $Date: 2005-12-18 01:56:14 +0100 (Sun, 18 Dec 2005) $
+:Revision: $Revision: 4224 $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin-left: 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left {
+  clear: left }
+
+img.align-right {
+  clear: right }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font-family: serif ;
+  font-size: 100% }
+
+pre.literal-block, pre.doctest-block {
+  margin-left: 2em ;
+  margin-right: 2em ;
+  background-color: #eeeeee }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+tt.docutils {
+  background-color: #eeeeee }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+</head>
+<body>
+<div class="document" id="tutorial-1">
+<h1 class="title">Tutorial 1</h1>
+<p>Once you have Geraldo installed and its dependencies resolved (read
+Installation document to know about dependency for ReportLab and Python
+Imaging Library) you can start opening the <strong>settings.py</strong> from your
+project to edit.</p>
+<blockquote>
+<strong>Attention:</strong> this tutorial is pressuposes you are going to use Geraldo
+with a Django project, but in fact you can just ignore the Django parts
+and all the rest is exactly the same for Django and non-Django cases.</blockquote>
+<div class="section">
+<h2><a id="step-1-preparing-your-project" name="step-1-preparing-your-project">Step 1. Preparing your project</a></h2>
+<p>To install Geraldo in your Django project, you must change the setting
+<strong>INSTALLED_APPS</strong> in your <strong>settings.py</strong> file and this shoul be enough.</p>
+<p>But let's create a new URL to load a report PDF online.</p>
+<blockquote>
+<strong>Attention:</strong> Geraldo can work with online or not onfile ways to get PDF.
+You are no dependent for a URL or view to generate reports from Geraldo.
+This is just one of many ways you can do it.</blockquote>
+<p>We are going to work with a common example for this kind of solution: a
+purchasing application.</p>
+<p>Let's say you have the following model classes:</p>
+<pre class="literal-block">
+class Product(models.Model):
+    name = models.CharField(max_length=100)
+
+class Customer(models.Model):
+    name = models.CharField(max_length=100)
+
+class Purchase(models.Model):
+    customer = models.ForeignKey('Customer')
+    delivery_address = models.CharField(max_length=70, blank=True)
+    date_creation = models.DateField(blank=True, default=date.today())
+    date_bill = models.DateField(blank=True, null=True)
+    date_delivery = models.DateField(blank=True, null=True)
+    taxes = models.DecimalField(max_digits=12, decimal_places=2, blank=True, default=0)
+    sub_total_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, default=0)
+    total_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, default=0)
+
+class PurchaseItem(models.Model):
+    purchase = models.ForeignKey('Purchase')
+    product = models.ForeignKey('Product')
+    unit_price = models.DecimalField(max_digits=12, decimal_places=2)
+    quantity = models.DecimalField(max_digits=12, decimal_places=2)
+    total_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, default=0)
+</pre>
+<p>First you declare a new URL, this for example:</p>
+<pre class="literal-block">
+urlpatterns = patterns('purchases.views',
+    url('^purchase-report/$', 'purchase_report'),
+)
+</pre>
+<p>The next step is you have a <em>view</em> for the created URL, like this:</p>
+<pre class="literal-block">
+from django.http import HttpResponse
+
+from reports import ReportPurchase
+from geraldo.generators import PDFGenerator
+from models import Purchase
+
+def purchase_report(request):
+    resp = HttpResponse(mimetype='application/pdf')
+
+    purchases = Purchase.objects.order_by('customer','id')
+    report = ReportPurchase(queryset=purchases)
+    report.generate_by(PDFGenerator, filename=resp)
+
+    return resp
+</pre>
+<p>You can see you first imported two important things:</p>
+<pre class="literal-block">
+from reports import ReportPurchase
+from geraldo.generators import PDFGenerator
+</pre>
+<p>Your report class (we will create it in next step) and the generator class
+<strong>PDFGenerator</strong> you will need to generate a PDF file. In the future we will
+have other generators, for other formats of file.</p>
+<p>The next thing is you note you are going to return a PDF format <strong>HttpResponse</strong>,
+look:</p>
+<pre class="literal-block">
+resp = HttpResponse(mimetype='application/pdf')
+</pre>
+<p>Now you are going to work your report instance:</p>
+<pre class="literal-block">
+purchases = Purchase.objects.order_by('customer','id')
+report = ReportPurchase(queryset=purchases)
+report.generate_by(PDFGenerator, filename=resp)
+</pre>
+<ul class="simple">
+<li>The first thing you did is get all purchases, ordered by 'customer' and 'id'
+fields;</li>
+<li>After, you got a <strong>report</strong> instance from your report class
+<strong>ReportPurchase</strong>, using purchases queryset as report driver queryset;</li>
+<li>And latest, you called the 'generate_by', using the generator class.</li>
+</ul>
+<p>Now you have a prepared Django application to use a report you are going to
+create at the next step!</p>
+</div>
+<div class="section">
+<h2><a id="declaring-the-report-class" name="declaring-the-report-class">Declaring the report class</a></h2>
+<p>The report class must be an inheritance from <strong>geraldo.Report</strong> class. You can
+create a new file 'reports.py' to declare your report classes inside.</p>
+<pre class="literal-block">
+from geraldo import Report
+
+class ReportPurchase(Report):
+    title = 'Purchases list'
+    author = 'John Smith Corporation'
+</pre>
+<p>Going to see something more complex, you can set the page size, margins and
+other report attributes, like below:</p>
+<pre class="literal-block">
+from geraldo import Report, landscape
+from reportlab.lib.pagesizes import A5
+from reportlab.lib.units import cm
+
+class ReportPurchase(Report):
+    title = 'Purchases list'
+    author = 'John Smith Corporation'
+
+    page_size = landscape(A5)
+    margin_left = 2*cm
+    margin_top = 0.5*cm
+    margin_right = 0.5*cm
+    margin_bottom = 0.5*cm
+</pre>
+<p>As you can see, we use most we can from ReportLab libraries, their units, page
+sizes, stylizing, etc.</p>
+<p>A report is driven by <strong>bands</strong>. If you are used to work with other report
+engines you know what is a band.</p>
+<p>A band is a row with elements in the report canvas. Bands in essence are the
+same but their use vary depending you are using a band as the Page Header or
+Report Summary, for example.</p>
+<p>A report can have a band for each one of following attributes:</p>
+</div>
+<div class="section">
+<h2><a id="detail-band" name="detail-band">Detail band</a></h2>
+<p>The detail band is the most important band in a report. This is because the
+detail band is the reason of the existency of every report.</p>
+<p>The detail band is used most of times to show object field values. This is the
+same for a detailing info page or just a list or grid.</p>
+<p>The detail band is rendered one time per each object in the queryset attribute.
+So, if you have 10 objects in the queryset, you will have detail band rendered
+10 times, one time per each object.</p>
+<p>Let's change our report to have a detail band, see below:</p>
+<pre class="literal-block">
+from geraldo import Report, landscape, ReportBand, ObjectValue
+from reportlab.lib.pagesizes import A5
+from reportlab.lib.units import cm
+
+class ReportPurchase(Report):
+    title = 'Purchases list'
+    author = 'John Smith Corporation'
+
+    page_size = landscape(A5)
+    margin_left = 2*cm
+    margin_top = 0.5*cm
+    margin_right = 0.5*cm
+    margin_bottom = 0.5*cm
+
+    class band_detail(ReportBand):
+        height = 0.5*cm
+        elements=(
+            ObjectValue(attribute_name='id', left=0.5*cm),
+            ObjectValue(attribute_name='date_creation', left=3*cm,
+                get_value=lambda instance: instance.date_creation.strftime('%m/%d/%Y')),
+            )
+</pre>
+<p>The attribute <strong>band_dateil</strong> is locally declared as class, but it could be setted
+with an external class else.</p>
+<p>The important thing here is the band has the attribute <strong>height</strong>, fixed with a
+defined height in centimeters.</p>
+<p>The second thing to observe is the <strong>elements</strong> list, with 2 widgets representing
+2 model class fields: <strong>id</strong> and <strong>date_creation</strong>. The last one is customized
+with <strong>get_value</strong> attribute, for date field formatting.</p>
+</div>
+<div class="section">
+<h2><a id="page-header-and-page-footer-bands" name="page-header-and-page-footer-bands">Page Header and Page Footer bands</a></h2>
+<p>Page header and Page footer bands are respectively designed to appear on the header and
+footer on every pages in the report.</p>
+<p>In most of reports, a page header is used to show the report title and its page number,
+page count and maybe the columns header if you are creating a list or grid report.</p>
+<p>In the same way, page footer band is used to show footer informations, like the print
+date/time, software name, company's mark, etc.</p>
+<p>Add this code block to the end of report class to have both bands:</p>
+<pre class="literal-block">
+class band_page_header(ReportBand):
+    height = 1.3*cm
+    elements = [
+            SystemField(expression='%(report_title)s', top=0.1*cm, left=0, width=BAND_WIDTH,
+                style={'fontName': 'Helvetica-Bold', 'fontSize': 14, 'alignment': TA_CENTER}),
+            Label(text=&quot;ID&quot;, top=0.8*cm, left=0.5*cm),
+            Label(text=u&quot;Creation Date&quot;, top=0.8*cm, left=3*cm),
+            SystemField(expression=u'Page %(page_number)d of %(page_count)d', top=0.1*cm,
+                width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
+            ]
+    borders = {'bottom': True}
+
+class band_page_footer(ReportBand):
+    height = 0.5*cm
+    elements = [
+            Label(text='Geraldo Reports', top=0.1*cm),
+            SystemField(expression=u'Printed in %(now:%Y, %b %d)s at %(now:%H:%M)s', top=0.1*cm,
+                width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
+            ]
+    borders = {'top': True}
+</pre>
+<p>Now you have to change the file top lines with imports to import some new elements:</p>
+<pre class="literal-block">
+from geraldo import Report, landscape, ReportBand, ObjectValue, SystemField,\
+        BAND_WIDTH, Label
+
+from reportlab.lib.pagesizes import A5
+from reportlab.lib.units import cm
+from reportlab.lib.enums import TA_RIGHT, TA_CENTER
+</pre>
+<p>The new elements for you now are:</p>
+<ul class="simple">
+<li><strong>SystemField</strong> - shows a system field, like current date/time, page number,
+page count, report title, report author, etc.</li>
+<li><strong>Label</strong> - show a free text</li>
+<li><strong>BAND_WIDTH</strong> - sets the width automatically to its parent band width;</li>
+<li><strong>TA_RIGHT</strong> and <strong>TA_CENTER</strong> - they sets the alignment of a widget</li>
+</ul>
+<p>Other good use of Page Header and Page Footer bands is to compose or inherit
+reports layout. Use your imagine ane do it!</p>
+</div>
+<div class="section">
+<h2><a id="groupping" name="groupping">Groupping</a></h2>
+<p>The next thing now is group our purchases by a field. Lets choose the field
+<strong>customer</strong>, ok?</p>
+<p>Geraldo allows you to group report by how many levels you want. This means you
+can group the report objects by 1, 2 or how many fields do you want and have
+header and footer to show their aggregation informations and other features.</p>
+<p>But for a while, just add the following code to the end of <strong>reports.py</strong>:</p>
+<pre class="literal-block">
+groups = [
+        ReportGroup(attribute_name='customer',
+            band_header=ReportBand(
+                height=0.7*cm,
+                elements=[
+                    ObjectValue(attribute_name='customer', left=0, top=0.1*cm, width=20*cm,
+                        get_value=lambda instance: 'Customer: ' + (instance.customer.name),
+                        style={'fontName': 'Helvetica-Bold', 'fontSize': 12})
+                    ],
+                borders={'bottom': True},
+                )
+            ),
+        ]
+</pre>
+<p>In the same way you did before, you have to change the top imports to have the
+new elements:</p>
+<pre class="literal-block">
+from geraldo import Report, landscape, ReportBand, ObjectValue, SystemField,\
+        BAND_WIDTH, Label, ReportGroup
+</pre>
+<p>The two important things now are:</p>
+<ul class="simple">
+<li><strong>attribute_name</strong> - this attribute in ReportGroup defines what field we are
+going to use to group the objects. You must before order the queryset by this
+attribute to have it working properly. Here you can inform a field name, free
+attribute, property or method you have in queryset objects;</li>
+<li><strong>band_header</strong> - this band is for you show things on the top of group. You
+could also use <strong>band_footer</strong>.</li>
+</ul>
+</div>
+<div class="section">
+<h2><a id="subreports" name="subreports">SubReports</a></h2>
+<p>SubReport is the way you have to show object children data in a report. As you
+know, a <strong>purchase</strong> has <strong>many items</strong>, and they are available in attribute
+<strong>purchase.purchaseitem_set.all()</strong> os something like that.</p>
+<p>Geraldo allows you to have how many subreports you want, and they will appear
+in the same sequency you inform them in the class declaration.</p>
+<p>Just add the following block with code to the end of <strong>reports.py</strong>:</p>
+<pre class="literal-block">
+subreports = [
+        SubReport(
+            queryset_string = '%(object)s.purchaseitem_set.all()',
+            detail_band = ReportBand(
+                height=0.5*cm,
+                elements=[
+                    ObjectValue(attribute_name='product', top=0, left=1*cm),
+                    ObjectValue(attribute_name='unit_price', top=0, left=5*cm),
+                    ]
+                ),
+            ),
+        ]
+</pre>
+<p>And now you have to change the top imports line:</p>
+<pre class="literal-block">
+from geraldo import Report, landscape, ReportBand, ObjectValue, SystemField,\
+        BAND_WIDTH, Label, ReportGroup, SubReport
+</pre>
+<p>The new thing and most intersting thing here is this:</p>
+<pre class="literal-block">
+queryset_string = '%(object)s.purchaseitem_set.all()',
+</pre>
+<p>This is the attribute that you use to join the detail object to the subreport.
+It is a <strong>string</strong> because you can do a relationship to get objects using not
+only one way.</p>
+<p>So, you just use the macro <strong>'%(object)s'</strong> to set the current object!</p>
+</div>
+</div>
+</body>
+</html>

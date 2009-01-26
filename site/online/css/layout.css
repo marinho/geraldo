@@ -1,0 +1,77 @@
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans;
+    font-size: 12pt;
+    min-width: 960px;
+}
+
+img {
+    border: none;
+}
+
+h1 {
+    margin: 10px;
+    clear: both;
+}
+
+h3 {
+    margin: 0 0 5px 0;
+}
+
+h4 {
+    margin: 10px 0 0 0;
+}
+
+dd {
+    margin-left: 10px;
+}
+
+.all {
+}
+
+.top, .footer {
+    padding: 5px;
+}
+
+.content {
+    overflow: hidden;
+}
+
+.left {
+    width: 50%;
+    float: left;
+}
+
+.left .wrapper {
+    padding: 10px;
+}
+
+.right {
+    width: 50%;
+    float: right;
+}
+
+.right .wrapper {
+    border-left: 1px solid silver;
+    padding: 0 10px 0 10px;
+}
+
+.right .wrapper .item {
+    padding: 5px;
+    border: 1px solid #ddd;
+    background-color: #eee;
+    margin-bottom: 10px;
+}
+
+.screenshots img {
+    border: 1px solid silver;
+}
+
+.panel {
+    background: url(img/reports-panel-back.gif);
+    text-align: center;
+}
+
+.footer {
+}
+
