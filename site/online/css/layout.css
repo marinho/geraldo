@@ -38,7 +38,7 @@ dd {
 }
 
 .left {
-    width: 50%;
+    width: 49%;
     float: left;
 }
 
@@ -47,7 +47,7 @@ dd {
 }
 
 .right {
-    width: 50%;
+    width: 49%;
     float: right;
 }
 
