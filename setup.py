@@ -15,7 +15,7 @@ setup(
     author = 'Marinho Brandao',
     author_email = 'marinho@gmail.com',
     url = 'http://geraldo.sourceforge.net/',
-    download_url = 'http://ufpr.dl.sourceforge.net/sourceforge/geraldo/Geraldo-0.2-stable.tar.gz',
+    #download_url = 'http://ufpr.dl.sourceforge.net/sourceforge/geraldo/Geraldo-0.2-stable.tar.gz',
     license = 'GNU Lesser General Public License (LGPL)',
     packages = ['geraldo', 'geraldo.tests', 'geraldo.generators',],
     install_requires = ['reportlab','pil'],
