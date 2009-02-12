@@ -46,6 +46,34 @@ class BaseReport(object):
         self.queryset = queryset or self.queryset
         self.groups = self.groups or []
 
+        # Transforms band classes to band objects
+        self.transform_classes_to_objects()
+
+    def transform_classes_to_objects(self):
+        """Finds all band classes in the report and instantiante them. This
+        is important to have a safety on separe inherited reports each one
+        from other."""
+
+        # Basic bands
+        if self.band_begin and not isinstance(self.band_begin, ReportBand):
+            self.band_begin = self.band_begin()
+
+        if self.band_summary and not isinstance(self.band_summary, ReportBand):
+            self.band_summary = self.band_summary()
+
+        if self.band_page_header and not isinstance(self.band_page_header, ReportBand):
+            self.band_page_header = self.band_page_header()
+
+        if self.band_page_footer and not isinstance(self.band_page_footer, ReportBand):
+            self.band_page_footer = self.band_page_footer()
+
+        if self.band_detail and not isinstance(self.band_detail, ReportBand):
+            self.band_detail = self.band_detail()
+
+        # Groups
+        groups = self.groups
+        self.groups = [isinstance(group, ReportGroup) and group or group() for group in groups]
+
     def get_objects_list(self):
         """Returns the list with objects to be rendered.
         
@@ -193,9 +221,21 @@ class ReportBand(object):
         self.child_bands = self.child_bands or []
         self.default_style = self.default_style or {}
 
+        # Transforms band classes to band objects
+        self.transform_classes_to_objects()
+
     def clone(self):
         """Does a deep copy of this band to be rendered"""
         return copy.deepcopy(self)
+
+    def transform_classes_to_objects(self):
+        """Finds all child band classes in this class and instantiante them. This
+        is important to have a safety on separe inherited reports each one
+        from other."""
+        
+        child_bands = self.child_bands
+        self.child_bands = [isinstance(child, ReportBand) and child or child()
+                for child in child_bands]
 
 class TableBand(ReportBand): # TODO
     """This band must be used only as a detail band. It doesn't is repeated per
@@ -212,6 +252,20 @@ class ReportGroup(object):
     def __init__(self, **kwargs):
         for k,v in kwargs.items():
             setattr(self, k, v)
+
+        # Transforms band classes to band objects
+        self.transform_classes_to_objects()
+
+    def transform_classes_to_objects(self):
+        """Finds all band classes in this class and instantiante them. This
+        is important to have a safety on separe inherited reports each one
+        from other."""
+        
+        if self.band_header and not isinstance(self.band_header, ReportBand):
+            self.band_header = self.band_header()
+        
+        if self.band_footer and not isinstance(self.band_footer, ReportBand):
+            self.band_footer = self.band_footer()
 
 class Element(object):
     """The base class for widgets and graphics"""

@@ -120,15 +120,15 @@ Building the chart
     >>> import pylab
     >>> from numpy import numarray
 
-    >>> user_ids = report.queryset.filter(id__in=[1,5,7,12]).values('id')
+    >>> user_ids = report.queryset.filter(id__in=[1,5,7,12]).values('id','username')
     >>> labels = [user['username'] for user in user_ids]
     >>> data = [user['id'] for user in user_ids]
     >>> left = numarray.array(range(len(data))) + 0.5
     >>> 
-    >>> pylab.bar(left, data, width=0.5)
-    >>> pylab.yticks(range(15))
-    >>> pylab.xticks(left+0.25, labels)
-    >>> pylab.title('Users IDs')
+    >>> tmp = pylab.bar(left, data, width=0.5)
+    >>> tmp = pylab.yticks(range(15))
+    >>> tmp = pylab.xticks(left+0.25, labels)
+    >>> tmp = pylab.title('Users IDs')
     >>> pylab.gca().get_xaxis().tick_bottom()
     >>> pylab.gca().get_yaxis().tick_left()
     >>> pylab.savefig(os.path.join(cur_dir, 'matplotlib.png'), dpi=50)

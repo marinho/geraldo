@@ -1,3 +1,11 @@
+2009-02-01: Version 0.2.2-stable
+--------------------------------
+* Fixed setup.py to not require PIL and ReportLab from PyPI
+* All band classes are transformed in objects on objects initializations. This
+  is important to work with inheritance, and it is important to make a future
+  important thing: events (specially BeforePrint and AfterPrint events)
+* Fixed test of MatPlotLib support
+
 2009-01-23: Version 0.2-alpha(4)
 --------------------------------
 * Removed all Django dependecy. Now when use '%(now:)s' macro in SystemField
