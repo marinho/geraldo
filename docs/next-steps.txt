@@ -21,10 +21,10 @@ Generators
 * Generate in HTML and maybe to TXT
 * Export/import structure to/from a XMLized format
 
-User interaction
-----------------
+Thir-part tools
+---------------
 
 * Have a GUI tool to design reports, if possible to be used in a web browser
 * Have a way to create and print reports using a server, with no low level coding
-* Have a explicit, clear and full documentation
+* **Django pluggable application to create fast reports** (currently in development)
 
