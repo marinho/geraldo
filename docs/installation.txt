@@ -9,7 +9,7 @@ Option 1. Get the latest official version
 
 1. Get the latest tarball available from:
 
-    http://django-plus.googlecode.com/files/geraldo-latest.tar.gz
+    https://sourceforge.net/project/showfiles.php?group_id=251460&package_id=307400
     
 2. Then you can do the following steps to install it:
 
@@ -48,7 +48,7 @@ following URL:
 
 ::
 
-    http://github.com/marinho/django-geraldo
+    http://github.com/marinho/geraldo
     
 
 To get the latest development version from repository server, you will need for
@@ -57,10 +57,10 @@ MS-DOS Prompty window:
 
 ::
 
-    git clone git://github.com/marinho/django-geraldo.git
+    git clone git://github.com/marinho/geraldo.git
     
 
-A folder named **django-geraldo** will be in your current path with all
+A folder named **geraldo** will be in your current path with all
 Geraldo files inside.
 
 Then you can go ahead and use the same commands from **Option 1** to install

@@ -38,7 +38,7 @@ def get_version():
 
 __author__ = 'Marinho Brandao'
 __license__ = 'GNU Lesser General Public License (LGPL)'
-__url__ = 'http://github.com/marinho/django-geraldo/'
+__url__ = 'http://geraldo.sourceforge.net/'
 __version__ = get_version()
 
 from base import Report, ReportBand, TableBand, ReportGroup, SubReport,\
