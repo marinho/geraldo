@@ -1,0 +1,14 @@
+{% extends "reporting/base.html" %}
+
+{% block content %}{{ block.super }}
+
+{% for report in reports %}
+{% ifchanged report.app_label %}<h3>{{ report.app_label }}</h3>{% endifchanged %}
+
+{% ifchanged report.model_label %}
+<b>{{ report.model_label }}</b><br/>
+{% endifchanged %}
+
+<a href="{{ report.url }}">{{ report.report.title }}</a><br/>
+{% endfor %}
+{% endblock content %}
