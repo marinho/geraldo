@@ -44,6 +44,10 @@ class BaseReport(object):
 
     def __init__(self, queryset=None):
         self.queryset = queryset or self.queryset
+
+        if self.queryset is None:
+            self.queryset = []
+
         self.groups = self.groups or []
 
         # Transforms band classes to band objects
