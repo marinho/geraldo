@@ -378,12 +378,40 @@ queryset.</p>
 <p><strong>Attributes</strong></p>
 <ul class="simple">
 <li><strong>height</strong> - Default: 1*cm</li>
+<li><strong>width</strong> - Default: None</li>
 <li><strong>visible</strong> - Default: True</li>
 <li><strong>borders</strong> - Default: {'top': None, 'right': None, 'bottom': None, 'left': None, 'all': None}</li>
 <li><strong>elements</strong> - Default: []</li>
 <li><strong>child_bands</strong> - Default: []</li>
 <li><strong>force_new_page</strong> - Default: False</li>
 <li><strong>default_style</strong> - Default: None</li>
+</ul>
+</div>
+<div class="section">
+<h2><a id="detailband" name="detailband">DetailBand</a></h2>
+<p>Path: <strong>geraldo.DetailBand</strong></p>
+<p>An extension of ReportBand. The only difference is that this class supports more
+attributes, specific to detail bands.</p>
+<p><strong>Attributes</strong></p>
+<ul>
+<li><p class="first"><strong>margin_top</strong> - Default: 0</p>
+</li>
+<li><p class="first"><strong>margin_left</strong> - Default: 0</p>
+</li>
+<li><p class="first"><strong>margin_bottom</strong> - Default: 0</p>
+</li>
+<li><p class="first"><strong>margin_right</strong> - Default: 0</p>
+</li>
+<li><p class="first"><strong>display_inline</strong> - Default: False</p>
+<blockquote>
+<p>When you use <strong>display_inline</strong> with <strong>True</strong> value and <strong>width</strong> with a
+valid value, the generator will try to align the detail band instances in
+the same way HTML does with inline displaying of left floating elements:
+it will keep each detail band at right of the last one if there is width
+available.</p>
+<p>This is useful for label reports.</p>
+</blockquote>
+</li>
 </ul>
 </div>
 <div class="section">
