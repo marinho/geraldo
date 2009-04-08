@@ -105,11 +105,12 @@ Report class
 
 Creating some users
 
-    >>> len([User.objects.create(username='John', is_staff=True, is_superuser=True),
-    ... User.objects.create(username='Paul', is_staff=True, is_superuser=True),
-    ... User.objects.create(username='George', is_staff=True),
-    ... User.objects.create(username='Ringo')])
-    4
+    >>> len([User.objects.create(username='John', is_staff=True, is_superuser=True, email='john@beatles.com'),
+    ... User.objects.create(username='Paul', is_staff=True, is_superuser=True, email='paul@beatles.com'),
+    ... User.objects.create(username='George', is_staff=True, email='george@beatles.com'),
+    ... User.objects.create(username='Ringo', email='ringo@beatles.com'),
+    ... User.objects.create(username='Larry', email='larry@beatlesfans.com')])
+    5
 
 PDF common generation with users
 

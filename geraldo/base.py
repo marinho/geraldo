@@ -209,6 +209,7 @@ class ReportBand(object):
     things on the top, on summary, on page header, on page footer or one time
     per object from queryset."""
     height = 1*cm
+    width = None # Useful only on detail bands
     visible = True
     borders = {'top': None, 'right': None, 'bottom': None, 'left': None,
             'all': None}
@@ -221,6 +222,7 @@ class ReportBand(object):
         for k,v in kwargs.items():
             setattr(self, k, v)
 
+        # Default values for elements, child bands and default style lists
         self.elements = self.elements or []
         self.child_bands = self.child_bands or []
         self.default_style = self.default_style or {}
@@ -240,6 +242,23 @@ class ReportBand(object):
         child_bands = self.child_bands
         self.child_bands = [isinstance(child, ReportBand) and child or child()
                 for child in child_bands]
+
+class DetailBand(ReportBand):
+    """You should use this class instead of ReportBand in detail bands.
+    
+    It is useful when you want to have detail band with strict width, with
+    margins or displayed inline like labels.
+    
+     * display_inline: use it together attribute 'width' to specify that you
+       want to make many detail bands per line. Useful to make labels."""
+
+    margin_top = 0
+    margin_bottom = 0
+    margin_left = 0
+    margin_right = 0
+
+    # With this attribute as True, the band will try to align in the same line
+    display_inline = False
 
 class TableBand(ReportBand): # TODO
     """This band must be used only as a detail band. It doesn't is repeated per

@@ -27,6 +27,7 @@ class PDFGenerator(ReportGenerator):
     _is_first_page = True
     _is_latest_page = True
     _current_top_position = 0
+    _current_left_position = 0
     _current_page_number = 0
     _current_object = None
     _generation_datetime = None
@@ -130,23 +131,45 @@ class PDFGenerator(ReportGenerator):
                     )
             self._rendered_pages[-1].elements.append(graphic)
 
-    def render_band(self, band, top_position=None, update_top=True, current_object=None):
+    def make_band_rect(self, band, top_position, left_position):
+        """Returns the right band rect on the PDF canvas"""
+        band_rect = {
+                'left': left_position, #self.report.margin_left,
+                'top': top_position,
+                'right': left_position + band.width, #self.report.page_size[0] - self.report.margin_right,
+                'bottom': top_position - band.height,
+                'height': band.height,
+                }
+        return band_rect
+
+    def render_band(self, band, top_position=None, left_position=None,
+            update_top=True, current_object=None):
         """Generate a band having the current top position or informed as its
         top coordinate"""
         current_object = current_object or self._current_object
 
-        # Coordinates and dimensions
-        temp_top = top_position = top_position or self.get_top_pos()
-        band_rect = {
-                'left': self.report.margin_left,
-                'top': top_position,
-                'right': self.report.page_size[0] - self.report.margin_right,
-                'bottom': top_position - band.height,
-                'height': band.height,
-                }
-        # This should be done by a metaclass in Report domain TODO
-        self._rendered_pages[-1].width = band.width = self.report.page_size[0] -\
+        # Page width. This should be done in a metaclass in Report domain TODO
+        self._rendered_pages[-1].width = self.report.page_size[0] -\
                 self.report.margin_left - self.report.margin_right
+
+        # Default value for band width
+        band.width = band.width or self._rendered_pages[-1].width
+
+        # Coordinates
+        left_position = left_position or self.get_left_pos()
+
+        if left_position > self.report.margin_left and\
+           getattr(band, 'display_inline', False) and\
+           band.width < self.get_available_width():
+            self.update_top_pos(decrease=band.height)
+        else:
+            self.update_left_pos(set=0)
+            left_position = self.get_left_pos()
+
+        temp_top = top_position = top_position or self.get_top_pos()
+
+        # Calculates the band dimensions on the canvas
+        band_rect = self.make_band_rect(band, top_position, left_position)
 
         # Band borders
         self.render_border(band.borders, band_rect)
@@ -168,12 +191,12 @@ class PDFGenerator(ReportGenerator):
                 widget.page = self._rendered_pages[-1]
 
                 if isinstance(widget, SystemField):
-                    widget.left = self.report.margin_left + widget.left
+                    widget.left = band_rect['left'] + widget.left
                     widget.top = temp_top - widget.top
                 elif isinstance(widget, Label):
                     widget.para = Paragraph(widget.text, self.make_paragraph_style(band, widget.style))
                     widget.para.wrapOn(self.canvas, widget.width, widget.height)
-                    widget.left = self.report.margin_left + widget.left
+                    widget.left = band_rect['left'] + widget.left
                     widget.top = temp_top - widget.top - widget.para.height
 
                 self._rendered_pages[-1].elements.append(widget)
@@ -194,38 +217,44 @@ class PDFGenerator(ReportGenerator):
                 graphic.stroke_color = graphic.stroke_color or self.report.default_stroke_color
 
                 if isinstance(graphic, RoundRect):
-                    graphic.left = self.report.margin_left + graphic.left
+                    graphic.left = band_rect['left'] + graphic.left
                     graphic.top = top_position - graphic.top - graphic.height
                 elif isinstance(graphic, Rect):
-                    graphic.left = self.report.margin_left + graphic.left
+                    graphic.left = band_rect['left'] + graphic.left
                     graphic.top = top_position - graphic.top - graphic.height
                 elif isinstance(graphic, Line):
-                    graphic.left = self.report.margin_left + graphic.left
+                    graphic.left = band_rect['left'] + graphic.left
                     graphic.top = top_position - graphic.top
-                    graphic.right = self.report.margin_left + graphic.right
+                    graphic.right = band_rect['left'] + graphic.right
                     graphic.bottom = top_position - graphic.bottom
                 elif isinstance(graphic, Circle):
-                    graphic.left_center = self.report.margin_left + graphic.left_center
+                    graphic.left_center = band_rect['left'] + graphic.left_center
                     graphic.top_center = top_position - graphic.top_center
                 elif isinstance(graphic, Arc):
-                    graphic.left = self.report.margin_left + graphic.left
+                    graphic.left = band_rect['left'] + graphic.left
                     graphic.top = top_position - graphic.top
-                    graphic.right = self.report.margin_left + graphic.right
+                    graphic.right = band_rect['left'] + graphic.right
                     graphic.bottom = top_position - graphic.bottom
                 elif isinstance(graphic, Ellipse):
-                    graphic.left = self.report.margin_left + graphic.left
+                    graphic.left = band_rect['left'] + graphic.left
                     graphic.top = top_position - graphic.top
-                    graphic.right = self.report.margin_left + graphic.right
+                    graphic.right = band_rect['left'] + graphic.right
                     graphic.bottom = top_position - graphic.bottom
                 elif isinstance(graphic, Image):
-                    graphic.left = self.report.margin_left + graphic.left
+                    graphic.left = band_rect['left'] + graphic.left
                     graphic.top = top_position - graphic.top - graphic.height
 
                 self._rendered_pages[-1].elements.append(graphic)
 
         # Updates top position
         if update_top:
-            self.update_top_pos(band.height)
+            self.update_top_pos(band.height + getattr(band, 'margin_top', 0))
+
+        # Updates left position
+        if getattr(band, 'display_inline', False):
+            self.update_left_pos(band.width + getattr(band, 'margin_right', 0))
+        else:
+            self.update_left_pos(set=0)
 
         # Child bands
         for child_band in band.child_bands or []: # XXX This "or []" here is a quickfix
@@ -300,7 +329,7 @@ class PDFGenerator(ReportGenerator):
         # Call method that print the band area and its widgets
         self.render_band(
                 self.report.band_page_header,
-                self.report.page_size[1] - self.report.margin_top,
+                top_position=self.report.page_size[1] - self.report.margin_top,
                 update_top=False,
                 )
 
@@ -316,7 +345,7 @@ class PDFGenerator(ReportGenerator):
         # Call method that print the band area and its widgets
         self.render_band(
                 self.report.band_page_footer,
-                self.report.margin_bottom + self.report.band_page_footer.height,
+                top_position=self.report.margin_bottom + self.report.band_page_footer.height,
                 update_top=False,
                 )
 
@@ -453,6 +482,14 @@ class PDFGenerator(ReportGenerator):
 
             self.render_border(self.report.borders, self._page_rect)
 
+    def get_left_pos(self):
+        """Returns the left position of the drawer. Is useful on inline displayed detail bands"""
+        return self.report.margin_left + self._current_left_position
+
+    def get_available_width(self):
+        return self.report.page_size[0] - self.report.margin_left - self.report.margin_right -\
+                self._current_left_position
+
     def get_top_pos(self):
         """Since the coordinates are bottom-left on PDF, we have to use this to get
         the current top position, considering also the top margin."""
@@ -487,6 +524,17 @@ class PDFGenerator(ReportGenerator):
             self._current_top_position -= decrease
 
         return self._current_top_position
+
+    def update_left_pos(self, increase=0, decrease=0, set=None):
+        """Updates the current left position controller, increasing (by default),
+        decreasing or setting it with a new value."""
+        if set is not None:
+            self._current_left_position = set
+        else:        
+            self._current_left_position += increase
+            self._current_left_position -= decrease
+
+        return self._current_left_position
 
     def get_page_count(self): # TODO
         """Calculate and returns the page count for this report. The challenge
