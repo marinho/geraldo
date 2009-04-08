@@ -400,6 +400,9 @@ class PDFGenerator(ReportGenerator):
         self._current_object_index = 0
         objects = self.report.get_objects_list()
 
+        # just an alias to make it easier
+        d_band = self.report.band_detail
+
         # Empty report
         if self.report.print_if_empty and not objects:
             self.start_new_page()
@@ -417,7 +420,7 @@ class PDFGenerator(ReportGenerator):
                 self.render_begin()
 
             # Does generate objects if there is no details band
-            if not self.report.band_detail:
+            if not d_band:
                 self._current_object_index = len(objects)
 
             # Loop for objects to go into grid on current page
@@ -434,8 +437,8 @@ class PDFGenerator(ReportGenerator):
                 self.render_groups_headers()
 
                 # Generate this band only if it is visible
-                if self.report.band_detail.visible:
-                    self.render_band(self.report.band_detail)
+                if d_band.visible:
+                    self.render_band(d_band)
 
                 # Renders subreports
                 self.render_subreports()
@@ -444,9 +447,18 @@ class PDFGenerator(ReportGenerator):
                 self._current_object_index += 1
                 first_object_on_page = False
 
-                # Break is this is the end of this page
-                if self.get_available_height() < self.report.band_detail.height or\
-                   (self.report.band_detail.force_new_page and self._current_object_index < len(objects)):
+                # Break this if this page doesn't suppport nothing more...
+                # ... if there is no more available height
+                if self.get_available_height() < d_band.height:
+                    # right margin is not considered to calculate the necessary space
+                    d_width = d_band.width + getattr(d_band, 'margin_left', 0)
+
+                    # ... and this is not an inline displayed detail band or there is no width available
+                    if not getattr(d_band, 'display_inline', False) or self.get_available_width() < d_width:
+                        break
+
+                # ... or this band forces a new page and this is not the last object in objects list
+                elif d_band.force_new_page and self._current_object_index < len(objects):
                     break
 
             # Sets this is the latest page or not

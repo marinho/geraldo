@@ -90,12 +90,37 @@ queryset.
 **Attributes**
 
 - **height** - Default: 1*cm
+- **width** - Default: None
 - **visible** - Default: True
 - **borders** - Default: {'top': None, 'right': None, 'bottom': None, 'left': None, 'all': None}
 - **elements** - Default: []
 - **child_bands** - Default: []
 - **force_new_page** - Default: False
 - **default_style** - Default: None
+
+DetailBand
+----------
+
+Path: **geraldo.DetailBand**
+
+An extension of ReportBand. The only difference is that this class supports more
+attributes, specific to detail bands.
+
+**Attributes**
+
+- **margin_top** - Default: 0
+- **margin_left** - Default: 0
+- **margin_bottom** - Default: 0
+- **margin_right** - Default: 0
+- **display_inline** - Default: False
+
+    When you use **display_inline** with **True** value and **width** with a
+    valid value, the generator will try to align the detail band instances in
+    the same way HTML does with inline displaying of left floating elements:
+    it will keep each detail band at right of the last one if there is width
+    available.
+
+    This is useful for label reports.
 
 ReportGroup
 -----------
