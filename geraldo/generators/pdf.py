@@ -3,7 +3,7 @@ from base import ReportGenerator
 
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.lib.styles import ParagraphStyle
-from reportlab.platypus import Paragraph
+from reportlab.platypus import Paragraph, KeepInFrame
 from reportlab.lib.units import cm
 
 from geraldo.base import get_attr_value
@@ -195,9 +195,18 @@ class PDFGenerator(ReportGenerator):
                     widget.top = temp_top - widget.top
                 elif isinstance(widget, Label):
                     widget.para = Paragraph(widget.text, self.make_paragraph_style(band, widget.style))
-                    widget.para.wrapOn(self.canvas, widget.width, widget.height)
-                    widget.left = band_rect['left'] + widget.left
-                    widget.top = temp_top - widget.top - widget.para.height
+
+                    if widget.truncate_overflow:
+                        widget.keep = KeepInFrame(widget.width, widget.height, [widget.para], mode='truncate') # shrink
+                        widget.keep.canv = self.canvas
+                        widget.keep.wrap(widget.width, widget.height)
+
+                        widget.left = band_rect['left'] + widget.left
+                        widget.top = temp_top - widget.top - widget.height
+                    else:
+                        widget.para.wrapOn(self.canvas, widget.width, widget.height) # XXX
+                        widget.left = band_rect['left'] + widget.left
+                        widget.top = temp_top - widget.top - widget.para.height
 
                 self._rendered_pages[-1].elements.append(widget)
 
@@ -257,7 +266,7 @@ class PDFGenerator(ReportGenerator):
             self.update_left_pos(set=0)
 
         # Child bands
-        for child_band in band.child_bands or []: # XXX This "or []" here is a quickfix
+        for child_band in band.child_bands or []: # TODO This "or []" here is a quickfix
             # Doesn't generate if it is not visible
             if not child_band.visible:
                 continue
@@ -698,8 +707,11 @@ class PDFGenerator(ReportGenerator):
             para = Paragraph(widget.text, self.make_paragraph_style(widget.band, widget.style))
             para.wrapOn(canvas, widget.width, widget.height)
             para.drawOn(canvas, widget.left, widget.top - para.height)
-        elif isinstance(widget, Label):
-            widget.para.drawOn(canvas, widget.left, widget.top)
+        elif isinstance(widget, Label): # XXX
+            if widget.truncate_overflow:
+                widget.keep.drawOn(canvas, widget.left, widget.top)
+            else:
+                widget.para.drawOn(canvas, widget.left, widget.top)
 
     def generate_graphic(self, graphic, canvas=None):
         """Renders a graphic element"""

@@ -1,7 +1,14 @@
+2009-04-10: Version 0.3.0-alpha-3
+--------------------------------
+* New attribute on widgets: truncate_overflow, to truncate widget values when they
+  overflow
+* Default widget height changed to zero ( 0 ).
+
 2009-04-08: Version 0.3.0-alpha
+--------------------------------
 * Fixed a bug on queryset attribute in Report class
 * Created a new class DetailBand, to support inline displayed detail bands
---------------------------------
+
 2009-02-01: Version 0.2.2-stable
 --------------------------------
 * Fixed setup.py to not require PIL and ReportLab from PyPI

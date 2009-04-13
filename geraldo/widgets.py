@@ -8,12 +8,13 @@ from base import BAND_WIDTH, BAND_HEIGHT, Element
 
 class Widget(Element):
     """A widget is a value representation on the report"""
-    _height = 0.5*cm
+    _height = 0 #0.5*cm
     _width = 5*cm
     left = 0
     top = 0
     visible = True
     style = {}
+    truncate_overflow = False
     
     get_value = None # A lambda function to get customized values
 
