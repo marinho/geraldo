@@ -79,6 +79,27 @@ class ObjectValue(Label):
     display_format = '%s'
     objects = None
 
+    def _get_part_value(self, obj, attr_path):
+        """This method exists to make possible the use of an expression in
+        "attribute_name" attribute.
+        
+        Examples:
+            
+            attribute_name = 'name.upper'
+            attribute_name = 'customer.name'
+        """
+        parts = attr_path.split('.')
+
+        val = getattr(obj, parts[0])
+
+        if len(parts) > 1:
+            val = self._get_part_value(val, '.'.join(parts[1:]))
+
+        if callable(val):
+            val = val()
+            
+        return val
+
     def get_object_value(self, instance=None):
         """Return the attribute value for just an object"""
         instance = instance or self.instance
@@ -86,7 +107,7 @@ class ObjectValue(Label):
         if self.get_value and instance:
             return self.get_value(instance)
 
-        value = getattr(instance, self.attribute_name)
+        value = self._get_part_value(instance, self.attribute_name)
 
         # For method attributes
         if type(value) == types.MethodType:

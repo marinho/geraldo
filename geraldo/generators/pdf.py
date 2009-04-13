@@ -204,7 +204,7 @@ class PDFGenerator(ReportGenerator):
                         widget.left = band_rect['left'] + widget.left
                         widget.top = temp_top - widget.top - widget.height
                     else:
-                        widget.para.wrapOn(self.canvas, widget.width, widget.height) # XXX
+                        widget.para.wrapOn(self.canvas, widget.width, widget.height)
                         widget.left = band_rect['left'] + widget.left
                         widget.top = temp_top - widget.top - widget.para.height
 
@@ -707,7 +707,7 @@ class PDFGenerator(ReportGenerator):
             para = Paragraph(widget.text, self.make_paragraph_style(widget.band, widget.style))
             para.wrapOn(canvas, widget.width, widget.height)
             para.drawOn(canvas, widget.left, widget.top - para.height)
-        elif isinstance(widget, Label): # XXX
+        elif isinstance(widget, Label):
             if widget.truncate_overflow:
                 widget.keep.drawOn(canvas, widget.left, widget.top)
             else:

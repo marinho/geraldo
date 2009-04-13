@@ -126,6 +126,15 @@ with a mask or additional text.
     widget. You can inform a field, common attribute, propert or just a method,
     since it has no required argument to inform.
 
+    You can use paths of callable or properties instead of attribute name in
+    this attribute.
+
+    Examples:
+
+        attribute_name = 'name.upper'
+        attribute_name = 'customer.name'
+        attribute_name = 'customer.type.name.lower'
+
 - **action** - Default: geraldo.FIELD_ACTION_VALUE
 
     The action is where you say what Geraldo will do with the value of this

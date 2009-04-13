@@ -421,6 +421,14 @@ with a mask or additional text.</p>
 <p>You can inform here the object attribute name you want to show in this
 widget. You can inform a field, common attribute, propert or just a method,
 since it has no required argument to inform.</p>
+<p>You can use paths of callable or properties instead of attribute name in
+this attribute.</p>
+<p>Examples:</p>
+<blockquote>
+<p>attribute_name = 'name.upper'
+attribute_name = 'customer.name'
+attribute_name = 'customer.type.name.lower'</p>
+</blockquote>
 </blockquote>
 </li>
 <li><p class="first"><strong>action</strong> - Default: geraldo.FIELD_ACTION_VALUE</p>

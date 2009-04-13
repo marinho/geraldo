@@ -1,3 +1,8 @@
+2009-04-13: Version 0.3.0-alpha-4
+--------------------------------
+* Changed attribute 'attribute_name' on ObjectValue widget class, to support
+  callable values and object paths instead of attribute names.
+
 2009-04-10: Version 0.3.0-alpha-3
 --------------------------------
 * New attribute on widgets: truncate_overflow, to truncate widget values when they
