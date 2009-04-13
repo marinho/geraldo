@@ -54,6 +54,12 @@ own widgets, otherwise you shouldn't use it directly.
     This is the way you have to customize easily the widget output. Be careful
     with this attribute, because each one widget has its own set of arguments.
 
+- **truncate_overflow** - Default: False
+
+    When "True", truncate the widget to use only its defined **height** and
+    **widget** attributes, with no word wrap. What means that those attributes
+    are required.
+
 **Rendering attributes**
 
 They are read-only attributes you can use in render time.
