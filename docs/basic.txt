@@ -31,6 +31,9 @@ You can also override some methods to customize some things.
 
 **Report bands**
 
+A report band must be a class inherited from **ReportBand** or an instance of
+**ReportBand** of a class inherited from **ReportBand**
+
 - **band_begin** - Default: None
 - **band_summary** - Default: None
 - **band_page_header** - Default: None
@@ -72,6 +75,15 @@ Class to be used for subreport objects. It doesn't need to be inherited.
         * '%(object)s.groups.all()'
         * 'Message.objects.filter(user=%(object)s)'
         * 'Message.objects.filter(user__id=%(object)s.id)'
+
+**Report bands**
+
+A report band must be a class inherited from **ReportBand** or an instance of
+**ReportBand** of a class inherited from **ReportBand**
+
+- **band_detail** - Default: None
+- **band_header** - Default: None
+- **band_footer** - Default: None
 
 **Methods**
 
@@ -133,6 +145,12 @@ values.
 **Attributes**
 
 - **attribute_name** - Default: None
+
+**Report bands**
+
+A report band must be a class inherited from **ReportBand** or an instance of
+**ReportBand** of a class inherited from **ReportBand**
+
 - **band_header** - Default: None
 - **band_footer** - Default: None
 

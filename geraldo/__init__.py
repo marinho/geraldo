@@ -31,7 +31,7 @@ Packages Structure
 - tests - a package with automated doc tests.
 """
 
-VERSION = (0, 3, 0, 'alpha-5')
+VERSION = (0, 3, 0, 'alpha-6')
 
 def get_version():
     return '%d.%d.%d-%s'%VERSION

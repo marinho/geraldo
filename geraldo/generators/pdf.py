@@ -659,9 +659,16 @@ class PDFGenerator(ReportGenerator):
         
         For a while just the detail band is rendered. Maybe in future we
         change this to accept header and footer."""
+
+        def force_new_page(height):
+            # Forces new page if there is no available space
+            if self.get_available_height() < height:
+                self.render_page_footer()
+                self.force_new_page(insert_new_page=False)
+
         for subreport in self.report.subreports:
             # Subreports must have detail band
-            if not subreport.detail_band:
+            if not subreport.band_detail:
                 continue
 
             # Sets the parent object and automatically clear the queryset
@@ -669,14 +676,28 @@ class PDFGenerator(ReportGenerator):
             subreport.parent_object = self._current_object
 
             # Loops objects
-            for obj in subreport.get_objects_list():
+            for num, obj in enumerate(subreport.get_objects_list()):
+                # Renders the header band
+                if num == 0 and subreport.band_header:
+                    # Forces new page if there is no available space
+                    force_new_page(subreport.band_header.height)
+
+                    # Renders the header band
+                    self.render_band(subreport.band_header)
+
                 # Forces new page if there is no available space
-                if self.get_available_height() < subreport.detail_band.height:
-                    self.render_page_footer()
-                    self.force_new_page(insert_new_page=False)
+                force_new_page(subreport.band_detail.height)
 
                 # Renders the detail band
-                self.render_band(subreport.detail_band, current_object=obj)
+                self.render_band(subreport.band_detail, current_object=obj)
+
+            # Renders the footer band
+            if subreport.band_footer:
+                # Forces new page if there is no available space
+                force_new_page(subreport.band_footer.height)
+
+                # Renders the header band
+                self.render_band(subreport.band_footer)
 
     def make_paragraph_style(self, band, style=None):
         """Merge report default_style + band default_style + widget style"""

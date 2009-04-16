@@ -61,23 +61,41 @@ Report class
     ...         height = 2*cm
     ...         elements = [
     ...             Label(text="Username", top=0, left=0, style={'fontName': 'Helvetica-Bold', 'fontSize': 14}),
-    ...             Label(text="First name", top=1*cm, left=0.2*cm, style={'fontName': 'Helvetica-Bold'}),
+    ...             Label(text="Full name", top=1*cm, left=0.2*cm, style={'fontName': 'Helvetica-Bold'}),
     ...             Label(text="Superuser", top=1.5*cm, left=0.2*cm, style={'fontName': 'Helvetica-Bold'}),
     ...             ObjectValue(attribute_name='username', top=0, left=4*cm, style={'fontName': 'Helvetica', 'fontSize': 14}),
-    ...             ObjectValue(attribute_name='first_name', top=1*cm, left=4*cm, style={'fontName': 'Helvetica'}),
-    ...             ObjectValue(attribute_name='last_name', top=1.5*cm, left=4*cm, style={'fontName': 'Helvetica'}),
+    ...             ObjectValue(attribute_name='get_full_name', top=1*cm, left=4*cm, style={'fontName': 'Helvetica'}),
+    ...             ObjectValue(attribute_name='is_superuser', top=1.5*cm, left=4*cm, style={'fontName': 'Helvetica'}),
     ...         ]
     ...         borders = {'bottom': Line(stroke_color=navy)}
     ... 
     ...     subreports = [
     ...         SubReport(
     ...             queryset_string = '%(object)s.user_permissions.all()',
-    ...             detail_band = ReportBand(
+    ...             band_header = ReportBand(
     ...                     height=0.5*cm,
     ...                     elements=[
-    ...                         ObjectValue(attribute_name='id', top=0, left=0),
+    ...                         Label(text='ID', top=0, left=0.2*cm, style={'fontName': 'Helvetica-Bold'}),
+    ...                         Label(text='Name', top=0, left=4*cm, style={'fontName': 'Helvetica-Bold'}),
+    ...                     ],
+    ...                     borders={'top': True, 'left': True, 'right': True},
+    ...                 ),
+    ...             band_detail = ReportBand(
+    ...                     height=0.5*cm,
+    ...                     elements=[
+    ...                         ObjectValue(attribute_name='id', top=0, left=0.2*cm),
     ...                         ObjectValue(attribute_name='name', top=0, left=4*cm),
-    ...                     ]
+    ...                     ],
+    ...                     borders={'left': True, 'right': True},
+    ...                 ),
+    ...             band_footer = ReportBand(
+    ...                     height=0.5*cm,
+    ...                     elements=[
+    ...                         ObjectValue(attribute_name='id', left=4*cm,\
+    ...                             action=FIELD_ACTION_COUNT, display_format='%s permissions found',
+    ...                             style={'fontName': 'Helvetica-Bold'}),
+    ...                     ],
+    ...                     borders={'bottom': True, 'left': True, 'right': True},
     ...                 ),
     ...         ),
     ...     ]

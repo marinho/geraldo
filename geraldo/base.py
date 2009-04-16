@@ -175,8 +175,19 @@ class SubReport(BaseReport):
     _parent_object = None
     _queryset = None
 
+    band_detail = None
+    band_header = None
+    band_footer = None
+
     def __init__(self, **kwargs):
         for k,v in kwargs.items():
+            # Validates backward incompatibility for 'detail_band'
+            if k == 'detail_band':
+                k = 'band_detail'
+
+                import warnings
+                warnings.warn("Attribute 'detail_band' in SubReport class is deprecated. Use 'band_detail' as well.")
+
             setattr(self, k, v)
 
     @property
