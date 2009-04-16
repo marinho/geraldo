@@ -1,3 +1,8 @@
+2009-04-16: Version 0.3.0-alpha-5
+--------------------------------
+* Changed method Report.generate_by to raise an exception EmptyQueryset if the
+  report has attribute 'print_if_empty' is False and 'queryset' is empty
+
 2009-04-13: Version 0.3.0-alpha-4
 --------------------------------
 * Changed attribute 'attribute_name' on ObjectValue widget class, to support

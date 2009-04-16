@@ -18,6 +18,7 @@ customized widget values and some stylized elements.
     ...     FIELD_ACTION_COUNT, FIELD_ACTION_AVG, FIELD_ACTION_MIN,\
     ...     FIELD_ACTION_MAX, FIELD_ACTION_SUM, FIELD_ACTION_DISTINCT_COUNT, BAND_WIDTH,\
     ...     RoundRect, Line
+    >>> from geraldo.base import EmptyQueryset
 
 Report class
 
@@ -98,11 +99,15 @@ Report class
 
     >>> report = UsersReport(queryset=queryset)
 
-PDF generation with empty queryset
+PDF generation with empty queryset (raises an exception)
 
     >>> from geraldo.generators import PDFGenerator
 
-    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'users-empty-report.pdf'))
+    >>> try:
+    ...     report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'users-empty-report.pdf'))
+    ... except EmptyQueryset, e:
+    ...     print e
+    This report doesn't accept empty queryset
 
 Creating some users
 

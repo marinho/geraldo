@@ -92,6 +92,9 @@ class BaseReport(object):
         """Use a date format string method to return formatted datetime"""
         return date.strftime(expression)
 
+class EmptyQueryset(Exception):
+    pass
+
 class Report(BaseReport):
     """This class must be inherited to be used as a new report.
     
@@ -127,6 +130,12 @@ class Report(BaseReport):
         to a desired format, like XML, HTML or PDF, for example.
         
         The arguments *args and **kwargs are passed to class initializer."""
+
+        # Check empty queryset and raises an error if this is not acceptable
+        if not self.print_if_empty and not self.queryset:
+            raise EmptyQueryset("This report doesn't accept empty queryset")
+
+        # Initialize generator instance
         generator = generator_class(self, *args, **kwargs)
 
         return generator.execute()
