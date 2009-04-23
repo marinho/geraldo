@@ -48,7 +48,7 @@ class BaseReport(object):
         if self.queryset is None:
             self.queryset = []
 
-        self.groups = self.groups or []
+        self.groups = self.groups and list(self.groups) or []
 
         # Transforms band classes to band objects
         self.transform_classes_to_objects()
@@ -122,7 +122,7 @@ class Report(BaseReport):
     def __init__(self, queryset=None):
         super(Report, self).__init__(queryset)
 
-        self.subreports = self.subreports or []
+        self.subreports = self.subreports and list(self.subreports) or []
         self.default_style = self.default_style or {}
 
     def generate_by(self, generator_class, *args, **kwargs):
@@ -243,8 +243,8 @@ class ReportBand(object):
             setattr(self, k, v)
 
         # Default values for elements, child bands and default style lists
-        self.elements = self.elements or []
-        self.child_bands = self.child_bands or []
+        self.elements = self.elements and list(self.elements) or []
+        self.child_bands = self.child_bands and list(self.child_bands) or []
         self.default_style = self.default_style or {}
 
         # Transforms band classes to band objects
