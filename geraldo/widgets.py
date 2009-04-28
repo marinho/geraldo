@@ -1,4 +1,4 @@
-import datetime, types
+import datetime, types, decimal
 from sets import Set
 
 from reportlab.lib.units import cm
@@ -121,6 +121,17 @@ class ObjectValue(Label):
         return [self.get_object_value(instance) for instance in
                 self.generator.get_objects_in_group()]
 
+    def _clean_empty_values(self, values):
+        def _clean(val):
+            if not val:
+                return 0
+            elif isinstance(val, decimal.Decimal):
+                return float(val)
+            
+            return val
+
+        return map(_clean, values)
+
     def action_value(self):
         return self.get_object_value()
 
@@ -130,6 +141,10 @@ class ObjectValue(Label):
 
     def action_avg(self):
         values = self.get_queryset_values()
+
+        # Clear empty values
+        values = self._clean_empty_values(values)
+
         return sum(values) / len(values)
 
     def action_min(self):
@@ -142,16 +157,20 @@ class ObjectValue(Label):
 
     def action_sum(self):
         values = self.get_queryset_values()
+
+        # Clear empty values
+        values = self._clean_empty_values(values)
+
         return sum(values)
 
     def action_distinct_count(self):
         values = Set(self.get_queryset_values())
         return len(values)
 
-    @property
-    def text(self):
+    def _text(self):
         text = unicode(getattr(self, 'action_'+self.action)())
         return self.display_format%text
+    text = property(lambda self: self._text())
 
 SYSTEM_FIELD_CHOICES = {
     'report_title': 'ReportTitle',
