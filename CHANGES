@@ -1,3 +1,17 @@
+2009-04-30: Version 0.3.0-alpha-9
+---------------------------------
+* Fixed a bug on group band footer calculations when there was only one object
+  in the queryset
+
+2009-04-28: Version 0.3.0-alpha-8
+---------------------------------
+* Fixed bug on ObjectValue widget and how it works with 'text' property
+* Fixed bug on ObjectValue to avoid None values and to convert Decimal to float
+
+2009-04-23: Version 0.3.0-alpha-7
+---------------------------------
+* Fixed a bug on basic classes creation (it was using objects on lists)
+
 2009-04-16: Version 0.3.0-alpha-6
 --------------------------------
 * SubReport attribute 'detail_band' changed to 'band_detail' and the old name

@@ -35,7 +35,6 @@ class PDFGenerator(ReportGenerator):
     # Groupping
     _groups_values = None
     _groups_previous_values = None
-    _groups_values = None
     _groups_changed = None
     _groups_stack = None
 
@@ -475,6 +474,7 @@ class PDFGenerator(ReportGenerator):
 
             # Renders the finish group footer bands
             if self._is_latest_page:
+                self.calc_changed_groups(False)
                 self.render_groups_footers(force=True)
 
             # Ends the current page, printing footer and summary and necessary
@@ -579,7 +579,8 @@ class PDFGenerator(ReportGenerator):
     # Groups topic
 
     def calc_changed_groups(self, force_no_changed=False):
-        """Render reports groups - only group headers for a while"""
+        """Defines which groups has been changed their driver values to be
+        used to render group bands"""
         changed = force_no_changed
 
         # Stores the previous group values
