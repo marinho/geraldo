@@ -6,7 +6,7 @@ from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus import Paragraph, KeepInFrame
 from reportlab.lib.units import cm
 
-from geraldo.base import get_attr_value
+from geraldo.utils import get_attr_value
 from geraldo.widgets import Widget, Label, SystemField
 from geraldo.graphics import Graphic, RoundRect, Rect, Line, Circle, Arc,\
         Ellipse, Image

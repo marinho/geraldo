@@ -1,3 +1,10 @@
+2009-05-14: Version 0.3.0-final
+-------------------------------
+* Fixed ReportGroup.attribute_name to support methods and child attributes
+* Created a new module 'utils.py' with once function to get attribute values
+  from objects support methods and expression paths. It is used by
+  ReportGroup.attribute_name and Widget.attribute_name
+
 2009-04-30: Version 0.3.0-alpha-9
 ---------------------------------
 * Fixed a bug on group band footer calculations when there was only one object

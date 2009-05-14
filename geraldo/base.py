@@ -10,16 +10,6 @@ BAND_HEIGHT = 'band-height'
 def landscape(page_size):
     return page_size[1], page_size[0]
 
-def get_attr_value(obj, attr):
-    """This function returns a value from a object doesn't matters if the
-    attribute is a function or not"""
-    value = getattr(obj, attr)
-    
-    if type(value) == types.MethodType:
-        return value()
-
-    return value
-
 class BaseReport(object):
     """Basic Report class, inherited and used to make reports adn subreports"""
 
