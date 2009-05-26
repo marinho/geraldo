@@ -3,15 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.4.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.5: http://docutils.sourceforge.net/" />
 <title>Basic Reference</title>
 <style type="text/css">
 
 /*
-:Author: David Goodger
-:Contact: goodger@users.sourceforge.net
-:Date: $Date: 2005-12-18 01:56:14 +0100 (Sun, 18 Dec 2005) $
-:Revision: $Revision: 4224 $
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 5196 2007-06-03 20:25:28Z wiemann $
 :Copyright: This stylesheet has been placed in the public domain.
 
 Default cascading style sheet for the HTML output of Docutils.
@@ -117,7 +115,7 @@ div.line-block div.line-block {
   margin-left: 1.5em }
 
 div.sidebar {
-  margin-left: 1em ;
+  margin: 0 0 0.5em 1em ;
   border: medium outset ;
   padding: 1em ;
   background-color: #ffffee ;
@@ -223,8 +221,7 @@ pre.address {
 
 pre.literal-block, pre.doctest-block {
   margin-left: 2em ;
-  margin-right: 2em ;
-  background-color: #eeeeee }
+  margin-right: 2em }
 
 span.classifier {
   font-family: sans-serif ;
@@ -281,9 +278,6 @@ h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
 h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
   font-size: 100% }
 
-tt.docutils {
-  background-color: #eeeeee }
-
 ul.auto-toc {
   list-style-type: none }
 
@@ -292,8 +286,9 @@ ul.auto-toc {
 <body>
 <div class="document" id="basic-reference">
 <h1 class="title">Basic Reference</h1>
-<div class="section">
-<h2><a id="report" name="report">Report</a></h2>
+
+<div class="section" id="report">
+<h2>Report</h2>
 <p>Path: <strong>geraldo.Report</strong></p>
 <p>This is the report main class. Every report must inherit or be an instance of
 this class. It supports some bands and report definitions.</p>
@@ -307,6 +302,8 @@ this class. It supports some bands and report definitions.</p>
 <ul class="simple">
 <li><strong>title</strong> - Default: '';</li>
 <li><strong>author</strong> - Default: '';</li>
+<li><strong>subject</strong> - Default: ''; (you can use it as the report description)</li>
+<li><strong>keywords</strong> - Default: '';</li>
 </ul>
 <p><strong>Report page dimensions</strong></p>
 <ul class="simple">
@@ -345,8 +342,8 @@ this class. It supports some bands and report definitions.</p>
 <li><strong>generate_by(generator_class, *args, **kwargs)</strong></li>
 </ul>
 </div>
-<div class="section">
-<h2><a id="subreport" name="subreport">SubReport</a></h2>
+<div class="section" id="subreport">
+<h2>SubReport</h2>
 <p>Path: <strong>geraldo.SubReport</strong></p>
 <p>Class to be used for subreport objects. It doesn't need to be inherited.</p>
 <p><strong>Attributes</strong></p>
@@ -379,8 +376,8 @@ this class. It supports some bands and report definitions.</p>
 <li><strong>get_objects_list()</strong></li>
 </ul>
 </div>
-<div class="section">
-<h2><a id="reportband" name="reportband">ReportBand</a></h2>
+<div class="section" id="reportband">
+<h2>ReportBand</h2>
 <p>Path: <strong>geraldo.ReportBand</strong></p>
 <p>A band is a horizontal area in the report. It can be used to print things on
 the top, on summary, on page header, on page footer or one time per object from
@@ -397,8 +394,8 @@ queryset.</p>
 <li><strong>default_style</strong> - Default: None</li>
 </ul>
 </div>
-<div class="section">
-<h2><a id="detailband" name="detailband">DetailBand</a></h2>
+<div class="section" id="detailband">
+<h2>DetailBand</h2>
 <p>Path: <strong>geraldo.DetailBand</strong></p>
 <p>An extension of ReportBand. The only difference is that this class supports more
 attributes, specific to detail bands.</p>
@@ -424,8 +421,8 @@ available.</p>
 </li>
 </ul>
 </div>
-<div class="section">
-<h2><a id="reportgroup" name="reportgroup">ReportGroup</a></h2>
+<div class="section" id="reportgroup">
+<h2>ReportGroup</h2>
 <p>Path: <strong>geraldo.ReportGroup</strong></p>
 <p>This a report grouper class. A report can be multiple groupped by attribute
 values.</p>

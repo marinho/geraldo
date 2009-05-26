@@ -20,6 +20,8 @@ You can also override some methods to customize some things.
 
 - **title** - Default: '';
 - **author** - Default: '';
+- **subject** - Default: ''; (you can use it as the report description)
+- **keywords** - Default: '';
 
 **Report page dimensions**
 
