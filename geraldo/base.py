@@ -72,7 +72,7 @@ class BaseReport(object):
         """Returns the list with objects to be rendered.
         
         This should be refactored in the future to support big amounts of
-        records."""
+        objects."""
         if not self.queryset:
             return []
 
@@ -80,7 +80,7 @@ class BaseReport(object):
 
     def format_date(self, date, expression):
         """Use a date format string method to return formatted datetime"""
-        return date.strftime(expression)
+        return date.strftime(expression).decode('utf-8')
 
 class EmptyQueryset(Exception):
     pass
@@ -92,10 +92,13 @@ class Report(BaseReport):
     margins definitions.
     
     Depends on ReportLab to work properly"""
+
     # Report properties
     title = ''
     author = ''
-    
+    subject = '' # Can be used also as the report description
+    keywords = ''
+
     # Page dimensions
     page_size = A4
     margin_top = 1*cm

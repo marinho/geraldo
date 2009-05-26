@@ -98,8 +98,9 @@ class ObjectValue(Label):
     def get_queryset_values(self):
         """Uses the method 'get_object_value' to get the attribute value from
         all objects in the objects list, as a list"""
+
         return [self.get_object_value(instance) for instance in
-                self.generator.get_objects_in_group()]
+                self.generator.get_current_queryset()]
 
     def _clean_empty_values(self, values):
         def _clean(val):

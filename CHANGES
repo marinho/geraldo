@@ -1,3 +1,12 @@
+2009-05-26: Version 0.3.1-alpha
+-------------------------------
+* Fixed band_footer and band_header aggregation ObjectValue on SubReports
+  (thanks to Paul Hide)
+* Fixed latin datetime decode when formatting date (ticket # 2796452, thanks
+  to Ari Caldeira)
+* Implemented subject (description) and keywords attributes to Report class
+  (ticket # 2796457, thanks to Ari Caldeira)
+
 2009-05-14: Version 0.3.0-final
 -------------------------------
 * Fixed ReportGroup.attribute_name to support methods and child attributes

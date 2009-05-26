@@ -30,6 +30,7 @@ class PDFGenerator(ReportGenerator):
     _current_left_position = 0
     _current_page_number = 0
     _current_object = None
+    _current_queryset = None
     _generation_datetime = None
 
     # Groupping
@@ -80,6 +81,8 @@ class PDFGenerator(ReportGenerator):
         # Set PDF properties
         self.canvas.setTitle(self.report.title)
         self.canvas.setAuthor(self.report.author)
+        self.canvas.setSubject(self.report.subject)
+        self.canvas.setKeywords(self.report.keywords)
 
     def render_border(self, borders_dict, rect_dict):
         """Renders a border in the coordinates setted in the rect."""
@@ -634,11 +637,24 @@ class PDFGenerator(ReportGenerator):
 
                 self._groups_stack.pop()
 
+    def get_current_queryset(self):
+        """Returns the current queryset. This solves a problem with subreports
+        footers and headers, and solves also flexibility and customization issues."""
+
+        # Customized and SubReports
+        if self._current_queryset is not None:
+            return self._current_queryset
+
+        # Groups
+        elif self._groups_stack:
+            return self.get_objects_in_group()
+
+        # Defaul detail driver queryset
+        return self.report.queryset
+
     def get_objects_in_group(self):
-        """Return objects filtered in the current group or all if there is no
+        """Returns objects filtered in the current group or all if there is no
         group"""
-        if not self._groups_stack:
-            return self.report.queryset
 
         filter = dict([(group.attribute_name, self._groups_previous_values.get(group, None))\
                 for group in self.report.groups if group in self._groups_stack])
@@ -676,6 +692,9 @@ class PDFGenerator(ReportGenerator):
             # in memory
             subreport.parent_object = self._current_object
 
+            # Sets the temporary currenty queryset
+            self._current_queryset = subreport.get_objects_list()
+
             # Loops objects
             for num, obj in enumerate(subreport.get_objects_list()):
                 # Renders the header band
@@ -699,6 +718,9 @@ class PDFGenerator(ReportGenerator):
 
                 # Renders the header band
                 self.render_band(subreport.band_footer)
+
+            # Sets back the default currenty queryset
+            self._current_queryset = None
 
     def make_paragraph_style(self, band, style=None):
         """Merge report default_style + band default_style + widget style"""
