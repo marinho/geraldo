@@ -179,6 +179,9 @@ class SystemField(Label):
     def __init__(self, **kwargs):
         super(SystemField, self).__init__(**kwargs)
 
+        # This is the safe way to use the predefined fields dictionary
+        self.fields = SystemField.fields.copy()
+
         self.fields['current_datetime'] = datetime.datetime.now()
 
     @property
@@ -194,7 +197,9 @@ class SystemField(Label):
         if self.get_value:
             return self.get_value(self.expression, fields)
 
-        return self.expression%SystemFieldDict(self, fields)
+        ret = self.expression%SystemFieldDict(self, fields)
+
+        return ret.decode('utf-8')
 
 class SystemFieldDict(dict):
     widget = None

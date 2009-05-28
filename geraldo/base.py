@@ -80,7 +80,7 @@ class BaseReport(object):
 
     def format_date(self, date, expression):
         """Use a date format string method to return formatted datetime"""
-        return date.strftime(expression).decode('utf-8')
+        return date.strftime(expression)
 
 class EmptyQueryset(Exception):
     pass
