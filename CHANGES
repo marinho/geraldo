@@ -1,3 +1,9 @@
+2009-05-29: Version 0.3.1-alpha
+-------------------------------
+* Fixed error on date formatting. We made a mistake decoding with UTF-8 when
+  we just should make people learn to override the right method (unless we
+  find a better and agnosthic solution).
+
 2009-05-28: Version 0.3.1-alpha
 -------------------------------
 * Fixed error on date formatting for Python in versions less than 2.6.x

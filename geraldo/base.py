@@ -79,7 +79,12 @@ class BaseReport(object):
         return [object for object in self.queryset]
 
     def format_date(self, date, expression):
-        """Use a date format string method to return formatted datetime"""
+        """Use a date format string method to return formatted datetime.
+
+        You should override this method to force UTF-8 decode or something like
+        this (until we find a better and agnosthic solution).
+        
+        Please don't hack this method up. Just override it on your report class."""
         return date.strftime(expression)
 
 class EmptyQueryset(Exception):

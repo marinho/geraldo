@@ -197,9 +197,7 @@ class SystemField(Label):
         if self.get_value:
             return self.get_value(self.expression, fields)
 
-        ret = self.expression%SystemFieldDict(self, fields)
-
-        return ret.decode('utf-8')
+        return self.expression%SystemFieldDict(self, fields)
 
 class SystemFieldDict(dict):
     widget = None
