@@ -1,3 +1,6 @@
+from reportlab.lib.units import * # Check this - is the source of units
+from reportlab.lib.pagesizes import * # Check this - is the source of page sizes
+
 def get_attr_value(obj, attr_path):
     """This function gets an attribute value from an object. If the attribute
     is a method with no arguments (or arguments with default values) it calls
@@ -10,6 +13,9 @@ def get_attr_value(obj, attr_path):
         attribute_name = 'name.upper'
         attribute_name = 'customer.name.lower'
     """
+    if not attr_path:
+        raise Exception('Invalid attribute path \'%s\''%attr_path)
+
     parts = attr_path.split('.')
 
     val = getattr(obj, parts[0])
@@ -21,4 +27,12 @@ def get_attr_value(obj, attr_path):
         val = val()
         
     return val
+
+def calculate_size(size):
+    """Calculates the informed size. If this is a string or unicode, it is
+    converted to float using evaluation function"""
+    if isinstance(size, basestring):
+        return eval(size)
+    
+    return size
 

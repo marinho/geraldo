@@ -1,3 +1,8 @@
+2009-05-23: Version 0.3.1-alpha-2
+-------------------------------
+* New function 'utils.calculate_size'
+* Added support to string sizes (i.e: margin_top = '1*cm')
+
 2009-05-29: Version 0.3.1-alpha
 -------------------------------
 * Fixed error on date formatting. We made a mistake decoding with UTF-8 when

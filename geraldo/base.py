@@ -4,6 +4,8 @@ from reportlab.lib.units import cm
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.colors import black
 
+from utils import calculate_size
+
 BAND_WIDTH = 'band-width'
 BAND_HEIGHT = 'band-height'
 
@@ -142,14 +144,14 @@ class Report(BaseReport):
         """Calculates a dictionary with page dimensions inside the margins
         and returns. It is used to make page borders."""
         if not self._page_rect:
-            client_width = self.page_size[0] - self.margin_left - self.margin_right
-            client_height = self.page_size[1] - self.margin_top - self.margin_bottom
+            client_width = calculate_size(self.page_size[0]) - calculate_size(self.margin_left) - calculate_size(self.margin_right)
+            client_height = calculate_size(self.page_size[1]) - calculate_size(self.margin_top) - calculate_size(self.margin_bottom)
 
             self._page_rect = {
-                'left': self.margin_left,
-                'top': self.margin_top,
-                'right': self.page_size[0] - self.margin_right,
-                'bottom': self.page_size[1] - self.margin_bottom,
+                'left': calculate_size(self.margin_left),
+                'top': calculate_size(self.margin_top),
+                'right': calculate_size(self.page_size[0]) - calculate_size(self.margin_right),
+                'bottom': calculate_size(self.page_size[1]) - calculate_size(self.margin_bottom),
                 'width': client_width,
                 'height': client_height,
                 }
