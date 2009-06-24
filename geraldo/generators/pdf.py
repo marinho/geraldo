@@ -138,9 +138,9 @@ class PDFGenerator(ReportGenerator):
         band_rect = {
                 'left': left_position, #self.report.margin_left,
                 'top': top_position,
-                'right': left_position + calculate_size(band.width), #self.report.page_size[0] - self.report.margin_right,
-                'bottom': top_position - calculate_size(band.height),
-                'height': calculate_size(band.height),
+                'right': left_position + self.calculate_size(band.width), #self.report.page_size[0] - self.report.margin_right,
+                'bottom': top_position - self.calculate_size(band.height),
+                'height': self.calculate_size(band.height),
                 }
         return band_rect
 
@@ -151,19 +151,19 @@ class PDFGenerator(ReportGenerator):
         current_object = current_object or self._current_object
 
         # Page width. This should be done in a metaclass in Report domain TODO
-        self._rendered_pages[-1].width = calculate_size(self.report.page_size[0]) -\
-                calculate_size(self.report.margin_left) - calculate_size(self.report.margin_right)
+        self._rendered_pages[-1].width = self.calculate_size(self.report.page_size[0]) -\
+                self.calculate_size(self.report.margin_left) - self.calculate_size(self.report.margin_right)
 
         # Default value for band width
-        band.width = calculate_size(band.width) or self._rendered_pages[-1].width
+        band.width = self.calculate_size(band.width) or self._rendered_pages[-1].width
 
         # Coordinates
         left_position = left_position or self.get_left_pos()
 
-        if left_position > calculate_size(self.report.margin_left) and\
+        if left_position > self.calculate_size(self.report.margin_left) and\
            getattr(band, 'display_inline', False) and\
            band.width < self.get_available_width():
-            self.update_top_pos(decrease=calculate_size(band.height))
+            self.update_top_pos(decrease=self.calculate_size(band.height))
         else:
             self.update_left_pos(set=0)
             left_position = self.get_left_pos()
@@ -193,27 +193,27 @@ class PDFGenerator(ReportGenerator):
                 widget.page = self._rendered_pages[-1]
 
                 if isinstance(widget, SystemField):
-                    widget.left = band_rect['left'] + calculate_size(widget.left)
-                    widget.top = temp_top - calculate_size(widget.top)
+                    widget.left = band_rect['left'] + self.calculate_size(widget.left)
+                    widget.top = temp_top - self.calculate_size(widget.top)
                 elif isinstance(widget, Label):
-                    widget.para = Paragraph(widget.text, self.make_paragraph_style(band, widget.style))
+                    widget.para = self.make_paragraph(widget.text, self.make_paragraph_style(band, widget.style))
 
                     if widget.truncate_overflow:
                         widget.keep = KeepInFrame(
-                                calculate_size(widget.width),
-                                calculate_size(widget.height),
+                                self.calculate_size(widget.width),
+                                self.calculate_size(widget.height),
                                 [widget.para],
                                 mode='truncate',
                                 ) # shrink
                         widget.keep.canv = self.canvas
-                        widget.keep.wrap(calculate_size(widget.width), calculate_size(widget.height))
+                        widget.keep.wrap(self.calculate_size(widget.width), self.calculate_size(widget.height))
 
-                        widget.left = band_rect['left'] + calculate_size(widget.left)
-                        widget.top = temp_top - calculate_size(widget.top) - calculate_size(widget.height)
+                        widget.left = band_rect['left'] + self.calculate_size(widget.left)
+                        widget.top = temp_top - self.calculate_size(widget.top) - self.calculate_size(widget.height)
                     else:
-                        widget.para.wrapOn(self.canvas, calculate_size(widget.width), calculate_size(widget.height))
-                        widget.left = band_rect['left'] + calculate_size(widget.left)
-                        widget.top = temp_top - calculate_size(widget.top) - calculate_size(widget.para.height)
+                        self.wrap_paragraph_on(widget.para, self.calculate_size(widget.width), self.calculate_size(widget.height))
+                        widget.left = band_rect['left'] + self.calculate_size(widget.left)
+                        widget.top = temp_top - self.calculate_size(widget.top) - self.calculate_size(widget.para.height)
 
                 self._rendered_pages[-1].elements.append(widget)
 
@@ -233,42 +233,42 @@ class PDFGenerator(ReportGenerator):
                 graphic.stroke_color = graphic.stroke_color or self.report.default_stroke_color
 
                 if isinstance(graphic, RoundRect):
-                    graphic.left = band_rect['left'] + calculate_size(graphic.left)
-                    graphic.top = top_position - calculate_size(graphic.top) - calculate_size(graphic.height)
+                    graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
+                    graphic.top = top_position - self.calculate_size(graphic.top) - self.calculate_size(graphic.height)
                 elif isinstance(graphic, Rect):
-                    graphic.left = band_rect['left'] + calculate_size(graphic.left)
-                    graphic.top = top_position - calculate_size(graphic.top) - calculate_size(graphic.height)
+                    graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
+                    graphic.top = top_position - self.calculate_size(graphic.top) - self.calculate_size(graphic.height)
                 elif isinstance(graphic, Line):
-                    graphic.left = band_rect['left'] + calculate_size(graphic.left)
-                    graphic.top = top_position - calculate_size(graphic.top)
-                    graphic.right = band_rect['left'] + calculate_size(graphic.right)
-                    graphic.bottom = top_position - calculate_size(graphic.bottom)
+                    graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
+                    graphic.top = top_position - self.calculate_size(graphic.top)
+                    graphic.right = band_rect['left'] + self.calculate_size(graphic.right)
+                    graphic.bottom = top_position - self.calculate_size(graphic.bottom)
                 elif isinstance(graphic, Circle):
-                    graphic.left_center = band_rect['left'] + calculate_size(graphic.left_center)
-                    graphic.top_center = top_position - calculate_size(graphic.top_center)
+                    graphic.left_center = band_rect['left'] + self.calculate_size(graphic.left_center)
+                    graphic.top_center = top_position - self.calculate_size(graphic.top_center)
                 elif isinstance(graphic, Arc):
-                    graphic.left = band_rect['left'] + calculate_size(graphic.left)
-                    graphic.top = top_position - calculate_size(graphic.top)
-                    graphic.right = band_rect['left'] + calculate_size(graphic.right)
-                    graphic.bottom = top_position - calculate_size(graphic.bottom)
+                    graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
+                    graphic.top = top_position - self.calculate_size(graphic.top)
+                    graphic.right = band_rect['left'] + self.calculate_size(graphic.right)
+                    graphic.bottom = top_position - self.calculate_size(graphic.bottom)
                 elif isinstance(graphic, Ellipse):
-                    graphic.left = band_rect['left'] + calculate_size(graphic.left)
-                    graphic.top = top_position - calculate_size(graphic.top)
-                    graphic.right = band_rect['left'] + calculate_size(graphic.right)
-                    graphic.bottom = top_position - calculate_size(graphic.bottom)
+                    graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
+                    graphic.top = top_position - self.calculate_size(graphic.top)
+                    graphic.right = band_rect['left'] + self.calculate_size(graphic.right)
+                    graphic.bottom = top_position - self.calculate_size(graphic.bottom)
                 elif isinstance(graphic, Image):
-                    graphic.left = band_rect['left'] + calculate_size(graphic.left)
-                    graphic.top = top_position - calculate_size(graphic.top) - calculate_size(graphic.height)
+                    graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
+                    graphic.top = top_position - self.calculate_size(graphic.top) - self.calculate_size(graphic.height)
 
                 self._rendered_pages[-1].elements.append(graphic)
 
         # Updates top position
         if update_top:
-            self.update_top_pos(calculate_size(band.height) + calculate_size(getattr(band, 'margin_top', 0)))
+            self.update_top_pos(self.calculate_size(band.height) + self.calculate_size(getattr(band, 'margin_top', 0)))
 
         # Updates left position
         if getattr(band, 'display_inline', False):
-            self.update_left_pos(band.width + calculate_size(getattr(band, 'margin_right', 0)))
+            self.update_left_pos(band.width + self.calculate_size(getattr(band, 'margin_right', 0)))
         else:
             self.update_left_pos(set=0)
 
@@ -278,7 +278,7 @@ class PDFGenerator(ReportGenerator):
             if not child_band.visible:
                 continue
 
-            self.force_blank_page_by_height(calculate_size(child_band.height))
+            self.force_blank_page_by_height(self.calculate_size(child_band.height))
 
             self.render_band(child_band)
 
@@ -328,7 +328,7 @@ class PDFGenerator(ReportGenerator):
         self._groups_stack = []
 
         # Check to force new page if there is no available space
-        self.force_blank_page_by_height(calculate_size(self.report.band_summary.height))
+        self.force_blank_page_by_height(self.calculate_size(self.report.band_summary.height))
 
         # Call method that print the band area and its widgets
         self.render_band(self.report.band_summary)
@@ -345,7 +345,7 @@ class PDFGenerator(ReportGenerator):
         # Call method that print the band area and its widgets
         self.render_band(
                 self.report.band_page_header,
-                top_position=calculate_size(self.report.page_size[1]) - calculate_size(self.report.margin_top),
+                top_position=self.calculate_size(self.report.page_size[1]) - self.calculate_size(self.report.margin_top),
                 update_top=False,
                 )
 
@@ -361,8 +361,8 @@ class PDFGenerator(ReportGenerator):
         # Call method that print the band area and its widgets
         self.render_band(
                 self.report.band_page_footer,
-                top_position=calculate_size(self.report.margin_bottom) +\
-                    calculate_size(self.report.band_page_footer.height),
+                top_position=self.calculate_size(self.report.margin_bottom) +\
+                    self.calculate_size(self.report.band_page_footer.height),
                 update_top=False,
                 )
 
@@ -379,36 +379,6 @@ class PDFGenerator(ReportGenerator):
         self._current_page_number += 1
         self._is_first_page = False
         self.update_top_pos(set=0) # <---- update top position
-
-    def generate_pages(self):
-        self._generation_datetime = datetime.datetime.now()
-
-        for num, page in enumerate([page for page in self._rendered_pages if page.elements]):
-            self._current_page_number = num
-
-            # Loop at band widgets
-            for element in page.elements:
-                # Widget element
-                if isinstance(element, Widget):
-                    widget = element
-    
-                    # Set element colors
-                    self.set_fill_color(widget.font_color)
-    
-                    self.generate_widget(widget, self.canvas, num)
-    
-                # Graphic element
-                elif isinstance(element, Graphic):
-                    graphic = element
-    
-                    # Set element colors
-                    self.set_fill_color(graphic.fill_color)
-                    self.set_stroke_color(graphic.stroke_color)
-                    self.set_stroke_width(graphic.stroke_width)
-    
-                    self.generate_graphic(graphic, self.canvas)
-
-            self.canvas.showPage()
  
     def render_bands(self):
         """Loops into the objects list to create the report pages until the end"""
@@ -466,9 +436,9 @@ class PDFGenerator(ReportGenerator):
 
                 # Break this if this page doesn't suppport nothing more...
                 # ... if there is no more available height
-                if self.get_available_height() < calculate_size(d_band.height):
+                if self.get_available_height() < self.calculate_size(d_band.height):
                     # right margin is not considered to calculate the necessary space
-                    d_width = calculate_size(d_band.width) + calculate_size(getattr(d_band, 'margin_left', 0))
+                    d_width = self.calculate_size(d_band.width) + self.calculate_size(getattr(d_band, 'margin_left', 0))
 
                     # ... and this is not an inline displayed detail band or there is no width available
                     if not getattr(d_band, 'display_inline', False) or self.get_available_width() < d_width:
@@ -507,40 +477,44 @@ class PDFGenerator(ReportGenerator):
         if self.report.borders:
             if not self._page_rect:
                 self._page_rect = self.report.get_page_rect()
-                self._page_rect['top'] = calculate_size(self.report.page_size[1]) - self._page_rect['top']
-                self._page_rect['bottom'] = calculate_size(self.report.page_size[1]) - self._page_rect['bottom']
+                self._page_rect['top'] = self.calculate_size(self.report.page_size[1]) - self._page_rect['top']
+                self._page_rect['bottom'] = self.calculate_size(self.report.page_size[1]) - self._page_rect['bottom']
 
             self.render_border(self.report.borders, self._page_rect)
 
+    def calculate_size(self, size):
+        """Uses the function 'calculate_size' to calculate a size"""
+        return calculate_size(size)
+
     def get_left_pos(self):
         """Returns the left position of the drawer. Is useful on inline displayed detail bands"""
-        return calculate_size(self.report.margin_left) + self._current_left_position
+        return self.calculate_size(self.report.margin_left) + self._current_left_position
 
     def get_available_width(self):
-        return calculate_size(self.report.page_size[0]) - calculate_size(self.report.margin_left) -\
-                calculate_size(self.report.margin_right) - self._current_left_position
+        return self.calculate_size(self.report.page_size[0]) - self.calculate_size(self.report.margin_left) -\
+                self.calculate_size(self.report.margin_right) - self._current_left_position
 
     def get_top_pos(self):
         """Since the coordinates are bottom-left on PDF, we have to use this to get
         the current top position, considering also the top margin."""
-        ret = calculate_size(self.report.page_size[1]) - calculate_size(self.report.margin_top) - self._current_top_position
+        ret = self.calculate_size(self.report.page_size[1]) - self.calculate_size(self.report.margin_top) - self._current_top_position
 
         if self.report.band_page_header:
-            ret -= calculate_size(self.report.band_page_header.height)
+            ret -= self.calculate_size(self.report.band_page_header.height)
 
         return ret
 
     def get_available_height(self):
         """Returns the available client height area from the current top position
         until the end of page, considering the bottom margin."""
-        ret = calculate_size(self.report.page_size[1]) - calculate_size(self.report.margin_bottom) -\
-                calculate_size(self.report.margin_top) - self._current_top_position
+        ret = self.calculate_size(self.report.page_size[1]) - self.calculate_size(self.report.margin_bottom) -\
+                self.calculate_size(self.report.margin_top) - self._current_top_position
 
         if self.report.band_page_header:
-            ret -= calculate_size(self.report.band_page_header.height)
+            ret -= self.calculate_size(self.report.band_page_header.height)
 
         if self.report.band_page_footer:
-            ret -= calculate_size(self.report.band_page_footer.height)
+            ret -= self.calculate_size(self.report.band_page_footer.height)
 
         return ret
 
@@ -566,10 +540,18 @@ class PDFGenerator(ReportGenerator):
 
         return self._current_left_position
 
-    def get_page_count(self): # TODO
+    def get_page_count(self):
         """Calculate and returns the page count for this report. The challenge
         here is do this calculate before to generate the pages."""
         return len(self._rendered_pages)
+
+    def make_paragraph(self, text, style=None): # XXX
+        """Uses the Paragraph class to return a new paragraph object"""
+        return Paragraph(text, style)
+
+    def wrap_paragraph_on(self, paragraph, width, height): # XXX
+        """Wraps the paragraph on the height/width informed"""
+        paragraph.wrapOn(self.canvas, width, height)
 
     # Stylizing
 
@@ -619,7 +601,7 @@ class PDFGenerator(ReportGenerator):
         # Loops on groups to render changed ones
         for group in self.report.groups:
             if self._groups_changed.get(group, None) and group.band_header:
-                self.force_blank_page_by_height(calculate_size(group.band_header.height))
+                self.force_blank_page_by_height(self.calculate_size(group.band_header.height))
                 self.render_band(group.band_header)
 
     def render_groups_footers(self, force=False):
@@ -638,7 +620,7 @@ class PDFGenerator(ReportGenerator):
                 #    continue
                 
                 if group.band_footer:
-                    self.force_blank_page_by_height(calculate_size(group.band_footer.height))
+                    self.force_blank_page_by_height(self.calculate_size(group.band_footer.height))
                     self.render_band(group.band_footer)
 
                 self._groups_stack.pop()
@@ -685,7 +667,7 @@ class PDFGenerator(ReportGenerator):
 
         def force_new_page(height):
             # Forces new page if there is no available space
-            if self.get_available_height() < calculate_size(height):
+            if self.get_available_height() < self.calculate_size(height):
                 self.render_page_footer()
                 self.force_new_page(insert_new_page=False)
 
@@ -743,6 +725,40 @@ class PDFGenerator(ReportGenerator):
         import datetime
 
         return ParagraphStyle(name=datetime.datetime.now().strftime('%H%m%s'), **d_style)
+
+    # METHODS THAT ARE TOTALLY SPECIFIC TO THIS GENERATOR AND MUST
+    # OVERRIDE THE SUPERCLASS EQUIVALENT ONES
+
+    def generate_pages(self):
+        """Specific method that generates the pages"""
+        self._generation_datetime = datetime.datetime.now()
+
+        for num, page in enumerate([page for page in self._rendered_pages if page.elements]):
+            self._current_page_number = num
+
+            # Loop at band widgets
+            for element in page.elements:
+                # Widget element
+                if isinstance(element, Widget):
+                    widget = element
+    
+                    # Set element colors
+                    self.set_fill_color(widget.font_color)
+    
+                    self.generate_widget(widget, self.canvas, num)
+    
+                # Graphic element
+                elif isinstance(element, Graphic):
+                    graphic = element
+    
+                    # Set element colors
+                    self.set_fill_color(graphic.fill_color)
+                    self.set_stroke_color(graphic.stroke_color)
+                    self.set_stroke_width(graphic.stroke_width)
+    
+                    self.generate_graphic(graphic, self.canvas)
+
+            self.canvas.showPage()
 
     def generate_widget(self, widget, canvas=None, page_number=0):
         """Renders a widget element on canvas"""
