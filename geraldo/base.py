@@ -190,7 +190,6 @@ class SubReport(BaseReport):
 
             setattr(self, k, v)
 
-    @property
     def queryset(self):
         if not self._queryset and self.parent_object and self.queryset_string:
             # Replaces the string representer to a local variable identifier
@@ -203,6 +202,7 @@ class SubReport(BaseReport):
                     )
 
         return self._queryset
+    queryset = property(queryset)
 
     def _get_parent_object(self):
         return self._parent_object
@@ -344,4 +344,34 @@ class Element(object):
     def clone(self):
         """Uses deepcopy to return a copy of this element"""
         return copy.deepcopy(self)
+
+    def get_rect(self, force=False):
+        """Returns a dictionary with positions and dimensions of this element"""
+        if not force:
+            try:
+                return self._rect
+            except AttributeError:
+                pass
+
+        self._rect = {
+                'top': self.top,
+                'left': self.left,
+                'height': self.height,
+                'width': self.width,
+                }
+
+        try:
+            self._rect['right'] = self.right
+        except AttributeError:
+            self._rect['right'] = self.generator.calculate_size(self._rect['left']) +\
+                    self.generator.calculate_size(self._rect['width'])
+
+        try:
+            self._rect['bottom'] = self.bottom
+        except AttributeError:
+            self._rect['bottom'] = self.generator.calculate_size(self._rect['top']) +\
+                    self.generator.calculate_size(self._rect['height'])
+
+        return self._rect
+    rect = property(get_rect)
 

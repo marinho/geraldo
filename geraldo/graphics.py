@@ -69,13 +69,13 @@ class Fixed(Graphic):
 class Line(Fixed):
     """A simple line"""
 
-    @property
     def height(self):
         return self.bottom - self.top
+    height = property(height)
 
-    @property
     def width(self):
         return self.right - self.left
+    width = property(width)
 
 class Circle(Graphic):
     """A simple circle"""

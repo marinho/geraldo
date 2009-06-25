@@ -509,6 +509,12 @@ class TextGenerator(ReportGenerator):
 
     def calculate_size(self, size):
         """Uses the function 'calculate_size' to calculate a size"""
+        if isinstance(size, basestring):
+            if size.endswith('*cols'):
+                return int(size.split('*')[0]) * self.character_width
+            elif size.endswith('*rows'):
+                return int(size.split('*')[0]) * self.row_height
+        
         return calculate_size(size)
 
     def get_left_pos(self):
@@ -522,7 +528,7 @@ class TextGenerator(ReportGenerator):
     def get_top_pos(self):
         """Since the coordinates are bottom-left on PDF, we have to use this to get
         the current top position, considering also the top margin."""
-        ret = self.calculate_size(self.report.page_size[1]) - self.calculate_size(self.report.margin_top) - self._current_top_position
+        ret = self.calculate_size(self.report.margin_top) + self._current_top_position
 
         if self.report.band_page_header:
             ret -= self.calculate_size(self.report.band_page_header.height)
@@ -775,8 +781,10 @@ class TextGenerator(ReportGenerator):
                 # Widget element
                 if isinstance(element, Widget):
                     widget = element
-    
-                    self.generate_widget(widget, num)
+                    self.generate_widget(widget, _page_output, num)
+
+            # Adds the page output to output string
+            self._output += u'\n'.join(_page_output)
 
             # Escapes
             self.add_escapes_page_end(num);
@@ -786,13 +794,38 @@ class TextGenerator(ReportGenerator):
 
         return self._output
 
-    def generate_widget(self, widget, page_number=0):
+    def generate_widget(self, widget, page_output, page_number=0): # XXX
         """Renders a widget element on canvas"""
-        pass # XXX TODO
+        self.print_in_page_output(page_output, widget.text, widget.rect)
 
-    def generate_graphic(self, graphic):
+    def generate_graphic(self, graphic, page_output):
         """Renders a graphic element"""
         pass
+
+    def print_in_page_output(self, page_output, text, rect): # XXX
+        """Changes the array page_output (a matrix with rows and cols equivalent
+        to rows and cols in a matrix printer page) inserting the text value in
+        the left/top coordinates."""
+
+        # Make the real rect for this text
+        text_rect = {
+            'top': int(round(self.calculate_size(rect['top']) / self.row_height)),
+            'left': int(round(self.calculate_size(rect['left']) / self.character_width)),
+            'height': int(round(self.calculate_size(rect['height']) / self.row_height)),
+            'width': int(round(self.calculate_size(rect['width']) / self.character_width)),
+            'bottom': int(round(self.calculate_size(rect['bottom']) / self.row_height)),
+            'right': int(round(self.calculate_size(rect['right']) / self.character_width)),
+            }
+        print rect
+
+        if text_rect['height'] and text_rect['width']:
+            # Make a text with the exact width
+            text = text.ljust(text_rect['width'])[:text_rect['width']] # Align to left - TODO: should have center and right justifying also
+
+            # Inserts the text into the page output buffer
+            _temp = page_output[text_rect['top']]
+            _temp = _temp[:text_rect['left']] + text + _temp[text_rect['right']:]
+            page_output[text_rect['top']] = _temp
 
     def add_escapes_report_start(self):
         """Adds the escape commands to the output variable"""
@@ -812,10 +845,16 @@ class TextGenerator(ReportGenerator):
 
     def update_escape_chars(self):
         """Sets the escape chars to be ran for some events on report generation"""
-        self.escapes_report_start = ''
-        self.escapes_report_end = ''
-        self.escapes_page_start = ''
-        self.escapes_page_end = self.to_printer and self.escape_set['form-feed'] or ''
+        if self.to_printer:
+            self.escapes_report_start = ''
+            self.escapes_report_end = ''
+            self.escapes_page_start = ''
+            self.escapes_page_end = self.escape_set['form-feed']
+        else:
+            self.escapes_report_start = ''
+            self.escapes_report_end = ''
+            self.escapes_page_start = ''
+            self.escapes_page_end = ''
 
     def get_escape_set(self):
         return self._escape_set
@@ -836,10 +875,10 @@ class TextGenerator(ReportGenerator):
     to_printer = property(get_to_printer, set_to_printer)
 
     def get_page_rows_count(self):
-        return round(self.page_size[1] / self.row_height)
+        return int(round(self.calculate_size(self.report.page_size[1]) / self.row_height))
     page_rows_count = property(get_page_rows_count)
 
     def get_page_columns_count(self):
-        return round(self.page_size[0] / self.character_width)
+        return int(round(self.calculate_size(self.report.page_size[0]) / self.character_width))
     page_columns_count = property(get_page_columns_count)
 

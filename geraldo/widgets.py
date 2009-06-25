@@ -184,7 +184,6 @@ class SystemField(Label):
 
         self.fields['current_datetime'] = datetime.datetime.now()
 
-    @property
     def text(self):
         fields = {
             'report_title': self.fields.get('report_title') or self.report.title,
@@ -198,6 +197,7 @@ class SystemField(Label):
             return self.get_value(self.expression, fields)
 
         return self.expression%SystemFieldDict(self, fields)
+    text = property(text)
 
 class SystemFieldDict(dict):
     widget = None
