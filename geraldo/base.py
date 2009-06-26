@@ -1,10 +1,11 @@
-import copy, types
+import copy, types, sets
 
 from reportlab.lib.units import cm
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.colors import black
 
 from utils import calculate_size
+from exceptions import EmptyQueryset, ObjectNotFound, ManyObjectsFound
 
 BAND_WIDTH = 'band-width'
 BAND_HEIGHT = 'band-height'
@@ -12,7 +13,86 @@ BAND_HEIGHT = 'band-height'
 def landscape(page_size):
     return page_size[1], page_size[0]
 
-class BaseReport(object):
+class GeraldoObject(object):
+    """Base class inherited by all report classes, including band, subreports,
+    groups, graphics and widgets.
+    
+    Attributes:
+        
+        * parent - this is setted by its parent when it is initializing. There
+          is no automated way to get it."""
+
+    parent = None
+
+    def __init__(self, *kwargs):
+        if 'name' in kwargs:
+            self.name = kwargs.pop('name')
+
+    def find_by_name(self, name, many=False):
+        """Find child by informed name (and raises an exception if doesn't
+        find).
+        
+        Attributes:
+            
+            * name - object name to find
+            * many - boolean attribute that means it returns many objects
+              or not - in the case there are more than one object with the
+              same name
+        """
+        found = []
+
+        # Get object children
+        children = self.get_children()
+
+        for child in children:
+            # Child with the name it is searching for
+            if getattr(child, 'name', None) == name:
+                found.append(child)
+
+            # Search on child's children
+            try:
+                ch_found = child.find_by_name(name, many=True)
+            except ObjectNotFound:
+                ch_found = []
+
+            found += ch_found
+
+        # Cleans using a set
+        found = list(sets.Set(found))
+
+        # Found nothing
+        if not found:
+            raise ObjectNotFound('There is no child with name "%s"'%name)
+        
+        # Found many
+        elif len(found) > 1 and not many:
+            raise ManyObjectsFound('There are many childs with name "%s"'%name)
+
+        return many and found or found[0]
+
+    def get_children(self):
+        """Returns all children elements from this one. This must be overriden
+        by inherited class."""
+        raise Exception('Not yet implemented!')
+
+    def remove_from_parent(self):
+        """Remove this object from its parent one"""
+        if not self.parent:
+            raise Exception('This object has no parent')
+
+        self.parent.remove_child(self)
+
+    def remove_child(self, obj):
+        """Removes a child from this one. This must be overriden by inherited
+        class."""
+        raise Exception('Not yet implemented!')
+
+    def set_parent_on_children(self):
+        """Goes on every child and set their attribute 'parent' for this one.
+        This must be overriden by inherited class."""
+        raise Exception('Not yet implemented!')
+
+class BaseReport(GeraldoObject):
     """Basic Report class, inherited and used to make reports adn subreports"""
 
     # Bands - is not possible to have more than one band from the same kind
@@ -44,6 +124,9 @@ class BaseReport(object):
 
         # Transforms band classes to band objects
         self.transform_classes_to_objects()
+
+        # Calls the method that set this as parent if their children
+        self.set_parent_on_children()
 
     def transform_classes_to_objects(self):
         """Finds all band classes in the report and instantiante them. This
@@ -89,8 +172,64 @@ class BaseReport(object):
         Please don't hack this method up. Just override it on your report class."""
         return date.strftime(expression)
 
-class EmptyQueryset(Exception):
-    pass
+    def get_children(self):
+        ret = []
+
+        # Bands
+        ret += filter(bool, [
+            self.band_begin,
+            self.band_summary,
+            self.band_page_header,
+            self.band_page_footer,
+            self.band_detail
+        ])
+
+        # Groups
+        if isinstance(self.groups, (list, tuple)):
+            ret += self.groups
+
+        # Borders
+        if isinstance(self.borders, dict):
+            ret += filter(lambda e: isinstance(e, Element),self.borders.values())
+
+        return ret
+
+    def remove_child(self, obj):
+        # Bands
+        if obj == self.band_begin: self.band_begin = None
+        if obj == self.band_summary: self.band_summary = None
+        if obj == self.band_page_header: self.band_page_header = None
+        if obj == self.band_page_footer: self.band_page_footer = None
+        if obj == self.band_detail: self.band_detail = None
+
+        # Groups
+        if isinstance(self.groups, (list, tuple)) and obj in self.groups:
+            self.groups.remove(obj)
+
+        # Borders
+        if isinstance(self.borders, dict) and obj in self.borders.values():
+            for k,v in self.borders.items():
+                if v == obj:
+                    self.borders.pop(k)
+
+    def set_parent_on_children(self):
+        # Bands
+        if self.band_begin: self.band_begin.parent = self
+        if self.band_summary: self.band_summary.parent = self
+        if self.band_page_header: self.band_page_header.parent = self
+        if self.band_page_footer: self.band_page_footer.parent = self
+        if self.band_detail: self.band_detail.parent = self
+
+        # Groups
+        if isinstance(self.groups, (list, tuple)):
+            for group in self.groups:
+                group.parent = self
+
+        # Borders
+        if isinstance(self.borders, dict):
+            for v in self.borders.values():
+                if isinstance(v, GeraldoObject):
+                    v.parent = self
 
 class Report(BaseReport):
     """This class must be inherited to be used as a new report.
@@ -125,6 +264,9 @@ class Report(BaseReport):
         self.subreports = self.subreports and list(self.subreports) or []
         self.default_style = self.default_style or {}
 
+        # Calls the method that set this as parent if their children
+        self.set_parent_on_children()
+
     def generate_by(self, generator_class, *args, **kwargs):
         """This method uses a generator inherited class to generate a report
         to a desired format, like XML, HTML or PDF, for example.
@@ -158,6 +300,28 @@ class Report(BaseReport):
 
         return self._page_rect
 
+    def get_children(self):
+        ret = super(Report, self).get_children()
+
+        if isinstance(self.subreports, (list, tuple)):
+            ret += self.subreports
+
+        return ret
+
+    def remove_child(self, obj):
+        super(Report, self).remove_child(obj)
+
+        # Subreports
+        if isinstance(self.subreports, (list, tuple)) and obj in self.subreports:
+            self.subreports.remove(obj)
+
+    def set_parent_on_children(self):
+        super(Report, self).set_parent_on_children()
+
+        # Subreports
+        if isinstance(self.subreports, (list, tuple)):
+            for subreport in self.subreports:
+                subreport.parent = self
 
 class SubReport(BaseReport):
     """Class to be used for subreport objects. It doesn't need to be inherited.
@@ -189,6 +353,9 @@ class SubReport(BaseReport):
                 warnings.warn("Attribute 'detail_band' in SubReport class is deprecated. Use 'band_detail' as well.")
 
             setattr(self, k, v)
+
+        # Calls the method that set this as parent if their children
+        self.set_parent_on_children()
 
     def queryset(self):
         if not self._queryset and self.parent_object and self.queryset_string:
@@ -224,7 +391,33 @@ class SubReport(BaseReport):
 
     queryset_string = property(_get_queryset_string, _set_queryset_string)
 
-class ReportBand(object):
+    def get_children(self):
+        ret = super(SubReport, self).get_children()
+        ret += filter(bool, [
+            self.band_detail,
+            self.band_header,
+            self.band_footer,
+            ])
+
+        return ret
+
+    def remove_child(self, obj):
+        super(SubReport, self).remove_child(obj)
+
+        # Bands
+        if obj == self.band_detail: self.band_detail = None
+        if obj == self.band_header: self.band_header = None
+        if obj == self.band_footer: self.band_footer = None
+
+    def set_parent_on_children(self):
+        super(SubReport, self).set_parent_on_children()
+
+        # Bands
+        if self.band_detail: self.band_detail.parent = self
+        if self.band_header: self.band_header.parent = self
+        if self.band_footer: self.band_footer.parent = self
+
+class ReportBand(GeraldoObject):
     """A band is a horizontal area in the report. It can be used to print
     things on the top, on summary, on page header, on page footer or one time
     per object from queryset."""
@@ -250,6 +443,9 @@ class ReportBand(object):
         # Transforms band classes to band objects
         self.transform_classes_to_objects()
 
+        # Calls the method that set this as parent if their children
+        self.set_parent_on_children()
+
     def clone(self):
         """Does a deep copy of this band to be rendered"""
         return copy.deepcopy(self)
@@ -262,6 +458,49 @@ class ReportBand(object):
         child_bands = self.child_bands
         self.child_bands = [isinstance(child, ReportBand) and child or child()
                 for child in child_bands]
+
+    def get_children(self):
+        ret = []
+        ret += self.elements
+        ret += self.child_bands
+
+        # Borders
+        if isinstance(self.borders, dict):
+            ret += filter(lambda e: isinstance(e, Element),self.borders.values())
+
+        return ret
+
+    def remove_child(self, obj):
+        # Elements
+        if isinstance(self.elements, (list, tuple)) and obj in self.elements:
+            self.elements.remove(obj)
+
+        # Child bands
+        if isinstance(self.child_bands, (list, tuple)) and obj in self.child_bands:
+            self.child_bands.remove(obj)
+
+        # Borders
+        if isinstance(self.borders, dict) and obj in self.borders.values():
+            for k,v in self.borders.items():
+                if v == obj:
+                    self.borders.pop(k)
+
+    def set_parent_on_children(self):
+        # Elements
+        if isinstance(self.elements, (list, tuple)):
+            for element in self.elements:
+                element.parent = self
+
+        # Child bands
+        if isinstance(self.child_bands, (list, tuple)):
+            for child_band in self.child_bands:
+                child_band.parent = self
+
+        # Borders
+        if isinstance(self.borders, dict):
+            for v in self.borders.values():
+                if isinstance(v, GeraldoObject):
+                    v.parent = self
 
 class DetailBand(ReportBand):
     """You should use this class instead of ReportBand in detail bands.
@@ -285,7 +524,7 @@ class TableBand(ReportBand): # TODO
     object, but instead of it is streched and have its rows increased."""
     pass
 
-class ReportGroup(object):
+class ReportGroup(GeraldoObject):
     """This a report grouper class. A report can be multiple groupped by
     attribute values."""
     attribute_name = None
@@ -299,6 +538,9 @@ class ReportGroup(object):
         # Transforms band classes to band objects
         self.transform_classes_to_objects()
 
+        # Calls the method that set this as parent if their children
+        self.set_parent_on_children()
+
     def transform_classes_to_objects(self):
         """Finds all band classes in this class and instantiante them. This
         is important to have a safety on separe inherited reports each one
@@ -310,7 +552,23 @@ class ReportGroup(object):
         if self.band_footer and not isinstance(self.band_footer, ReportBand):
             self.band_footer = self.band_footer()
 
-class Element(object):
+    def get_children(self):
+        return filter(bool, [
+            self.band_header,
+            self.band_footer,
+            ])
+
+    def remove_child(self, obj):
+        # Bands
+        if obj == self.band_header: self.band_header = None
+        if obj == self.band_footer: self.band_footer = None
+
+    def set_parent_on_children(self):
+        # Bands
+        if self.band_header: self.band_header.parent = self
+        if self.band_footer: self.band_footer.parent = self
+
+class Element(GeraldoObject):
     """The base class for widgets and graphics"""
     left = 0
     top = 0
@@ -374,4 +632,10 @@ class Element(object):
 
         return self._rect
     rect = property(get_rect)
+
+    def get_children(self):
+        return []
+
+    def set_parent_on_children(self):
+        pass
 

@@ -1,3 +1,13 @@
+2009-05-26: Version 0.3.2-alpha-2
+-------------------------------
+* Objects improved to support be named and found by their names
+  using the method 'find_by_name'
+* Objects can also be removed from their parents with method
+  'remove_from_parent'
+* Objects can remove heir childrens with method 'remove_child'
+* And objects can returns their children at once, when calling
+  method 'get_children'
+
 2009-05-25: Version 0.3.2-alpha
 -------------------------------
 * Working on TextGenerator (still testing and fixing bugs)

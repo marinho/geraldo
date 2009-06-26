@@ -31,7 +31,7 @@ Packages Structure
 - tests - a package with automated doc tests.
 """
 
-VERSION = (0, 3, 2, 'alpha')
+VERSION = (0, 3, 2, 'alpha-2')
 
 def get_version():
     return '%d.%d.%d-%s'%VERSION
@@ -42,9 +42,11 @@ __url__ = 'http://geraldo.sourceforge.net/'
 __version__ = get_version()
 
 from base import Report, ReportBand, DetailBand, TableBand, ReportGroup,\
-        SubReport, landscape
+        SubReport, landscape, GeraldoObject
 from widgets import Label, ObjectValue, SystemField
 from widgets import FIELD_ACTION_VALUE, FIELD_ACTION_COUNT, FIELD_ACTION_AVG,\
         FIELD_ACTION_MIN, FIELD_ACTION_MAX, FIELD_ACTION_SUM,\
         FIELD_ACTION_DISTINCT_COUNT, BAND_WIDTH
 from graphics import RoundRect, Rect, Line, Circle, Arc, Ellipse, Image
+from exceptions import EmptyQueryset, ObjectNotFound, ManyObjectsFound
+
