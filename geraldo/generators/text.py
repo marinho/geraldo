@@ -784,7 +784,7 @@ class TextGenerator(ReportGenerator):
             # Escapes
             self.add_escapes_page_start(num);
 
-            _page_output = [' ' * self.page_columns_count] * self.page_rows_count
+            _page_output = [u' ' * self.page_columns_count] * self.page_rows_count
 
             self._current_page_number = num
 
