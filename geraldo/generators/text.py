@@ -10,7 +10,7 @@ from geraldo.graphics import Graphic, RoundRect, Rect, Line, Circle, Arc,\
 # In development
 
 DEFAULT_ROW_HEIGHT = 0.5*cm
-DEFAULT_CHAR_WIDTH = 0.2*cm
+DEFAULT_CHAR_WIDTH = 0.23*cm
 
 # Default is Epson ESC/P2 standard
 DEFAULT_ESCAPE_SET = {
@@ -64,6 +64,7 @@ class TextGenerator(ReportGenerator):
           As far as we know, escape codes can vary depending of model or printer
           manufacturer (i.e. Epson, Lexmark, HP, etc.). This attribute is useful
           to support this. Defaul is ESC/P2 standard (Epson matrix printers)
+        * 'filename' - is the file path you can inform optionally to save text to.
     """
     row_height = DEFAULT_ROW_HEIGHT
     character_width = DEFAULT_CHAR_WIDTH
@@ -107,7 +108,15 @@ class TextGenerator(ReportGenerator):
         self.render_bands()
 
         # Generate the pages
-        return self.generate_pages()
+        text = self.generate_pages()
+
+        # Saves to file or just returns the text
+        if hasattr(self, 'filename'):
+            fp = file(self.filename, 'w')
+            fp.write(text)
+            fp.close()
+        else:
+            return text
  
     def render_border(self, borders_dict, rect_dict):
         """Renders a border in the coordinates setted in the rect."""
@@ -175,7 +184,7 @@ class TextGenerator(ReportGenerator):
         top coordinate"""
         current_object = current_object or self._current_object
 
-        # Page width. This should be done in a metaclass in Report domain TODO
+        # Page width. This should be done in a metaclass in Report domain FIXME
         self._rendered_pages[-1].width = self.calculate_size(self.report.page_size[0]) -\
                 self.calculate_size(self.report.margin_left) - self.calculate_size(self.report.margin_right)
 
@@ -213,13 +222,13 @@ class TextGenerator(ReportGenerator):
                 # Set widget basic attributes
                 widget.instance = current_object
                 widget.generator = self
-                widget.report = self.report # This should be done by a metaclass in Band domain TODO
-                widget.band = band # This should be done by a metaclass in Band domain TODO
+                widget.report = self.report # This should be done by a metaclass in Band domain FIXME
+                widget.band = band # This should be done by a metaclass in Band domain FIXME
                 widget.page = self._rendered_pages[-1]
 
                 if isinstance(widget, SystemField):
                     widget.left = band_rect['left'] + self.calculate_size(widget.left)
-                    widget.top = temp_top - self.calculate_size(widget.top)
+                    widget.top = self.calculate_top(temp_top, self.calculate_size(widget.top))
                 elif isinstance(widget, Label):
                     widget.para = self.make_paragraph(widget.text, self.make_paragraph_style(band, widget.style))
 
@@ -234,11 +243,11 @@ class TextGenerator(ReportGenerator):
                         widget.keep.wrap(self.calculate_size(widget.width), self.calculate_size(widget.height))
 
                         widget.left = band_rect['left'] + self.calculate_size(widget.left)
-                        widget.top = temp_top - self.calculate_size(widget.top) - self.calculate_size(widget.height)
+                        widget.top = self.calculate_top(temp_top, self.calculate_size(widget.top), self.calculate_size(widget.height))
                     else:
                         self.wrap_paragraph_on(widget.para, self.calculate_size(widget.width), self.calculate_size(widget.height))
                         widget.left = band_rect['left'] + self.calculate_size(widget.left)
-                        widget.top = temp_top - self.calculate_size(widget.top) - self.calculate_size(widget.para.height)
+                        widget.top = self.calculate_top(temp_top, self.calculate_size(widget.top), self.calculate_size(widget.para.height))
 
                 self._rendered_pages[-1].elements.append(widget)
 
@@ -249,8 +258,8 @@ class TextGenerator(ReportGenerator):
                 # Set widget basic attributes
                 graphic.instance = current_object
                 graphic.generator = self
-                graphic.report = self.report # This should be done by a metaclass in Band domain TODO
-                graphic.band = band # This should be done by a metaclass in Band domain TODO
+                graphic.report = self.report # This should be done by a metaclass in Band domain FIXME
+                graphic.band = band # This should be done by a metaclass in Band domain FIXME
                 graphic.page = self._rendered_pages[-1]
 
                 # Set graphic colors
@@ -298,7 +307,7 @@ class TextGenerator(ReportGenerator):
             self.update_left_pos(set=0)
 
         # Child bands
-        for child_band in band.child_bands or []: # TODO This "or []" here is a quickfix
+        for child_band in band.child_bands or []: # FIXME This "or []" here is a quickfix
             # Doesn't generate if it is not visible
             if not child_band.visible:
                 continue
@@ -517,6 +526,9 @@ class TextGenerator(ReportGenerator):
         
         return calculate_size(size)
 
+    def calculate_top(self, *args):
+        return sum(args)
+
     def get_left_pos(self):
         """Returns the left position of the drawer. Is useful on inline displayed detail bands"""
         return self.calculate_size(self.report.margin_left) + self._current_left_position
@@ -531,7 +543,7 @@ class TextGenerator(ReportGenerator):
         ret = self.calculate_size(self.report.margin_top) + self._current_top_position
 
         if self.report.band_page_header:
-            ret -= self.calculate_size(self.report.band_page_header.height)
+            ret += self.calculate_size(self.report.band_page_header.height)
 
         return ret
 
@@ -794,11 +806,11 @@ class TextGenerator(ReportGenerator):
 
         return self._output
 
-    def generate_widget(self, widget, page_output, page_number=0): # XXX
+    def generate_widget(self, widget, page_output, page_number=0):
         """Renders a widget element on canvas"""
         self.print_in_page_output(page_output, widget.text, widget.rect)
 
-    def generate_graphic(self, graphic, page_output):
+    def generate_graphic(self, graphic, page_output): # TODO
         """Renders a graphic element"""
         pass
 
@@ -816,7 +828,6 @@ class TextGenerator(ReportGenerator):
             'bottom': int(round(self.calculate_size(rect['bottom']) / self.row_height)),
             'right': int(round(self.calculate_size(rect['right']) / self.character_width)),
             }
-        print rect
 
         if text_rect['height'] and text_rect['width']:
             # Make a text with the exact width
@@ -825,7 +836,7 @@ class TextGenerator(ReportGenerator):
             # Inserts the text into the page output buffer
             _temp = page_output[text_rect['top']]
             _temp = _temp[:text_rect['left']] + text + _temp[text_rect['right']:]
-            page_output[text_rect['top']] = _temp
+            page_output[text_rect['top']] = _temp[:self.get_page_columns_count()]
 
     def add_escapes_report_start(self):
         """Adds the escape commands to the output variable"""

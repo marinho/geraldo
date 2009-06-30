@@ -77,4 +77,9 @@ Page with half height
 
     >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'simple-report-half-height.pdf'))
 
+Text generation
+
+    >>> from geraldo.generators import TextGenerator
+
+    >>> report.generate_by(TextGenerator, filename=os.path.join(cur_dir, 'simple-report.txt'))
 

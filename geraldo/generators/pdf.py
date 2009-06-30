@@ -194,7 +194,7 @@ class PDFGenerator(ReportGenerator):
 
                 if isinstance(widget, SystemField):
                     widget.left = band_rect['left'] + self.calculate_size(widget.left)
-                    widget.top = temp_top - self.calculate_size(widget.top)
+                    widget.top = self.calculate_top(temp_top, self.calculate_size(widget.top))
                 elif isinstance(widget, Label):
                     widget.para = self.make_paragraph(widget.text, self.make_paragraph_style(band, widget.style))
 
@@ -209,11 +209,11 @@ class PDFGenerator(ReportGenerator):
                         widget.keep.wrap(self.calculate_size(widget.width), self.calculate_size(widget.height))
 
                         widget.left = band_rect['left'] + self.calculate_size(widget.left)
-                        widget.top = temp_top - self.calculate_size(widget.top) - self.calculate_size(widget.height)
+                        widget.top = self.calculate_top(temp_top, self.calculate_size(widget.top), self.calculate_size(widget.height))
                     else:
                         self.wrap_paragraph_on(widget.para, self.calculate_size(widget.width), self.calculate_size(widget.height))
                         widget.left = band_rect['left'] + self.calculate_size(widget.left)
-                        widget.top = temp_top - self.calculate_size(widget.top) - self.calculate_size(widget.para.height)
+                        widget.top = self.calculate_top(temp_top, self.calculate_size(widget.top), self.calculate_size(widget.para.height))
 
                 self._rendered_pages[-1].elements.append(widget)
 
@@ -493,6 +493,14 @@ class PDFGenerator(ReportGenerator):
     def get_available_width(self):
         return self.calculate_size(self.report.page_size[0]) - self.calculate_size(self.report.margin_left) -\
                 self.calculate_size(self.report.margin_right) - self._current_left_position
+
+    def calculate_top(self, *args):
+        ret = args[0]
+
+        for i in args[1:]:
+            ret -= i
+
+        return ret
 
     def get_top_pos(self):
         """Since the coordinates are bottom-left on PDF, we have to use this to get

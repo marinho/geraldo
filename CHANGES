@@ -1,5 +1,12 @@
+2009-05-30: Version 0.3.2-alpha-3
+---------------------------------
+* TextGenerator almost done
+* Little adjustments in PDFGenerator as a preview change before
+  move the common code (between PDF and Text) to BaseGenerator
+  class
+
 2009-05-26: Version 0.3.2-alpha-2
--------------------------------
+---------------------------------
 * Objects improved to support be named and found by their names
   using the method 'find_by_name'
 * Objects can also be removed from their parents with method
@@ -15,7 +22,7 @@
 * Replaced '@property' to python 2.4 standard (property())
 
 2009-05-23: Version 0.3.1-alpha-2
--------------------------------
+---------------------------------
 * New function 'utils.calculate_size'
 * Added support to string sizes (i.e: margin_top = '1*cm')
 
