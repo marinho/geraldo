@@ -1,0 +1,59 @@
+                                                                                           
+                                                                                           
+                                                                                           
+    Printed in 2009, Jul 06 at 07:59                                                       
+                                                                                           
+     This is a <b>users</b> report.<br/>This time <i>our idea</i> is showsome <font colo   
+                                                                                           
+    1            <font size=14 name=HelLeticia               Ribeiro das Neves     No      
+    2            <font size=14 name=Hel                                            Yes     
+    3            <font size=14 name=Hel                                            Yes     
+                                                                                           
+    4            <font size=14 name=Hel                                            Yes     
+    5            <font size=14 name=HelBetty                 Garcia Pacheco        Yes     
+                                                                                           
+    6            <font size=14 name=Hel                                            No      
+    7            <font size=14 name=Hel                                            No      
+    8            <font size=14 name=Hel                                            No      
+                                                                                           
+    9            <font size=14 name=Hel                                            No      
+    10           <font size=14 name=Hel                                            No      
+                                                                                           
+    11           <font size=14 name=Hel                                            No      
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+    System users                                                                           
+    ID           Username              First name            Last name             Staff                                                                                              
+                                                                                           
+                                                                                           
+    Printed in 2009, Jul 06 at 07:59                                                       
+                                                                                           
+     Users count:     11 permissions found                                                 
+     Users ids average6                                                                    
+     Users ids minimum1                                                                    
+     Users ids maximum11                                                                   
+     Users ids sum:   66                                                                   
+     Users first name 3                                                                    
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+    System users                                                                           
+    ID           Username              First name            Last name             Staff   

@@ -9,14 +9,16 @@ PDF Generator
 
 Path: **geraldo.generators.PDFGenerator**
 
-This is our once currently available generator. It uses ReportLab awesome
-library to create them.
+This generator is the most mature generator we have. It generates PDF files to
+be viewed on Adobe Acrobat Reader or similar softwares. It uses the awesome
+library 'ReportLab' to create them.
 
 To use it you just do something like this:
 
     >>> my_report_instance.generate_by(PDFGenerator, filename='file.pdf')
 
 In **filename** argument you can use a file path string or a file output object.
+
 Examples:
 
     >>> fp = file('test.pdf', 'w')
@@ -24,4 +26,58 @@ Examples:
     >>> 
     >>> resp = HttpResponse(mimetype='application/pdf')
     >>> my_report_instance.generate_by(PDFGenerator, filename=resp)
+
+Text Generator
+--------------
+**New in development version.**
+
+Path: **geraldo.generators.TextGenerator**
+
+This generator is still in development stage, but it already works well. It
+ca be used to generate text files or to print to matrix printers.
+
+You can use it exactly like you would use PDF generator, but this has some more
+features. When running **'generate_by'** report method, you can inform the
+attribute 'filename' like you do in PDF, but you could also do some things else.
+
+**Examples:**
+
+Basic:
+
+    >>> my_report_instance.generate_by(TextGenerator, filename='file.txt')
+
+Returning the output:
+
+    >>> output = my_report_instance.generate_by(TextGenerator)
+
+Setting row height and/or column width:
+
+    >>> output = my_report_instance.generate_by(TextGenerator, row_height=0.7*cm, character_width=0.2*cm)
+
+Forcing the generator to encode the output:
+
+    >>> output = my_report_instance.generate_by(TextGenerator, encode_to='latin-1')
+
+Setting to be or not to be printed by a printer:
+
+    >>> output = my_report_instance.generate_by(TextGenerator, to_printer=False)
+
+Setting a set of escape codes to printer (matrix printers work with escape codes
+set for special characters or to setup the output printing):
+
+    >>> from geraldo.generators.text import DEFAULT_ESCAPE_SET
+    >>> my_escape_set = DEFAULT_ESCAPE_SET.copy()
+    >>> my_escape_set['condensed'] = chr(15) + chr(17)
+    >>> output = my_report_instance.generate_by(TextGenerator, to_printer=True, escape_set=my_escape_set)
+
+Forcing the output to print out escape codes before/after report or page print:
+
+    >>> MyTextGenerator(TextGenerator):
+    ...     to_printer = True
+    ...     manual_escape_codes = True
+    ...     escapes_report_start = chr(15) # Sets condensed mode
+    ...     escapes_report_end = chr(18) # Unsets condensed mode
+    ...     escapes_page_start = chr(12) + chr(10) # Form and line feed
+    ...     escapes_page_end = ''
+    >>> output = my_report_instance.generate_by(MyTextGenerator)
 

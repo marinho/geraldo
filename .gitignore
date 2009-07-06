@@ -2,7 +2,9 @@
 .*.swp
 .svn
 .bzr
-geraldo/tests/*.pdf
+geraldo/tests/output/*.pdf
+geraldo/tests/output/*.txt
+geraldo/tests/output/*.png
 examples/*.jpg
 docs/*.txt.html
 MANIFEST

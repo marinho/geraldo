@@ -3,15 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.4.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.5: http://docutils.sourceforge.net/" />
 <title>Next Steps</title>
 <style type="text/css">
 
 /*
-:Author: David Goodger
-:Contact: goodger@users.sourceforge.net
-:Date: $Date: 2005-12-18 01:56:14 +0100 (Sun, 18 Dec 2005) $
-:Revision: $Revision: 4224 $
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 5196 2007-06-03 20:25:28Z wiemann $
 :Copyright: This stylesheet has been placed in the public domain.
 
 Default cascading style sheet for the HTML output of Docutils.
@@ -117,7 +115,7 @@ div.line-block div.line-block {
   margin-left: 1.5em }
 
 div.sidebar {
-  margin-left: 1em ;
+  margin: 0 0 0.5em 1em ;
   border: medium outset ;
   padding: 1em ;
   background-color: #ffffee ;
@@ -223,8 +221,7 @@ pre.address {
 
 pre.literal-block, pre.doctest-block {
   margin-left: 2em ;
-  margin-right: 2em ;
-  background-color: #eeeeee }
+  margin-right: 2em }
 
 span.classifier {
   font-family: sans-serif ;
@@ -281,9 +278,6 @@ h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
 h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
   font-size: 100% }
 
-tt.docutils {
-  background-color: #eeeeee }
-
 ul.auto-toc {
   list-style-type: none }
 
@@ -292,11 +286,12 @@ ul.auto-toc {
 <body>
 <div class="document" id="next-steps">
 <h1 class="title">Next Steps</h1>
+
 <p>Geraldo Reports is a ambicious project. We want to reach much more than we did.
 See below the main goals we have to do in the future (and maybe you could help
 us to reach them early)</p>
-<div class="section">
-<h2><a id="engine-api" name="engine-api">Engine API</a></h2>
+<div class="section" id="engine-api">
+<h2>Engine API</h2>
 <ul class="simple">
 <li><strong>Table band</strong> - a band to make easy create lists just using tables instead
 of detail band and lines. Table band must be an alternative to detail band</li>
@@ -305,16 +300,16 @@ of detail band and lines. Table band must be an alternative to detail band</li>
 <li>Events (i.e: BeforePrint and AfterPrint for bands and reports)</li>
 </ul>
 </div>
-<div class="section">
-<h2><a id="generators" name="generators">Generators</a></h2>
+<div class="section" id="generators">
+<h2>Generators</h2>
 <ul class="simple">
 <li><strong>Generate in ODF formats (ODT and ODS) (currently in development)</strong></li>
 <li>Generate in HTML and maybe to TXT</li>
 <li>Export/import structure to/from a XMLized format</li>
 </ul>
 </div>
-<div class="section">
-<h2><a id="thir-part-tools" name="thir-part-tools">Thir-part tools</a></h2>
+<div class="section" id="thir-part-tools">
+<h2>Thir-part tools</h2>
 <ul class="simple">
 <li>Have a GUI tool to design reports, if possible to be used in a web browser</li>
 <li>Have a way to create and print reports using a server, with no low level coding</li>

@@ -83,6 +83,7 @@ Class to be used for subreport objects. It doesn't need to be inherited.
 A report band must be a class inherited from **ReportBand** or an instance of
 **ReportBand** of a class inherited from **ReportBand**
 
+- **name** - Default: None
 - **band_detail** - Default: None
 - **band_header** - Default: None
 - **band_footer** - Default: None
@@ -103,6 +104,7 @@ queryset.
 
 **Attributes**
 
+- **name** - Default: None
 - **height** - Default: 1*cm
 - **width** - Default: None
 - **visible** - Default: True
@@ -122,6 +124,7 @@ attributes, specific to detail bands.
 
 **Attributes**
 
+- **name** - Default: None
 - **margin_top** - Default: 0
 - **margin_left** - Default: 0
 - **margin_bottom** - Default: 0
@@ -146,6 +149,7 @@ values.
 
 **Attributes**
 
+- **name** - Default: None
 - **attribute_name** - Default: None
 
 **Report bands**

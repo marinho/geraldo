@@ -18,6 +18,7 @@ Path: **geraldo.graphics.Graphic**
 
 **Attributes**
 
+- **name** - Default: None
 - **visible** - Default: True
 - **stroke** - Default: True
 - **stroke_color** - Default: reportlab.lib.colors.black

@@ -3,15 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.4.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.5: http://docutils.sourceforge.net/" />
 <title>Graphics Reference</title>
 <style type="text/css">
 
 /*
-:Author: David Goodger
-:Contact: goodger@users.sourceforge.net
-:Date: $Date: 2005-12-18 01:56:14 +0100 (Sun, 18 Dec 2005) $
-:Revision: $Revision: 4224 $
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 5196 2007-06-03 20:25:28Z wiemann $
 :Copyright: This stylesheet has been placed in the public domain.
 
 Default cascading style sheet for the HTML output of Docutils.
@@ -117,7 +115,7 @@ div.line-block div.line-block {
   margin-left: 1.5em }
 
 div.sidebar {
-  margin-left: 1em ;
+  margin: 0 0 0.5em 1em ;
   border: medium outset ;
   padding: 1em ;
   background-color: #ffffee ;
@@ -223,8 +221,7 @@ pre.address {
 
 pre.literal-block, pre.doctest-block {
   margin-left: 2em ;
-  margin-right: 2em ;
-  background-color: #eeeeee }
+  margin-right: 2em }
 
 span.classifier {
   font-family: sans-serif ;
@@ -281,9 +278,6 @@ h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
 h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
   font-size: 100% }
 
-tt.docutils {
-  background-color: #eeeeee }
-
 ul.auto-toc {
   list-style-type: none }
 
@@ -292,17 +286,19 @@ ul.auto-toc {
 <body>
 <div class="document" id="graphics-reference">
 <h1 class="title">Graphics Reference</h1>
+
 <p>Graphics elements are the way you have to draw images ad shapes on the band
 canvas.</p>
 <p>They can be useful also to make customized borders in bands.</p>
-<div class="section">
-<h2><a id="graphic" name="graphic">Graphic</a></h2>
+<div class="section" id="graphic">
+<h2>Graphic</h2>
 <p>This is the basic graphic class. You should use it only when inheriting to
 create your own graphic class, never use it directly.</p>
 <p>Its rect area is based on <strong>left-width-top-height</strong> dimensions.</p>
 <p>Path: <strong>geraldo.graphics.Graphic</strong></p>
 <p><strong>Attributes</strong></p>
 <ul class="simple">
+<li><strong>name</strong> - Default: None</li>
 <li><strong>visible</strong> - Default: True</li>
 <li><strong>stroke</strong> - Default: True</li>
 <li><strong>stroke_color</strong> - Default: reportlab.lib.colors.black</li>
@@ -329,15 +325,15 @@ to set your own rule if you need.</p>
 </li>
 </ul>
 </div>
-<div class="section">
-<h2><a id="fixed" name="fixed">Fixed</a></h2>
+<div class="section" id="fixed">
+<h2>Fixed</h2>
 <p>Path: <strong>geraldo.graphics.Fixed</strong></p>
 <p>In the same way of Graphic class, you should use this just to inhert and create
 your own graphic. This is a graphic with rect with <strong>left-right-top-bottom</strong>
 dimensioning.</p>
 </div>
-<div class="section">
-<h2><a id="rect" name="rect">Rect</a></h2>
+<div class="section" id="rect">
+<h2>Rect</h2>
 <p>Path: <strong>geraldo.Rect</strong></p>
 <p>A rectangle with square borders on the canvas.</p>
 <p><strong>Example of use</strong></p>
@@ -354,8 +350,8 @@ dimensioning.</p>
 <li><strong>height</strong> - Required</li>
 </ul>
 </div>
-<div class="section">
-<h2><a id="roundrect" name="roundrect">RoundRect</a></h2>
+<div class="section" id="roundrect">
+<h2>RoundRect</h2>
 <p>Path: <strong>geraldo.RoundRect</strong></p>
 <p>A rectangle with rounded borders on the canvas.</p>
 <p><strong>Example of use</strong></p>
@@ -381,8 +377,8 @@ dimensioning.</p>
 </li>
 </ul>
 </div>
-<div class="section">
-<h2><a id="line" name="line">Line</a></h2>
+<div class="section" id="line">
+<h2>Line</h2>
 <p>Path: <strong>geraldo.Line</strong></p>
 <p><strong>Example of use</strong></p>
 <blockquote>
@@ -398,8 +394,8 @@ dimensioning.</p>
 <li><strong>bottom</strong> - Required</li>
 </ul>
 </div>
-<div class="section">
-<h2><a id="circle" name="circle">Circle</a></h2>
+<div class="section" id="circle">
+<h2>Circle</h2>
 <p>Path: <strong>geraldo.Circle</strong></p>
 <p><strong>Example of use</strong></p>
 <blockquote>
@@ -414,8 +410,8 @@ dimensioning.</p>
 <li><strong>radius</strong> - Required</li>
 </ul>
 </div>
-<div class="section">
-<h2><a id="arc" name="arc">Arc</a></h2>
+<div class="section" id="arc">
+<h2>Arc</h2>
 <p>Path: <strong>geraldo.Arc</strong></p>
 <p><strong>Example of use</strong></p>
 <blockquote>
@@ -433,8 +429,8 @@ dimensioning.</p>
 <li><strong>extent</strong> - Default: 90</li>
 </ul>
 </div>
-<div class="section">
-<h2><a id="ellipse" name="ellipse">Ellipse</a></h2>
+<div class="section" id="ellipse">
+<h2>Ellipse</h2>
 <p>Path: <strong>geraldo.Ellipse</strong></p>
 <p><strong>Example of use</strong></p>
 <blockquote>
@@ -450,8 +446,8 @@ dimensioning.</p>
 <li><strong>bottom</strong> - Required</li>
 </ul>
 </div>
-<div class="section">
-<h2><a id="image" name="image">Image</a></h2>
+<div class="section" id="image">
+<h2>Image</h2>
 <p>Path: <strong>geraldo.Image</strong></p>
 <p><strong>Example of use</strong></p>
 <blockquote>

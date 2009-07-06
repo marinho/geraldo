@@ -1,0 +1,204 @@
+                                                                                           
+                                                                                           
+                                                                                           
+    Printed in 2009, Jul 06 at 08:00                                                       
+    Username          Betty                                                                
+                                                                                           
+     Full name        Betty Garcia Pacheco                                                 
+     Superuser        False                                                                
+     ID               Name                                                                 
+                                                                                           
+     22                            23                                                      
+     Can add log entry             Can change log entry                                    
+     24                            4                                                       
+     Can delete log entry          Can add group                                           
+                                                                                           
+     10                                                                                    
+     Can add message                                                                       
+                                                                                           
+                      16 permissions found                                                 
+    Username          Davi                                                                 
+                                                                                           
+     Full name                                                                             
+     Superuser        False                                                                
+                      16 permissions found                                                 
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+    Page # 1 of 7                                                                          
+                                                                                                                                                                                      
+                                                                                           
+                                                                                           
+    Printed in 2009, Jul 06 at 08:00                                                       
+    Username          George                                                               
+                                                                                           
+     Full name                                                                             
+     Superuser        False                                                                
+                      16 permissions found                                                 
+    Username          John                                                                 
+                                                                                           
+     Full name                                                                             
+     Superuser        True                                                                 
+                                                                                           
+                      16 permissions found                                                 
+    Username          Larry                                                                
+                                                                                           
+     Full name                                                                             
+     Superuser        False                                                                
+                                                                                           
+                      16 permissions found                                                 
+    Username          Leni                                                                 
+                                                                                           
+     Full name                                                                             
+     Superuser        False                                                                
+                                                                                           
+                                                                                           
+                                                                                           
+    Page # 2 of 7                                                                          
+                                                                                                                                                                                      
+                                                                                           
+                                                                                           
+    Printed in 2009, Jul 06 at 08:00                                                       
+                      16 permissions found                                                 
+    Username          Leticia                                                              
+                                                                                           
+     Full name        Leticia Ribeiro das Ne                                               
+     Superuser        False                                                                
+                                                                                           
+     ID               Name                                                                 
+     22                            23                                                      
+                                                                                           
+     Can add log entry             Can change log entry                                    
+     24                            4                                                       
+     Can delete log entry          Can add group                                           
+                                                                                           
+     10                            1                                                       
+     Can add message               Can add permission                                      
+     7                             5                                                       
+     Can add user                  Can change group                                        
+                                                                                           
+     11                                                                                    
+     Can change message                                                                    
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+    Page # 3 of 7                                                                          
+                                                                                                                                                                                      
+                                                                                           
+                                                                                           
+    Printed in 2009, Jul 06 at 08:00                                                       
+     2                             8                                                       
+     Can change permission         Can change user                                         
+     6                             12                                                      
+                                                                                           
+     Can delete group              Can delete message                                      
+     3                             9                                                       
+     Can delete permission         Can delete user                                         
+                                                                                           
+     73                            76                                                      
+     Can add Área                  Can add Cliente                                         
+     88                            91                                                      
+     Can add Conta Bancária        Can add cliente empres                                  
+                                                                                           
+     79                            82                                                      
+     Can add Dados Pessoa F        Can add Dados Pessoa J                                  
+     94                            97                                                      
+                                                                                           
+     Can add cliente pf            Can add cliente pj                                      
+     85                                                                                    
+     Can add Referência do                                                                 
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+    Page # 4 of 7                                                                          
+                                                                                                                                                                                      
+                                                                                           
+                                                                                           
+    Printed in 2009, Jul 06 at 08:00                                                       
+     70                                                                                    
+     Can add Grupo de Clien                                                                
+                                                                                           
+                      16 permissions found                                                 
+    Username          Marta                                                                
+                                                                                           
+     Full name                                                                             
+     Superuser        False                                                                
+                      16 permissions found                                                 
+                                                                                           
+    Username          Miltinho                                                             
+                                                                                           
+     Full name                                                                             
+     Superuser        False                                                                
+                      16 permissions found                                                 
+                                                                                           
+    Username          Mychell                                                              
+                                                                                           
+     Full name                                                                             
+     Superuser        False                                                                
+                      16 permissions found                                                 
+                                                                                           
+                                                                                           
+                                                                                           
+    Page # 5 of 7                                                                          
+                                                                                                                                                                                      
+                                                                                           
+                                                                                           
+    Printed in 2009, Jul 06 at 08:00                                                       
+    Username          Mychelle                                                             
+                                                                                           
+     Full name                                                                             
+     Superuser        False                                                                
+                      16 permissions found                                                 
+    Username          Paul                                                                 
+                                                                                           
+     Full name                                                                             
+     Superuser        True                                                                 
+                                                                                           
+                      16 permissions found                                                 
+    Username          Ringo                                                                
+                                                                                           
+     Full name                                                                             
+     Superuser        False                                                                
+                                                                                           
+                      16 permissions found                                                 
+    Username          Tarsila                                                              
+                                                                                           
+     Full name                                                                             
+     Superuser        False                                                                
+                                                                                           
+                                                                                           
+                                                                                           
+    Page # 6 of 7                                                                          
+                                                                                                                                                                                      
+                                                                                           
+                                                                                           
+    Printed in 2009, Jul 06 at 08:00                                                       
+                      16 permissions found                                                 
+    Username          Verinha                                                              
+                                                                                           
+     Full name                                                                             
+     Superuser        False                                                                
+                                                                                           
+                      16 permissions found                                                 
+    Username          Waltinho                                                             
+                                                                                           
+     Full name                                                                             
+     Superuser        False                                                                
+                                                                                           
+                      16 permissions found                                                 
+    Users count:      16 users found                                                       
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+    Page # 7 of 7                                                                          
+                                                                                           

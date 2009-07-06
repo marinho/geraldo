@@ -117,12 +117,12 @@ PDF common generation with users
     >>> from geraldo.generators import PDFGenerator
 
     >>> report.queryset = User.objects.order_by('id')
-    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'child-bands-report.pdf'))
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/child-bands-report.pdf'))
 
 Page with half height
 
     >>> report.page_size = (A4[0], A4[1] / 2)
 
-    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'child-bands-report-half-height.pdf'))
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/child-bands-report-half-height.pdf'))
 
 

@@ -52,7 +52,7 @@ Report class
     ...             Label(text="Users first name distinct:", top=2.6*cm, left=0.2*cm),
     ...             ObjectValue(attribute_name='first_name', top=2.6*cm, left=4*cm, action=FIELD_ACTION_DISTINCT_COUNT),
     ... 
-    ...             Image(filename=os.path.join(cur_dir, 'matplotlib.png'), left=11*cm, top=0.2*cm)
+    ...             Image(filename=os.path.join(cur_dir, 'output/matplotlib.png'), left=11*cm, top=0.2*cm)
     ...         ]
     ...         borders = {'top': True}
     ... 
@@ -131,10 +131,10 @@ Building the chart
     >>> tmp = pylab.title('Users IDs')
     >>> pylab.gca().get_xaxis().tick_bottom()
     >>> pylab.gca().get_yaxis().tick_left()
-    >>> pylab.savefig(os.path.join(cur_dir, 'matplotlib.png'), dpi=50)
+    >>> pylab.savefig(os.path.join(cur_dir, 'output/matplotlib.png'), dpi=50)
 
 PDF generation
 
-    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'charts-matplotlib-report.pdf'))
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/charts-matplotlib-report.pdf'))
 
 

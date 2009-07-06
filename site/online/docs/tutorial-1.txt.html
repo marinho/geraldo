@@ -3,15 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.4.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.5: http://docutils.sourceforge.net/" />
 <title>Tutorial 1</title>
 <style type="text/css">
 
 /*
-:Author: David Goodger
-:Contact: goodger@users.sourceforge.net
-:Date: $Date: 2005-12-18 01:56:14 +0100 (Sun, 18 Dec 2005) $
-:Revision: $Revision: 4224 $
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 5196 2007-06-03 20:25:28Z wiemann $
 :Copyright: This stylesheet has been placed in the public domain.
 
 Default cascading style sheet for the HTML output of Docutils.
@@ -117,7 +115,7 @@ div.line-block div.line-block {
   margin-left: 1.5em }
 
 div.sidebar {
-  margin-left: 1em ;
+  margin: 0 0 0.5em 1em ;
   border: medium outset ;
   padding: 1em ;
   background-color: #ffffee ;
@@ -223,8 +221,7 @@ pre.address {
 
 pre.literal-block, pre.doctest-block {
   margin-left: 2em ;
-  margin-right: 2em ;
-  background-color: #eeeeee }
+  margin-right: 2em }
 
 span.classifier {
   font-family: sans-serif ;
@@ -281,9 +278,6 @@ h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
 h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
   font-size: 100% }
 
-tt.docutils {
-  background-color: #eeeeee }
-
 ul.auto-toc {
   list-style-type: none }
 
@@ -292,6 +286,7 @@ ul.auto-toc {
 <body>
 <div class="document" id="tutorial-1">
 <h1 class="title">Tutorial 1</h1>
+
 <p>Once you have Geraldo installed and its dependencies resolved (read
 Installation document to know about dependency for ReportLab and Python
 Imaging Library) you can start opening the <strong>settings.py</strong> from your
@@ -300,8 +295,8 @@ project to edit.</p>
 <strong>Attention:</strong> this tutorial is pressuposes you are going to use Geraldo
 with a Django project, but in fact you can just ignore the Django parts
 and all the rest is exactly the same for Django and non-Django cases.</blockquote>
-<div class="section">
-<h2><a id="step-1-preparing-your-project" name="step-1-preparing-your-project">Step 1. Preparing your project</a></h2>
+<div class="section" id="step-1-preparing-your-project">
+<h2>Step 1. Preparing your project</h2>
 <p>To install Geraldo in your Django project, you must change the setting
 <strong>INSTALLED_APPS</strong> in your <strong>settings.py</strong> file and this shoul be enough.</p>
 <p>But let's create a new URL to load a report PDF online.</p>
@@ -388,8 +383,8 @@ fields;</li>
 <p>Now you have a prepared Django application to use a report you are going to
 create at the next step!</p>
 </div>
-<div class="section">
-<h2><a id="declaring-the-report-class" name="declaring-the-report-class">Declaring the report class</a></h2>
+<div class="section" id="declaring-the-report-class">
+<h2>Declaring the report class</h2>
 <p>The report class must be an inheritance from <strong>geraldo.Report</strong> class. You can
 create a new file 'reports.py' to declare your report classes inside.</p>
 <pre class="literal-block">
@@ -425,8 +420,8 @@ same but their use vary depending you are using a band as the Page Header or
 Report Summary, for example.</p>
 <p>A report can have a band for each one of following attributes:</p>
 </div>
-<div class="section">
-<h2><a id="detail-band" name="detail-band">Detail band</a></h2>
+<div class="section" id="detail-band">
+<h2>Detail band</h2>
 <p>The detail band is the most important band in a report. This is because the
 detail band is the reason of the existency of every report.</p>
 <p>The detail band is used most of times to show object field values. This is the
@@ -466,8 +461,8 @@ defined height in centimeters.</p>
 2 model class fields: <strong>id</strong> and <strong>date_creation</strong>. The last one is customized
 with <strong>get_value</strong> attribute, for date field formatting.</p>
 </div>
-<div class="section">
-<h2><a id="page-header-and-page-footer-bands" name="page-header-and-page-footer-bands">Page Header and Page Footer bands</a></h2>
+<div class="section" id="page-header-and-page-footer-bands">
+<h2>Page Header and Page Footer bands</h2>
 <p>Page header and Page footer bands are respectively designed to appear on the header and
 footer on every pages in the report.</p>
 <p>In most of reports, a page header is used to show the report title and its page number,
@@ -517,8 +512,8 @@ page count, report title, report author, etc.</li>
 <p>Other good use of Page Header and Page Footer bands is to compose or inherit
 reports layout. Use your imagine ane do it!</p>
 </div>
-<div class="section">
-<h2><a id="groupping" name="groupping">Groupping</a></h2>
+<div class="section" id="groupping">
+<h2>Groupping</h2>
 <p>The next thing now is group our purchases by a field. Lets choose the field
 <strong>customer</strong>, ok?</p>
 <p>Geraldo allows you to group report by how many levels you want. This means you
@@ -556,8 +551,8 @@ attribute, property or method you have in queryset objects;</li>
 could also use <strong>band_footer</strong>.</li>
 </ul>
 </div>
-<div class="section">
-<h2><a id="subreports" name="subreports">SubReports</a></h2>
+<div class="section" id="subreports">
+<h2>SubReports</h2>
 <p>SubReport is the way you have to show object children data in a report. As you
 know, a <strong>purchase</strong> has <strong>many items</strong>, and they are available in attribute
 <strong>purchase.purchaseitem_set.all()</strong> os something like that.</p>

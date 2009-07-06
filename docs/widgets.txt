@@ -15,6 +15,7 @@ own widgets, otherwise you shouldn't use it directly.
 
 **Attributes**
 
+- **name** - Default: None
 - **height** - Default: 0.5*cm
 - **width** - Default: 5*cm
 - **left** - Default: 0

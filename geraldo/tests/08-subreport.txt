@@ -118,10 +118,10 @@ PDF common generation with users
 
     >>> from geraldo.generators import PDFGenerator
 
-    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'subreports-report.pdf'))
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/subreports-report.pdf'))
 
 Page with half height
 
     >>> report.page_size = (A4[0], A4[1] / 2)
-    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'subreports-report-half-height.pdf'))
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/subreports-report-half-height.pdf'))
 

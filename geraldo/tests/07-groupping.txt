@@ -128,15 +128,15 @@ PDF common generation with users
 
     >>> from geraldo.generators import PDFGenerator
 
-    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'groupping-report.pdf'))
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/groupping-report.pdf'))
 
 Page with half height
 
     >>> report.page_size = (A4[0], A4[1] / 2)
-    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'groupping-report-half-height.pdf'))
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/groupping-report-half-height.pdf'))
 
 Page with half height with new group in the begin of second page
 
     >>> report.queryset = report.queryset.exclude(username='Betty')
-    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'groupping-report-half-height-2.pdf'))
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/groupping-report-half-height-2.pdf'))
 

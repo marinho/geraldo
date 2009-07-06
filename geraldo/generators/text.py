@@ -44,7 +44,7 @@ class Paragraph(object):
         self.text = text
         self.style = style
 
-    def wrapOn(self, page_size, width, height): # TODO
+    def wrapOn(self, page_size, width, height): # TODO: this should be more eficient with multiple lines
         self.height = height
         self.width = width
 
@@ -65,11 +65,20 @@ class TextGenerator(ReportGenerator):
           manufacturer (i.e. Epson, Lexmark, HP, etc.). This attribute is useful
           to support this. Defaul is ESC/P2 standard (Epson matrix printers)
         * 'filename' - is the file path you can inform optionally to save text to.
+        * 'encode_to' - you can inform the coding identifier to force Geraldo to
+          encode the output string on it. Example: 'latin-1'
     """
     row_height = DEFAULT_ROW_HEIGHT
     character_width = DEFAULT_CHAR_WIDTH
     _to_printer = True
     _escape_set = DEFAULT_ESCAPE_SET
+    encode_to = None
+    manual_escape_codes = False
+
+    escapes_report_start = ''
+    escapes_report_end = ''
+    escapes_page_start = ''
+    escapes_page_end = ''
 
     _is_first_page = True
     _is_latest_page = True
@@ -109,6 +118,10 @@ class TextGenerator(ReportGenerator):
 
         # Generate the pages
         text = self.generate_pages()
+
+        # Encode
+        if self.encode_to:
+            text = text.encode(self.encode_to)
 
         # Saves to file or just returns the text
         if hasattr(self, 'filename'):
@@ -588,11 +601,11 @@ class TextGenerator(ReportGenerator):
         here is do this calculate before to generate the pages."""
         return len(self._rendered_pages)
 
-    def make_paragraph(self, text, style=None): # XXX
+    def make_paragraph(self, text, style=None): # TODO: make style with basic functions, like alignment, bold, emphasis (italic), etc
         """Uses the Paragraph class to return a new paragraph object"""
         return Paragraph(text, style)
 
-    def wrap_paragraph_on(self, paragraph, width, height): # XXX
+    def wrap_paragraph_on(self, paragraph, width, height):
         """Wraps the paragraph on the height/width informed"""
         paragraph.wrapOn(self.report.page_size, width, height)
 
@@ -810,11 +823,11 @@ class TextGenerator(ReportGenerator):
         """Renders a widget element on canvas"""
         self.print_in_page_output(page_output, widget.text, widget.rect)
 
-    def generate_graphic(self, graphic, page_output): # TODO
+    def generate_graphic(self, graphic, page_output): # TODO: horizontal and vertical lines, rectangles and borders should be ok
         """Renders a graphic element"""
         pass
 
-    def print_in_page_output(self, page_output, text, rect): # XXX
+    def print_in_page_output(self, page_output, text, rect):
         """Changes the array page_output (a matrix with rows and cols equivalent
         to rows and cols in a matrix printer page) inserting the text value in
         the left/top coordinates."""
@@ -828,6 +841,10 @@ class TextGenerator(ReportGenerator):
             'bottom': int(round(self.calculate_size(rect['bottom']) / self.row_height)),
             'right': int(round(self.calculate_size(rect['right']) / self.character_width)),
             }
+
+        # Default height and width
+        text_rect['height'] = text_rect['height'] or 1
+        text_rect['width'] = text_rect['width'] or len(text)
 
         if text_rect['height'] and text_rect['width']:
             # Make a text with the exact width
@@ -856,6 +873,9 @@ class TextGenerator(ReportGenerator):
 
     def update_escape_chars(self):
         """Sets the escape chars to be ran for some events on report generation"""
+        if self.manual_escape_codes:
+            return
+
         if self.to_printer:
             self.escapes_report_start = ''
             self.escapes_report_end = ''
@@ -880,7 +900,7 @@ class TextGenerator(ReportGenerator):
         return self._to_printer
 
     def set_to_printer(self, val):
-        self.to_printer = val
+        self._to_printer = val
         self.update_escape_chars()
 
     to_printer = property(get_to_printer, set_to_printer)

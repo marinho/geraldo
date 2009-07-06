@@ -1,0 +1,291 @@
+                                                                                           
+                                                                                           
+                                                                                           
+    Page # 1 of 10                                                                         
+                                                                                           
+                                       Look those permissions                              
+                                                                                           
+    1            Can add permission                                                       
+    2            Can change permission                                                    
+    3            Can delete permission                                                    
+    4            Can add group                                                            
+    5            Can change group                                                         
+    6            Can delete group                                                         
+    7            Can add user                                                             
+    8            Can change user                                                          
+    9            Can delete user                                                          
+    10           Can add message                                                          
+    11           Can change message                                                       
+    12           Can delete message                                                       
+    13           Can add content type                                                     
+    14           Can change content type                                                  
+    15           Can delete content type                                                  
+    16           Can add session                                                          
+    17           Can change session                                                       
+    18           Can delete session                                                       
+    19           Can add site                                                             
+    20           Can change site                                                          
+                                                                                           
+    Permissions list                                                                       
+    ID           Name                                                                                                                                                                 
+                                                                                           
+                                                                                           
+    Page # 2 of 10                                                                         
+                                                                                           
+    21           Can delete site                                                          
+    22           Can add log entry                                                        
+    23           Can change log entry                                                     
+    24           Can delete log entry                                                     
+    25           Can add dynamic template                                                 
+    26           Can change dynamic template                                              
+    27           Can delete dynamic template                                              
+    28           Can add static file                                                      
+    29           Can change static file                                                   
+    30           Can delete static file                                                   
+    31           Can add report class                                                     
+    32           Can change report class                                                  
+    33           Can delete report class                                                  
+    34           Can add migration history                                                
+    35           Can change migration history                                             
+    36           Can delete migration history                                             
+    37           Can add Cidade                                                           
+    38           Can change Cidade                                                        
+    39           Can delete Cidade                                                        
+    40           Can add Configuração                                                     
+    41           Can change Configuração                                                  
+    42           Can delete Configuração                                                  
+                                                                                           
+    Permissions list                                                                       
+    ID           Name                                                                                                                                                                 
+                                                                                           
+                                                                                           
+    Page # 3 of 10                                                                         
+                                                                                           
+    43           Can add Loja                                                             
+    44           Can change Loja                                                          
+    45           Can delete Loja                                                          
+    46           Can add Perfil do Usuário                                                
+    47           Can change Perfil do Usuário                                             
+    48           Can delete Perfil do Usuário                                             
+    49           Can add Computador                                                       
+    50           Can change Computador                                                    
+    51           Can delete Computador                                                    
+    52           Can add Banco                                                            
+    53           Can change Banco                                                         
+    54           Can delete Banco                                                         
+    55           Can add Condição de Pagamento                                            
+    56           Can change Condição de Pagamen                                           
+    57           Can delete Condição de Pagamen                                           
+    58           Can add condicao pagamento ite                                           
+    59           Can change condicao pagamento                                            
+    60           Can delete condicao pagamento                                            
+    61           Can add cfop                                                             
+    62           Can change cfop                                                          
+    63           Can delete cfop                                                          
+    64           Can add unidade                                                          
+                                                                                           
+    Permissions list                                                                       
+    ID           Name                                                                                                                                                                 
+                                                                                           
+                                                                                           
+    Page # 4 of 10                                                                         
+                                                                                           
+    65           Can change unidade                                                       
+    66           Can delete unidade                                                       
+    67           Can add Região                                                           
+    68           Can change Região                                                        
+    69           Can delete Região                                                        
+    70           Can add Grupo de Clientes                                                
+    71           Can change Grupo de Clientes                                             
+    72           Can delete Grupo de Clientes                                             
+    73           Can add Área                                                             
+    74           Can change Área                                                          
+    75           Can delete Área                                                          
+    76           Can add Cliente                                                          
+    77           Can change Cliente                                                       
+    78           Can delete Cliente                                                       
+    79           Can add Dados Pessoa Física                                              
+    80           Can change Dados Pessoa Física                                           
+    81           Can delete Dados Pessoa Física                                           
+    82           Can add Dados Pessoa Jurídica                                            
+    83           Can change Dados Pessoa Jurídi                                           
+    84           Can delete Dados Pessoa Jurídi                                           
+    85           Can add Referência do Cliente                                            
+    86           Can change Referência do Clien                                           
+                                                                                           
+    Permissions list                                                                       
+    ID           Name                                                                                                                                                                 
+                                                                                           
+                                                                                           
+    Page # 5 of 10                                                                         
+                                                                                           
+    87           Can delete Referência do Clien                                           
+    88           Can add Conta Bancária do Clie                                           
+    89           Can change Conta Bancária do C                                           
+    90           Can delete Conta Bancária do C                                           
+    91           Can add cliente empresa                                                  
+    92           Can change cliente empresa                                               
+    93           Can delete cliente empresa                                               
+    94           Can add cliente pf                                                       
+    95           Can change cliente pf                                                    
+    96           Can delete cliente pf                                                    
+    97           Can add cliente pj                                                       
+    98           Can change cliente pj                                                    
+    99           Can delete cliente pj                                                    
+    100          Can add Carga                                                            
+    101          Can change Carga                                                         
+    102          Can delete Carga                                                         
+    103          Can add carga pedido venda                                               
+    104          Can change carga pedido venda                                            
+    105          Can delete carga pedido venda                                            
+    106          Can add Tipo de Pagamento                                                
+    107          Can change Tipo de Pagamento                                             
+    108          Can delete Tipo de Pagamento                                             
+                                                                                           
+    Permissions list                                                                       
+    ID           Name                                                                                                                                                                 
+                                                                                           
+                                                                                           
+    Page # 6 of 10                                                                         
+                                                                                           
+    109          Can add Tipo de Despesa                                                  
+    110          Can change Tipo de Despesa                                               
+    111          Can delete Tipo de Despesa                                               
+    112          Can add Conta a Pagar                                                    
+    113          Can change Conta a Pagar                                                 
+    114          Can delete Conta a Pagar                                                 
+    115          Can add Conta a Receber                                                  
+    116          Can change Conta a Receber                                               
+    117          Can delete Conta a Receber                                               
+    118          Can add Despesa Fixa                                                     
+    119          Can change Despesa Fixa                                                  
+    120          Can delete Despesa Fixa                                                  
+    121          Can add Grupo de Fornecedores                                            
+    122          Can change Grupo de Fornecedor                                           
+    123          Can delete Grupo de Fornecedor                                           
+    124          Can add Fornecedor                                                       
+    125          Can change Fornecedor                                                    
+    126          Can delete Fornecedor                                                    
+    127          Can add fornecedor empresa                                               
+    128          Can change fornecedor empresa                                            
+    129          Can delete fornecedor empresa                                            
+    130          Can add transportadora                                                   
+                                                                                           
+    Permissions list                                                                       
+    ID           Name                                                                                                                                                                 
+                                                                                           
+                                                                                           
+    Page # 7 of 10                                                                         
+                                                                                           
+    131          Can change transportadora                                                
+    132          Can delete transportadora                                                
+    133          Can add Cargo                                                            
+    134          Can change Cargo                                                         
+    135          Can delete Cargo                                                         
+    136          Can add Funcionário                                                      
+    137          Can change Funcionário                                                   
+    138          Can delete Funcionário                                                   
+    139          Can add vendedor                                                         
+    140          Can change vendedor                                                      
+    141          Can delete vendedor                                                      
+    142          Can add Grupo de Produtos                                                
+    143          Can change Grupo de Produtos                                             
+    144          Can delete Grupo de Produtos                                             
+    145          Can add Subgrupo de Produtos                                             
+    146          Can change Subgrupo de Produto                                           
+    147          Can delete Subgrupo de Produto                                           
+    148          Can add Cor                                                              
+    149          Can change Cor                                                           
+    150          Can delete Cor                                                           
+    151          Can add Produto                                                          
+    152          Can change Produto                                                       
+                                                                                           
+    Permissions list                                                                       
+    ID           Name                                                                                                                                                                 
+                                                                                           
+                                                                                           
+    Page # 8 of 10                                                                         
+                                                                                           
+    153          Can delete Produto                                                       
+    154          Can add Código de Barras                                                 
+    155          Can change Código de Barras                                              
+    156          Can delete Código de Barras                                              
+    157          Can add Estoque                                                          
+    158          Can change Estoque                                                       
+    159          Can delete Estoque                                                       
+    160          Can add Pedido de Balanço                                                
+    161          Can change Pedido de Balanço                                             
+    162          Can delete Pedido de Balanço                                             
+    163          Can add Item do Pedido                                                   
+    164          Can change Item do Pedido                                                
+    165          Can delete Item do Pedido                                                
+    166          Can add Cartão de Crédito                                                
+    167          Can change Cartão de Crédito                                             
+    168          Can delete Cartão de Crédito                                             
+    169          Can add Pedido de Venda                                                  
+    170          Can change Pedido de Venda                                               
+    171          Can delete Pedido de Venda                                               
+    172          uPode Faturar                                                            
+    173          Pode Cancelar                                                            
+    174          Pode Efetuar Devolução                                                   
+                                                                                           
+    Permissions list                                                                       
+    ID           Name                                                                                                                                                                 
+                                                                                           
+                                                                                           
+    Page # 9 of 10                                                                         
+                                                                                           
+    175          Can add Item do Pedido                                                   
+    176          Can change Item do Pedido                                                
+    177          Can delete Item do Pedido                                                
+    178          Can add Nota Fiscal                                                      
+    179          Can change Nota Fiscal                                                   
+    180          Can delete Nota Fiscal                                                   
+    181          Pode Emitir Nota Fiscal                                                  
+    182          Pode Editar Layout Nota Fiscal                                           
+    183          Can add Previsão Mensal                                                  
+    184          Can change Previsão Mensal                                               
+    185          Can delete Previsão Mensal                                               
+    186          Can add Tipo de Investimento                                             
+    187          Can change Tipo de Investiment                                           
+    188          Can delete Tipo de Investiment                                           
+    189          Can add investimento                                                     
+    190          Can change investimento                                                  
+    191          Can delete investimento                                                  
+    192          Can add Pedido de Compra                                                 
+    193          Can change Pedido de Compra                                              
+    194          Can delete Pedido de Compra                                              
+    195          Pode Atualizar                                                           
+    196          Pode Cancelar                                                            
+                                                                                           
+    Permissions list                                                                       
+    ID           Name                                                                                                                                                                 
+                                                                                           
+                                                                                           
+    Page # 10 of 10                                                                        
+                                                                                           
+    197          Can add Item do Pedido                                                   
+    198          Can change Item do Pedido                                                
+    199          Can delete Item do Pedido                                                
+    200          Can add Item do Pedido                                                   
+    201          Can change Item do Pedido                                                
+    202          Can delete Item do Pedido                                                
+    That's all   202 permissions found                                                     
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                           
+    Permissions list                                                                       
+    ID           Name                                                                      

@@ -3,15 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.4.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.5: http://docutils.sourceforge.net/" />
 <title>Widgets Reference</title>
 <style type="text/css">
 
 /*
-:Author: David Goodger
-:Contact: goodger@users.sourceforge.net
-:Date: $Date: 2005-12-18 01:56:14 +0100 (Sun, 18 Dec 2005) $
-:Revision: $Revision: 4224 $
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 5196 2007-06-03 20:25:28Z wiemann $
 :Copyright: This stylesheet has been placed in the public domain.
 
 Default cascading style sheet for the HTML output of Docutils.
@@ -117,7 +115,7 @@ div.line-block div.line-block {
   margin-left: 1.5em }
 
 div.sidebar {
-  margin-left: 1em ;
+  margin: 0 0 0.5em 1em ;
   border: medium outset ;
   padding: 1em ;
   background-color: #ffffee ;
@@ -223,8 +221,7 @@ pre.address {
 
 pre.literal-block, pre.doctest-block {
   margin-left: 2em ;
-  margin-right: 2em ;
-  background-color: #eeeeee }
+  margin-right: 2em }
 
 span.classifier {
   font-family: sans-serif ;
@@ -281,9 +278,6 @@ h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
 h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
   font-size: 100% }
 
-tt.docutils {
-  background-color: #eeeeee }
-
 ul.auto-toc {
   list-style-type: none }
 
@@ -292,15 +286,18 @@ ul.auto-toc {
 <body>
 <div class="document" id="widgets-reference">
 <h1 class="title">Widgets Reference</h1>
+
 <p>Widgets are report elements to show text values on report canvas.</p>
 <p>All widget classes can be initialized with their attributes as class arguments.</p>
-<div class="section">
-<h2><a id="widget" name="widget">Widget</a></h2>
+<div class="section" id="widget">
+<h2>Widget</h2>
 <p>Path: <strong>geraldo.widgets.Widget</strong></p>
 <p>Base class for reports widgets, you should use it only to inherit and make your
 own widgets, otherwise you shouldn't use it directly.</p>
 <p><strong>Attributes</strong></p>
 <ul>
+<li><p class="first"><strong>name</strong> - Default: None</p>
+</li>
 <li><p class="first"><strong>height</strong> - Default: 0.5*cm</p>
 </li>
 <li><p class="first"><strong>width</strong> - Default: 5*cm</p>
@@ -365,8 +362,8 @@ are required.</p>
 <li><strong>page</strong> - current page</li>
 </ul>
 </div>
-<div class="section">
-<h2><a id="label" name="label">Label</a></h2>
+<div class="section" id="label">
+<h2>Label</h2>
 <p>Path: <strong>geraldo.Label</strong></p>
 <p>A label is just a simple text.</p>
 <p><strong>Example of use</strong></p>
@@ -386,8 +383,8 @@ are required.</p>
 </ul>
 <p><strong>get_value</strong> must have 'text' argument.</p>
 </div>
-<div class="section">
-<h2><a id="objectvalue" name="objectvalue">ObjectValue</a></h2>
+<div class="section" id="objectvalue">
+<h2>ObjectValue</h2>
 <p>Path: <strong>geraldo.ObjectValue</strong></p>
 <p>This shows the value from a method, field or property from objects got from the
 queryset.</p>
@@ -459,8 +456,8 @@ use <strong>get_value</strong> if you want something more powerful.</p>
 </li>
 </ul>
 </div>
-<div class="section">
-<h2><a id="systemfield" name="systemfield">SystemField</a></h2>
+<div class="section" id="systemfield">
+<h2>SystemField</h2>
 <p>This shows system informations, like the report title, current date/time, page
 number, pages count, etc.</p>
 <p>'get_value' must have 'expression' and 'fields' argument.</p>

@@ -3,15 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.4.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.5: http://docutils.sourceforge.net/" />
 <title>Installation</title>
 <style type="text/css">
 
 /*
-:Author: David Goodger
-:Contact: goodger@users.sourceforge.net
-:Date: $Date: 2005-12-18 01:56:14 +0100 (Sun, 18 Dec 2005) $
-:Revision: $Revision: 4224 $
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 5196 2007-06-03 20:25:28Z wiemann $
 :Copyright: This stylesheet has been placed in the public domain.
 
 Default cascading style sheet for the HTML output of Docutils.
@@ -117,7 +115,7 @@ div.line-block div.line-block {
   margin-left: 1.5em }
 
 div.sidebar {
-  margin-left: 1em ;
+  margin: 0 0 0.5em 1em ;
   border: medium outset ;
   padding: 1em ;
   background-color: #ffffee ;
@@ -223,8 +221,7 @@ pre.address {
 
 pre.literal-block, pre.doctest-block {
   margin-left: 2em ;
-  margin-right: 2em ;
-  background-color: #eeeeee }
+  margin-right: 2em }
 
 span.classifier {
   font-family: sans-serif ;
@@ -281,9 +278,6 @@ h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
 h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
   font-size: 100% }
 
-tt.docutils {
-  background-color: #eeeeee }
-
 ul.auto-toc {
   list-style-type: none }
 
@@ -292,14 +286,15 @@ ul.auto-toc {
 <body>
 <div class="document" id="installation">
 <h1 class="title">Installation</h1>
+
 <p>Geraldo is still not available as installer or system package. So, you have two
 ways to install it:</p>
-<div class="section">
-<h2><a id="option-1-get-the-latest-official-version" name="option-1-get-the-latest-official-version">Option 1. Get the latest official version</a></h2>
+<div class="section" id="option-1-get-the-latest-official-version">
+<h2>Option 1. Get the latest official version</h2>
 <ol class="arabic">
 <li><p class="first">Get the latest tarball available from:</p>
 <blockquote>
-<p><a class="reference" href="https://sourceforge.net/project/showfiles.php?group_id=251460&amp;package_id=307400">https://sourceforge.net/project/showfiles.php?group_id=251460&amp;package_id=307400</a></p>
+<p><a class="reference external" href="https://sourceforge.net/project/showfiles.php?group_id=251460&amp;package_id=307400">https://sourceforge.net/project/showfiles.php?group_id=251460&amp;package_id=307400</a></p>
 </blockquote>
 </li>
 <li><p class="first">Then you can do the following steps to install it:</p>
@@ -316,7 +311,7 @@ sudo python setup.py install
 <p>If you are using Windows, Geraldo is fully compatible. You just have to use a
 tarball uncompress tool, like <strong>7-Zip</strong> you can download from:</p>
 <blockquote>
-<a class="reference" href="http://www.7-zip.org/download.html">http://www.7-zip.org/download.html</a></blockquote>
+<a class="reference external" href="http://www.7-zip.org/download.html">http://www.7-zip.org/download.html</a></blockquote>
 <p>Once you have a tool to uncompress tarball files, you have to uncompress it,
 open a MS-DOS Prompty window in the folder you uncompress into and run the
 following command:</p>
@@ -324,8 +319,8 @@ following command:</p>
 python setup.py install
 </pre>
 </div>
-<div class="section">
-<h2><a id="option-2-get-the-latest-development-version" name="option-2-get-the-latest-development-version">Option 2. Get the latest development version</a></h2>
+<div class="section" id="option-2-get-the-latest-development-version">
+<h2>Option 2. Get the latest development version</h2>
 <p>Our version control is centralized on GitHub Social repository, in the
 following URL:</p>
 <pre class="literal-block">
@@ -342,21 +337,21 @@ Geraldo files inside.</p>
 <p>Then you can go ahead and use the same commands from <strong>Option 1</strong> to install
 in your system.</p>
 </div>
-<div class="section">
-<h2><a id="dependencies" name="dependencies">Dependencies</a></h2>
+<div class="section" id="dependencies">
+<h2>Dependencies</h2>
 <p><strong>ReportLab</strong></p>
 <p>This is required, there is no chance you use Geraldo with no ReportLab
 installed.</p>
 <p>Get it from the following URL:</p>
 <blockquote>
-<a class="reference" href="http://www.reportlab.org/">http://www.reportlab.org/</a></blockquote>
+<a class="reference external" href="http://www.reportlab.org/">http://www.reportlab.org/</a></blockquote>
 <p>The tested version is <strong>2.1</strong>.</p>
 <p><strong>Python Imaging Library</strong></p>
 <p>Geraldo depends on PIL for works with Images manipulation on the canvas. If you
 aren't going to use them, you can live without PIL.</p>
 <p>To get PIL you can go to following URL:</p>
 <blockquote>
-<a class="reference" href="http://www.pythonware.com/products/pil/">http://www.pythonware.com/products/pil/</a></blockquote>
+<a class="reference external" href="http://www.pythonware.com/products/pil/">http://www.pythonware.com/products/pil/</a></blockquote>
 </div>
 </div>
 </body>

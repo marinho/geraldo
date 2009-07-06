@@ -62,7 +62,7 @@ Report class
 PDF generation
 
     >>> from geraldo.generators import PDFGenerator
-    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'inheritance-report.pdf'))
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/inheritance-report.pdf'))
 
 A inheritance report class
 
@@ -93,5 +93,5 @@ A inheritance report class
 PDF generation
 
     >>> report = LandscapeUsersReport(queryset=queryset)
-    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'inheritance-landscape-report.pdf'))
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/inheritance-landscape-report.pdf'))
 

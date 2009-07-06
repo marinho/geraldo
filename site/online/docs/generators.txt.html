@@ -3,15 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.4.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.5: http://docutils.sourceforge.net/" />
 <title>Generators Reference</title>
 <style type="text/css">
 
 /*
-:Author: David Goodger
-:Contact: goodger@users.sourceforge.net
-:Date: $Date: 2005-12-18 01:56:14 +0100 (Sun, 18 Dec 2005) $
-:Revision: $Revision: 4224 $
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 5196 2007-06-03 20:25:28Z wiemann $
 :Copyright: This stylesheet has been placed in the public domain.
 
 Default cascading style sheet for the HTML output of Docutils.
@@ -117,7 +115,7 @@ div.line-block div.line-block {
   margin-left: 1.5em }
 
 div.sidebar {
-  margin-left: 1em ;
+  margin: 0 0 0.5em 1em ;
   border: medium outset ;
   padding: 1em ;
   background-color: #ffffee ;
@@ -223,8 +221,7 @@ pre.address {
 
 pre.literal-block, pre.doctest-block {
   margin-left: 2em ;
-  margin-right: 2em ;
-  background-color: #eeeeee }
+  margin-right: 2em }
 
 span.classifier {
   font-family: sans-serif ;
@@ -281,9 +278,6 @@ h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
 h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
   font-size: 100% }
 
-tt.docutils {
-  background-color: #eeeeee }
-
 ul.auto-toc {
   list-style-type: none }
 
@@ -292,21 +286,23 @@ ul.auto-toc {
 <body>
 <div class="document" id="generators-reference">
 <h1 class="title">Generators Reference</h1>
+
 <p>Generators are classes to generate a report instance to some data format. In
 future we will have generators to XML, HTML, TXT, PS, images and so on.</p>
-<div class="section">
-<h2><a id="pdf-generator" name="pdf-generator">PDF Generator</a></h2>
+<div class="section" id="pdf-generator">
+<h2>PDF Generator</h2>
 <p>Path: <strong>geraldo.generators.PDFGenerator</strong></p>
-<p>This is our once currently available generator. It uses ReportLab awesome
-library to create them.</p>
+<p>This generator is the most mature generator we have. It generates PDF files to
+be viewed on Adobe Acrobat Reader or similar softwares. It uses the awesome
+library 'ReportLab' to create them.</p>
 <p>To use it you just do something like this:</p>
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; my_report_instance.generate_by(PDFGenerator, filename='file.pdf')
 </pre>
 </blockquote>
-<p>In <strong>filename</strong> argument you can use a file path string or a file output object.
-Examples:</p>
+<p>In <strong>filename</strong> argument you can use a file path string or a file output object.</p>
+<p>Examples:</p>
 <blockquote>
 <pre class="doctest-block">
 &gt;&gt;&gt; fp = file('test.pdf', 'w')
@@ -314,6 +310,70 @@ Examples:</p>
 &gt;&gt;&gt;
 &gt;&gt;&gt; resp = HttpResponse(mimetype='application/pdf')
 &gt;&gt;&gt; my_report_instance.generate_by(PDFGenerator, filename=resp)
+</pre>
+</blockquote>
+</div>
+<div class="section" id="text-generator">
+<h2>Text Generator</h2>
+<p><strong>New in development version.</strong></p>
+<p>Path: <strong>geraldo.generators.TextGenerator</strong></p>
+<p>This generator is still in development stage, but it already works well. It
+ca be used to generate text files or to print to matrix printers.</p>
+<p>You can use it exactly like you would use PDF generator, but this has some more
+features. When running <strong>'generate_by'</strong> report method, you can inform the
+attribute 'filename' like you do in PDF, but you could also do some things else.</p>
+<p><strong>Examples:</strong></p>
+<p>Basic:</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; my_report_instance.generate_by(TextGenerator, filename='file.txt')
+</pre>
+</blockquote>
+<p>Returning the output:</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; output = my_report_instance.generate_by(TextGenerator)
+</pre>
+</blockquote>
+<p>Setting row height and/or column width:</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; output = my_report_instance.generate_by(TextGenerator, row_height=0.7*cm, character_width=0.2*cm)
+</pre>
+</blockquote>
+<p>Forcing the generator to encode the output:</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; output = my_report_instance.generate_by(TextGenerator, encode_to='latin-1')
+</pre>
+</blockquote>
+<p>Setting to be or not to be printed by a printer:</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; output = my_report_instance.generate_by(TextGenerator, to_printer=False)
+</pre>
+</blockquote>
+<p>Setting a set of escape codes to printer (matrix printers work with escape codes
+set for special characters or to setup the output printing):</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; from geraldo.generators.text import DEFAULT_ESCAPE_SET
+&gt;&gt;&gt; my_escape_set = DEFAULT_ESCAPE_SET.copy()
+&gt;&gt;&gt; my_escape_set['condensed'] = chr(15) + chr(17)
+&gt;&gt;&gt; output = my_report_instance.generate_by(TextGenerator, to_printer=True, escape_set=my_escape_set)
+</pre>
+</blockquote>
+<p>Forcing the output to print out escape codes before/after report or page print:</p>
+<blockquote>
+<pre class="doctest-block">
+&gt;&gt;&gt; MyTextGenerator(TextGenerator):
+...     to_printer = True
+...     manual_escape_codes = True
+...     escapes_report_start = chr(15) # Sets condensed mode
+...     escapes_report_end = chr(18) # Unsets condensed mode
+...     escapes_page_start = chr(12) + chr(10) # Form and line feed
+...     escapes_page_end = ''
+&gt;&gt;&gt; output = my_report_instance.generate_by(MyTextGenerator)
 </pre>
 </blockquote>
 </div>

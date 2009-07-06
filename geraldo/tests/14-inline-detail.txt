@@ -56,12 +56,12 @@ PDF generation
 
     >>> from geraldo.generators import PDFGenerator
 
-    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'inline-detail-report.pdf'))
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/inline-detail-report.pdf'))
 
 Page with half height
 
     >>> report.page_size = (LETTER[0], LETTER[1] / 2)
 
-    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'inline-detail-report-half-height.pdf'))
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/inline-detail-report-half-height.pdf'))
 
 

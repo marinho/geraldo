@@ -127,16 +127,16 @@ PDF common generation with users
 
     >>> from geraldo.generators import PDFGenerator
 
-    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'inline-subreports-report.pdf'))
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/inline-subreports-report.pdf'))
 
 Page with half height
 
     >>> report.page_size = (A4[0], A4[1] / 2)
-    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'inline-subreports-report-half-height.pdf'))
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/inline-subreports-report-half-height.pdf'))
 
 Text generation
 
     >>> from geraldo.generators import TextGenerator
 
-    >>> report.generate_by(TextGenerator, filename=os.path.join(cur_dir, 'inline-subreports-report.txt'))
+    >>> report.generate_by(TextGenerator, filename=os.path.join(cur_dir, 'output/inline-subreports-report.txt'), to_printer=False, encode_to='latin-1')
 

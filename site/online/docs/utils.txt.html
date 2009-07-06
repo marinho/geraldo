@@ -3,15 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.4.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.5: http://docutils.sourceforge.net/" />
 <title>Utilities Reference</title>
 <style type="text/css">
 
 /*
-:Author: David Goodger
-:Contact: goodger@users.sourceforge.net
-:Date: $Date: 2005-12-18 01:56:14 +0100 (Sun, 18 Dec 2005) $
-:Revision: $Revision: 4224 $
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 5196 2007-06-03 20:25:28Z wiemann $
 :Copyright: This stylesheet has been placed in the public domain.
 
 Default cascading style sheet for the HTML output of Docutils.
@@ -117,7 +115,7 @@ div.line-block div.line-block {
   margin-left: 1.5em }
 
 div.sidebar {
-  margin-left: 1em ;
+  margin: 0 0 0.5em 1em ;
   border: medium outset ;
   padding: 1em ;
   background-color: #ffffee ;
@@ -223,8 +221,7 @@ pre.address {
 
 pre.literal-block, pre.doctest-block {
   margin-left: 2em ;
-  margin-right: 2em ;
-  background-color: #eeeeee }
+  margin-right: 2em }
 
 span.classifier {
   font-family: sans-serif ;
@@ -281,9 +278,6 @@ h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
 h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
   font-size: 100% }
 
-tt.docutils {
-  background-color: #eeeeee }
-
 ul.auto-toc {
   list-style-type: none }
 
@@ -292,15 +286,16 @@ ul.auto-toc {
 <body>
 <div class="document" id="utilities-reference">
 <h1 class="title">Utilities Reference</h1>
-<div class="section">
-<h2><a id="landscape" name="landscape">landscape</a></h2>
+
+<div class="section" id="landscape">
+<h2>landscape</h2>
 <p>Path: <strong>geraldo.landscape</strong></p>
 <p>Page sizes are tuples with 2 nodes: first with <strong>width</strong> and second width
 <strong>height</strong>.</p>
 <p><strong>landscape</strong> is a helpe function to revert this tuple.</p>
 </div>
-<div class="section">
-<h2><a id="band-width" name="band-width">BAND_WIDTH</a></h2>
+<div class="section" id="band-width">
+<h2>BAND_WIDTH</h2>
 <p>Path: <strong>geraldo.BAND_WIDTH</strong></p>
 <p>Once you use this constant in a widget or graphic width, it will assumes its
 band width automatically.</p>

@@ -3,15 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.4.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.5: http://docutils.sourceforge.net/" />
 <title>Backward Incompatible Changes</title>
 <style type="text/css">
 
 /*
-:Author: David Goodger
-:Contact: goodger@users.sourceforge.net
-:Date: $Date: 2005-12-18 01:56:14 +0100 (Sun, 18 Dec 2005) $
-:Revision: $Revision: 4224 $
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 5196 2007-06-03 20:25:28Z wiemann $
 :Copyright: This stylesheet has been placed in the public domain.
 
 Default cascading style sheet for the HTML output of Docutils.
@@ -117,7 +115,7 @@ div.line-block div.line-block {
   margin-left: 1.5em }
 
 div.sidebar {
-  margin-left: 1em ;
+  margin: 0 0 0.5em 1em ;
   border: medium outset ;
   padding: 1em ;
   background-color: #ffffee ;
@@ -223,8 +221,7 @@ pre.address {
 
 pre.literal-block, pre.doctest-block {
   margin-left: 2em ;
-  margin-right: 2em ;
-  background-color: #eeeeee }
+  margin-right: 2em }
 
 span.classifier {
   font-family: sans-serif ;
@@ -281,9 +278,6 @@ h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
 h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
   font-size: 100% }
 
-tt.docutils {
-  background-color: #eeeeee }
-
 ul.auto-toc {
   list-style-type: none }
 
@@ -292,10 +286,11 @@ ul.auto-toc {
 <body>
 <div class="document" id="backward-incompatible-changes">
 <h1 class="title">Backward Incompatible Changes</h1>
+
 <p>This section is to keep users informed about things that have been being
 deprecated in favour of design improvements.</p>
-<div class="section">
-<h2><a id="attribute-detail-band-on-class-subreport-changed-to-band-detail" name="attribute-detail-band-on-class-subreport-changed-to-band-detail">1. Attribute 'detail_band' on class SubReport changed to 'band_detail'</a></h2>
+<div class="section" id="attribute-detail-band-on-class-subreport-changed-to-band-detail">
+<h2>1. Attribute 'detail_band' on class SubReport changed to 'band_detail'</h2>
 <p><strong>Date:</strong> 2009-04-16
 <strong>Version:</strong> 0.3.0-alpha-6
 <strong>Reason:</strong> class Report had already a 'band_*' signature on this kind of

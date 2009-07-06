@@ -95,11 +95,11 @@ Report 2 class
 PDF generation
 
     >>> from geraldo.generators import PDFGenerator
-    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'composition-report.pdf'))
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/composition-report.pdf'))
 
 PDF generation
 
     >>> report = LandscapeUsersReport(queryset=queryset)
-    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'composition-landscape-report.pdf'))
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/composition-landscape-report.pdf'))
 
 
