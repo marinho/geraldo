@@ -176,6 +176,9 @@ class PDFGenerator(ReportGenerator):
         # Band borders
         self.render_border(band.borders, band_rect)
 
+        # Variable that stores the highest height at all elements
+        highest_height = 0
+
         # Loop at band widgets
         for element in band.elements:
             # Widget element
@@ -195,6 +198,8 @@ class PDFGenerator(ReportGenerator):
                 if isinstance(widget, SystemField):
                     widget.left = band_rect['left'] + self.calculate_size(widget.left)
                     widget.top = self.calculate_top(temp_top, self.calculate_size(widget.top))
+
+                    temp_height = self.calculate_top(element.top) + self.calculate_top(widget.height)
                 elif isinstance(widget, Label):
                     widget.para = self.make_paragraph(widget.text, self.make_paragraph_style(band, widget.style))
 
@@ -204,7 +209,7 @@ class PDFGenerator(ReportGenerator):
                                 self.calculate_size(widget.height),
                                 [widget.para],
                                 mode='truncate',
-                                ) # shrink
+                                )
                         widget.keep.canv = self.canvas
                         widget.keep.wrap(self.calculate_size(widget.width), self.calculate_size(widget.height))
 
@@ -214,6 +219,12 @@ class PDFGenerator(ReportGenerator):
                         self.wrap_paragraph_on(widget.para, self.calculate_size(widget.width), self.calculate_size(widget.height))
                         widget.left = band_rect['left'] + self.calculate_size(widget.left)
                         widget.top = self.calculate_top(temp_top, self.calculate_size(widget.top), self.calculate_size(widget.para.height))
+
+                    temp_height = self.calculate_top(element.top) + self.calculate_top(widget.para.height)
+
+                # Sets element height as the highest
+                if temp_height > highest_height:
+                    highest_height = temp_height
 
                 self._rendered_pages[-1].elements.append(widget)
 
@@ -260,11 +271,24 @@ class PDFGenerator(ReportGenerator):
                     graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
                     graphic.top = top_position - self.calculate_size(graphic.top) - self.calculate_size(graphic.height)
 
+                # Sets element height as the highest
+                temp_height = self.calculate_top(element.top) + self.calculate_top(graphic.height)
+                if temp_height > highest_height:
+                    highest_height = temp_height
+
                 self._rendered_pages[-1].elements.append(graphic)
 
         # Updates top position
         if update_top:
-            self.update_top_pos(self.calculate_size(band.height) + self.calculate_size(getattr(band, 'margin_top', 0)))
+            if band.auto_expand_height:
+                band_height = highest_height
+            else:
+                band_height = self.calculate_size(band.height)
+
+            band_height += self.calculate_size(getattr(band, 'margin_top', 0))
+            band_height += self.calculate_size(getattr(band, 'margin_bottom', 0))
+
+            self.update_top_pos(band_height)
 
         # Updates left position
         if getattr(band, 'display_inline', False):

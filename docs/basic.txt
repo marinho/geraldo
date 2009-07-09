@@ -113,6 +113,14 @@ queryset.
 - **child_bands** - Default: []
 - **force_new_page** - Default: False
 - **default_style** - Default: None
+- **margin_top** - Default: 0
+- **margin_bottom** - Default: 0
+- **auto_expanded_height** - Default: False
+
+    **New in development version**
+
+    Use 'auto_expanded_height' to make flexible bands to fit their heights to 
+    their elements.
 
 DetailBand
 ----------
@@ -125,9 +133,7 @@ attributes, specific to detail bands.
 **Attributes**
 
 - **name** - Default: None
-- **margin_top** - Default: 0
 - **margin_left** - Default: 0
-- **margin_bottom** - Default: 0
 - **margin_right** - Default: 0
 - **display_inline** - Default: False
 

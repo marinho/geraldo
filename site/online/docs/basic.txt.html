@@ -384,16 +384,36 @@ this class. It supports some bands and report definitions.</p>
 the top, on summary, on page header, on page footer or one time per object from
 queryset.</p>
 <p><strong>Attributes</strong></p>
-<ul class="simple">
-<li><strong>name</strong> - Default: None</li>
-<li><strong>height</strong> - Default: 1*cm</li>
-<li><strong>width</strong> - Default: None</li>
-<li><strong>visible</strong> - Default: True</li>
-<li><strong>borders</strong> - Default: {'top': None, 'right': None, 'bottom': None, 'left': None, 'all': None}</li>
-<li><strong>elements</strong> - Default: []</li>
-<li><strong>child_bands</strong> - Default: []</li>
-<li><strong>force_new_page</strong> - Default: False</li>
-<li><strong>default_style</strong> - Default: None</li>
+<ul>
+<li><p class="first"><strong>name</strong> - Default: None</p>
+</li>
+<li><p class="first"><strong>height</strong> - Default: 1*cm</p>
+</li>
+<li><p class="first"><strong>width</strong> - Default: None</p>
+</li>
+<li><p class="first"><strong>visible</strong> - Default: True</p>
+</li>
+<li><p class="first"><strong>borders</strong> - Default: {'top': None, 'right': None, 'bottom': None, 'left': None, 'all': None}</p>
+</li>
+<li><p class="first"><strong>elements</strong> - Default: []</p>
+</li>
+<li><p class="first"><strong>child_bands</strong> - Default: []</p>
+</li>
+<li><p class="first"><strong>force_new_page</strong> - Default: False</p>
+</li>
+<li><p class="first"><strong>default_style</strong> - Default: None</p>
+</li>
+<li><p class="first"><strong>margin_top</strong> - Default: 0</p>
+</li>
+<li><p class="first"><strong>margin_bottom</strong> - Default: 0</p>
+</li>
+<li><p class="first"><strong>auto_expanded_height</strong> - Default: False</p>
+<blockquote>
+<p><em>New in development version</em>
+Use 'auto_expanded_height' to make flexible bands to fit their heights to
+their elements.</p>
+</blockquote>
+</li>
 </ul>
 </div>
 <div class="section" id="detailband">
@@ -405,11 +425,7 @@ attributes, specific to detail bands.</p>
 <ul>
 <li><p class="first"><strong>name</strong> - Default: None</p>
 </li>
-<li><p class="first"><strong>margin_top</strong> - Default: 0</p>
-</li>
 <li><p class="first"><strong>margin_left</strong> - Default: 0</p>
-</li>
-<li><p class="first"><strong>margin_bottom</strong> - Default: 0</p>
 </li>
 <li><p class="first"><strong>margin_right</strong> - Default: 0</p>
 </li>

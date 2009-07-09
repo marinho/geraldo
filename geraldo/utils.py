@@ -1,6 +1,8 @@
 from reportlab.lib.units import * # Check this - is the source of units
 from reportlab.lib.pagesizes import * # Check this - is the source of page sizes
 
+from exceptions import AttributeNotFound
+
 def get_attr_value(obj, attr_path):
     """This function gets an attribute value from an object. If the attribute
     is a method with no arguments (or arguments with default values) it calls
@@ -18,7 +20,13 @@ def get_attr_value(obj, attr_path):
 
     parts = attr_path.split('.')
 
-    val = getattr(obj, parts[0])
+    try:
+        val = getattr(obj, parts[0])
+    except AttributeError:
+        try:
+            val = obj[parts[0]]
+        except KeyError:
+            raise AttributeNotFound('There is no attribute nor key "%s" in the object "%s"'%(parts[0], repr(obj)))
 
     if len(parts) > 1:
         val = get_attr_value(val, '.'.join(parts[1:]))

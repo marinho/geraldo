@@ -421,6 +421,7 @@ class ReportBand(GeraldoObject):
     """A band is a horizontal area in the report. It can be used to print
     things on the top, on summary, on page header, on page footer or one time
     per object from queryset."""
+
     height = 1*cm
     width = None # Useful only on detail bands
     visible = True
@@ -430,6 +431,7 @@ class ReportBand(GeraldoObject):
     child_bands = None
     force_new_page = False
     default_style = None
+    auto_expand_height = False
 
     def __init__(self, **kwargs):
         for k,v in kwargs.items():

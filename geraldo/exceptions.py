@@ -7,4 +7,6 @@ class ObjectNotFound(Exception):
 class ManyObjectsFound(Exception):
     pass
 
+class AttributeNotFound(Exception):
+    pass
 

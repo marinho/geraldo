@@ -1,3 +1,8 @@
+2009-07-09: Version 0.3.3-alpha
+---------------------------------
+* Support to 'auto_expand_height' on bands
+* Support to bands bottom margin
+
 2009-07-06: Version 0.3.2-alpha-4
 ---------------------------------
 * Adding attribute 'encode_to' on TextGenerator
