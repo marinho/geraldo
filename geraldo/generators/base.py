@@ -131,7 +131,8 @@ class ReportGenerator(object):
         if left_position > self.calculate_size(self.report.margin_left) and\
            getattr(band, 'display_inline', False) and\
            band.width < self.get_available_width():
-            self.update_top_pos(decrease=self.calculate_size(band.height))
+            temp_height = band.height + getattr(band, 'margin_top', 0) + getattr(band, 'margin_bottom', 0)
+            self.update_top_pos(decrease=self.calculate_size(temp_height))
         else:
             self.update_left_pos(set=0)
             left_position = self.get_left_pos()
@@ -189,6 +190,8 @@ class ReportGenerator(object):
                         widget.top = self.calculate_top(temp_top, self.calculate_size(widget.top), self.calculate_size(widget.para.height))
 
                     temp_height = self.calculate_top(element.top) + self.calculate_top(widget.para.height)
+                else:
+                    temp_height = self.calculate_top(element.top) + self.calculate_top(widget.height)
 
                 # Sets element height as the highest
                 if temp_height > highest_height:

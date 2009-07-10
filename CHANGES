@@ -1,3 +1,9 @@
+2009-07-09: Version 0.3.3-alpha-2
+---------------------------------
+* Moved common code between PDF and Text generators to Base class
+* Fixed band margin_bottom and margin_top calculation when it is
+  a inline displayed detail band
+
 2009-07-09: Version 0.3.3-alpha
 ---------------------------------
 * Support to 'auto_expand_height' on bands
