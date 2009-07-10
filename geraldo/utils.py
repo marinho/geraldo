@@ -27,6 +27,8 @@ def get_attr_value(obj, attr_path):
             val = obj[parts[0]]
         except KeyError:
             raise AttributeNotFound('There is no attribute nor key "%s" in the object "%s"'%(parts[0], repr(obj)))
+        except TypeError:
+            raise AttributeNotFound('There is no attribute nor key "%s" in the object "%s"'%(parts[0], repr(obj)))
 
     if len(parts) > 1:
         val = get_attr_value(val, '.'.join(parts[1:]))

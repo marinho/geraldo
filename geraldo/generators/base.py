@@ -168,7 +168,7 @@ class ReportGenerator(object):
                     widget.left = band_rect['left'] + self.calculate_size(widget.left)
                     widget.top = self.calculate_top(temp_top, self.calculate_size(widget.top))
 
-                    temp_height = self.calculate_top(element.top) + self.calculate_top(widget.height)
+                    temp_height = self.calculate_size(element.top) + self.calculate_size(widget.height)
                 elif isinstance(widget, Label):
                     widget.para = self.make_paragraph(widget.text, self.make_paragraph_style(band, widget.style))
 
@@ -189,9 +189,9 @@ class ReportGenerator(object):
                         widget.left = band_rect['left'] + self.calculate_size(widget.left)
                         widget.top = self.calculate_top(temp_top, self.calculate_size(widget.top), self.calculate_size(widget.para.height))
 
-                    temp_height = self.calculate_top(element.top) + self.calculate_top(widget.para.height)
+                    temp_height = self.calculate_size(element.top) + self.calculate_size(widget.para.height)
                 else:
-                    temp_height = self.calculate_top(element.top) + self.calculate_top(widget.height)
+                    temp_height = self.calculate_size(element.top) + self.calculate_size(widget.height)
 
                 # Sets element height as the highest
                 if temp_height > highest_height:
@@ -243,7 +243,7 @@ class ReportGenerator(object):
                     graphic.top = top_position - self.calculate_size(graphic.top) - self.calculate_size(graphic.height)
 
                 # Sets element height as the highest
-                temp_height = self.calculate_top(element.top) + self.calculate_top(graphic.height)
+                temp_height = self.calculate_size(element.top) + self.calculate_size(graphic.height)
                 if temp_height > highest_height:
                     highest_height = temp_height
 
@@ -489,7 +489,7 @@ class ReportGenerator(object):
         return self.calculate_size(self.report.page_size[0]) - self.calculate_size(self.report.margin_left) -\
                 self.calculate_size(self.report.margin_right) - self._current_left_position
 
-    def calculate_top(self, *args):
+    def calculate_top(self, *args): # XXX
         return sum(args)
 
     def get_top_pos(self):
