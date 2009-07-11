@@ -1,4 +1,3 @@
-
 from geraldo.utils import get_attr_value, calculate_size
 from geraldo.widgets import Widget, Label, SystemField
 from geraldo.graphics import Graphic, RoundRect, Rect, Line, Circle, Arc,\
@@ -340,7 +339,7 @@ class ReportGenerator(object):
         # Call method that print the band area and its widgets
         self.render_band(
                 self.report.band_page_header,
-                top_position=self.calculate_size(self.report.page_size[1]) - self.calculate_size(self.report.margin_top),
+                top_position=self.calculate_size(self.report.margin_top),
                 update_top=False,
                 )
 
@@ -356,7 +355,8 @@ class ReportGenerator(object):
         # Call method that print the band area and its widgets
         self.render_band(
                 self.report.band_page_footer,
-                top_position=self.calculate_size(self.report.margin_bottom) +\
+                top_position=self.calculate_size(self.report.page_size[1]) -\
+                    self.calculate_size(self.report.margin_bottom) -\
                     self.calculate_size(self.report.band_page_footer.height),
                 update_top=False,
                 )

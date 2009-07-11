@@ -1,9 +1,7 @@
 import datetime
 from base import ReportGenerator
 
-from reportlab.lib.enums import TA_CENTER, TA_RIGHT
-
-from geraldo.base import cm
+from geraldo.base import cm, TA_CENTER, TA_RIGHT
 from geraldo.utils import get_attr_value, calculate_size
 from geraldo.widgets import Widget, Label, SystemField
 from geraldo.graphics import Graphic, RoundRect, Rect, Line, Circle, Arc,\
@@ -11,8 +9,8 @@ from geraldo.graphics import Graphic, RoundRect, Rect, Line, Circle, Arc,\
 
 # In development
 
-DEFAULT_ROW_HEIGHT = 0.5*cm
-DEFAULT_CHAR_WIDTH = 0.23*cm
+DEFAULT_ROW_HEIGHT = 0.65*cm
+DEFAULT_CHAR_WIDTH = 0.261*cm
 
 # Default is Epson ESC/P2 standard
 DEFAULT_ESCAPE_SET = {
@@ -109,11 +107,11 @@ class TextGenerator(ReportGenerator):
     def calculate_size(self, size):
         """Uses the function 'calculate_size' to calculate a size"""
         if isinstance(size, basestring):
-            if size.endswith('*cols'):
+            if size.endswith('*cols') or size.endswith('*col'):
                 return int(size.split('*')[0]) * self.character_width
-            elif size.endswith('*rows'):
+            elif size.endswith('*rows') or size.endswith('*row'):
                 return int(size.split('*')[0]) * self.row_height
-        
+
         return calculate_size(size)
 
     def make_paragraph(self, text, style=None): # TODO: make style with basic functions, like alignment, bold, emphasis (italic), etc
@@ -163,8 +161,7 @@ class TextGenerator(ReportGenerator):
             for element in page.elements:
                 # Widget element
                 if isinstance(element, Widget):
-                    widget = element
-                    self.generate_widget(widget, _page_output, num)
+                    self.generate_widget(element, _page_output, num)
 
             # Adds the page output to output string
             self._output += u'\n'.join(_page_output)
@@ -189,8 +186,9 @@ class TextGenerator(ReportGenerator):
 
         self.print_in_page_output(page_output, text, widget.rect)
 
-    def generate_graphic(self, graphic, page_output): # TODO: horizontal and vertical lines, rectangles and borders should be ok
+    def generate_graphic(self, graphic, page_output):
         """Renders a graphic element"""
+        # TODO: horizontal and vertical lines, rectangles and borders should work
         pass
 
     def print_in_page_output(self, page_output, text, rect):
@@ -272,10 +270,18 @@ class TextGenerator(ReportGenerator):
     to_printer = property(get_to_printer, set_to_printer)
 
     def get_page_rows_count(self):
-        return int(round(self.calculate_size(self.report.page_size[1]) / self.row_height))
+        if not hasattr(self, '_page_rows_count'):
+            height = self.calculate_size(self.report.page_size[1]) / self.row_height
+            self._page_rows_count = int(round(height))
+
+        return self._page_rows_count
     page_rows_count = property(get_page_rows_count)
 
     def get_page_columns_count(self):
-        return int(round(self.calculate_size(self.report.page_size[0]) / self.character_width))
+        if not hasattr(self, '_page_columns_count'):
+            width = self.calculate_size(self.report.page_size[0]) / self.character_width
+            self._page_columns_count = int(round(width))
+
+        return self._page_columns_count
     page_columns_count = property(get_page_columns_count)
 

@@ -50,6 +50,39 @@ class PDFGenerator(ReportGenerator):
         self.canvas.setSubject(self.report.subject)
         self.canvas.setKeywords(self.report.keywords)
 
+    def render_page_header(self):
+        """Generate the report page header band if it exists"""
+        if not self.report.band_page_header:
+            return
+
+        # Doesn't generate this band if it is not visible
+        if not self.report.band_page_header.visible:
+            return
+
+        # Call method that print the band area and its widgets
+        self.render_band(
+                self.report.band_page_header,
+                top_position=self.calculate_size(self.report.page_size[1]) - self.calculate_size(self.report.margin_top),
+                update_top=False,
+                )
+
+    def render_page_footer(self):
+        """Generate the report page footer band if it exists"""
+        if not self.report.band_page_footer:
+            return
+
+        # Doesn't generate this band if it is not visible
+        if not self.report.band_page_footer.visible:
+            return
+
+        # Call method that print the band area and its widgets
+        self.render_band(
+                self.report.band_page_footer,
+                top_position=self.calculate_size(self.report.margin_bottom) +\
+                    self.calculate_size(self.report.band_page_footer.height),
+                update_top=False,
+                )
+
     def calculate_top(self, *args):
         ret = args[0]
 

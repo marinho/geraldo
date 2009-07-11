@@ -3,6 +3,7 @@ import copy, types, sets
 from reportlab.lib.units import cm
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.colors import black
+from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
 
 from utils import calculate_size
 from exceptions import EmptyQueryset, ObjectNotFound, ManyObjectsFound

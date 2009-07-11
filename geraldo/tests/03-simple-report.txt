@@ -32,16 +32,18 @@ Report class
     ...         height = 0.7*cm
     ...         elements = [
     ...             Label(text="That's all", top=0.1*cm, left=0),
-    ...             ObjectValue(attribute_name='name', top=0.1*cm, left=3*cm,\
-    ...                 action=FIELD_ACTION_COUNT, display_format='%s permissions found'),
+    ...             ObjectValue(attribute_name='name', top=0.1*cm, left=3*cm,
+    ...                 action=FIELD_ACTION_COUNT,
+    ...                 display_format='%s permissions found'),
     ...         ]
     ...         borders = {'all': True}
     ... 
     ...     class band_page_header(ReportBand):
     ...         height = 1.3*cm
     ...         elements = [
-    ...             SystemField(expression='%(report_title)s', top=0.1*cm, left=0, width=BAND_WIDTH,
-    ...                 style={'fontName': 'Helvetica-Bold', 'fontSize': 14, 'alignment': TA_CENTER}),
+    ...             SystemField(expression='%(report_title)s', top=0.1*cm,
+    ...                 left=0, width=BAND_WIDTH, style={'fontName': 'Helvetica-Bold',
+    ...                 'fontSize': 14, 'alignment': TA_CENTER}),
     ...             Label(text="ID", top=0.8*cm, left=0),
     ...             Label(text="Name", top=0.8*cm, left=3*cm),
     ...         ]
@@ -71,15 +73,15 @@ PDF generation
 
     >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/simple-report.pdf'))
 
-Page with half height
-
-    >>> report.page_size = (A4[0], A4[1] / 2)
-
-    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/simple-report-half-height.pdf'))
-
 Text generation
 
     >>> from geraldo.generators import TextGenerator
 
     >>> report.generate_by(TextGenerator, filename=os.path.join(cur_dir, 'output/simple-report.txt'), to_printer=False, encode_to='latin-1')
+
+Page with half height
+
+    >>> report.page_size = (A4[0], A4[1] / 2)
+
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/simple-report-half-height.pdf'))
 
