@@ -1,6 +1,8 @@
 import datetime
 from base import ReportGenerator
 
+from reportlab.lib.enums import TA_CENTER, TA_RIGHT
+
 from geraldo.base import cm
 from geraldo.utils import get_attr_value, calculate_size
 from geraldo.widgets import Widget, Label, SystemField
@@ -59,6 +61,8 @@ class TextGenerator(ReportGenerator):
         * 'filename' - is the file path you can inform optionally to save text to.
         * 'encode_to' - you can inform the coding identifier to force Geraldo to
           encode the output string on it. Example: 'latin-1'
+        * 'manual_escape_codes' - a boolean variable that sets escape codes are
+          manually informed or not.
     """
     row_height = DEFAULT_ROW_HEIGHT
     character_width = DEFAULT_CHAR_WIDTH
@@ -175,7 +179,15 @@ class TextGenerator(ReportGenerator):
 
     def generate_widget(self, widget, page_output, page_number=0):
         """Renders a widget element on canvas"""
-        self.print_in_page_output(page_output, widget.text, widget.rect)
+        text = widget.text
+
+        # Aligment
+        if widget.style.get('alignment', None) == TA_CENTER:
+            text = text.center(int(self.calculate_size(widget.width) / self.character_width))
+        elif widget.style.get('alignment', None) == TA_RIGHT:
+            text = text.rjust(int(self.calculate_size(widget.width) / self.character_width))
+
+        self.print_in_page_output(page_output, text, widget.rect)
 
     def generate_graphic(self, graphic, page_output): # TODO: horizontal and vertical lines, rectangles and borders should be ok
         """Renders a graphic element"""

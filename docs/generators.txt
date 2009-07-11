@@ -40,6 +40,43 @@ You can use it exactly like you would use PDF generator, but this has some more
 features. When running **'generate_by'** report method, you can inform the
 attribute 'filename' like you do in PDF, but you could also do some things else.
 
+**Attributes:**
+
+- **row_height** - Default: 0.5*cm
+
+    Should be the equivalent height of a row plus the space between rows. 
+    This is important to calculate how many rows has a page.
+
+- **character_width** - Default: 0.23*cm
+
+    Should be the equivalent width of a character. This is important to 
+    calculate how many columns has a page.
+
+- **to_printer** - Default: True
+
+    Is a boolean variable you can inform to generate a text to matrix printer 
+    or not. This means escape characters will be in output or not.
+
+- **escape_set** - Default: geraldo.generators.text.DEFAULT_ESCAPE_SET
+
+    Is a dictionary with equivalence table to escape codes. As far as we know,
+    escape codes can vary depending of model or printer manufacturer
+    (i.e. Epson, Lexmark, HP, etc.). This attribute is useful to support this.
+    Defaul is ESC/P2 standard (Epson matrix printers)
+
+- **filename** - Default: None
+
+    Is the file path you can inform optionally to save text to.
+
+- **encode_to** - Default: None
+
+    Here you can inform the coding identifier to force Geraldo to encode the
+    output string on it. Example: 'latin-1'
+
+- **manual_escape_codes** - Default: False
+
+    A boolean variable that sets escape codes are manually informed or not.
+
 **Examples:**
 
 Basic:
