@@ -114,6 +114,8 @@ class ReportGenerator(object):
             update_top=True, current_object=None):
         """Generate a band having the current top position or informed as its
         top coordinate"""
+
+        # Sets the current object
         current_object = current_object or self._current_object
 
         # Page width. This should be done in a metaclass in Report domain TODO
@@ -149,6 +151,10 @@ class ReportGenerator(object):
 
         # Loop at band widgets
         for element in band.elements:
+            # Doesn't render not visible element
+            if not element.visible:
+                continue
+
             # Widget element
             if isinstance(element, Widget):
                 widget = element.clone()
@@ -489,7 +495,7 @@ class ReportGenerator(object):
         return self.calculate_size(self.report.page_size[0]) - self.calculate_size(self.report.margin_left) -\
                 self.calculate_size(self.report.margin_right) - self._current_left_position
 
-    def calculate_top(self, *args): # XXX
+    def calculate_top(self, *args):
         return sum(args)
 
     def get_top_pos(self):
@@ -598,7 +604,9 @@ class ReportGenerator(object):
 
         # Loops on groups to render changed ones
         for group in self.report.groups:
-            if self._groups_changed.get(group, None) and group.band_header:
+            if self._groups_changed.get(group, None) and\
+               group.band_header and\
+               group.band_header.visible:
                 self.force_blank_page_by_height(self.calculate_size(group.band_header.height))
                 self.render_band(group.band_header)
 
@@ -617,7 +625,7 @@ class ReportGenerator(object):
                 #if not force and (not self._groups_stack or self._groups_stack[-1] != group):
                 #    continue
                 
-                if group.band_footer:
+                if group.band_footer and group.band_footer.visible:
                     self.force_blank_page_by_height(self.calculate_size(group.band_footer.height))
                     self.render_band(group.band_footer)
 
@@ -671,7 +679,7 @@ class ReportGenerator(object):
 
         for subreport in self.report.subreports:
             # Subreports must have detail band
-            if not subreport.band_detail:
+            if not subreport.band_detail or not subreport.visible:
                 continue
 
             # Sets the parent object and automatically clear the queryset
@@ -689,13 +697,15 @@ class ReportGenerator(object):
                     force_new_page(subreport.band_header.height)
 
                     # Renders the header band
-                    self.render_band(subreport.band_header)
+                    if subreport.band_header.visible:
+                        self.render_band(subreport.band_header)
 
                 # Forces new page if there is no available space
                 force_new_page(subreport.band_detail.height)
 
                 # Renders the detail band
-                self.render_band(subreport.band_detail, current_object=obj)
+                if subreport.band_detail.visible:
+                    self.render_band(subreport.band_detail, current_object=obj)
 
             # Renders the footer band
             if subreport.band_footer:
@@ -703,7 +713,8 @@ class ReportGenerator(object):
                 force_new_page(subreport.band_footer.height)
 
                 # Renders the header band
-                self.render_band(subreport.band_footer)
+                if subreport.band_footer.visible:
+                    self.render_band(subreport.band_footer)
 
             # Sets back the default currenty queryset
             self._current_queryset = None

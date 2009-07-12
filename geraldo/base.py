@@ -344,6 +344,8 @@ class SubReport(BaseReport):
     band_header = None
     band_footer = None
 
+    visible = True
+
     def __init__(self, **kwargs):
         for k,v in kwargs.items():
             # Validates backward incompatibility for 'detail_band'
@@ -577,6 +579,8 @@ class Element(GeraldoObject):
     top = 0
     _width = 0
     _height = 0
+
+    visible = True
 
     # 'width' property
     def _get_width(self):

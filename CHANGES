@@ -1,3 +1,9 @@
+2009-07-12: Version 0.3.4-alpha
+---------------------------------
+* Full support to attribute 'visible', a boolean variable you can
+  set to widgets, graphics, bands and subreports to make them
+  visible or not. Default value is 'True'
+
 2009-07-11: Version 0.3.3-alpha-4
 ---------------------------------
 * Text generator fixed page header and page footer generation
