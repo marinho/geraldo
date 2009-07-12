@@ -78,6 +78,10 @@ Class to be used for subreport objects. It doesn't need to be inherited.
         * 'Message.objects.filter(user=%(object)s)'
         * 'Message.objects.filter(user__id=%(object)s.id)'
 
+- **visible** - Default: True
+
+    Set False if you want to make it not visible.
+
 **Report bands**
 
 A report band must be a class inherited from **ReportBand** or an instance of
@@ -108,6 +112,9 @@ queryset.
 - **height** - Default: 1*cm
 - **width** - Default: None
 - **visible** - Default: True
+
+    Set False if you want to make it not visible.
+
 - **borders** - Default: {'top': None, 'right': None, 'bottom': None, 'left': None, 'all': None}
 - **elements** - Default: []
 - **child_bands** - Default: []

@@ -20,6 +20,9 @@ Path: **geraldo.graphics.Graphic**
 
 - **name** - Default: None
 - **visible** - Default: True
+
+    Set False if you want to make it not visible.
+
 - **stroke** - Default: True
 - **stroke_color** - Default: reportlab.lib.colors.black
 - **stroke_width** - Default: 1

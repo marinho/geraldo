@@ -21,6 +21,9 @@ own widgets, otherwise you shouldn't use it directly.
 - **left** - Default: 0
 - **top** - Default: 0
 - **visible** - Default: True
+
+    Set False if you want to make it not visible.
+
 - **style** - Default: {}
 
     This is a dictionary that uses the powerful of ReportLab **ParagraphStyle**
