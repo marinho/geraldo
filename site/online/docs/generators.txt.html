@@ -322,6 +322,51 @@ ca be used to generate text files or to print to matrix printers.</p>
 <p>You can use it exactly like you would use PDF generator, but this has some more
 features. When running <strong>'generate_by'</strong> report method, you can inform the
 attribute 'filename' like you do in PDF, but you could also do some things else.</p>
+<p><strong>Attributes:</strong></p>
+<ul>
+<li><p class="first"><strong>row_height</strong> - Default: 0.5*cm</p>
+<blockquote>
+<p>Should be the equivalent height of a row plus the space between rows.
+This is important to calculate how many rows has a page.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>character_width</strong> - Default: 0.23*cm</p>
+<blockquote>
+<p>Should be the equivalent width of a character. This is important to
+calculate how many columns has a page.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>to_printer</strong> - Default: True</p>
+<blockquote>
+<p>Is a boolean variable you can inform to generate a text to matrix printer
+or not. This means escape characters will be in output or not.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>escape_set</strong> - Default: geraldo.generators.text.DEFAULT_ESCAPE_SET</p>
+<blockquote>
+<p>Is a dictionary with equivalence table to escape codes. As far as we know,
+escape codes can vary depending of model or printer manufacturer
+(i.e. Epson, Lexmark, HP, etc.). This attribute is useful to support this.
+Defaul is ESC/P2 standard (Epson matrix printers)</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>filename</strong> - Default: None</p>
+<blockquote>
+<p>Is the file path you can inform optionally to save text to.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>encode_to</strong> - Default: None</p>
+<blockquote>
+<p>Here you can inform the coding identifier to force Geraldo to encode the
+output string on it. Example: 'latin-1'</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>manual_escape_codes</strong> - Default: False</p>
+<blockquote>
+<p>A boolean variable that sets escape codes are manually informed or not.</p>
+</blockquote>
+</li>
+</ul>
 <p><strong>Examples:</strong></p>
 <p>Basic:</p>
 <blockquote>

@@ -138,6 +138,10 @@ class TextGenerator(ReportGenerator):
 
         return dict(name=datetime.datetime.now().strftime('%H%m%s'), **d_style)
 
+    def keep_in_frame(self, widget, width, height, paragraphs, mode):
+        # Doesn't nothing for a while: TODO
+        pass
+
     # METHODS THAT ARE TOTALLY SPECIFIC TO THIS GENERATOR AND MUST
     # OVERRIDE THE SUPERCLASS EQUIVALENT ONES
 

@@ -139,6 +139,12 @@ class PDFGenerator(ReportGenerator):
 
         return ParagraphStyle(name=datetime.datetime.now().strftime('%H%m%s'), **d_style)
 
+    def keep_in_frame(self, widget, width, height, paragraphs, mode):
+        widget.keep = KeepInFrame(width, height, paragraphs, mode=mode)
+        
+        widget.keep.canv = self.canvas
+        widget.keep.wrap(self.calculate_size(widget.width), self.calculate_size(widget.height))
+
     # METHODS THAT ARE TOTALLY SPECIFIC TO THIS GENERATOR AND MUST
     # OVERRIDE THE SUPERCLASS EQUIVALENT ONES
 

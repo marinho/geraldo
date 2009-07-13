@@ -178,14 +178,13 @@ class ReportGenerator(object):
                     widget.para = self.make_paragraph(widget.text, self.make_paragraph_style(band, widget.style))
 
                     if widget.truncate_overflow:
-                        widget.keep = KeepInFrame(
+                        self.keep_in_frame(
+                                widget,
                                 self.calculate_size(widget.width),
                                 self.calculate_size(widget.height),
                                 [widget.para],
                                 mode='truncate',
                                 )
-                        widget.keep.canv = self.canvas
-                        widget.keep.wrap(self.calculate_size(widget.width), self.calculate_size(widget.height))
 
                         widget.left = band_rect['left'] + self.calculate_size(widget.left)
                         widget.top = self.calculate_top(temp_top, self.calculate_size(widget.top), self.calculate_size(widget.height))
@@ -721,5 +720,8 @@ class ReportGenerator(object):
 
     def make_paragraph_style(self, band, style=None):
         """Merge report default_style + band default_style + widget style"""
+        raise Exception('Not implemented')
+
+    def keep_in_frame(self, widget, width, height, paragraphs, mode):
         raise Exception('Not implemented')
 
