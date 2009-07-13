@@ -1,0 +1,298 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Basic Reference &mdash; Geraldo Reports Documentation v0.3.4-final documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.3.4-final',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Geraldo Reports Documentation v0.3.4-final documentation" href="index.html" />
+    <link rel="next" title="Widgets Reference" href="widgets.html" />
+    <link rel="prev" title="Tutorial 1" href="tutorial-1.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="widgets.html" title="Widgets Reference"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tutorial-1.html" title="Tutorial 1"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Geraldo Reports Documentation v0.3.4-final documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="basic-reference">
+<h1>Basic Reference<a class="headerlink" href="#basic-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="report">
+<h2>Report<a class="headerlink" href="#report" title="Permalink to this headline">¶</a></h2>
+<p>Path: <strong>geraldo.Report</strong></p>
+<p>This is the report main class. Every report must inherit or be an instance of
+this class. It supports some bands and report definitions.</p>
+<p>You can also override some methods to customize some things.</p>
+<p><strong>Data source</strong></p>
+<ul class="simple">
+<li><strong>queryset</strong> - Default: None</li>
+<li><strong>print_if_empty</strong> - Default: False</li>
+</ul>
+<p><strong>Report properties</strong></p>
+<ul class="simple">
+<li><strong>title</strong> - Default: &#8216;&#8217;;</li>
+<li><strong>author</strong> - Default: &#8216;&#8217;;</li>
+<li><strong>subject</strong> - Default: &#8216;&#8217;; (you can use it as the report description)</li>
+<li><strong>keywords</strong> - Default: &#8216;&#8217;;</li>
+</ul>
+<p><strong>Report page dimensions</strong></p>
+<ul class="simple">
+<li><strong>page_size</strong> - Default: A4</li>
+<li><strong>margin_top</strong> - Default: 1*cm</li>
+<li><strong>margin_bottom</strong> - Default: 1*cm</li>
+<li><strong>margin_left</strong> - Default: 1*cm</li>
+<li><strong>margin_right</strong> - Default: 1*cm</li>
+</ul>
+<p><strong>Report bands</strong></p>
+<p>A report band must be a class inherited from <strong>ReportBand</strong> or an instance of
+<strong>ReportBand</strong> of a class inherited from <strong>ReportBand</strong></p>
+<ul class="simple">
+<li><strong>band_begin</strong> - Default: None</li>
+<li><strong>band_summary</strong> - Default: None</li>
+<li><strong>band_page_header</strong> - Default: None</li>
+<li><strong>band_page_footer</strong> - Default: None</li>
+<li><strong>band_detail</strong> - Default: None</li>
+</ul>
+<p><strong>Report composition</strong></p>
+<ul class="simple">
+<li><strong>groups</strong> - Default: None</li>
+<li><strong>subreports</strong> - Default: []</li>
+</ul>
+<p><strong>Look &amp; feel</strong></p>
+<ul class="simple">
+<li><strong>default_font_color</strong> - Default: black</li>
+<li><strong>default_stroke_color</strong> - Default: black</li>
+<li><strong>default_fill_color</strong> - Default: black</li>
+<li><strong>default_style</strong> - Default: None</li>
+</ul>
+<p><strong>Methods</strong></p>
+<ul class="simple">
+<li><strong>format_date(date, expression)</strong></li>
+<li><strong>get_objects_list()</strong></li>
+<li><strong>generate_by(generator_class, *args, **kwargs)</strong></li>
+</ul>
+</div>
+<div class="section" id="subreport">
+<h2>SubReport<a class="headerlink" href="#subreport" title="Permalink to this headline">¶</a></h2>
+<p>Path: <strong>geraldo.SubReport</strong></p>
+<p>Class to be used for subreport objects. It doesn&#8217;t need to be inherited.</p>
+<p><strong>Attributes</strong></p>
+<ul>
+<li><p class="first"><strong>queryset_string</strong> - must be a string with path for Python compatible queryset.</p>
+<blockquote>
+<p>Examples:</p>
+<blockquote>
+<ul class="simple">
+<li>&#8216;%(object)s.user_permissions.all()&#8217;</li>
+<li>&#8216;%(object)s.groups.all()&#8217;</li>
+<li>&#8216;Message.objects.filter(user=%(object)s)&#8217;</li>
+<li>&#8216;Message.objects.filter(user__id=%(object)s.id)&#8217;</li>
+</ul>
+</blockquote>
+</blockquote>
+</li>
+<li><p class="first"><strong>visible</strong> - Default: True</p>
+<blockquote>
+<p>Set False if you want to make it not visible.</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>Report bands</strong></p>
+<p>A report band must be a class inherited from <strong>ReportBand</strong> or an instance of
+<strong>ReportBand</strong> of a class inherited from <strong>ReportBand</strong></p>
+<ul class="simple">
+<li><strong>name</strong> - Default: None</li>
+<li><strong>band_detail</strong> - Default: None</li>
+<li><strong>band_header</strong> - Default: None</li>
+<li><strong>band_footer</strong> - Default: None</li>
+</ul>
+<p><strong>Methods</strong></p>
+<ul class="simple">
+<li><strong>format_date(date, expression)</strong></li>
+<li><strong>get_objects_list()</strong></li>
+</ul>
+</div>
+<div class="section" id="reportband">
+<h2>ReportBand<a class="headerlink" href="#reportband" title="Permalink to this headline">¶</a></h2>
+<p>Path: <strong>geraldo.ReportBand</strong></p>
+<p>A band is a horizontal area in the report. It can be used to print things on
+the top, on summary, on page header, on page footer or one time per object from
+queryset.</p>
+<p><strong>Attributes</strong></p>
+<ul>
+<li><p class="first"><strong>name</strong> - Default: None</p>
+</li>
+<li><p class="first"><strong>height</strong> - Default: 1*cm</p>
+</li>
+<li><p class="first"><strong>width</strong> - Default: None</p>
+</li>
+<li><p class="first"><strong>visible</strong> - Default: True</p>
+<blockquote>
+<p>Set False if you want to make it not visible.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>borders</strong> - Default: {&#8216;top&#8217;: None, &#8216;right&#8217;: None, &#8216;bottom&#8217;: None, &#8216;left&#8217;: None, &#8216;all&#8217;: None}</p>
+</li>
+<li><p class="first"><strong>elements</strong> - Default: []</p>
+</li>
+<li><p class="first"><strong>child_bands</strong> - Default: []</p>
+</li>
+<li><p class="first"><strong>force_new_page</strong> - Default: False</p>
+</li>
+<li><p class="first"><strong>default_style</strong> - Default: None</p>
+</li>
+<li><p class="first"><strong>margin_top</strong> - Default: 0</p>
+</li>
+<li><p class="first"><strong>margin_bottom</strong> - Default: 0</p>
+</li>
+<li><p class="first"><strong>auto_expanded_height</strong> - Default: False</p>
+<blockquote>
+<p><strong>New in development version</strong></p>
+<p>Use &#8216;auto_expanded_height&#8217; to make flexible bands to fit their heights to
+their elements.</p>
+</blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="detailband">
+<h2>DetailBand<a class="headerlink" href="#detailband" title="Permalink to this headline">¶</a></h2>
+<p>Path: <strong>geraldo.DetailBand</strong></p>
+<p>An extension of ReportBand. The only difference is that this class supports more
+attributes, specific to detail bands.</p>
+<p><strong>Attributes</strong></p>
+<ul>
+<li><p class="first"><strong>name</strong> - Default: None</p>
+</li>
+<li><p class="first"><strong>margin_left</strong> - Default: 0</p>
+</li>
+<li><p class="first"><strong>margin_right</strong> - Default: 0</p>
+</li>
+<li><p class="first"><strong>display_inline</strong> - Default: False</p>
+<blockquote>
+<p>When you use <strong>display_inline</strong> with <strong>True</strong> value and <strong>width</strong> with a
+valid value, the generator will try to align the detail band instances in
+the same way HTML does with inline displaying of left floating elements:
+it will keep each detail band at right of the last one if there is width
+available.</p>
+<p>This is useful for label reports.</p>
+</blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="reportgroup">
+<h2>ReportGroup<a class="headerlink" href="#reportgroup" title="Permalink to this headline">¶</a></h2>
+<p>Path: <strong>geraldo.ReportGroup</strong></p>
+<p>This a report grouper class. A report can be multiple groupped by attribute
+values.</p>
+<p><strong>Attributes</strong></p>
+<ul class="simple">
+<li><strong>name</strong> - Default: None</li>
+<li><strong>attribute_name</strong> - Default: None</li>
+</ul>
+<p><strong>Report bands</strong></p>
+<p>A report band must be a class inherited from <strong>ReportBand</strong> or an instance of
+<strong>ReportBand</strong> of a class inherited from <strong>ReportBand</strong></p>
+<ul class="simple">
+<li><strong>band_header</strong> - Default: None</li>
+<li><strong>band_footer</strong> - Default: None</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Basic Reference</a><ul>
+<li><a class="reference external" href="#report">Report</a></li>
+<li><a class="reference external" href="#subreport">SubReport</a></li>
+<li><a class="reference external" href="#reportband">ReportBand</a></li>
+<li><a class="reference external" href="#detailband">DetailBand</a></li>
+<li><a class="reference external" href="#reportgroup">ReportGroup</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="tutorial-1.html"
+                                  title="previous chapter">Tutorial 1</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="widgets.html"
+                                  title="next chapter">Widgets Reference</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/basic.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="widgets.html" title="Widgets Reference"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tutorial-1.html" title="Tutorial 1"
+             >previous</a> |</li>
+        <li><a href="index.html">Geraldo Reports Documentation v0.3.4-final documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009, Marinho Brandao.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.2.
+    </div>
+  </body>
+</html>

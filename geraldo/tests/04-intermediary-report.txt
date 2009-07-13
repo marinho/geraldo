@@ -104,7 +104,7 @@ PDF generation with empty queryset (raises an exception)
     >>> from geraldo.generators import PDFGenerator
 
     >>> try:
-    ...     report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'users-empty-report.pdf'))
+    ...     report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/users-empty-report.pdf'))
     ... except EmptyQueryset, e:
     ...     print e
     This report doesn't accept empty queryset

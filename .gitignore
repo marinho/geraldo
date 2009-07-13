@@ -6,7 +6,7 @@ geraldo/tests/output/*.pdf
 geraldo/tests/output/*.txt
 geraldo/tests/output/*.png
 examples/*.jpg
-docs/*.txt.html
+docs/build/
 MANIFEST
 build
 dist

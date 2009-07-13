@@ -1,0 +1,4 @@
+To build documentation to HTML, you have to:
+
+1. install Sphinx (sudo easy_install sphinx)
+2. run 'make html'

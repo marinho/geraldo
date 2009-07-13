@@ -1,0 +1,175 @@
+Basic Reference
+===============
+
+Report
+------
+
+Path: **geraldo.Report**
+
+This is the report main class. Every report must inherit or be an instance of
+this class. It supports some bands and report definitions.
+
+You can also override some methods to customize some things.
+
+**Data source**
+
+- **queryset** - Default: None
+- **print_if_empty** - Default: False
+
+**Report properties**
+
+- **title** - Default: '';
+- **author** - Default: '';
+- **subject** - Default: ''; (you can use it as the report description)
+- **keywords** - Default: '';
+
+**Report page dimensions**
+
+- **page_size** - Default: A4
+- **margin_top** - Default: 1*cm
+- **margin_bottom** - Default: 1*cm
+- **margin_left** - Default: 1*cm
+- **margin_right** - Default: 1*cm
+
+**Report bands**
+
+A report band must be a class inherited from **ReportBand** or an instance of
+**ReportBand** of a class inherited from **ReportBand**
+
+- **band_begin** - Default: None
+- **band_summary** - Default: None
+- **band_page_header** - Default: None
+- **band_page_footer** - Default: None
+- **band_detail** - Default: None
+
+**Report composition**
+
+- **groups** - Default: None
+- **subreports** - Default: []
+
+**Look & feel**
+
+- **default_font_color** - Default: black
+- **default_stroke_color** - Default: black
+- **default_fill_color** - Default: black
+- **default_style** - Default: None
+
+**Methods**
+
+- **format_date(date, expression)**
+- **get_objects_list()**
+- **generate_by(generator_class, *args, **kwargs)**
+
+SubReport
+---------
+
+Path: **geraldo.SubReport**
+
+Class to be used for subreport objects. It doesn't need to be inherited.
+
+**Attributes**
+
+- **queryset_string** - must be a string with path for Python compatible queryset.
+    
+    Examples:
+    
+        * '%(object)s.user_permissions.all()'
+        * '%(object)s.groups.all()'
+        * 'Message.objects.filter(user=%(object)s)'
+        * 'Message.objects.filter(user__id=%(object)s.id)'
+
+- **visible** - Default: True
+
+    Set False if you want to make it not visible.
+
+**Report bands**
+
+A report band must be a class inherited from **ReportBand** or an instance of
+**ReportBand** of a class inherited from **ReportBand**
+
+- **name** - Default: None
+- **band_detail** - Default: None
+- **band_header** - Default: None
+- **band_footer** - Default: None
+
+**Methods**
+
+- **format_date(date, expression)**
+- **get_objects_list()**
+
+ReportBand
+----------
+
+Path: **geraldo.ReportBand**
+
+A band is a horizontal area in the report. It can be used to print things on
+the top, on summary, on page header, on page footer or one time per object from
+queryset.
+
+**Attributes**
+
+- **name** - Default: None
+- **height** - Default: 1*cm
+- **width** - Default: None
+- **visible** - Default: True
+
+    Set False if you want to make it not visible.
+
+- **borders** - Default: {'top': None, 'right': None, 'bottom': None, 'left': None, 'all': None}
+- **elements** - Default: []
+- **child_bands** - Default: []
+- **force_new_page** - Default: False
+- **default_style** - Default: None
+- **margin_top** - Default: 0
+- **margin_bottom** - Default: 0
+- **auto_expanded_height** - Default: False
+
+    **New in development version**
+
+    Use 'auto_expanded_height' to make flexible bands to fit their heights to 
+    their elements.
+
+DetailBand
+----------
+
+Path: **geraldo.DetailBand**
+
+An extension of ReportBand. The only difference is that this class supports more
+attributes, specific to detail bands.
+
+**Attributes**
+
+- **name** - Default: None
+- **margin_left** - Default: 0
+- **margin_right** - Default: 0
+- **display_inline** - Default: False
+
+    When you use **display_inline** with **True** value and **width** with a
+    valid value, the generator will try to align the detail band instances in
+    the same way HTML does with inline displaying of left floating elements:
+    it will keep each detail band at right of the last one if there is width
+    available.
+
+    This is useful for label reports.
+
+ReportGroup
+-----------
+
+Path: **geraldo.ReportGroup**
+
+This a report grouper class. A report can be multiple groupped by attribute
+values.
+
+**Attributes**
+
+- **name** - Default: None
+- **attribute_name** - Default: None
+
+**Report bands**
+
+A report band must be a class inherited from **ReportBand** or an instance of
+**ReportBand** of a class inherited from **ReportBand**
+
+- **band_header** - Default: None
+- **band_footer** - Default: None
+

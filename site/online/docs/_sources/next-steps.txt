@@ -1,0 +1,30 @@
+Next Steps
+==========
+
+Geraldo Reports is a ambicious project. We want to reach much more than we did.
+See below the main goals we have to do in the future (and maybe you could help
+us to reach them early)
+
+Engine API
+----------
+
+* **Table band** - a band to make easy create lists just using tables instead
+  of detail band and lines. Table band must be an alternative to detail band
+* Support canvas draw
+* Report merging (many reports at once)
+* Events (i.e: BeforePrint and AfterPrint for bands and reports)
+
+Generators
+----------
+
+* **Generate in ODF formats (ODT and ODS) (currently in development)**
+* Generate in HTML and maybe to TXT
+* Export/import structure to/from a XMLized format
+
+Thir-part tools
+---------------
+
+* Have a GUI tool to design reports, if possible to be used in a web browser
+* Have a way to create and print reports using a server, with no low level coding
+* **Django pluggable application to create fast reports** (currently in development)
+

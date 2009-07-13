@@ -14,6 +14,22 @@ Its workflow is the following:
 4. Do what you want with the output: you can return in a HttpResponse, keep it
    in a file, etc.
 
+Content
+-------
+
+.. toctree::
+    :maxdepth: 1
+
+    installing
+    tutorial-1
+    basic
+    widgets
+    graphics
+    generators
+    utils
+    backward-incompatible-changes
+    next-steps
+
 Features
 --------
 
@@ -103,4 +119,5 @@ Geraldo has been created by **Marinho Brandao** a brazilian Django and Python
 enthusiast.
 
 Home page: **http://marinhobrandao.com/**
+
 E-mail: **marinho at gmail dot com**

@@ -1,0 +1,120 @@
+Generators Reference
+====================
+
+Generators are classes to generate a report instance to some data format. In
+future we will have generators to XML, HTML, TXT, PS, images and so on.
+
+PDF Generator
+-------------
+
+Path: **geraldo.generators.PDFGenerator**
+
+This generator is the most mature generator we have. It generates PDF files to
+be viewed on Adobe Acrobat Reader or similar softwares. It uses the awesome
+library 'ReportLab' to create them.
+
+To use it you just do something like this:
+
+    >>> my_report_instance.generate_by(PDFGenerator, filename='file.pdf')
+
+In **filename** argument you can use a file path string or a file output object.
+
+Examples:
+
+    >>> fp = file('test.pdf', 'w')
+    >>> my_report_instance.generate_by(PDFGenerator, filename=fp)
+    >>> 
+    >>> resp = HttpResponse(mimetype='application/pdf')
+    >>> my_report_instance.generate_by(PDFGenerator, filename=resp)
+
+Text Generator
+--------------
+**New in development version.**
+
+Path: **geraldo.generators.TextGenerator**
+
+This generator is still in development stage, but it already works well. It
+ca be used to generate text files or to print to matrix printers.
+
+You can use it exactly like you would use PDF generator, but this has some more
+features. When running **'generate_by'** report method, you can inform the
+attribute 'filename' like you do in PDF, but you could also do some things else.
+
+**Attributes:**
+
+- **row_height** - Default: 0.5*cm
+
+    Should be the equivalent height of a row plus the space between rows. 
+    This is important to calculate how many rows has a page.
+
+- **character_width** - Default: 0.23*cm
+
+    Should be the equivalent width of a character. This is important to 
+    calculate how many columns has a page.
+
+- **to_printer** - Default: True
+
+    Is a boolean variable you can inform to generate a text to matrix printer 
+    or not. This means escape characters will be in output or not.
+
+- **escape_set** - Default: geraldo.generators.text.DEFAULT_ESCAPE_SET
+
+    Is a dictionary with equivalence table to escape codes. As far as we know,
+    escape codes can vary depending of model or printer manufacturer
+    (i.e. Epson, Lexmark, HP, etc.). This attribute is useful to support this.
+    Defaul is ESC/P2 standard (Epson matrix printers)
+
+- **filename** - Default: None
+
+    Is the file path you can inform optionally to save text to.
+
+- **encode_to** - Default: None
+
+    Here you can inform the coding identifier to force Geraldo to encode the
+    output string on it. Example: 'latin-1'
+
+- **manual_escape_codes** - Default: False
+
+    A boolean variable that sets escape codes are manually informed or not.
+
+**Examples:**
+
+Basic:
+
+    >>> my_report_instance.generate_by(TextGenerator, filename='file.txt')
+
+Returning the output:
+
+    >>> output = my_report_instance.generate_by(TextGenerator)
+
+Setting row height and/or column width:
+
+    >>> output = my_report_instance.generate_by(TextGenerator, row_height=0.7*cm, character_width=0.2*cm)
+
+Forcing the generator to encode the output:
+
+    >>> output = my_report_instance.generate_by(TextGenerator, encode_to='latin-1')
+
+Setting to be or not to be printed by a printer:
+
+    >>> output = my_report_instance.generate_by(TextGenerator, to_printer=False)
+
+Setting a set of escape codes to printer (matrix printers work with escape codes
+set for special characters or to setup the output printing):
+
+    >>> from geraldo.generators.text import DEFAULT_ESCAPE_SET
+    >>> my_escape_set = DEFAULT_ESCAPE_SET.copy()
+    >>> my_escape_set['condensed'] = chr(15) + chr(17)
+    >>> output = my_report_instance.generate_by(TextGenerator, to_printer=True, escape_set=my_escape_set)
+
+Forcing the output to print out escape codes before/after report or page print:
+
+    >>> MyTextGenerator(TextGenerator):
+    ...     to_printer = True
+    ...     manual_escape_codes = True
+    ...     escapes_report_start = chr(15) # Sets condensed mode
+    ...     escapes_report_end = chr(18) # Unsets condensed mode
+    ...     escapes_page_start = chr(12) + chr(10) # Form and line feed
+    ...     escapes_page_end = ''
+    >>> output = my_report_instance.generate_by(MyTextGenerator)
+
