@@ -11,9 +11,6 @@ class Widget(Element):
     """A widget is a value representation on the report"""
     _height = 0 #0.5*cm
     _width = 5*cm
-    left = 0
-    top = 0
-    visible = True
     style = {}
     truncate_overflow = False
     
@@ -29,6 +26,20 @@ class Widget(Element):
         values."""
         for k,v in kwargs.items():
             setattr(self, k, v)
+
+    def clone(self):
+        new = super(Widget, self).clone()
+        new.style = self.style
+        new.truncate_overflow = self.truncate_overflow
+
+        new.get_value = self.get_value
+
+        new.instance = self.instance
+        new.report = self.report
+        new.generator = self.generator
+        new.band = self.band
+
+        return new
 
 class Label(Widget):
     """A label is just a simple text.
@@ -46,6 +57,14 @@ class Label(Widget):
         self._text = value
 
     text = property(_get_text, _set_text)
+
+    def clone(self):
+        new = super(Label, self).clone()
+
+        if not callable(self._text):
+            new._text = self._text
+
+        return new
 
 FIELD_ACTION_VALUE = 'value'
 FIELD_ACTION_COUNT = 'count'
@@ -153,6 +172,15 @@ class ObjectValue(Label):
         return self.display_format%text
     text = property(lambda self: self._text())
 
+    def clone(self):
+        new = super(ObjectValue, self).clone()
+        new.attribute_name = self.attribute_name
+        new.action = self.action
+        new.display_format = self.display_format
+        new.objects = self.objects
+
+        return new
+
 SYSTEM_FIELD_CHOICES = {
     'report_title': 'ReportTitle',
     'page_number': 'PageNumber',
@@ -198,6 +226,13 @@ class SystemField(Label):
 
         return self.expression%SystemFieldDict(self, fields)
     text = property(text)
+
+    def clone(self):
+        new = super(SystemField, self).clone()
+        new.expression = self.expression
+        new.fields = self.fields
+
+        return new
 
 class SystemFieldDict(dict):
     widget = None

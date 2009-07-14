@@ -451,10 +451,6 @@ class ReportBand(GeraldoObject):
         # Calls the method that set this as parent if their children
         self.set_parent_on_children()
 
-    def clone(self):
-        """Does a deep copy of this band to be rendered"""
-        return copy.deepcopy(self)
-
     def transform_classes_to_objects(self):
         """Finds all child band classes in this class and instantiante them. This
         is important to have a safety on separe inherited reports each one
@@ -579,7 +575,6 @@ class Element(GeraldoObject):
     top = 0
     _width = 0
     _height = 0
-
     visible = True
 
     # 'width' property
@@ -607,8 +602,16 @@ class Element(GeraldoObject):
     height = property(_get_height, _set_height)
 
     def clone(self):
-        """Uses deepcopy to return a copy of this element"""
-        return copy.deepcopy(self)
+        """Returns a copy of this element"""
+        #return copy.deepcopy(self)
+        new = self.__class__()
+        new.left = self.left
+        new.top = self.top
+        new._width = self._width
+        new._height = self._height
+        new.visible = self.visible
+
+        return new
 
     def get_rect(self, force=False):
         """Returns a dictionary with positions and dimensions of this element"""

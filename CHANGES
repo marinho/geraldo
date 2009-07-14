@@ -1,4 +1,8 @@
-2009-07-13: Version 0.3.4-stagle
+2009-07-14: Version 0.3.5-alpha
+---------------------------------
+* Fixed performance problems when cloning elements
+
+2009-07-13: Version 0.3.4-stable
 ---------------------------------
 * Fixed truncate_overflow behaviour
 

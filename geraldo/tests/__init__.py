@@ -24,6 +24,21 @@ def suite():
         suites.append(unittest.TestLoader().loadTestsFromName(m))
     return unittest.TestSuite(suites)
 
+def run_with_profiling(func, name='hotshot_edi_stats'):
+    """Used to run profiling call"""
+    import hotshot
+    from hotshot import stats
+    prof = hotshot.Profile(name)
+
+    # Runs the function
+    prof.runcall(func)
+
+    prof.close()
+
+    # Shows the time sheet
+    s = stats.load(name)
+    s.sort_stats('time').print_stats()
+
 if __name__ == '__main__':
     unittest.main(defaultTest='suite')
 
