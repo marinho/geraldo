@@ -6,22 +6,18 @@ source code.
 
 .. toctree::
 
-    01-base.txt
-    02-widgets.txt
-    03-simple-report.txt
-    04-intermediary-report.txt
-    05-graphics-report.txt
-    06-child-bands.txt
-    07-groupping.txt
-    08-subreport.txt
-    09-inheritance.txt
-    10-composition.txt
-    11-cairoplot.txt
-    12-matplotlib.txt
-    13-without-django.txt
-    14-inline-detail.txt
-    15-naming-objects.txt
-    16-inline-subreport.txt
-    17-auto-expand-bands.txt
-    18-not-visible-objects.txt
+    simple-report
+    intermediary-report
+    graphics-report
+    child-bands
+    groupping
+    subreport
+    inheritance
+    composition
+    cairoplot
+    matplotlib
+    without-django
+    inline-detail
+    inline-subreport
+    auto-expand-bands
 
