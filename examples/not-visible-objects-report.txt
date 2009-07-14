@@ -1,26 +1,24 @@
                                                                                 
                                                                                 
-                                  System users                                  
-    ID         Username           First name          Last name          Staff  
-    This is a <b>users</b> report.<br/>This time <i>our idea</i> is showsome    
-    1          <font size=14 name=Leticia             Ribeiro das Neves  No     
-    2          <font size=14 name=                                       Yes    
-    3          <font size=14 name=                                       Yes    
-    4          <font size=14 name=                                       Yes    
-    5          <font size=14 name=Betty               Garcia Pacheco     Yes    
-    6          <font size=14 name=                                       No     
-                                                                                
-    7          <font size=14 name=                                       No     
-    8          <font size=14 name=                                       No     
-    9          <font size=14 name=                                       No     
-    10         <font size=14 name=                                       No     
-    11         <font size=14 name=                                       No     
-     Users count:  11 permissions foun                                          
-     Users ids aver6                                                            
-     Users ids maxi11                                                           
-     Users ids sum:66                                                           
-     Users first na3                                                            
-                                                                                
+                 Report with visible and not visible objects                   
+    USA                                                                         
+               New York                   Name                                  
+    About:             This also                                                
+    WALL STREETwall street                                                      
+    BROADWAY   broadway                                                         
+    UK                                                                          
+               London                     Name                                  
+    About:             This also                                                
+    GIANT WHEELgiant wheel                                                      
+    FR                                                                          
+               Paris                      Name                                  
+    About:             This also                                                
+    EIFFEL TOWEeiffel tower                                                     
+    TRIUMPH ARCtriumph arch                                                     
+    LOUVRE MUSElouvre museum                                                    
+    RU         Moscow                     Name                                  
+    About:                                                                      
+    KREMLIN    kremlin                                                          
                                                                                 
                                                                                 
                                                                                 
@@ -42,5 +40,7 @@
                                                                                 
                                                                                 
                                                                                 
-                                            Printed in 2009, Jul 14 at 06:14    
+                                                                                
+                                                                                
+                                                                                
                                                                                 
