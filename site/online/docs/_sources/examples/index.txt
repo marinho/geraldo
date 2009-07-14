@@ -1,0 +1,23 @@
+Examples
+========
+
+The following examples are the same you can find in the 'tests' package, from
+source code.
+
+.. toctree::
+
+    simple-report
+    intermediary-report
+    graphics-report
+    child-bands
+    groupping
+    subreport
+    inheritance
+    composition
+    cairoplot
+    matplotlib
+    without-django
+    inline-detail
+    inline-subreport
+    auto-expand-bands
+
