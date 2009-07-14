@@ -1,0 +1,247 @@
+NAMING OBJECTS AND FINDING THEM BY NAME
+=======================================
+
+This test will instantiate every basic class and find their children by names.
+
+    >>> from geraldo import Report, ReportBand, SubReport, ReportGroup
+    >>> from geraldo.base import Element
+    >>> from geraldo import GeraldoObject, ObjectNotFound, ManyObjectsFound
+    >>> from geraldo import ObjectValue, SystemField, Label, Line
+
+A report with an example of every class
+
+    >>> class MyReport(Report):
+    ...     class band_page_header(ReportBand):
+    ...         name = 'the-page-header-band'
+    ...         elements = [
+    ...             Line(name='the-line'),
+    ...         ]
+    ...
+    ...     class band_detail(ReportBand):
+    ...         name = 'the-detail-band'
+    ...         elements = [
+    ...             SystemField(expression='%(report_title)s', name='the-system-field'),
+    ...             ObjectValue(attribute_name="id", name='the-object-value'),
+    ...             Label(text="Name", name='the-label'),
+    ...         ]
+    ...         child_bands = [
+    ...             ReportBand(
+    ...                 name = 'the-child-band',
+    ...                 elements = [
+    ...                     Label(text="Users ids average:", name='the-label-4'),
+    ...                     ObjectValue(attribute_name='id', name='the-object-value-5'),
+    ...                 ]),
+    ...             ReportBand(
+    ...                 name = 'the-child-band-2',
+    ...                 elements = [
+    ...                     Label(text="Users ids sum:", name='the-label-5'),
+    ...                     Label(text='id', name='the-duplicate-name'),
+    ...                 ]),
+    ...         ]
+    ...
+    ...     subreports = [
+    ...         SubReport(
+    ...             name = 'the-sub-report',
+    ...             queryset_string = '%(object)s.user_permissions.all()',
+    ...             band_header = ReportBand(
+    ...                     name='the-sub-report-header-band',
+    ...                     elements=[
+    ...                         Label(text='ID', name='the-label-2'),
+    ...                         Label(text='Name', name='the-label-3'),
+    ...                     ],
+    ...                 ),
+    ...             band_detail = ReportBand(
+    ...                     name='the-sub-report-detail-band',
+    ...                     elements=[
+    ...                         ObjectValue(attribute_name='id', name='the-object-value-2'),
+    ...                         ObjectValue(attribute_name='name', name='the-duplicate-name'),
+    ...                     ],
+    ...                 ),
+    ...             )
+    ...         ]
+    ...
+    ...     groups = [
+    ...         ReportGroup(attribute_name='is_superuser', 
+    ...             name = 'the-report-group',
+    ...             band_header=ReportBand(
+    ...                 name='the-report-group-header-band',
+    ...                 elements=[
+    ...                     ObjectValue(attribute_name='is_superuser', name='the-object-value-4')
+    ...                 ],
+    ...             ),
+    ...         ),
+    ...     ]
+
+Report instance
+
+    >>> report = MyReport()
+
+Every class must be a GeraldoObject subclass
+
+    >>> issubclass(Report, GeraldoObject)
+    True
+    
+    >>> issubclass(ReportBand, GeraldoObject)
+    True
+    
+    >>> issubclass(SubReport, GeraldoObject)
+    True
+    
+    >>> issubclass(ReportGroup, GeraldoObject)
+    True
+    
+    >>> issubclass(Element, GeraldoObject)
+    True
+
+Finding child by name (every class type)
+
+    >>> try:
+    ...     report.find_by_name('an-invalid-name')
+    ... except ObjectNotFound:
+    ...     print False
+    False
+
+    >>> report.find_by_name('the-page-header-band').name == 'the-page-header-band'
+    True
+
+    >>> report.find_by_name('the-line').name == 'the-line'
+    True
+
+    >>> report.find_by_name('the-detail-band').name == 'the-detail-band'
+    True
+
+    >>> report.find_by_name('the-system-field').name == 'the-system-field'
+    True
+
+    >>> report.find_by_name('the-object-value').name == 'the-object-value'
+    True
+
+    >>> report.find_by_name('the-label').name == 'the-label'
+    True
+
+    >>> report.find_by_name('the-child-band').name == 'the-child-band'
+    True
+
+    >>> report.find_by_name('the-label-4').name == 'the-label-4'
+    True
+
+    >>> report.find_by_name('the-object-value-5').name == 'the-object-value-5'
+    True
+
+    >>> report.find_by_name('the-child-band-2').name == 'the-child-band-2'
+    True
+
+    >>> report.find_by_name('the-label-5').name == 'the-label-5'
+    True
+
+    >>> report.find_by_name('the-sub-report').name == 'the-sub-report'
+    True
+
+    >>> report.find_by_name('the-sub-report-header-band').name == 'the-sub-report-header-band'
+    True
+
+    >>> report.find_by_name('the-label-2').name == 'the-label-2'
+    True
+
+    >>> report.find_by_name('the-label-3').name == 'the-label-3'
+    True
+
+    >>> report.find_by_name('the-sub-report-detail-band').name == 'the-sub-report-detail-band'
+    True
+
+    >>> report.find_by_name('the-object-value-2').name == 'the-object-value-2'
+    True
+
+    >>> report.find_by_name('the-report-group').name == 'the-report-group'
+    True
+
+    >>> report.find_by_name('the-report-group-header-band').name == 'the-report-group-header-band'
+    True
+
+    >>> report.find_by_name('the-object-value-4').name == 'the-object-value-4'
+    True
+
+Every parent find their children
+
+    >>> band = report.find_by_name('the-page-header-band')
+    >>> band.find_by_name('the-line').name == 'the-line'
+    True
+
+    >>> band = report.find_by_name('the-detail-band')
+    >>> band.find_by_name('the-system-field').name == 'the-system-field'
+    True
+
+    >>> band.find_by_name('the-object-value').name == 'the-object-value'
+    True
+
+    >>> band.find_by_name('the-label').name == 'the-label'
+    True
+
+    >>> child = band.find_by_name('the-child-band')
+    >>> child.find_by_name('the-label-4').name == 'the-label-4'
+    True
+
+    >>> child.find_by_name('the-object-value-5').name == 'the-object-value-5'
+    True
+
+    >>> child = report.find_by_name('the-child-band-2')
+    >>> child.find_by_name('the-label-5').name == 'the-label-5'
+    True
+
+    >>> child.find_by_name('the-duplicate-name').name == 'the-duplicate-name'
+    True
+
+    >>> subreport = report.find_by_name('the-sub-report')
+    >>> band = subreport.find_by_name('the-sub-report-header-band')
+    >>> band.find_by_name('the-label-2').name == 'the-label-2'
+    True
+
+    >>> band.find_by_name('the-label-3').name == 'the-label-3'
+    True
+
+    >>> band = subreport.find_by_name('the-sub-report-detail-band')
+    >>> band.find_by_name('the-object-value-2').name == 'the-object-value-2'
+    True
+
+    >>> group = report.find_by_name('the-report-group')
+    >>> band = group.find_by_name('the-report-group-header-band')
+    >>> band.find_by_name('the-object-value-4').name == 'the-object-value-4'
+    True
+
+Duplicates
+----------
+
+Duplicates shouldn't raise exception just to be existing but raise when 2
+instances with the same name are found in the same parent
+
+    >>> try:
+    ...     report.find_by_name('the-duplicate-name')
+    ... except ManyObjectsFound:
+    ...     print True
+    True
+
+    >>> band = report.find_by_name('the-child-band-2')
+    >>> band.find_by_name('the-duplicate-name').__class__ == Label
+    True
+
+    >>> band = report.find_by_name('the-sub-report-detail-band')
+    >>> band.find_by_name('the-duplicate-name').__class__ == ObjectValue
+    True
+
+but if you force 'many' parameter as True, then it returns a list of
+objects
+
+    >>> len(report.find_by_name('the-duplicate-name', many=True)) == 2
+    True
+
+An object can be removed from its parent just calling "remove_from_parent".
+
+    >>> band = report.find_by_name('the-report-group-header-band')
+    >>> count = len(band.elements)
+
+    >>> el = band.find_by_name('the-object-value-4')
+    >>> el.remove_from_parent()
+
+    >>> len(band.elements) == count - 1
+    True
+

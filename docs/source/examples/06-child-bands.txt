@@ -1,0 +1,128 @@
+CHILD BANDS
+===========
+
+This a simple test for child bands. All band can have child bands attached. Child
+band are bands that are attached to a parent band and will print below them.
+
+    >>> import os
+    >>> cur_dir = os.path.dirname(os.path.abspath(__file__))
+
+    >>> from django.contrib.auth.models import User
+
+    >>> from reportlab.lib.pagesizes import A4
+    >>> from reportlab.lib.units import cm
+    >>> from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY
+    >>> from reportlab.lib.colors import navy, yellow, red
+    
+    >>> from geraldo import Report, ReportBand, Label, ObjectValue, SystemField,\
+    ...     FIELD_ACTION_COUNT, FIELD_ACTION_AVG, FIELD_ACTION_MIN,\
+    ...     FIELD_ACTION_MAX, FIELD_ACTION_SUM, FIELD_ACTION_DISTINCT_COUNT, BAND_WIDTH,\
+    ...     RoundRect, Line
+
+Report class
+
+    >>> class ChildBandsReport(Report):
+    ...     title = 'Child bands demonstration'
+    ... 
+    ...     class band_summary(ReportBand):
+    ...         height = 0.8*cm
+    ...         elements = [
+    ...             Label(text="Users count:", top=0.1*cm, left=0),
+    ...             ObjectValue(attribute_name='username', top=0.1*cm, left=4*cm,\
+    ...                 action=FIELD_ACTION_COUNT, display_format='%s permissions found'),
+    ...         ]
+    ...         child_bands = [
+    ...             ReportBand(
+    ...                 height = 0.6*cm,
+    ...                 elements = [
+    ...                     Label(text="Users ids average:", top=0.6*cm, left=0),
+    ...                     ObjectValue(attribute_name='id', top=0.6*cm, left=4*cm, action=FIELD_ACTION_AVG),
+    ...                 ]),
+    ...             ReportBand(
+    ...                 visible = False,
+    ...                 height = 0.6*cm,
+    ...                 elements = [
+    ...                     Label(text="Users ids minimum:", top=1.1*cm, left=0),
+    ...                     ObjectValue(attribute_name='id', top=1.1*cm, left=4*cm, action=FIELD_ACTION_MIN),
+    ...                 ]),
+    ...             ReportBand(
+    ...                 height = 0.6*cm,
+    ...                 elements = [
+    ...                     Label(text="Users ids maximum:", top=1.6*cm, left=0),
+    ...                     ObjectValue(attribute_name='id', top=1.6*cm, left=4*cm, action=FIELD_ACTION_MAX),
+    ...                 ],
+    ...                 borders = {'bottom': True}),
+    ...             ReportBand(
+    ...                 height = 0.6*cm,
+    ...                 elements = [
+    ...                     Label(text="Users ids sum:", top=2.1*cm, left=0),
+    ...                     ObjectValue(attribute_name='id', top=2.1*cm, left=4*cm, action=FIELD_ACTION_SUM),
+    ...                 ]),
+    ...             ReportBand(
+    ...                 visible = False,
+    ...                 height = 0.6*cm,
+    ...                 elements = [
+    ...                     Label(text="Users first name distinct:", top=2.6*cm, left=0),
+    ...                     ObjectValue(attribute_name='first_name', top=2.6*cm, left=4*cm, action=FIELD_ACTION_DISTINCT_COUNT),
+    ...                 ]),
+    ...         ]
+    ...         borders = {'all': True}
+    ... 
+    ...     class band_page_header(ReportBand):
+    ...         height = 1.3*cm
+    ...         elements = [
+    ...             SystemField(expression='%(report_title)s', top=0.1*cm, left=0, width=BAND_WIDTH,
+    ...                 style={'fontName': 'Helvetica-Bold', 'fontSize': 14, 'alignment': TA_CENTER}),
+    ...             Label(text="ID", top=0.8*cm, left=0),
+    ...             Label(text="Username", top=0.8*cm, left=3*cm),
+    ...             Label(text="First name", top=0.8*cm, left=8*cm),
+    ...             Label(text="Last name", top=0.8*cm, left=13*cm),
+    ...             Label(text="Staff", top=0.8*cm, left=18*cm),
+    ...         ]
+    ...         borders = {'bottom': Line(stroke_color=red, stroke_width=3)}
+    ... 
+    ...     class band_page_footer(ReportBand):
+    ...         height = 0.5*cm
+    ...         elements = [
+    ...             Label(text='Created with Geraldo Reports', top=0.1*cm),
+    ...         ]
+    ...         borders = {'top': Line(stroke_color=navy)}
+    ... 
+    ...     class band_detail(ReportBand):
+    ...         height = 0.7*cm
+    ...         elements = [
+    ...             ObjectValue(attribute_name='id', top=0, left=0),
+    ...             ObjectValue(attribute_name='username', top=0, left=3*cm),
+    ...             ObjectValue(attribute_name='first_name', top=0, left=8*cm),
+    ...             ObjectValue(attribute_name='last_name', top=0, left=13*cm),
+    ...             ObjectValue(attribute_name='is_staff', top=0, left=18*cm,
+    ...                 get_value=lambda instance: instance.is_staff and 'Yes' or 'No'),
+    ...         ]
+
+    >>> queryset = User.objects.order_by('id')
+
+    >>> report = ChildBandsReport(queryset=queryset)
+
+Creating some users
+
+    >>> len([User.objects.create(username='John', is_staff=True, is_superuser=True, email='john@beatles.com'),
+    ... User.objects.create(username='Paul', is_staff=True, is_superuser=True, email='paul@beatles.com'),
+    ... User.objects.create(username='George', is_staff=True, email='george@beatles.com'),
+    ... User.objects.create(username='Ringo', email='ringo@beatles.com'),
+    ... User.objects.create(username='Larry', email='larry@beatlesfans.com')])
+    5
+
+PDF common generation with users
+
+    >>> from geraldo.generators import PDFGenerator
+
+    >>> report.queryset = User.objects.order_by('id')
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/child-bands-report.pdf'))
+
+Page with half height
+
+    >>> report.page_size = (A4[0], A4[1] / 2)
+
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/child-bands-report-half-height.pdf'))
+
+

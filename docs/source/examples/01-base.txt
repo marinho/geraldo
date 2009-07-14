@@ -1,0 +1,114 @@
+BASE
+====
+
+    >>> from django.contrib.auth.models import Permission
+
+Utilities used from ReportLab
+
+    >>> from reportlab.lib.pagesizes import A4
+    >>> from reportlab.lib.units import cm
+
+Report class
+------------
+
+Each one report is driven by a QuerySet and have some properties, like page
+size, margins and others features.
+
+    >>> from geraldo import Report
+
+Report attributes. Most of them have default values
+
+    >>> Report.title
+    ''
+
+    >>> Report.page_size == A4
+    True
+
+    >>> Report.margin_top == 1*cm
+    True
+
+    >>> Report.margin_bottom == 1*cm
+    True
+
+    >>> Report.margin_left == 1*cm
+    True
+
+    >>> Report.margin_right == 1*cm
+    True
+
+    >>> Report.queryset
+
+Basic report methods
+
+    >>> Report.generate_by != None
+    True
+
+You must declare a class from Report class, setting some attributes
+
+    >>> class MyReport(Report):
+    ...     title = 'Report Title'
+    ... 
+    ...     page_size = A4
+    ...     margin_top = 1*cm
+    ...     margin_bottom = 1*cm
+    ...     margin_left = 1*cm
+    ...     margin_right = 1*cm
+
+Initializer must support queryset argument
+
+    >>> report = MyReport(queryset=Permission.objects.all())
+
+Base band class
+---------------
+
+    >>> from geraldo import ReportBand
+
+Every report is composed by horizontal partes named 'bands'.
+
+Report Begin is the band that will be shown on the top of all pages. Useful to
+show report title, page number and other informations.
+
+    >>> Report.band_begin
+
+Report Summary is the band that will be shown on the end of the last page,
+above the page footer.
+
+    >>> Report.band_summary
+
+Page Header is the band that will be shown on the top of all pages. Useful to
+show report title, page number and other informations.
+
+    >>> Report.band_page_header
+
+Page Footer is the band that will be shown on the bottom of all pages. Useful
+to show page number, date, copyright and other informations.
+
+    >>> Report.band_page_footer
+
+Report detail is the band that will be shown one time per object in the
+QuerySet
+
+    >>> Report.band_detail
+
+Base bands have some default attributes. They have no width, because all of
+them are auto-width, sized to the max client horizonta area of the page.
+
+    >>> ReportBand.height == 1*cm
+    True
+
+    >>> ReportBand.visible
+    True
+
+TableBand
+---------
+
+The table band is a special band that has a behavior of a table. The first row
+is the table header and the following rows are objects. When a new page comes
+the table header is repeated on the on and so on.
+
+The big difference between a common band on detail and a table band on detail
+is that the first one is multiplied one per object. But the second one is just
+streched and have the header increased down.
+
+    >>> from geraldo import TableBand
+

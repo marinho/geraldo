@@ -27,6 +27,7 @@ Content
     graphics
     generators
     utils
+    examples/index
     backward-incompatible-changes
     next-steps
 

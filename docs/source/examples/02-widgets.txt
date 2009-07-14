@@ -1,0 +1,51 @@
+REPORT WIDGETS
+==============
+
+Widgets are objects that show field or expression values.
+
+    >>> from geraldo.widgets import Widget
+    >>> from reportlab.lib.units import cm
+
+    >>> Widget.height.__class__.__name__
+    'property'
+    >>> Widget.width.__class__.__name__
+    'property'
+    >>> Widget.left
+    0
+    >>> Widget.top
+    0
+    >>> Widget.visible
+    True
+
+Widget attributes that are setted and used in generation
+
+    >>> Widget.report
+    >>> Widget.instance
+    >>> Widget.generator
+
+A label is just a simple text to show a word or sentence.
+
+    >>> from geraldo import Label
+
+    >>> Label.text.__class__.__name__
+    'property'
+
+An object value is a field, method or property you can get from the model
+object, got from the QuerySet. There are actions to do with that field:
+Value, Count, Avg, Min, Max and Sum. Default action is "Value".
+
+    >>> from geraldo import ObjectValue, FIELD_ACTION_VALUE
+
+    >>> ObjectValue.attribute_name
+    >>> ObjectValue.action == FIELD_ACTION_VALUE
+    True
+
+There are some kinds for a system field value, like the report title, the
+current date/time, page number, total of pages, etc.
+
+    >>> from geraldo import SystemField
+
+    >>> SystemField.expression == r'%(report_title)s'
+    True
+
+
