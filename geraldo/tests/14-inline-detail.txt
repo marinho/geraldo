@@ -41,8 +41,9 @@ Report class
     ...         display_inline = True
     ...         
     ...         elements = [
-    ...             ObjectValue(attribute_name='get_full_name', top=0, left=0, height=0.7*cm,
+    ...             ObjectValue(attribute_name='get_full_name', top=0, left=0, height=0.4*cm,
     ...                 get_value=lambda inst: inst.get_full_name() or inst.username,
+    ...                 truncate_overflow=True,
     ...                 style={'fontName': 'Helvetica-Bold', 'fontSize': 13}),
     ...             Label(text='User ID:', top=0.6*cm, left=0),
     ...             ObjectValue(attribute_name='id', top=0.6*cm, left=1.5*cm),

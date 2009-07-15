@@ -29,7 +29,7 @@ class ReportGenerator(object):
     _groups_changed = None
     _groups_stack = None
 
-    # The rendered report have pages, each page is a ReportPage instance
+    # The rendered report has pages, each page is a ReportPage instance
     _rendered_pages = None
     _page_rect = None
 
