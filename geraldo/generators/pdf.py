@@ -15,34 +15,43 @@ class PDFGenerator(ReportGenerator):
     """This is a generator to output a PDF using ReportLab library with
     preference by its Platypus API"""
     filename = None
+    canvas = None
+    return_canvas = False
 
-    def __init__(self, report, filename):
+    def __init__(self, report, filename=None, canvas=None, return_canvas=False):
         super(PDFGenerator, self).__init__(report)
 
         self.filename = filename
+        self.canvas = canvas
+        self.return_canvas = return_canvas
 
     def execute(self):
         """Generates a PDF file using ReportLab pdfgen package."""
         super(PDFGenerator, self).execute()
 
         # Initializes the temporary PDF canvas (just to be used as reference)
-        self.canvas = Canvas(self.filename, pagesize=self.report.page_size)
+        if not self.canvas:
+            self.canvas = Canvas(self.filename, pagesize=self.report.page_size)
 
         # Render pages
         self.render_bands()
 
         # Initializes the definitive PDF canvas
-        self.start_pdf(self.filename)
+        self.start_pdf() #self.filename) # XXX
 
         self.generate_pages()
 
-        # Finalizes the canvas
+        # Returns the canvas
+        if self.return_canvas:
+            return self.canvas
+
+        # Saves the canvas - only if it didn't return it
         self.canvas.save()
 
-    def start_pdf(self, filename):
+    def start_pdf(self, filename=None): # XXX
         """Initializes the PDF document with some properties and methods"""
         # Sets the PDF canvas
-        self.canvas = Canvas(filename=filename, pagesize=self.report.page_size)
+        #self.canvas = Canvas(filename=filename, pagesize=self.report.page_size) # XXX
 
         # Set PDF properties
         self.canvas.setTitle(self.report.title)

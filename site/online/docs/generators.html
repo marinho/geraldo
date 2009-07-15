@@ -55,6 +55,28 @@ future we will have generators to XML, HTML, TXT, PS, images and so on.</p>
 <p>This generator is the most mature generator we have. It generates PDF files to
 be viewed on Adobe Acrobat Reader or similar softwares. It uses the awesome
 library &#8216;ReportLab&#8217; to create them.</p>
+<p><strong>Attributes:</strong></p>
+<ul>
+<li><p class="first"><strong>filename</strong> - Default: None</p>
+<blockquote>
+<p>You have to inform the filename you are creating, unless you informed the
+attribute &#8216;canvas&#8217;</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>canvas</strong> - Default: None</p>
+<blockquote>
+<p>If you have already a canvas instantiated, you can inform it in replacement
+to &#8216;filename&#8217; to generate this report inside. This is useful to generate
+many reports into the same PDF.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>return_canvas</strong> - Default: False</p>
+<blockquote>
+<p>If you inform this as <strong>True</strong>, the file will not be save and the generator
+will return the canvas to you use as you want.</p>
+</blockquote>
+</li>
+</ul>
 <p>To use it you just do something like this:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_report_instance</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s">&#39;file.pdf&#39;</span><span class="p">)</span>
 </pre></div>

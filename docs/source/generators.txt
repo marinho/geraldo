@@ -13,6 +13,24 @@ This generator is the most mature generator we have. It generates PDF files to
 be viewed on Adobe Acrobat Reader or similar softwares. It uses the awesome
 library 'ReportLab' to create them.
 
+**Attributes:**
+
+- **filename** - Default: None
+
+    You have to inform the filename you are creating, unless you informed the
+    attribute 'canvas'
+
+- **canvas** - Default: None
+
+    If you have already a canvas instantiated, you can inform it in replacement
+    to 'filename' to generate this report inside. This is useful to generate
+    many reports into the same PDF.
+
+- **return_canvas** - Default: False
+
+    If you inform this as **True**, the file will not be save and the generator
+    will return the canvas to you use as you want.
+
 To use it you just do something like this:
 
     >>> my_report_instance.generate_by(PDFGenerator, filename='file.pdf')
