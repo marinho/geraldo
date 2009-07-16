@@ -77,3 +77,8 @@ Generating Text...
     >>> from geraldo.generators import TextGenerator
     >>> report.generate_by(TextGenerator, filename=os.path.join(cur_dir, 'output/simple-report.txt'), to_printer=False, encode_to='latin-1')
 
+The Result
+
+- http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/simple-report.pdf
+- http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/simple-report.txt
+

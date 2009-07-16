@@ -7,11 +7,36 @@ future we will have generators to XML, HTML, TXT, PS, images and so on.
 PDF Generator
 -------------
 
+.. currentmodule:: geraldo.generators
+.. class:: PDFGenerator
+
 Path: **geraldo.generators.PDFGenerator**
 
 This generator is the most mature generator we have. It generates PDF files to
 be viewed on Adobe Acrobat Reader or similar softwares. It uses the awesome
 library 'ReportLab' to create them.
+
+**Attributes:**
+
+- **filename** - Default: None
+
+    You have to inform the filename you are creating, unless you informed the
+    attribute 'canvas'
+
+- **canvas** - Default: None
+
+    **New in development version**
+
+    If you have already a canvas instantiated, you can inform it in replacement
+    to 'filename' to generate this report inside. This is useful to generate
+    many reports into the same PDF.
+
+- **return_canvas** - Default: False
+
+    **New in development version**
+
+    If you inform this as **True**, the file will not be save and the generator
+    will return the canvas to you use as you want.
 
 To use it you just do something like this:
 
@@ -29,7 +54,9 @@ Examples:
 
 Text Generator
 --------------
-**New in development version.**
+
+.. currentmodule:: geraldo.generators
+.. class:: TextGenerator
 
 Path: **geraldo.generators.TextGenerator**
 

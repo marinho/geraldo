@@ -9,12 +9,15 @@ They can be useful also to make customized borders in bands.
 Graphic
 -------
 
+.. currentmodule:: geraldo.graphics
+.. class:: Graphic
+
+Path: **geraldo.graphics.Graphic**
+
 This is the basic graphic class. You should use it only when inheriting to
 create your own graphic class, never use it directly.
 
 Its rect area is based on **left-width-top-height** dimensions.
-
-Path: **geraldo.graphics.Graphic**
 
 **Attributes**
 
@@ -49,6 +52,9 @@ They are read-only attributes you can use in render time.
 Fixed
 -----
 
+.. currentmodule:: geraldo.graphics
+.. class:: Fixed
+
 Path: **geraldo.graphics.Fixed**
 
 In the same way of Graphic class, you should use this just to inhert and create
@@ -57,6 +63,9 @@ dimensioning.
 
 Rect
 ----
+
+.. currentmodule:: geraldo.graphics
+.. class:: Rect
 
 Path: **geraldo.Rect**
 
@@ -75,6 +84,9 @@ A rectangle with square borders on the canvas.
 
 RoundRect
 ---------
+
+.. currentmodule:: geraldo.graphics
+.. class:: RoundRect
 
 Path: **geraldo.RoundRect**
 
@@ -97,6 +109,9 @@ A rectangle with rounded borders on the canvas.
 Line
 ----
 
+.. currentmodule:: geraldo.graphics
+.. class:: Line
+
 Path: **geraldo.Line**
 
 **Example of use**
@@ -113,6 +128,9 @@ Path: **geraldo.Line**
 Circle
 ------
 
+.. currentmodule:: geraldo.graphics
+.. class:: Circle
+
 Path: **geraldo.Circle**
 
 **Example of use**
@@ -127,6 +145,9 @@ Path: **geraldo.Circle**
 
 Arc
 ---
+
+.. currentmodule:: geraldo.graphics
+.. class:: Arc
 
 Path: **geraldo.Arc**
 
@@ -146,6 +167,9 @@ Path: **geraldo.Arc**
 Ellipse
 -------
 
+.. currentmodule:: geraldo.graphics
+.. class:: Ellipse
+
 Path: **geraldo.Ellipse**
 
 **Example of use**
@@ -161,6 +185,9 @@ Path: **geraldo.Ellipse**
 
 Image
 -----
+
+.. currentmodule:: geraldo.graphics
+.. class:: Image
 
 Path: **geraldo.Image**
 

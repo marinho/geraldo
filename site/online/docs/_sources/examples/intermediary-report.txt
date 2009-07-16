@@ -111,3 +111,9 @@ Generating PDF with half height page
     >>> report.page_size = (A4[0], A4[1] / 2)
     >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/users-report-half-height.pdf'))
 
+The Result
+
+- http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/users-report.pdf
+- http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/users-report-half-height.pdf
+- http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/users-report.txt
+

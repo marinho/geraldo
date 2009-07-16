@@ -104,3 +104,7 @@ Generating PDF...
     >>> report.queryset = User.objects.order_by('id')
     >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/child-bands-report.pdf'))
 
+The Result
+
+- http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/child-bands-report.pdf
+

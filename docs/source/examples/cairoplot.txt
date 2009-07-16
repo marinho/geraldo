@@ -146,3 +146,7 @@ PDF generation
 
     >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/charts-cairoplot-report.pdf'))
 
+The Result
+
+- http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/charts-cairoplot-report.pdf
+

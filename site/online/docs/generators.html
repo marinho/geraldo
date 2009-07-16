@@ -51,6 +51,12 @@
 future we will have generators to XML, HTML, TXT, PS, images and so on.</p>
 <div class="section" id="pdf-generator">
 <h2>PDF Generator<a class="headerlink" href="#pdf-generator" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="geraldo.generators.PDFGenerator">
+<em class="property">
+class </em><tt class="descclassname">geraldo.generators.</tt><tt class="descname">PDFGenerator</tt><a class="headerlink" href="#geraldo.generators.PDFGenerator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <p>Path: <strong>geraldo.generators.PDFGenerator</strong></p>
 <p>This generator is the most mature generator we have. It generates PDF files to
 be viewed on Adobe Acrobat Reader or similar softwares. It uses the awesome
@@ -65,6 +71,7 @@ attribute &#8216;canvas&#8217;</p>
 </li>
 <li><p class="first"><strong>canvas</strong> - Default: None</p>
 <blockquote>
+<p><strong>New in development version</strong></p>
 <p>If you have already a canvas instantiated, you can inform it in replacement
 to &#8216;filename&#8217; to generate this report inside. This is useful to generate
 many reports into the same PDF.</p>
@@ -72,6 +79,7 @@ many reports into the same PDF.</p>
 </li>
 <li><p class="first"><strong>return_canvas</strong> - Default: False</p>
 <blockquote>
+<p><strong>New in development version</strong></p>
 <p>If you inform this as <strong>True</strong>, the file will not be save and the generator
 will return the canvas to you use as you want.</p>
 </blockquote>
@@ -93,7 +101,12 @@ will return the canvas to you use as you want.</p>
 </div>
 <div class="section" id="text-generator">
 <h2>Text Generator<a class="headerlink" href="#text-generator" title="Permalink to this headline">¶</a></h2>
-<p><strong>New in development version.</strong></p>
+<dl class="class">
+<dt id="geraldo.generators.TextGenerator">
+<em class="property">
+class </em><tt class="descclassname">geraldo.generators.</tt><tt class="descname">TextGenerator</tt><a class="headerlink" href="#geraldo.generators.TextGenerator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <p>Path: <strong>geraldo.generators.TextGenerator</strong></p>
 <p>This generator is still in development stage, but it already works well. It
 ca be used to generate text files or to print to matrix printers.</p>

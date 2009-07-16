@@ -99,4 +99,8 @@ Now generating the composed landscape report
     >>> report = LandscapeUsersReport(queryset=queryset)
     >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/composition-landscape-report.pdf'))
 
+The Result
+
+- http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/composition-report.pdf
+- http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/composition-landscape-report.pdf
 

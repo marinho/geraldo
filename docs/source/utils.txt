@@ -4,6 +4,9 @@ Utilities Reference
 landscape
 ---------
 
+.. currentmodule:: geraldo.utils
+.. function:: landscape
+
 Path: **geraldo.landscape**
 
 Page sizes are tuples with 2 nodes: first with **width** and second width
@@ -13,6 +16,9 @@ Page sizes are tuples with 2 nodes: first with **width** and second width
 
 BAND_WIDTH
 ----------
+
+.. currentmodule:: geraldo.utils
+.. data:: BAND_WIDTH
 
 Path: **geraldo.BAND_WIDTH**
 

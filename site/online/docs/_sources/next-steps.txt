@@ -11,14 +11,13 @@ Engine API
 * **Table band** - a band to make easy create lists just using tables instead
   of detail band and lines. Table band must be an alternative to detail band
 * Support canvas draw
-* Report merging (many reports at once)
 * Events (i.e: BeforePrint and AfterPrint for bands and reports)
 
 Generators
 ----------
 
 * **Generate in ODF formats (ODT and ODS) (currently in development)**
-* Generate in HTML and maybe to TXT
+* Generate in HTML
 * Export/import structure to/from a XMLized format
 
 Thir-part tools

@@ -103,3 +103,7 @@ Generating PDF...
     >>> from geraldo.generators import PDFGenerator
     >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/subreports-report.pdf'))
 
+The Result
+
+- http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/subreports-report.pdf
+

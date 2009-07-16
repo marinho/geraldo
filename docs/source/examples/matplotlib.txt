@@ -117,3 +117,7 @@ PDF generation
     >>> from geraldo.generators import PDFGenerator
     >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/charts-matplotlib-report.pdf'))
 
+The Result
+
+- http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/charts-matplotlib-report.pdf
+

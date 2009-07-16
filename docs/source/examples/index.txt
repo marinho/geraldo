@@ -20,4 +20,5 @@ source code.
     inline-detail
     inline-subreport
     auto-expand-bands
+    two-reports-at-once
 

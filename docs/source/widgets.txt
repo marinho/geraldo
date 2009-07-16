@@ -8,6 +8,9 @@ All widget classes can be initialized with their attributes as class arguments.
 Widget
 ------
 
+.. currentmodule:: geraldo.widgets
+.. class:: Widget
+
 Path: **geraldo.widgets.Widget**
 
 Base class for reports widgets, you should use it only to inherit and make your
@@ -77,6 +80,9 @@ They are read-only attributes you can use in render time.
 Label
 -----
 
+.. currentmodule:: geraldo.widgets
+.. class:: Label
+
 Path: **geraldo.Label**
 
 A label is just a simple text.
@@ -98,6 +104,9 @@ A label is just a simple text.
 
 ObjectValue
 -----------
+
+.. currentmodule:: geraldo.widgets
+.. class:: ObjectValue
 
 Path: **geraldo.ObjectValue**
 
@@ -166,6 +175,11 @@ with a mask or additional text.
 
 SystemField
 -----------
+
+.. currentmodule:: geraldo.widgets
+.. class:: SystemField
+
+Path: **geraldo.SystemField**
 
 This shows system informations, like the report title, current date/time, page
 number, pages count, etc.

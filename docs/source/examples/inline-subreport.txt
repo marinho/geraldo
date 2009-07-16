@@ -118,3 +118,8 @@ Generating Text...
     >>> report.generate_by(TextGenerator, filename=os.path.join(cur_dir,
     ...     'output/inline-subreports-report.txt'), to_printer=False, encode_to='latin-1')
 
+The Result
+
+- http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/inline-subreports-report.pdf
+- http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/inline-subreports-report.txt
+

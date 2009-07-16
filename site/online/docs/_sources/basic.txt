@@ -4,6 +4,9 @@ Basic Reference
 Report
 ------
 
+.. currentmodule:: geraldo.base
+.. class:: Report
+
 Path: **geraldo.Report**
 
 This is the report main class. Every report must inherit or be an instance of
@@ -63,6 +66,9 @@ A report band must be a class inherited from **ReportBand** or an instance of
 SubReport
 ---------
 
+.. currentmodule:: geraldo.base
+.. class:: SubReport
+
 Path: **geraldo.SubReport**
 
 Class to be used for subreport objects. It doesn't need to be inherited.
@@ -100,6 +106,9 @@ A report band must be a class inherited from **ReportBand** or an instance of
 ReportBand
 ----------
 
+.. currentmodule:: geraldo.base
+.. class:: ReportBand
+
 Path: **geraldo.ReportBand**
 
 A band is a horizontal area in the report. It can be used to print things on
@@ -124,13 +133,14 @@ queryset.
 - **margin_bottom** - Default: 0
 - **auto_expanded_height** - Default: False
 
-    **New in development version**
-
     Use 'auto_expanded_height' to make flexible bands to fit their heights to 
     their elements.
 
 DetailBand
 ----------
+
+.. currentmodule:: geraldo.base
+.. class:: DetailBand
 
 Path: **geraldo.DetailBand**
 
@@ -154,6 +164,9 @@ attributes, specific to detail bands.
 
 ReportGroup
 -----------
+
+.. currentmodule:: geraldo.base
+.. class:: ReportGroup
 
 Path: **geraldo.ReportGroup**
 

@@ -85,3 +85,7 @@ Generating PDF...
     >>> report = LandscapeUsersReport(queryset=queryset)
     >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/inheritance-landscape-report.pdf'))
 
+The Result
+
+- http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/inheritance-landscape-report.pdf
+
