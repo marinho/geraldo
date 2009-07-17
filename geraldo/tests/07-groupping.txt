@@ -31,6 +31,7 @@ In this test we work with users as following:
     
     >>> from geraldo import Report, ReportBand, Label, ObjectValue, SystemField,\
     ...     FIELD_ACTION_COUNT, FIELD_ACTION_SUM, BAND_WIDTH, Line, ReportGroup
+    >>> from geraldo.exceptions import AttributeNotFound
 
 Report class
 
@@ -85,17 +86,23 @@ Report class
     ...                 elements=[
     ...                     ObjectValue(attribute_name='is_superuser', left=0, top=0.1*cm,
     ...                         get_value=lambda instance: 'Superuser: ' + (instance.is_superuser and 'Yes' or 'No'),
-    ...                         style={'fontName': 'Helvetica-Bold', 'fontSize': 12})
+    ...                         style={'fontName': 'Helvetica-Bold', 'fontSize': 12}),
+    ...                     ObjectValue(attribute_name='id', action=FIELD_ACTION_COUNT,
+    ...                         display_format='%s superusers', left=7*cm, top=0.1*cm),
     ...                 ],
     ...                 borders={'bottom': True},
     ...             ),
     ...             band_footer=ReportBand(
     ...                 height=0.7*cm,
+    ...                 name='group-band-footer',
     ...                 elements=[
+    ...                     ObjectValue(attribute_name='username', top=0.1*cm, left=11.2*cm,
+    ...                         name='latest-name'),
     ...                     ObjectValue(attribute_name='id', action=FIELD_ACTION_COUNT,
     ...                         display_format='%s superusers', left=0*cm, top=0.1*cm),
     ...                     ObjectValue(attribute_name='id', action=FIELD_ACTION_SUM,
     ...                         display_format='%s is the sum of IDs above', left=4*cm, top=0.1*cm),
+    ...                     Label(text='Latest:', top=0.1*cm, left=10*cm),
     ...                 ],
     ...                 borders={'top': True},
     ...             ),
@@ -123,6 +130,17 @@ Report class
     >>> queryset = User.objects.order_by('is_superuser','is_staff','id')
 
     >>> report = GrouppingReport(queryset=queryset)
+
+Customized event to get object's value (this could be done using lambda or
+declaring it as a common method on a class)
+
+    >>> def get_latest_value(obj):
+    ...     if obj.name == 'latest-name':
+    ...         return obj.get_queryset_values()[-1]
+    ...     
+    ...     raise AttributeNotFound
+
+    >>> report.find_by_name('group-band-footer').get_object_value = get_latest_value
 
 PDF common generation with users
 

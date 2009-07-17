@@ -37,7 +37,7 @@ class PDFGenerator(ReportGenerator):
         self.render_bands()
 
         # Initializes the definitive PDF canvas
-        self.start_pdf() #self.filename) # XXX
+        self.start_pdf()
 
         self.generate_pages()
 

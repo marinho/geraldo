@@ -17,6 +17,11 @@ You can also override some methods to customize some things.
 **Data source**
 
 - **queryset** - Default: None
+
+    A list (or other iterable object) of objects that Geraldo will use to drive
+    the report generation. For each object on that list, a detail band is
+    rendered.
+
 - **print_if_empty** - Default: False
 
 **Report properties**

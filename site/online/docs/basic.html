@@ -60,9 +60,16 @@ class </em><tt class="descclassname">geraldo.base.</tt><tt class="descname">Repo
 this class. It supports some bands and report definitions.</p>
 <p>You can also override some methods to customize some things.</p>
 <p><strong>Data source</strong></p>
-<ul class="simple">
-<li><strong>queryset</strong> - Default: None</li>
-<li><strong>print_if_empty</strong> - Default: False</li>
+<ul>
+<li><p class="first"><strong>queryset</strong> - Default: None</p>
+<blockquote>
+<p>A list (or other iterable object) of objects that Geraldo will use to drive
+the report generation. For each object on that list, a detail band is
+rendered.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>print_if_empty</strong> - Default: False</p>
+</li>
 </ul>
 <p><strong>Report properties</strong></p>
 <ul class="simple">
