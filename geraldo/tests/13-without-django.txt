@@ -1,0 +1,80 @@
+CHARTS WITH MATPLOTLIB
+======================
+
+This test is done without relation to Django querysets.
+
+    >>> import os
+    >>> cur_dir = os.path.dirname(os.path.abspath(__file__))
+
+    >>> from reportlab.lib.pagesizes import A4
+    >>> from reportlab.lib.units import cm
+    >>> from reportlab.lib.enums import TA_CENTER, TA_RIGHT
+    
+    >>> from geraldo import Report, ReportBand, Label, ObjectValue, SystemField,\
+    ...     FIELD_ACTION_COUNT, BAND_WIDTH
+
+Report class
+
+    >>> class SimpleListReport(Report):
+    ...     title = 'Demonstration without Django'
+    ... 
+    ...     class band_page_header(ReportBand):
+    ...         height = 1.3*cm
+    ...         elements = [
+    ...             SystemField(expression='%(report_title)s', top=0.1*cm, left=0, width=BAND_WIDTH,
+    ...                 style={'fontName': 'Helvetica-Bold', 'fontSize': 14, 'alignment': TA_CENTER}),
+    ...             Label(text="ID", top=0.8*cm, left=0),
+    ...             Label(text="Name", top=0.8*cm, left=3*cm),
+    ...         ]
+    ...         borders = {'bottom': True}
+    ... 
+    ...     class band_page_footer(ReportBand):
+    ...         height = 0.5*cm
+    ...         elements = [
+    ...             Label(text='Created with Geraldo Reports', top=0.1*cm, left=0),
+    ...             SystemField(expression='Page # %(page_number)d of %(page_count)d', top=0.1*cm,
+    ...                 width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
+    ...         ]
+    ...         borders = {'top': True}
+    ... 
+    ...     class band_detail(ReportBand):
+    ...         height = 0.5*cm
+    ...         elements = [
+    ...             ObjectValue(attribute_name='id', top=0, left=0),
+    ...             ObjectValue(attribute_name='name', top=0, left=3*cm),
+    ...         ]
+
+    >>> class MyObject(object):
+    ...     def __init__(self, **kwargs):
+    ...         for k,v in kwargs.items():
+    ...             setattr(self, k, v)
+
+
+    >>> objects_list = [
+    ...     MyObject(id=1, name='Rio de Janeiro'),
+    ...     MyObject(id=2, name='New York'),
+    ...     MyObject(id=3, name='Paris'),
+    ...     MyObject(id=4, name='London'),
+    ...     MyObject(id=5, name='Tokyo'),
+    ...     MyObject(id=6, name='Moscow'),
+    ...     MyObject(id=7, name='Beijing'),
+    ...     MyObject(id=8, name='Hamburg'),
+    ...     MyObject(id=9, name='New Delhi'),
+    ...     MyObject(id=10, name='Jakarta'),
+    ... ]
+
+    >>> report = SimpleListReport(queryset=objects_list)
+
+PDF generation
+
+    >>> from geraldo.generators import PDFGenerator
+
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/without-django.pdf'))
+
+Page with half height
+
+    >>> report.page_size = (A4[0], A4[1] / 2)
+
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/without-django-half-height.pdf'))
+
+

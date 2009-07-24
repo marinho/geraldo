@@ -1,0 +1,159 @@
+VISIBLE AND NOT VISIBLE REPORT
+==============================
+
+This is just a simple report, with objects setted as visible (default) not not
+visible, including bands, widgets, graphics, groups and subreports.
+
+    >>> import os
+    >>> cur_dir = os.path.dirname(os.path.abspath(__file__))
+
+    >>> from geraldo import Report, ReportBand, SubReport, ReportGroup
+    >>> from geraldo.base import Element, cm
+    >>> from geraldo import GeraldoObject, ObjectNotFound, ManyObjectsFound
+    >>> from geraldo import ObjectValue, SystemField, Label, Line,\
+    ...     FIELD_ACTION_COUNT
+
+A report with an example of every class
+
+    >>> class MyReport(Report):
+    ...     title = 'Report with visible and not visible objects'
+    ... 
+    ...     class band_page_header(ReportBand):
+    ...         height = 1*cm
+    ...         name = 'the-page-header-band'
+    ...         elements = [
+    ...             Line(name='the-line', left=1*cm, top=0.3*cm, right=3*cm, bottom=0.7*cm),
+    ...             SystemField(expression='%(report_title)s', top=0.1*cm, left=3.5*cm,
+    ...                 name='the-system-field', width=15*cm),
+    ...         ]
+    ...
+    ...     class band_detail(ReportBand):
+    ...         height = 0.6*cm
+    ...         name = 'the-detail-band'
+    ...         elements = [
+    ...             ObjectValue(attribute_name='city', top=0.1*cm, left=3*cm,
+    ...                 name='the-object-value'),
+    ...             Label(text="Name", name='the-label', top=0.1*cm, left=10*cm),
+    ...         ]
+    ...         child_bands = [
+    ...             ReportBand(
+    ...                 height = 0.6*cm,
+    ...                 name = 'the-child-band',
+    ...                 auto_expand_height=True,
+    ...                 elements = [
+    ...                     Label(text="About:", name='the-label-4', top=0.1*cm, left=0),
+    ...                     ObjectValue(attribute_name='about', name='the-object-value-5',
+    ...                         top=0.1*cm, left=2*cm, width=15*cm),
+    ...                 ]),
+    ...             ReportBand(
+    ...                 height = 0.6*cm,
+    ...                 name = 'the-child-band-2',
+    ...                 elements = [
+    ...                     Label(text="This will be not visible:", name='the-label-5',
+    ...                         top=0.1*cm, left=0, visible=False),
+    ...                     Label(text='This also', name='the-duplicate-name',
+    ...                         top=0.1*cm, left=5*cm),
+    ...                 ]),
+    ...         ]
+    ...
+    ...     subreports = [
+    ...         SubReport(
+    ...             name = 'the-sub-report',
+    ...             queryset_string = '%(object)s["people"]',
+    ...             band_header = ReportBand(
+    ...                     height = 0.6*cm,
+    ...                     name='the-sub-report-header-band',
+    ...                     elements=[
+    ...                         Label(text='Upper', name='the-label-2', top=0.1*cm, left=0),
+    ...                         Label(text='Lower', name='the-label-3', top=0.1*cm, left=3*cm),
+    ...                     ],
+    ...                 ),
+    ...             band_detail = ReportBand(
+    ...                     height = 0.6*cm,
+    ...                     name='the-sub-report-detail-band',
+    ...                     elements=[
+    ...                         ObjectValue(attribute_name='upper', name='the-object-value-2',
+    ...                             top=0.1*cm, left=0*cm),
+    ...                         ObjectValue(attribute_name='lower', name='the-duplicate-name',
+    ...                             top=0.1*cm, left=3*cm),
+    ...                     ],
+    ...                 ),
+    ...             ),
+    ...         SubReport(
+    ...             name = 'the-sub-report-2',
+    ...             queryset_string = '%(object)s["places"]',
+    ...             band_detail = ReportBand(
+    ...                     height = 0.6*cm,
+    ...                     name='the-sub-report-detail-band-2',
+    ...                     elements=[
+    ...                         ObjectValue(attribute_name='upper', name='the-object-value-3',
+    ...                             top=0.1*cm, left=0),
+    ...                         ObjectValue(attribute_name='lower', name='the-duplicate-name',
+    ...                             top=0.1*cm, left=3*cm),
+    ...                     ],
+    ...                 ),
+    ...             ),
+    ...         ]
+    ...
+    ...     groups = [
+    ...         ReportGroup(attribute_name='country', 
+    ...             name = 'the-report-group',
+    ...             band_header=ReportBand(
+    ...                 height = 0.6*cm,
+    ...                 name='the-report-group-header-band',
+    ...                 elements=[
+    ...                     ObjectValue(attribute_name='country', name='the-object-value-4',
+    ...                         top=0.1*cm, left=0)
+    ...                 ],
+    ...             ),
+    ...         ),
+    ...     ]
+
+Objects list
+
+    >>> objects_list = [
+    ...     {'city': 'New York', 'country': 'USA', 'about': "New York is the most populous city in the United States, and the center of the New York metropolitan area, which is among the most populous urban areas in the world. A leading global city, New York exerts a powerful influence over worldwide commerce, finance, culture, fashion and entertainment. As host of the United Nations headquarters, it is also an important center for international affairs. The city is often referred to as New York City to differentiate it from the state of New York, of which it is a part."},
+    ...     {'city': 'London', 'country': 'UK', 'about': "London contains four World Heritage Sites: the Tower of London; the historic settlement of Greenwich; the Royal Botanic Gardens, Kew; and the site comprising the Palace of Westminster, Westminster Abbey and St. Margaret's Church."},
+    ...     {'city': 'Paris', 'country': 'FR', 'about': "An important settlement for more than two millennia, Paris is today one of the world's leading business and cultural centres, and its influence in politics, education, entertainment, media, fashion, science and the arts all contribute to its status as one of the world's major global cities.[8] According to 2005 estimates, the Paris urban area is Europe's biggest city economy,[9] and is fifth in the world's list of cities by GDP."},
+    ...     {'city': 'Moscow', 'country': 'RU', 'about': "A person from Moscow is called a Muscovite in English, Moskvich[8] in Russian."},
+    ... ]
+
+Childs
+
+    >>> objects_list[0]['people'] = ['Mary','John','Joseph']
+    >>> objects_list[1]['people'] = ['Stephen','William','Peter']
+    >>> objects_list[2]['people'] = ['Mauri','Jaquez','Francois']
+    >>> objects_list[3]['people'] = ['Putin','Ivan','Yuri']
+
+    >>> objects_list[0]['places'] = ['Wall Street','Broadway']
+    >>> objects_list[1]['places'] = ['Giant Wheel']
+    >>> objects_list[2]['places'] = ['Eiffel Tower','Triumph Arch','Louvre Museum']
+    >>> objects_list[3]['places'] = ['Kremlin']
+
+    >>> report = MyReport(queryset=objects_list)
+
+PDF generation
+
+    >>> from geraldo.generators import PDFGenerator
+
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/visible-objects-report.pdf'))
+
+Text generation
+
+    >>> from geraldo.generators import TextGenerator
+
+    >>> report.generate_by(TextGenerator, filename=os.path.join(cur_dir, 'output/visible-objects-report.txt'))
+
+Changing some objects to be not visible
+
+    >>> report.find_by_name('the-line').visible = False
+    >>> report.find_by_name('the-object-value-2').visible = False
+    >>> report.find_by_name('the-object-value-5').visible = False
+    >>> report.find_by_name('the-sub-report').visible = False
+
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/not-visible-objects-report.pdf'))
+
+Text generation
+
+    >>> report.generate_by(TextGenerator, filename=os.path.join(cur_dir, 'output/not-visible-objects-report.txt'))
+
