@@ -136,42 +136,44 @@ class ObjectValue(Label):
     def action_value(self):
         return self.get_object_value()
 
-    def action_count(self, values=None):
-        values = values or self.get_queryset_values()
+    def action_count(self):
+        values = self.get_queryset_values()
         return len([value for value in values if value])
 
-    def action_avg(self, values=None):
-        values = values or self.get_queryset_values()
+    def action_avg(self):
+        values = self.get_queryset_values()
 
         # Clear empty values
         values = self._clean_empty_values(values)
 
         return sum(values) / len(values)
 
-    def action_min(self, values=None):
-        values = values or self.get_queryset_values()
+    def action_min(self):
+        values = self.get_queryset_values()
         return min(values)
 
-    def action_max(self, values=None):
-        values = values or self.get_queryset_values()
+    def action_max(self):
+        values = self.get_queryset_values()
         return max(values)
 
-    def action_sum(self, values=None):
-        values = values or self.get_queryset_values()
+    def action_sum(self):
+        values = self.get_queryset_values()
 
         # Clear empty values
         values = self._clean_empty_values(values)
 
         return sum(values)
 
-    def action_distinct_count(self, values=None):
-        values = values or self.get_queryset_values()
+    def action_distinct_count(self):
+        values = Set(self.get_queryset_values())
         return len(values)
 
     def _text(self):
         try: # First of all, tries to get using parent object
             value = self.band.get_object_value(obj=self)
-        except (AttributeError, AttributeNotFound):
+        #except AttributeError:
+        #    raise
+        except AttributeNotFound:
             value = getattr(self, 'action_'+self.action)()
 
         text = unicode(value)

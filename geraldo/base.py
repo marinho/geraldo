@@ -97,10 +97,7 @@ class GeraldoObject(object):
     def get_object_value(self, obj=None, attribute_name=None, action=None):
         """Override this method to customize the behaviour of object getting
         its value."""
-        try:
-            return self.parent.get_object_value(obj, attribute_name, action)
-        except AttributeError:
-            raise AttributeNotFound
+        return self.parent.get_object_value(obj, attribute_name, action)
 
 class BaseReport(GeraldoObject):
     """Basic Report class, inherited and used to make reports adn subreports"""
@@ -590,61 +587,6 @@ class ReportGroup(GeraldoObject):
         # Bands
         if self.band_header: self.band_header.parent = self
         if self.band_footer: self.band_footer.parent = self
-
-    def get_object_value(self, obj=None, attribute_name=None, action=None, group=None, objects=None, report_groups=None): # XXX
-        # Leave it if this is from an object value
-        if obj.band.is_detail:
-            raise AttributeNotFound
-
-        if obj.action != 'value': # XXX
-            obj.generator.test = True
-
-        # Set values for not informed arguments
-        if obj:
-            attribute_name = attribute_name or obj.attribute_name
-            action = action or obj.action
-            objects = objects or obj.generator.get_current_queryset()
-            report_groups = report_groups or obj.report.groups
-
-        if obj.action != 'value': # XXX
-            obj.generator.test = False
-
-        # Current group is the default group to drive on
-        group = group or self
-
-        # Get the position of the current group in the report groups list
-        idx = report_groups.index(group) + 1
-
-        # If there is no more groups under the current one, just return
-        # the given objects list
-        if idx >= len(report_groups):
-            values_list = [get_attr_value(o, attribute_name) for o in objects]
-
-        else:
-            values_list = []
-
-            # Get the group under the current one
-            group_under = report_groups[idx]
-
-            # Get children values groupped by attribute name
-            distinct = []
-            for obj in objects:
-                cur_value = get_attr_value(obj, group_under.attribute_name)
-
-                if not cur_value in distinct:
-                    distinct.append(cur_value)
-
-            # Adds children values
-            for value in distinct:
-                values_list.append(
-                        self.get_object_value(
-                            obj=obj,
-                            group=group_under,
-                            objects=[get_attr_value(o, attribute_name) for o in objects if get_attr_value(o, group_under.attribute_name) == value],
-                            )
-                        )
-
-        return getattr(obj, 'action_'+self.action)(values_list)
     
 class Element(GeraldoObject):
     """The base class for widgets and graphics"""

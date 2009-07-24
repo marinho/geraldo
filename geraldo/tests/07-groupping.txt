@@ -87,8 +87,6 @@ Report class
     ...                     ObjectValue(attribute_name='is_superuser', left=0, top=0.1*cm,
     ...                         get_value=lambda instance: 'Superuser: ' + (instance.is_superuser and 'Yes' or 'No'),
     ...                         style={'fontName': 'Helvetica-Bold', 'fontSize': 12}),
-    ...                     ObjectValue(attribute_name='id', action=FIELD_ACTION_COUNT,
-    ...                         display_format='%s superusers', left=7*cm, top=0.1*cm),
     ...                 ],
     ...                 borders={'bottom': True},
     ...             ),
@@ -135,7 +133,7 @@ Customized event to get object's value (this could be done using lambda or
 declaring it as a common method on a class)
 
     >>> def get_latest_value(obj):
-    ...     if obj.name == 'latest-name':
+    ...     if getattr(obj, 'name', None) == 'latest-name':
     ...         return obj.get_queryset_values()[-1]
     ...     
     ...     raise AttributeNotFound

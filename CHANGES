@@ -1,3 +1,13 @@
+2009-07-24: Version 0.3.5-stable
+---------------------------------
+* Fixing problem on latest commit and changing back to stable version
+
+2009-07-24: Version 0.3.5-alpha-3
+---------------------------------
+* Implementing method 'get_object_value' on bands and parents to
+  override ObjectValue getting value behavior
+* Fixing aggregation calculations on reports with multiple groups
+
 2009-07-15: Version 0.3.5-alpha-2
 ---------------------------------
 * Adding attributes 'canvas' and 'return_canvas' to PDF generator

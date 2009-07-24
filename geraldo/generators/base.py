@@ -573,7 +573,7 @@ class ReportGenerator(object):
     # Groups topic
 
     def calc_changed_groups(self, force_no_changed=False):
-        """Defines which groups have been changed their driver values to be
+        """Defines which groups has been changed their driver values to be
         used to render group bands"""
         changed = force_no_changed
 
@@ -595,20 +595,7 @@ class ReportGenerator(object):
 
             # Appends to the stack
             if changed:
-                if group in self._groups_stack: # XXX
-                    idx = self._groups_stack.index(group) + 1
-
-                    # Clear groups under the current one
-                    for group_under in self._groups_stack[idx:]:
-                        current_value = get_attr_value(self._current_object, group_under.attribute_name)
-                        self._groups_changed[group_under] = True
-                        self._groups_values[group_under] = current_value
-
-                    self._groups_stack = self._groups_stack[:idx]
-
-                    break
-                else:
-                    self._groups_stack.append(group)
+                self._groups_stack.append(group)
 
     def render_groups_headers(self):
         """Renders the report headers using 'changed' definition calculated by
@@ -631,16 +618,17 @@ class ReportGenerator(object):
 
         # Loops on groups to render changed ones
         for group in reversed(self.report.groups):
-            if force or self._groups_changed.get(group, None): # and\
-                          #self._groups_stack and\
-                          #self._groups_stack[-1] == group ):
+            if force or ( self._groups_changed.get(group, None) and\
+                          self._groups_stack and\
+                          self._groups_stack[-1] == group ):
                 if group.band_footer and group.band_footer.visible:
-                    self.force_blank_page_by_height(
-                            self.calculate_size(group.band_footer.height),
-                            )
+                    self.force_blank_page_by_height(self.calculate_size(group.band_footer.height))
                     self.render_band(group.band_footer)
 
-                #self._groups_stack.pop() # XXX
+                if self._groups_stack:
+                    self._groups_working_values.pop(self._groups_stack[-1])
+
+                self._groups_stack.pop()
 
     def get_current_queryset(self):
         """Returns the current queryset. This solves a problem with subreports
@@ -657,28 +645,20 @@ class ReportGenerator(object):
         # Defaul detail driver queryset
         return self.report.queryset
 
-    def get_group_filter(self): # XXX
-        groups_values = self._groups_working_values
+    def get_objects_in_group(self):
+        """Returns objects filtered in the current group or all if there is no
+        group"""
 
-        filter_dict = dict([(group.attribute_name, groups_values.get(group, None))\
-                for group in self.report.groups if group in self._groups_stack])
+        filter_dict = dict([(group.attribute_name, value) for group, value in self._groups_working_values.items()])
 
-        return filter_dict
-
-    def get_objects_in_group(self): # XXX
-        """Returns objects filtered in the current group or all if there
-        is no group"""
-
-        filter_dict = self.get_group_filter()
-
-        def filter_func(obj):
+        def filter_object(obj):
             for k,v in filter_dict.items():
                 if get_attr_value(obj, k) != v:
                     return False
 
             return obj
 
-        return filter(filter_func, self.report.queryset)
+        return filter(filter_object, self.report.queryset)
 
     # SubReports
 
