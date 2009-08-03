@@ -146,7 +146,7 @@ class PDFGenerator(ReportGenerator):
 
         import datetime
 
-        return ParagraphStyle(name=datetime.datetime.now().strftime('%H%m%s'), **d_style)
+        return ParagraphStyle(name=datetime.datetime.now().strftime('%H%M%S'), **d_style)
 
     def keep_in_frame(self, widget, width, height, paragraphs, mode):
         widget.keep = KeepInFrame(width, height, paragraphs, mode=mode)
