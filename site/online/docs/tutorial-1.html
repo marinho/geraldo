@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Tutorial 1 &mdash; Geraldo Reports Documentation v0.3.6-stable documentation</title>
+    <title>Tutorial using Django &mdash; Geraldo Reports Documentation v0.3.6-stable documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -20,7 +20,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="Geraldo Reports Documentation v0.3.6-stable documentation" href="index.html" />
-    <link rel="next" title="Basic Reference" href="basic.html" />
+    <link rel="next" title="Tutorial using Web2Py" href="tutorial-2.html" />
     <link rel="prev" title="Overview" href="index.html" /> 
   </head>
   <body>
@@ -31,7 +31,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="basic.html" title="Basic Reference"
+          <a href="tutorial-2.html" title="Tutorial using Web2Py"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Overview"
@@ -45,24 +45,24 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="tutorial-1">
-<h1>Tutorial 1<a class="headerlink" href="#tutorial-1" title="Permalink to this headline">¶</a></h1>
-<p>Once you have Geraldo installed and its dependencies resolved (read
-Installation document to know about dependency for ReportLab and Python
-Imaging Library) you can start opening the <strong>settings.py</strong> from your
+  <div class="section" id="tutorial-using-django">
+<h1>Tutorial using Django<a class="headerlink" href="#tutorial-using-django" title="Permalink to this headline">¶</a></h1>
+<p>Once you have Geraldo installed and its dependencies resolved (read the
+Installation document to know about the dependencies on ReportLab and Python
+Imaging Library), you can start opening the <strong>settings.py</strong> from your
 project to edit.</p>
 <blockquote>
-<strong>Attention:</strong> this tutorial is pressuposes you are going to use Geraldo
+<strong>Attention:</strong> this tutorial assumes you are going to use Geraldo
 with a Django project, but in fact you can just ignore the Django parts
 and all the rest is exactly the same for Django and non-Django cases.</blockquote>
 <div class="section" id="step-1-preparing-your-project">
 <h2>Step 1. Preparing your project<a class="headerlink" href="#step-1-preparing-your-project" title="Permalink to this headline">¶</a></h2>
 <p>To install Geraldo in your Django project, you must change the setting
-<strong>INSTALLED_APPS</strong> in your <strong>settings.py</strong> file and this shoul be enough.</p>
-<p>But let&#8217;s create a new URL to load a report PDF online.</p>
+<strong>INSTALLED_APPS</strong> in your <strong>settings.py</strong> file and this should be enough.</p>
+<p>But let&#8217;s create a new URL to load a PDF report online.</p>
 <blockquote>
-<strong>Attention:</strong> Geraldo can work with online or not onfile ways to get PDF.
-You are no dependent for a URL or view to generate reports from Geraldo.
+<strong>Attention:</strong> Geraldo can work with online or file ways to get a PDF.
+You are not dependent on a URL or view to generate reports from Geraldo.
 This is just one of many ways you can do it.</blockquote>
 <p>We are going to work with a common example for this kind of solution: a
 purchasing application.</p>
@@ -91,7 +91,7 @@ purchasing application.</p>
     <span class="n">total_price</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DecimalField</span><span class="p">(</span><span class="n">max_digits</span><span class="o">=</span><span class="mf">12</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mf">2</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>First you declare a new URL, this for example:</p>
+<p>First you declare a new URL, for example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s">&#39;purchases.views&#39;</span><span class="p">,</span>
     <span class="n">url</span><span class="p">(</span><span class="s">&#39;^purchase-report/$&#39;</span><span class="p">,</span> <span class="s">&#39;purchase_report&#39;</span><span class="p">),</span>
 <span class="p">)</span>
@@ -107,7 +107,7 @@ purchasing application.</p>
 <span class="k">def</span> <span class="nf">purchase_report</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="n">resp</span> <span class="o">=</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">mimetype</span><span class="o">=</span><span class="s">&#39;application/pdf&#39;</span><span class="p">)</span>
 
-    <span class="n">purchases</span> <span class="o">=</span> <span class="n">Purchase</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;customer&#39;</span><span class="p">,</span><span class="s">&#39;id&#39;</span><span class="p">)</span>
+    <span class="n">purchases</span> <span class="o">=</span> <span class="n">Purchase</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;customer&#39;</span><span class="p">,</span> <span class="s">&#39;id&#39;</span><span class="p">)</span>
     <span class="n">report</span> <span class="o">=</span> <span class="n">ReportPurchase</span><span class="p">(</span><span class="n">queryset</span><span class="o">=</span><span class="n">purchases</span><span class="p">)</span>
     <span class="n">report</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">resp</span><span class="p">)</span>
 
@@ -119,26 +119,25 @@ purchasing application.</p>
 <span class="kn">from</span> <span class="nn">geraldo.generators</span> <span class="kn">import</span> <span class="n">PDFGenerator</span>
 </pre></div>
 </div>
-<p>Your report class (we will create it in next step) and the generator class
+<p>Your report class (we will create it in the next step) and the generator class
 <strong>PDFGenerator</strong> you will need to generate a PDF file. In the future we will
 have other generators, for other formats of file.</p>
-<p>The next thing is you note you are going to return a PDF format <strong>HttpResponse</strong>,
-look:</p>
+<p>The next thing to note is that you are going to return a PDF format <strong>HttpResponse</strong>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">resp</span> <span class="o">=</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">mimetype</span><span class="o">=</span><span class="s">&#39;application/pdf&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Now you are going to work your report instance:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">purchases</span> <span class="o">=</span> <span class="n">Purchase</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;customer&#39;</span><span class="p">,</span><span class="s">&#39;id&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">purchases</span> <span class="o">=</span> <span class="n">Purchase</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;customer&#39;</span><span class="p">,</span> <span class="s">&#39;id&#39;</span><span class="p">)</span>
 <span class="n">report</span> <span class="o">=</span> <span class="n">ReportPurchase</span><span class="p">(</span><span class="n">queryset</span><span class="o">=</span><span class="n">purchases</span><span class="p">)</span>
 <span class="n">report</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">resp</span><span class="p">)</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li>The first thing you did is get all purchases, ordered by &#8216;customer&#8217; and &#8216;id&#8217;
+<li>The first thing you did is to get all purchases, ordered by &#8216;customer&#8217; and &#8216;id&#8217;
 fields;</li>
-<li>After, you got a <strong>report</strong> instance from your report class
+<li>Afterwards, you got a <strong>report</strong> instance from your report class
 <strong>ReportPurchase</strong>, using purchases queryset as report driver queryset;</li>
-<li>And latest, you called the &#8216;generate_by&#8217;, using the generator class.</li>
+<li>And last, you called the &#8216;generate_by&#8217; method of the generator class.</li>
 </ul>
 <p>Now you have a prepared Django application to use a report you are going to
 create at the next step!</p>
@@ -154,7 +153,7 @@ create a new file &#8216;reports.py&#8217; to declare your report classes inside
     <span class="n">author</span> <span class="o">=</span> <span class="s">&#39;John Smith Corporation&#39;</span>
 </pre></div>
 </div>
-<p>Going to see something more complex, you can set the page size, margins and
+<p>To see something more complex, you can set the page size, margins and
 other report attributes, like below:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span><span class="p">,</span> <span class="n">landscape</span>
 <span class="kn">from</span> <span class="nn">reportlab.lib.pagesizes</span> <span class="kn">import</span> <span class="n">A5</span>
@@ -171,24 +170,24 @@ other report attributes, like below:</p>
     <span class="n">margin_bottom</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
 </pre></div>
 </div>
-<p>As you can see, we use most we can from ReportLab libraries, their units, page
+<p>As you can see, we use what we can from the ReportLab libraries, their units, page
 sizes, stylizing, etc.</p>
-<p>A report is driven by <strong>bands</strong>. If you are used to work with other report
-engines you know what is a band.</p>
+<p>A report is driven by <strong>bands</strong>. If you are used to working with other report
+engines you know what a band is.</p>
 <p>A band is a row with elements in the report canvas. Bands in essence are the
-same but their use vary depending you are using a band as the Page Header or
+same but their use varies depending whether you are using a band as the Page Header or
 Report Summary, for example.</p>
 <p>A report can have a band for each one of following attributes:</p>
 </div>
 <div class="section" id="detail-band">
 <h2>Detail band<a class="headerlink" href="#detail-band" title="Permalink to this headline">¶</a></h2>
 <p>The detail band is the most important band in a report. This is because the
-detail band is the reason of the existency of every report.</p>
-<p>The detail band is used most of times to show object field values. This is the
-same for a detailing info page or just a list or grid.</p>
-<p>The detail band is rendered one time per each object in the queryset attribute.
-So, if you have 10 objects in the queryset, you will have detail band rendered
-10 times, one time per each object.</p>
+detail band is the reason of the existence of every report.</p>
+<p>The detail band is used most of the time to show object field values. This is the
+same for a detailed info page or just a simple list or grid.</p>
+<p>The detail band is rendered one time for each object in the queryset attribute.
+So, if you have 10 objects in the queryset, you will have the detail band rendered
+10 times.</p>
 <p>Let&#8217;s change our report to have a detail band, see below:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span><span class="p">,</span> <span class="n">landscape</span><span class="p">,</span> <span class="n">ReportBand</span><span class="p">,</span> <span class="n">ObjectValue</span>
 <span class="kn">from</span> <span class="nn">reportlab.lib.pagesizes</span> <span class="kn">import</span> <span class="n">A5</span>
@@ -213,23 +212,23 @@ So, if you have 10 objects in the queryset, you will have detail band rendered
             <span class="p">)</span>
 </pre></div>
 </div>
-<p>The attribute <strong>band_dateil</strong> is locally declared as class, but it could be setted
-with an external class else.</p>
-<p>The important thing here is the band has the attribute <strong>height</strong>, fixed with a
+<p>The attribute <strong>band_detail</strong> is locally declared as a class, but it could alternatively be set
+with an external class.</p>
+<p>The important thing here is that the band has the attribute <strong>height</strong>, fixed with a
 defined height in centimeters.</p>
 <p>The second thing to observe is the <strong>elements</strong> list, with 2 widgets representing
 2 model class fields: <strong>id</strong> and <strong>date_creation</strong>. The last one is customized
-with <strong>get_value</strong> attribute, for date field formatting.</p>
+with the <strong>get_value</strong> attribute, for date field formatting.</p>
 </div>
 <div class="section" id="page-header-and-page-footer-bands">
 <h2>Page Header and Page Footer bands<a class="headerlink" href="#page-header-and-page-footer-bands" title="Permalink to this headline">¶</a></h2>
-<p>Page header and Page footer bands are respectively designed to appear on the header and
-footer on every pages in the report.</p>
-<p>In most of reports, a page header is used to show the report title and its page number,
+<p>Page header and Page footer bands are designed to appear on the header and
+footer, respectively, on every page in the report.</p>
+<p>In most reports, a page header is used to show the report title and its page number,
 page count and maybe the columns header if you are creating a list or grid report.</p>
-<p>In the same way, page footer band is used to show footer informations, like the print
+<p>In the same way, a page footer band is used to show footer information, like the print
 date/time, software name, company&#8217;s mark, etc.</p>
-<p>Add this code block to the end of report class to have both bands:</p>
+<p>Add this code block to the end of the report class to have both bands:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">band_page_header</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
     <span class="n">height</span> <span class="o">=</span> <span class="mf">1.3</span><span class="o">*</span><span class="n">cm</span>
     <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
@@ -252,7 +251,7 @@ date/time, software name, company&#8217;s mark, etc.</p>
     <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;top&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
 </pre></div>
 </div>
-<p>Now you have to change the file top lines with imports to import some new elements:</p>
+<p>Now you have to change the top lines of the file with imports to import some new elements:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span><span class="p">,</span> <span class="n">landscape</span><span class="p">,</span> <span class="n">ReportBand</span><span class="p">,</span> <span class="n">ObjectValue</span><span class="p">,</span> <span class="n">SystemField</span><span class="p">,</span>\
         <span class="n">BAND_WIDTH</span><span class="p">,</span> <span class="n">Label</span>
 
@@ -267,35 +266,35 @@ date/time, software name, company&#8217;s mark, etc.</p>
 page count, report title, report author, etc.</li>
 <li><strong>Label</strong> - show a free text</li>
 <li><strong>BAND_WIDTH</strong> - sets the width automatically to its parent band width;</li>
-<li><strong>TA_RIGHT</strong> and <strong>TA_CENTER</strong> - they sets the alignment of a widget</li>
+<li><strong>TA_RIGHT</strong> and <strong>TA_CENTER</strong> - they set the alignment of a widget</li>
 </ul>
 <p>Other good use of Page Header and Page Footer bands is to compose or inherit
-reports layout. Use your imagine ane do it!</p>
+reports layout. Use your imagination!</p>
 </div>
-<div class="section" id="groupping">
-<h2>Groupping<a class="headerlink" href="#groupping" title="Permalink to this headline">¶</a></h2>
-<p>The next thing now is group our purchases by a field. Lets choose the field
+<div class="section" id="grouping">
+<h2>Grouping<a class="headerlink" href="#grouping" title="Permalink to this headline">¶</a></h2>
+<p>The next thing now is to group our purchases by a field. Let&#8217;s choose the field
 <strong>customer</strong>, ok?</p>
-<p>Geraldo allows you to group report by how many levels you want. This means you
-can group the report objects by 1, 2 or how many fields do you want and have
-header and footer to show their aggregation informations and other features.</p>
-<p>But for a while, just add the following code to the end of <strong>reports.py</strong>:</p>
+<p>Geraldo allows you to group a report at many levels. This means you
+can group the report objects by 1, 2 or however many fields you want and have
+a header and footer to show their aggregation information and other features.</p>
+<p>But for now, just add the following code to the end of <strong>reports.py</strong>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">groups</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">ReportGroup</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;customer&#39;</span><span class="p">,</span>
-            <span class="n">band_header</span><span class="o">=</span><span class="n">ReportBand</span><span class="p">(</span>
-                <span class="n">height</span><span class="o">=</span><span class="mf">0.7</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
-                <span class="n">elements</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">ReportGroup</span><span class="p">(</span><span class="n">attribute_name</span> <span class="o">=</span> <span class="s">&#39;customer&#39;</span><span class="p">,</span>
+            <span class="n">band_header</span> <span class="o">=</span> <span class="n">ReportBand</span><span class="p">(</span>
+                <span class="n">height</span> <span class="o">=</span> <span class="mf">0.7</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
                     <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;customer&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">20</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
                         <span class="n">get_value</span><span class="o">=</span><span class="k">lambda</span> <span class="n">instance</span><span class="p">:</span> <span class="s">&#39;Customer: &#39;</span> <span class="o">+</span> <span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">customer</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
                         <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;fontName&#39;</span><span class="p">:</span> <span class="s">&#39;Helvetica-Bold&#39;</span><span class="p">,</span> <span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="mf">12</span><span class="p">})</span>
                     <span class="p">],</span>
-                <span class="n">borders</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;bottom&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">},</span>
+                <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;bottom&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">},</span>
                 <span class="p">)</span>
             <span class="p">),</span>
         <span class="p">]</span>
 </pre></div>
 </div>
-<p>In the same way you did before, you have to change the top imports to have the
+<p>In the same way as you did before, you have to change the top imports to have the
 new elements:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span><span class="p">,</span> <span class="n">landscape</span><span class="p">,</span> <span class="n">ReportBand</span><span class="p">,</span> <span class="n">ObjectValue</span><span class="p">,</span> <span class="n">SystemField</span><span class="p">,</span>\
         <span class="n">BAND_WIDTH</span><span class="p">,</span> <span class="n">Label</span><span class="p">,</span> <span class="n">ReportGroup</span>
@@ -303,12 +302,12 @@ new elements:</p>
 </div>
 <p>The two important things now are:</p>
 <ul class="simple">
-<li><strong>attribute_name</strong> - this attribute in ReportGroup defines what field we are
-going to use to group the objects. You must before order the queryset by this
-attribute to have it working properly. Here you can inform a field name, free
-attribute, property or method you have in queryset objects;</li>
-<li><strong>band_header</strong> - this band is for you show things on the top of group. You
-could also use <strong>band_footer</strong>.</li>
+<li><strong>attribute_name</strong> - this attribute in ReportGroup defines which field we are
+going to use to group the objects. You must order the queryset beforehand by this
+attribute to have it working properly. Here you can use a field name, free
+attribute, property or method that you have in queryset objects;</li>
+<li><strong>band_header</strong> - this band is for you to show things above the group. You
+can also use <strong>band_footer</strong> if you wish.</li>
 </ul>
 </div>
 <div class="section" id="subreports">
@@ -316,9 +315,9 @@ could also use <strong>band_footer</strong>.</li>
 <p>SubReport is the way you have to show object children data in a report. As you
 know, a <strong>purchase</strong> has <strong>many items</strong>, and they are available in attribute
 <strong>purchase.purchaseitem_set.all()</strong> os something like that.</p>
-<p>Geraldo allows you to have how many subreports you want, and they will appear
-in the same sequency you inform them in the class declaration.</p>
-<p>Just add the following block with code to the end of <strong>reports.py</strong>:</p>
+<p>Geraldo allows you to have however many subreports you want, and they will appear
+in the same sequence that you place them in the class declaration.</p>
+<p>Just add the following block of code to the end of <strong>reports.py</strong>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">subreports</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">SubReport</span><span class="p">(</span>
             <span class="n">queryset_string</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%(object)s</span><span class="s">.purchaseitem_set.all()&#39;</span><span class="p">,</span>
@@ -338,13 +337,12 @@ in the same sequency you inform them in the class declaration.</p>
         <span class="n">BAND_WIDTH</span><span class="p">,</span> <span class="n">Label</span><span class="p">,</span> <span class="n">ReportGroup</span><span class="p">,</span> <span class="n">SubReport</span>
 </pre></div>
 </div>
-<p>The new thing and most intersting thing here is this:</p>
+<p>The new and most interesting thing here is this:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">queryset_string</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%(object)s</span><span class="s">.purchaseitem_set.all()&#39;</span><span class="p">,</span>
 </pre></div>
 </div>
 <p>This is the attribute that you use to join the detail object to the subreport.
-It is a <strong>string</strong> because you can do a relationship to get objects using not
-only one way.</p>
+It is a <strong>string</strong> because you can do a relationship to get objects using different ways.</p>
 <p>So, you just use the macro <strong>&#8216;%(object)s&#8217;</strong> to set the current object!</p>
 </div>
 </div>
@@ -357,12 +355,12 @@ only one way.</p>
         <div class="sphinxsidebarwrapper">
             <h3><a href="index.html">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference external" href="">Tutorial 1</a><ul>
+<li><a class="reference external" href="">Tutorial using Django</a><ul>
 <li><a class="reference external" href="#step-1-preparing-your-project">Step 1. Preparing your project</a></li>
 <li><a class="reference external" href="#declaring-the-report-class">Declaring the report class</a></li>
 <li><a class="reference external" href="#detail-band">Detail band</a></li>
 <li><a class="reference external" href="#page-header-and-page-footer-bands">Page Header and Page Footer bands</a></li>
-<li><a class="reference external" href="#groupping">Groupping</a></li>
+<li><a class="reference external" href="#grouping">Grouping</a></li>
 <li><a class="reference external" href="#subreports">SubReports</a></li>
 </ul>
 </li>
@@ -372,8 +370,8 @@ only one way.</p>
             <p class="topless"><a href="index.html"
                                   title="previous chapter">Overview</a></p>
             <h4>Next topic</h4>
-            <p class="topless"><a href="basic.html"
-                                  title="next chapter">Basic Reference</a></p>
+            <p class="topless"><a href="tutorial-2.html"
+                                  title="next chapter">Tutorial using Web2Py</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
               <li><a href="_sources/tutorial-1.txt"
@@ -403,7 +401,7 @@ only one way.</p>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="basic.html" title="Basic Reference"
+          <a href="tutorial-2.html" title="Tutorial using Web2Py"
              >next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Overview"

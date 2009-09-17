@@ -1,5 +1,5 @@
-Tutorial 1
-==========
+Tutorial using Django
+=====================
 
 Once you have Geraldo installed and its dependencies resolved (read the 
 Installation document to know about the dependencies on ReportLab and Python
