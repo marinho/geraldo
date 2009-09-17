@@ -2,7 +2,7 @@ Generators Reference
 ====================
 
 Generators are classes to generate a report instance to some data format. In
-future we will have generators to XML, HTML, TXT, PS, images and so on.
+future we will have generators for XML, HTML, PS, images and so on.
 
 PDF Generator
 -------------
@@ -13,30 +13,30 @@ PDF Generator
 Path: **geraldo.generators.PDFGenerator**
 
 This generator is the most mature generator we have. It generates PDF files to
-be viewed on Adobe Acrobat Reader or similar softwares. It uses the awesome
+be viewed on Adobe Acrobat Reader or similar software. It uses the awesome
 library 'ReportLab' to create them.
 
 **Attributes:**
 
 - **filename** - Default: None
 
-    You have to inform the filename you are creating, unless you informed the
+    You have to provide the filename you are creating, unless you provided the
     attribute 'canvas'
 
 - **canvas** - Default: None
 
     **New in development version**
 
-    If you have already a canvas instantiated, you can inform it in replacement
-    to 'filename' to generate this report inside. This is useful to generate
-    many reports into the same PDF.
+    If you already have a canvas instantiated, you can provide it instead
+    of 'filename' to generate this report inside. This is useful to generate
+    many reports in the same PDF.
 
 - **return_canvas** - Default: False
 
     **New in development version**
 
-    If you inform this as **True**, the file will not be save and the generator
-    will return the canvas to you use as you want.
+    If you set this to **True**, the file will not be saved and the generator
+    will return the canvas to you to use as you want.
 
 To use it you just do something like this:
 
@@ -60,49 +60,49 @@ Text Generator
 
 Path: **geraldo.generators.TextGenerator**
 
-This generator is still in development stage, but it already works well. It
-ca be used to generate text files or to print to matrix printers.
+This generator is still in the development stage, but it already works well. It
+can be used to generate text files or to print to matrix printers.
 
 You can use it exactly like you would use PDF generator, but this has some more
 features. When running **'generate_by'** report method, you can inform the
-attribute 'filename' like you do in PDF, but you could also do some things else.
+attribute 'filename' like you do in PDF, but you could also do some other things.
 
 **Attributes:**
 
 - **row_height** - Default: 0.5*cm
 
     Should be the equivalent height of a row plus the space between rows. 
-    This is important to calculate how many rows has a page.
+    This is important to calculate how many rows a page has.
 
 - **character_width** - Default: 0.23*cm
 
     Should be the equivalent width of a character. This is important to 
-    calculate how many columns has a page.
+    calculate how many columns a page has.
 
 - **to_printer** - Default: True
 
-    Is a boolean variable you can inform to generate a text to matrix printer 
-    or not. This means escape characters will be in output or not.
+    Is a boolean variable which you can set to generate a text to matrix printer 
+    or not. This controls whether escape characters will be in the output or not.
 
 - **escape_set** - Default: geraldo.generators.text.DEFAULT_ESCAPE_SET
 
     Is a dictionary with equivalence table to escape codes. As far as we know,
-    escape codes can vary depending of model or printer manufacturer
+    escape codes can vary depending on model or printer manufacturer
     (i.e. Epson, Lexmark, HP, etc.). This attribute is useful to support this.
-    Defaul is ESC/P2 standard (Epson matrix printers)
+    Default is ESC/P2 standard (Epson matrix printers)
 
 - **filename** - Default: None
 
-    Is the file path you can inform optionally to save text to.
+    Is the file path you can optionally provide to save text to.
 
 - **encode_to** - Default: None
 
-    Here you can inform the coding identifier to force Geraldo to encode the
-    output string on it. Example: 'latin-1'
+    Here you can provide the coding identifier to force Geraldo to encode the
+    output string in. Example: 'latin-1'
 
 - **manual_escape_codes** - Default: False
 
-    A boolean variable that sets escape codes are manually informed or not.
+    A boolean variable that sets whether escape codes are manually provided or not.
 
 **Examples:**
 
@@ -122,11 +122,11 @@ Forcing the generator to encode the output:
 
     >>> output = my_report_instance.generate_by(TextGenerator, encode_to='latin-1')
 
-Setting to be or not to be printed by a printer:
+Setting to be printed by a printer or not:
 
     >>> output = my_report_instance.generate_by(TextGenerator, to_printer=False)
 
-Setting a set of escape codes to printer (matrix printers work with escape codes
+Setting a set of escape codes for printer (matrix printers work with escape codes
 set for special characters or to setup the output printing):
 
     >>> from geraldo.generators.text import DEFAULT_ESCAPE_SET

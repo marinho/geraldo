@@ -1,9 +1,9 @@
-Auto expading band height
-=========================
+Auto expanding band height
+==========================
 
-This is a example of auto expading function on bands. This means a band has the
-height flexible and adapted to its elements. It is useful to print long texts
-data that can be short or long depending on object::
+This is an example of auto expanding function on bands. This means a band has the
+height flexible and adapted to its elements. It is useful to print long text
+data that can be short or long depending on the object::
 
     import os
     cur_dir = os.path.dirname(os.path.abspath(__file__))

@@ -1,8 +1,8 @@
 Two Reports At Once
 ===================
 
-Sometimes we need to generate two or more reports at the same file. This
-example uses the new attributes 'canvas' and 'return_canvas' from PDFGeneretor
+Sometimes we need to generate two or more reports in the same file. This
+example uses the new attributes 'canvas' and 'return_canvas' from PDFGenerator
 to do that::
 
     import os
@@ -78,8 +78,8 @@ PDF generation
 
     >>> from geraldo.generators import PDFGenerator
 
-Because a requirement from ReportLab, you must inform the file name when 
-creating the Canvas (at the first report), even if you aren't going to save
+Because of a requirement from ReportLab, you must inform the file name when 
+creating the Canvas (in the first report), even if you aren't going to save
 it really.
 
     >>> canvas = report_cities.generate_by(PDFGenerator,

@@ -1,7 +1,7 @@
 A report with all kinds of graphic elements
 ===========================================
 
-This is just a report with every graphic elements::
+This is just a report with every graphic element::
 
     import os
     cur_dir = os.path.dirname(os.path.abspath(__file__))

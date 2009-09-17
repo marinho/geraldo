@@ -5,7 +5,7 @@ This is they best way to have a master/detail structure in a report. Its logic
 is: you have a detail band that shows object details and subreports to show
 ManyToMany or ManyRelated objects, like children.
 
-This is diferent from ChildBand. SubReport is to show object child items in the
+This is different from ChildBand. SubReport is to show object child items in the
 report, not as band childs::
 
     >>> import os

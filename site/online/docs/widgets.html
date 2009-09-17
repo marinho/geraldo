@@ -5,13 +5,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Widgets Reference &mdash; Geraldo Reports Documentation v0.3.4-final documentation</title>
+    <title>Widgets Reference &mdash; Geraldo Reports Documentation v0.3.6-stable documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.4-final',
+        VERSION:     '0.3.6-stable',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -19,7 +19,7 @@
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Geraldo Reports Documentation v0.3.4-final documentation" href="index.html" />
+    <link rel="top" title="Geraldo Reports Documentation v0.3.6-stable documentation" href="index.html" />
     <link rel="next" title="Graphics Reference" href="graphics.html" />
     <link rel="prev" title="Basic Reference" href="basic.html" /> 
   </head>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="basic.html" title="Basic Reference"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Geraldo Reports Documentation v0.3.4-final documentation</a> &raquo;</li> 
+        <li><a href="index.html">Geraldo Reports Documentation v0.3.6-stable documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -74,12 +74,12 @@ own widgets, otherwise you shouldn&#8217;t use it directly.</p>
 </li>
 <li><p class="first"><strong>visible</strong> - Default: True</p>
 <blockquote>
-<p>Set False if you want to make it not visible.</p>
+<p>Set to <strong>False</strong> if you want to make it not visible.</p>
 </blockquote>
 </li>
 <li><p class="first"><strong>style</strong> - Default: {}</p>
 <blockquote>
-<p>This is a dictionary that uses the powerful of ReportLab <strong>ParagraphStyle</strong>
+<p>This is a dictionary that uses the powerful ReportLab <strong>ParagraphStyle</strong>
 class to set style settings for this widget.</p>
 <p>Default keys are:</p>
 <ul class="simple">
@@ -109,20 +109,20 @@ class to set style settings for this widget.</p>
 </li>
 <li><p class="first"><strong>get_value</strong> - Default: None.</p>
 <blockquote>
-<p>This is the way you have to customize easily the widget output. Be careful
-with this attribute, because each one widget has its own set of arguments.</p>
+<p>This is the way you can easily customize the widget output. Be careful
+with this attribute, because each widget has its own set of arguments.</p>
 </blockquote>
 </li>
 <li><p class="first"><strong>truncate_overflow</strong> - Default: False</p>
 <blockquote>
 <p>When &#8220;True&#8221;, truncate the widget to use only its defined <strong>height</strong> and
-<strong>widget</strong> attributes, with no word wrap. What means that those attributes
+<strong>widget</strong> attributes, with no word wrap. This means that those attributes
 are required.</p>
 </blockquote>
 </li>
 </ul>
 <p><strong>Rendering attributes</strong></p>
-<p>They are read-only attributes you can use in render time.</p>
+<p>They are read-only attributes you can use at render time.</p>
 <ul class="simple">
 <li><strong>instance</strong> - current object being rendered</li>
 <li><strong>generator</strong> - generator instance</li>
@@ -154,7 +154,7 @@ class </em><tt class="descclassname">geraldo.widgets.</tt><tt class="descname">L
 <li><strong>visible</strong> - Default: True</li>
 <li><strong>style</strong> - Default: {}</li>
 </ul>
-<p><strong>get_value</strong> must have &#8216;text&#8217; argument.</p>
+<p><strong>get_value</strong> must have a &#8216;text&#8217; argument.</p>
 </div>
 <div class="section" id="objectvalue">
 <h2>ObjectValue<a class="headerlink" href="#objectvalue" title="Permalink to this headline">¶</a></h2>
@@ -165,13 +165,13 @@ class </em><tt class="descclassname">geraldo.widgets.</tt><tt class="descname">O
 <dd></dd></dl>
 
 <p>Path: <strong>geraldo.ObjectValue</strong></p>
-<p>This shows the value from a method, field or property from objects got from the
+<p>This shows the value from a method, field or property from objects in the
 queryset.</p>
-<p>You can inform an action to show the object value or an aggregation function on
+<p>You can provide an action to show the object value or an aggregation function on
 it.</p>
-<p>You can also use &#8216;display_format&#8217; attribute to set a friendly string formating,
+<p>You can also use the &#8216;display_format&#8217; attribute to set a friendly string formatting,
 with a mask or additional text.</p>
-<p>&#8216;get_value&#8217; lambda must have &#8216;instance&#8217; argument.</p>
+<p>&#8216;get_value&#8217; lambda must have an &#8216;instance&#8217; argument.</p>
 <p><strong>Example of use</strong></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">10</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">)</span>
 </pre></div>
@@ -192,9 +192,9 @@ with a mask or additional text.</p>
 </li>
 <li><p class="first"><strong>attribute_name</strong> - Required</p>
 <blockquote>
-<p>You can inform here the object attribute name you want to show in this
-widget. You can inform a field, common attribute, propert or just a method,
-since it has no required argument to inform.</p>
+<p>You can provide here the object attribute name you want to show in this
+widget. You can provide a field, common attribute, property or just a method,
+since it has no required argument to provide.</p>
 <p>You can use paths of callable or properties instead of attribute name in
 this attribute.</p>
 <p>Examples:</p>
@@ -208,11 +208,11 @@ attribute_name = &#8216;customer.type.name.lower&#8217;</p>
 <li><p class="first"><strong>action</strong> - Default: geraldo.FIELD_ACTION_VALUE</p>
 <blockquote>
 <p>The action is where you say what Geraldo will do with the value of this
-field. The default action is just show its value and nothing more.</p>
+field. The default action is just to show its value and nothing more.</p>
 <p>But if you are using an ObjectValue in a summary or footer band of report,
-group or subreport, you will probably needs for aggregation functions. This
+group or subreport, you will probably have a need for aggregation functions. This
 is why this attribute exists.</p>
-<p>Fields actions are all available in <strong>geraldo</strong> package to import from.
+<p>Field actions are all available in the <strong>geraldo</strong> package to import from.
 The choices you can use in <strong>action</strong> attributes are:</p>
 <ul class="simple">
 <li>geraldo.FIELD_ACTION_VALUE</li>
@@ -227,7 +227,7 @@ The choices you can use in <strong>action</strong> attributes are:</p>
 </li>
 <li><p class="first"><strong>display_format</strong> - Default: &#8216;%s&#8217;</p>
 <blockquote>
-<p>Use string formatting to do simple format the field value. You could else
+<p>Use simple string formatting on the field value. You could otherwise
 use <strong>get_value</strong> if you want something more powerful.</p>
 </blockquote>
 </li>
@@ -242,9 +242,9 @@ class </em><tt class="descclassname">geraldo.widgets.</tt><tt class="descname">S
 <dd></dd></dl>
 
 <p>Path: <strong>geraldo.SystemField</strong></p>
-<p>This shows system informations, like the report title, current date/time, page
-number, pages count, etc.</p>
-<p>&#8216;get_value&#8217; must have &#8216;expression&#8217; and &#8216;fields&#8217; argument.</p>
+<p>This shows system information, like the report title, current date/time, page
+number, page count, etc.</p>
+<p>&#8216;get_value&#8217; must have &#8216;expression&#8217; and &#8216;fields&#8217; arguments.</p>
 <p><strong>Example of use</strong></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ObjectValue</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;%(report_title)s&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">10</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">)</span>
 </pre></div>
@@ -283,13 +283,13 @@ own <strong>Report.format_date</strong> method, this will use it.</p>
 <blockquote>
 <p>Examples:</p>
 <ul class="simple">
-<li>&#8216;%(now:%Y)&#8217; - shows the 4-based current year</li>
+<li>&#8216;%(now:%Y)&#8217; - shows the current year</li>
 <li>&#8216;%(now:%m/%d/%Y)&#8217; - shows something like &#8216;01/23/2009&#8217;</li>
 </ul>
 <p><strong>Note:</strong> this is changed now. Before this function used Django
 template filter &#8216;date&#8217; to format datetime, but once we were
 going to use two standards, this wouldn&#8217;t be nice. If you want
-to use Django&#8217;s template filter, you can override method
+to use Django&#8217;s template filter, you can override the method
 <strong>Report.format_date(date, expression)</strong> and use it.</p>
 </blockquote>
 </li>
@@ -357,7 +357,7 @@ to use Django&#8217;s template filter, you can override method
         <li class="right" >
           <a href="basic.html" title="Basic Reference"
              >previous</a> |</li>
-        <li><a href="index.html">Geraldo Reports Documentation v0.3.4-final documentation</a> &raquo;</li> 
+        <li><a href="index.html">Geraldo Reports Documentation v0.3.6-stable documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

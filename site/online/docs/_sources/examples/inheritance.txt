@@ -3,7 +3,7 @@ Inheritance
 
 Inheritance is useful when you have two or more reports sharing common things.
 
-Example: two reports of Users, one with some fields and other with more fields
+Example: two reports of Users, one with some fields and another with more fields
 and landscape page orientation::
 
     import os
@@ -55,7 +55,7 @@ and landscape page orientation::
             ]
     
     class LandscapeUsersReport(UsersReport):
-        """A inheritance report class"""
+        """An inheritance report class"""
     
         title = 'Detailed list of users'
         page_size = landscape(A4)

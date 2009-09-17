@@ -1,7 +1,7 @@
 Installation
 ============
 
-Geraldo is still not available as installer or system package. So, you have two
+Geraldo is still not available as an installer or system package. So, you have two
 ways to install it:
 
 Option 1. Get the latest official version
@@ -9,7 +9,7 @@ Option 1. Get the latest official version
 
 1. Get the latest tarball available from:
 
-    https://sourceforge.net/project/showfiles.php?group_id=251460&package_id=307400
+    https://sourceforge.net/projects/geraldo/files/geraldo/
     
 2. Then you can do the following steps to install it:
 
@@ -17,22 +17,22 @@ Option 1. Get the latest official version
 
 ::
     
-    tar xvfz geraldo-latest.tar.gz
-    cd geraldo
+    tar xvfz Geraldo-latest.tar.gz
+    cd Geraldo
     sudo python setup.py install
 
-This will copy Geraldo's packages inside Python packages path.
+This will copy Geraldo's packages inside Python's packages path.
 
 **Windows**
 
 If you are using Windows, Geraldo is fully compatible. You just have to use a
-tarball uncompress tool, like **7-Zip** you can download from:
+tarball decompression tool, like **7-Zip** which you can download from:
 
     http://www.7-zip.org/download.html
     
 
-Once you have a tool to uncompress tarball files, you have to uncompress it,
-open a MS-DOS Prompty window in the folder you uncompress into and run the
+Once you have a tool to decompress tarball files, you have to decompress it,
+open a DOS Prompt window in the folder you decompress into and run the
 following command:
 
 ::
@@ -51,7 +51,7 @@ following URL:
     http://github.com/marinho/geraldo
     
 
-To get the latest development version from repository server, you will need for
+To get the latest development version from repository server, you will need the
 Git version control system. Then you can run the following command in Shell or
 MS-DOS Prompty window:
 
@@ -71,7 +71,7 @@ Dependencies
 
 **ReportLab**
 
-This is required, there is no chance you use Geraldo with no ReportLab
+This is required, as you cannot use Geraldo without ReportLab
 installed.
 
 Get it from the following URL:
@@ -83,10 +83,10 @@ The tested version is **2.1**.
 
 **Python Imaging Library**
 
-Geraldo depends on PIL for works with Images manipulation on the canvas. If you
+Geraldo depends on PIL to work with Images manipulation on the canvas. If you
 aren't going to use them, you can live without PIL.
 
-To get PIL you can go to following URL:
+To get PIL you can go to the following URL:
 
     http://www.pythonware.com/products/pil/
     

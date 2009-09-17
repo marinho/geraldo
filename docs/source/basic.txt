@@ -37,7 +37,7 @@ You can also override some methods to customize some things.
 **Report bands**
 
 A report band must be a class inherited from **ReportBand** or an instance of
-**ReportBand** of a class inherited from **ReportBand**
+**ReportBand** or a class inherited from **ReportBand**
 
 - **band_begin** - Default: None
 - **band_summary** - Default: None
@@ -75,7 +75,7 @@ Class to be used for subreport objects. It doesn't need to be inherited.
 
 **Attributes**
 
-- **queryset_string** - must be a string with path for Python compatible queryset.
+- **queryset_string** - must be a string to create a Python-compatible queryset.
     
     Examples:
     
@@ -86,12 +86,12 @@ Class to be used for subreport objects. It doesn't need to be inherited.
 
 - **visible** - Default: True
 
-    Set False if you want to make it not visible.
+    Set to False if you want to make it not visible.
 
 **Report bands**
 
 A report band must be a class inherited from **ReportBand** or an instance of
-**ReportBand** of a class inherited from **ReportBand**
+**ReportBand** or a class inherited from **ReportBand**
 
 - **name** - Default: None
 - **band_detail** - Default: None
@@ -122,7 +122,7 @@ queryset.
 - **width** - Default: None
 - **visible** - Default: True
 
-    Set False if you want to make it not visible.
+    Set to False if you want to make it not visible.
 
 - **borders** - Default: {'top': None, 'right': None, 'bottom': None, 'left': None, 'all': None}
 - **elements** - Default: []
@@ -156,8 +156,8 @@ attributes, specific to detail bands.
 
     When you use **display_inline** with **True** value and **width** with a
     valid value, the generator will try to align the detail band instances in
-    the same way HTML does with inline displaying of left floating elements:
-    it will keep each detail band at right of the last one if there is width
+    the same way that HTML does with inline displaying of left floating elements:
+    it will keep each detail band to the right of the last one if there is width
     available.
 
     This is useful for label reports.
@@ -170,7 +170,7 @@ ReportGroup
 
 Path: **geraldo.ReportGroup**
 
-This a report grouper class. A report can be multiple groupped by attribute
+This a report grouper class. A report can be grouped to multiple levels by attribute
 values.
 
 **Attributes**
@@ -181,7 +181,7 @@ values.
 **Report bands**
 
 A report band must be a class inherited from **ReportBand** or an instance of
-**ReportBand** of a class inherited from **ReportBand**
+**ReportBand** or a class inherited from **ReportBand**
 
 - **band_header** - Default: None
 - **band_footer** - Default: None

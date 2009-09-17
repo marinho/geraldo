@@ -1,14 +1,14 @@
 Next Steps
 ==========
 
-Geraldo Reports is a ambicious project. We want to reach much more than we did.
+Geraldo Reports is an ambitious project. We want to provide much more than we have done so far.
 See below the main goals we have to do in the future (and maybe you could help
 us to reach them early)
 
 Engine API
 ----------
 
-* **Table band** - a band to make easy create lists just using tables instead
+* **Table band** - a band to make it easy to create lists just using tables instead
   of detail band and lines. Table band must be an alternative to detail band
 * Support canvas draw
 * Events (i.e: BeforePrint and AfterPrint for bands and reports)
@@ -18,9 +18,9 @@ Generators
 
 * **Generate in ODF formats (ODT and ODS) (currently in development)**
 * Generate in HTML
-* Export/import structure to/from a XMLized format
+* Export/import structure to/from an XML format
 
-Thir-part tools
+Third-party tools
 ---------------
 
 * Have a GUI tool to design reports, if possible to be used in a web browser

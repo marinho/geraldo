@@ -1,10 +1,10 @@
-Groupping Bands
-===============
+Grouping Bands
+==============
 
-This example uses groupping bands. We must have support to multiple
+This example uses grouping bands. We must have support for multiple
 groups in a report.
 
-Groupping is something like this:
+Grouping is something like this:
 
 - Country
 
@@ -12,7 +12,7 @@ Groupping is something like this:
 
   - Soccer team
 
-As you can see above we have 2 grouppings: by country and by city (under
+As you can see above we have 2 groupings: by country and by city (under
 country).
 
 In this test we work with users as following:

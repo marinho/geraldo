@@ -5,13 +5,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Overview &mdash; Geraldo Reports Documentation v0.3.4-final documentation</title>
+    <title>Overview &mdash; Geraldo Reports Documentation v0.3.6-stable documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.4-final',
+        VERSION:     '0.3.6-stable',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -19,7 +19,7 @@
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Geraldo Reports Documentation v0.3.4-final documentation" href="" />
+    <link rel="top" title="Geraldo Reports Documentation v0.3.6-stable documentation" href="" />
     <link rel="next" title="Tutorial 1" href="tutorial-1.html" /> 
   </head>
   <body>
@@ -32,7 +32,7 @@
         <li class="right" >
           <a href="tutorial-1.html" title="Tutorial 1"
              accesskey="N">next</a> |</li>
-        <li><a href="">Geraldo Reports Documentation v0.3.4-final documentation</a> &raquo;</li> 
+        <li><a href="">Geraldo Reports Documentation v0.3.6-stable documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -48,17 +48,18 @@ output PDFs and other formats for complex reports.</p>
 <p>Its workflow is the following:</p>
 <ol class="arabic simple">
 <li>You declare a Report class with your report structure and definitions;</li>
-<li>Instantiate your Report class, informing a queryset with a list with objects;</li>
-<li>Call report&#8217;s &#8216;generate_by&#8217; method, informing the generator class and
+<li>Instantiate your Report class, providing a queryset with a list of objects;</li>
+<li>Call report&#8217;s &#8216;generate_by&#8217; method, providing the generator class and
 filename output (can be a filename or file output). It will generate a file
 in hard disk or in memory;</li>
-<li>Do what you want with the output: you can return in a HttpResponse, keep it
+<li>Do what you want with the output: you can return it in an HttpResponse, keep it
 in a file, etc.</li>
 </ol>
 <div class="section" id="content">
 <h2>Content<a class="headerlink" href="#content" title="Permalink to this headline">¶</a></h2>
 <ul>
 <li class="toctree-l1"><a class="reference external" href="tutorial-1.html">Tutorial 1</a></li>
+<li class="toctree-l1"><a class="reference external" href="tutorial-2.html">Tutorial 2</a></li>
 <li class="toctree-l1"><a class="reference external" href="basic.html">Basic Reference</a></li>
 <li class="toctree-l1"><a class="reference external" href="widgets.html">Widgets Reference</a></li>
 <li class="toctree-l1"><a class="reference external" href="graphics.html">Graphics Reference</a></li>
@@ -71,35 +72,35 @@ in a file, etc.</li>
 </div>
 <div class="section" id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
-<p>Geraldo does most of what any reports engine does. We can feature the following:</p>
+<p>Geraldo does most of what any reports engine does. It provides the following features:</p>
 <ul class="simple">
 <li>A detail band, the report driver</li>
 <li>Page header, Page footer, Report begin and Report summary bands</li>
-<li>Groupping in multiples levels</li>
+<li>Grouping in multiple levels</li>
 <li>SubReports to print childs</li>
-<li>Multi-formats compatible in output (even if we have only PDF for a while)</li>
+<li>Multi-formats compatible in output (even if we only have PDF for a while)</li>
 <li>Child bands, to attach helper bands to other ones</li>
-<li>Support Django or any else Python framework/application</li>
-<li>Graphics elements (including images and a sort of shapes)</li>
+<li>Support Django or any other Python framework/application</li>
+<li>Graphic elements (including images and shapes)</li>
 <li>System fields (to show report title, page numbers, current date/time, etc.)</li>
 <li>Reports composition (you can reuse your bands for other reports)</li>
 <li>Reports inheritance (you can use the same structure for a lot of reports)</li>
 <li>A powerful stylizing support (colors, fonts, sizes, etc.)</li>
 <li>Different page sizes</li>
-<li>Flexibility to be easy customized</li>
+<li>Flexibility to be easily customized</li>
 <li>Aggregation functions</li>
-<li>Hidding/showing bands and elements</li>
+<li>Hiding/showing bands and elements</li>
 </ul>
 </div>
 <div class="section" id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
-<p>Geraldo is fully dependent from ReportLab, not only because its PDF generation,
+<p>Geraldo is fully dependent on ReportLab, not only because of its PDF generation,
 but also its units and styles library. We have tested with ReportLab version 2.1</p>
-<p>Geraldo is not Django dependent, but it can work as a Django pluggable
+<p>Geraldo is not Django-dependent, but it can work as a Django pluggable
 application.</p>
 </div>
-<div class="section" id="a-very-little-demo-with-how-geraldo-works">
-<h2>A very little demo with how Geraldo works<a class="headerlink" href="#a-very-little-demo-with-how-geraldo-works" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="a-very-little-demo-of-how-geraldo-works">
+<h2>A very little demo of how Geraldo works<a class="headerlink" href="#a-very-little-demo-of-how-geraldo-works" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span>
 <span class="kn">from</span> <span class="nn">geraldo.generators</span> <span class="kn">import</span> <span class="n">PDFGenerator</span>
 
@@ -115,7 +116,7 @@ application.</p>
 </div>
 <p>This code above will output your report, driven by the queryset &#8216;objects_list&#8217;,
 into file &#8216;cars_list.pdf&#8217;.</p>
-<p>Now, an example in a Django&#8217;s view:</p>
+<p>Now, an example in a Django view:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
 <span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span>
 <span class="kn">from</span> <span class="nn">geraldo.generators</span> <span class="kn">import</span> <span class="n">PDFGenerator</span>
@@ -129,7 +130,7 @@ into file &#8216;cars_list.pdf&#8217;.</p>
     <span class="n">objects_list</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="c"># If you are using Django</span>
     <span class="n">report</span> <span class="o">=</span> <span class="n">MyReport</span><span class="p">(</span><span class="n">queryset</span><span class="o">=</span><span class="n">objects_list</span><span class="p">)</span>
 
-    <span class="n">report</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">resp</span><span class="p">)</span>
+    <span class="n">report</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">response</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">response</span>
 </pre></div>
@@ -166,7 +167,7 @@ enthusiast.</p>
 </li>
 <li><a class="reference external" href="#features">Features</a></li>
 <li><a class="reference external" href="#dependencies">Dependencies</a></li>
-<li><a class="reference external" href="#a-very-little-demo-with-how-geraldo-works">A very little demo with how Geraldo works</a></li>
+<li><a class="reference external" href="#a-very-little-demo-of-how-geraldo-works">A very little demo of how Geraldo works</a></li>
 <li><a class="reference external" href="#license">License</a></li>
 <li><a class="reference external" href="#authors">Authors</a></li>
 </ul>
@@ -207,7 +208,7 @@ enthusiast.</p>
         <li class="right" >
           <a href="tutorial-1.html" title="Tutorial 1"
              >next</a> |</li>
-        <li><a href="">Geraldo Reports Documentation v0.3.4-final documentation</a> &raquo;</li> 
+        <li><a href="">Geraldo Reports Documentation v0.3.6-stable documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

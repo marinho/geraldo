@@ -12,7 +12,7 @@ Path: **geraldo.landscape**
 Page sizes are tuples with 2 nodes: first with **width** and second width
 **height**.
 
-**landscape** is a helpe function to revert this tuple.
+**landscape** is a helper function to invert this tuple.
 
 BAND_WIDTH
 ----------
@@ -22,6 +22,6 @@ BAND_WIDTH
 
 Path: **geraldo.BAND_WIDTH**
 
-Once you use this constant in a widget or graphic width, it will assumes its
+Once you use this constant in a widget or graphic width, it will assume its
 band width automatically.
 

@@ -25,11 +25,11 @@ own widgets, otherwise you shouldn't use it directly.
 - **top** - Default: 0
 - **visible** - Default: True
 
-    Set False if you want to make it not visible.
+    Set to **False** if you want to make it not visible.
 
 - **style** - Default: {}
 
-    This is a dictionary that uses the powerful of ReportLab **ParagraphStyle**
+    This is a dictionary that uses the powerful ReportLab **ParagraphStyle**
     class to set style settings for this widget.
 
     Default keys are:
@@ -58,18 +58,18 @@ own widgets, otherwise you shouldn't use it directly.
 
 - **get_value** - Default: None.
 
-    This is the way you have to customize easily the widget output. Be careful
-    with this attribute, because each one widget has its own set of arguments.
+    This is the way you can easily customize the widget output. Be careful
+    with this attribute, because each widget has its own set of arguments.
 
 - **truncate_overflow** - Default: False
 
     When "True", truncate the widget to use only its defined **height** and
-    **widget** attributes, with no word wrap. What means that those attributes
+    **widget** attributes, with no word wrap. This means that those attributes
     are required.
 
 **Rendering attributes**
 
-They are read-only attributes you can use in render time.
+They are read-only attributes you can use at render time.
 
 - **instance** - current object being rendered
 - **generator** - generator instance
@@ -100,7 +100,7 @@ A label is just a simple text.
 - **visible** - Default: True
 - **style** - Default: {}
 
-**get_value** must have 'text' argument.
+**get_value** must have a 'text' argument.
 
 ObjectValue
 -----------
@@ -110,16 +110,16 @@ ObjectValue
 
 Path: **geraldo.ObjectValue**
 
-This shows the value from a method, field or property from objects got from the
+This shows the value from a method, field or property from objects in the
 queryset.
     
-You can inform an action to show the object value or an aggregation function on
+You can provide an action to show the object value or an aggregation function on
 it.
     
-You can also use 'display_format' attribute to set a friendly string formating,
+You can also use the 'display_format' attribute to set a friendly string formatting,
 with a mask or additional text.
 
-'get_value' lambda must have 'instance' argument.
+'get_value' lambda must have an 'instance' argument.
 
 **Example of use**
 
@@ -135,9 +135,9 @@ with a mask or additional text.
 - **style** - Default: {}
 - **attribute_name** - Required
 
-    You can inform here the object attribute name you want to show in this
-    widget. You can inform a field, common attribute, propert or just a method,
-    since it has no required argument to inform.
+    You can provide here the object attribute name you want to show in this
+    widget. You can provide a field, common attribute, property or just a method,
+    since it has no required argument to provide.
 
     You can use paths of callable or properties instead of attribute name in
     this attribute.
@@ -151,13 +151,13 @@ with a mask or additional text.
 - **action** - Default: geraldo.FIELD_ACTION_VALUE
 
     The action is where you say what Geraldo will do with the value of this
-    field. The default action is just show its value and nothing more.
+    field. The default action is just to show its value and nothing more.
     
     But if you are using an ObjectValue in a summary or footer band of report,
-    group or subreport, you will probably needs for aggregation functions. This
+    group or subreport, you will probably have a need for aggregation functions. This
     is why this attribute exists.
     
-    Fields actions are all available in **geraldo** package to import from.
+    Field actions are all available in the **geraldo** package to import from.
     The choices you can use in **action** attributes are:
     
     - geraldo.FIELD_ACTION_VALUE
@@ -170,7 +170,7 @@ with a mask or additional text.
 
 - **display_format** - Default: '%s'
 
-    Use string formatting to do simple format the field value. You could else
+    Use simple string formatting on the field value. You could otherwise
     use **get_value** if you want something more powerful.
 
 SystemField
@@ -181,10 +181,10 @@ SystemField
 
 Path: **geraldo.SystemField**
 
-This shows system informations, like the report title, current date/time, page
-number, pages count, etc.
+This shows system information, like the report title, current date/time, page
+number, page count, etc.
     
-'get_value' must have 'expression' and 'fields' argument.
+'get_value' must have 'expression' and 'fields' arguments.
 
 **Example of use**
 
@@ -215,12 +215,12 @@ number, pages count, etc.
 
         Examples:
         
-        - '%(now:%Y)' - shows the 4-based current year
+        - '%(now:%Y)' - shows the current year
         - '%(now:%m/%d/%Y)' - shows something like '01/23/2009'
 
         **Note:** this is changed now. Before this function used Django
         template filter 'date' to format datetime, but once we were
         going to use two standards, this wouldn't be nice. If you want 
-        to use Django's template filter, you can override method
+        to use Django's template filter, you can override the method
         **Report.format_date(date, expression)** and use it.
 

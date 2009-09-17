@@ -5,13 +5,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Inheritance &mdash; Geraldo Reports Documentation v0.3.4-final documentation</title>
+    <title>Inheritance &mdash; Geraldo Reports Documentation v0.3.6-stable documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.3.4-final',
+        VERSION:     '0.3.6-stable',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -19,7 +19,7 @@
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Geraldo Reports Documentation v0.3.4-final documentation" href="../index.html" />
+    <link rel="top" title="Geraldo Reports Documentation v0.3.6-stable documentation" href="../index.html" />
     <link rel="up" title="Examples" href="index.html" />
     <link rel="next" title="Composition" href="composition.html" />
     <link rel="prev" title="SubReports" href="subreport.html" /> 
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="subreport.html" title="SubReports"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Geraldo Reports Documentation v0.3.4-final documentation</a> &raquo;</li>
+        <li><a href="../index.html">Geraldo Reports Documentation v0.3.6-stable documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Examples</a> &raquo;</li> 
       </ul>
     </div>  
@@ -50,7 +50,7 @@
   <div class="section" id="inheritance">
 <h1>Inheritance<a class="headerlink" href="#inheritance" title="Permalink to this headline">¶</a></h1>
 <p>Inheritance is useful when you have two or more reports sharing common things.</p>
-<p>Example: two reports of Users, one with some fields and other with more fields
+<p>Example: two reports of Users, one with some fields and another with more fields
 and landscape page orientation:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
 <span class="n">cur_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span>
@@ -101,7 +101,7 @@ and landscape page orientation:</p>
         <span class="p">]</span>
 
 <span class="k">class</span> <span class="nc">LandscapeUsersReport</span><span class="p">(</span><span class="n">UsersReport</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A inheritance report class&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;An inheritance report class&quot;&quot;&quot;</span>
 
     <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;Detailed list of users&#39;</span>
     <span class="n">page_size</span> <span class="o">=</span> <span class="n">landscape</span><span class="p">(</span><span class="n">A4</span><span class="p">)</span>
@@ -184,7 +184,7 @@ and landscape page orientation:</p>
         <li class="right" >
           <a href="subreport.html" title="SubReports"
              >previous</a> |</li>
-        <li><a href="../index.html">Geraldo Reports Documentation v0.3.4-final documentation</a> &raquo;</li>
+        <li><a href="../index.html">Geraldo Reports Documentation v0.3.6-stable documentation</a> &raquo;</li>
           <li><a href="index.html" >Examples</a> &raquo;</li> 
       </ul>
     </div>

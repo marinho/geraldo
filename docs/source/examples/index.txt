@@ -1,7 +1,7 @@
 Examples
 ========
 
-The following examples are the same you can find in the 'tests' package, from
+The following examples are the same as you can find in the 'tests' package, from
 source code.
 
 .. toctree::
@@ -10,7 +10,7 @@ source code.
     intermediary-report
     graphics-report
     child-bands
-    groupping
+    grouping
     subreport
     inheritance
     composition

@@ -1,8 +1,8 @@
 Child Bands
 ===========
 
-This example uses child bands. All band can have child bands attached. Child
-band are bands that are attached to a parent band and will print below them::
+This example uses child bands. All bands can have child bands attached. Child
+bands are bands that are attached to a parent band and will print below them::
 
     import os
     cur_dir = os.path.dirname(os.path.abspath(__file__))

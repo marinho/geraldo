@@ -1,7 +1,7 @@
 Graphics Reference
 ==================
 
-Graphics elements are the way you have to draw images ad shapes on the band
+Graphics elements are the way you have to draw images and shapes on the band
 canvas.
 
 They can be useful also to make customized borders in bands.
@@ -24,7 +24,7 @@ Its rect area is based on **left-width-top-height** dimensions.
 - **name** - Default: None
 - **visible** - Default: True
 
-    Set False if you want to make it not visible.
+    Set to **False** if you want to make it not visible.
 
 - **stroke** - Default: True
 - **stroke_color** - Default: reportlab.lib.colors.black
@@ -34,7 +34,7 @@ Its rect area is based on **left-width-top-height** dimensions.
 
 **Rendering attributes**
 
-They are read-only attributes you can use in render time.
+They are read-only attributes you can use at render time.
 
 - **instance** - current object being rendered
 - **generator** - generator instance
@@ -46,7 +46,7 @@ They are read-only attributes you can use in render time.
 
 - **set_rect(**kwargs)**
 
-    Used to generator set the hard rectangle when rendering pages. Override it
+    Used to generate a hard rectangle when rendering pages. Override it
     to set your own rule if you need.
 
 Fixed
@@ -57,7 +57,7 @@ Fixed
 
 Path: **geraldo.graphics.Fixed**
 
-In the same way of Graphic class, you should use this just to inhert and create
+In the same way as Graphic class, you should use this just to inherit and create
 your own graphic. This is a graphic with rect with **left-right-top-bottom**
 dimensioning.
 
@@ -203,11 +203,11 @@ Path: **geraldo.Image**
 - **height** - Required
 - **filename** - Required
 
-    You can inform a filename path or a Python Imaging Library Image instance.
-    Then you have to have this library installed.
+    You can provide a filename path or a Python Imaging Library Image instance.
+    If the latter, then you have to have this library installed.
 
 - **get_image** - Default: None
 
-    You should inform a function or lambda object to this attribute when you
+    You should provide a function or lambda object to this attribute when you
     want to work with Images or Charts based on object values or logic.
 

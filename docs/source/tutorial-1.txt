@@ -1,12 +1,12 @@
 Tutorial 1
 ==========
 
-Once you have Geraldo installed and its dependencies resolved (read
-Installation document to know about dependency for ReportLab and Python
-Imaging Library) you can start opening the **settings.py** from your
+Once you have Geraldo installed and its dependencies resolved (read the 
+Installation document to know about the dependencies on ReportLab and Python
+Imaging Library), you can start opening the **settings.py** from your
 project to edit.
 
-    **Attention:** this tutorial is pressuposes you are going to use Geraldo
+    **Attention:** this tutorial assumes you are going to use Geraldo
     with a Django project, but in fact you can just ignore the Django parts
     and all the rest is exactly the same for Django and non-Django cases.
 
@@ -14,12 +14,12 @@ Step 1. Preparing your project
 ------------------------------
 
 To install Geraldo in your Django project, you must change the setting
-**INSTALLED_APPS** in your **settings.py** file and this shoul be enough.
+**INSTALLED_APPS** in your **settings.py** file and this should be enough.
 
-But let's create a new URL to load a report PDF online.
+But let's create a new URL to load a PDF report online.
 
-    **Attention:** Geraldo can work with online or not onfile ways to get PDF.
-    You are no dependent for a URL or view to generate reports from Geraldo.
+    **Attention:** Geraldo can work with online or file ways to get a PDF.
+    You are not dependent on a URL or view to generate reports from Geraldo.
     This is just one of many ways you can do it.
 
 We are going to work with a common example for this kind of solution: a
@@ -52,7 +52,7 @@ Let's say you have the following model classes:
         quantity = models.DecimalField(max_digits=12, decimal_places=2)
         total_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, default=0)
 
-First you declare a new URL, this for example:
+First you declare a new URL, for example:
 
 ::
 
@@ -73,7 +73,7 @@ The next step is you have a *view* for the created URL, like this:
     def purchase_report(request):
         resp = HttpResponse(mimetype='application/pdf')
     
-        purchases = Purchase.objects.order_by('customer','id')
+        purchases = Purchase.objects.order_by('customer', 'id')
         report = ReportPurchase(queryset=purchases)
         report.generate_by(PDFGenerator, filename=resp)
     
@@ -86,12 +86,11 @@ You can see you first imported two important things:
     from reports import ReportPurchase
     from geraldo.generators import PDFGenerator
 
-Your report class (we will create it in next step) and the generator class
+Your report class (we will create it in the next step) and the generator class
 **PDFGenerator** you will need to generate a PDF file. In the future we will
 have other generators, for other formats of file.
 
-The next thing is you note you are going to return a PDF format **HttpResponse**,
-look:
+The next thing to note is that you are going to return a PDF format **HttpResponse**:
 
 ::
 
@@ -102,15 +101,15 @@ Now you are going to work your report instance:
 
 ::
 
-        purchases = Purchase.objects.order_by('customer','id')
+        purchases = Purchase.objects.order_by('customer', 'id')
         report = ReportPurchase(queryset=purchases)
         report.generate_by(PDFGenerator, filename=resp)
 
-- The first thing you did is get all purchases, ordered by 'customer' and 'id'
+- The first thing you did is to get all purchases, ordered by 'customer' and 'id'
   fields;
-- After, you got a **report** instance from your report class
+- Afterwards, you got a **report** instance from your report class
   **ReportPurchase**, using purchases queryset as report driver queryset;
-- And latest, you called the 'generate_by', using the generator class.
+- And last, you called the 'generate_by' method of the generator class.
 
 Now you have a prepared Django application to use a report you are going to
 create at the next step!
@@ -129,7 +128,7 @@ create a new file 'reports.py' to declare your report classes inside.
         title = 'Purchases list'
         author = 'John Smith Corporation'
 
-Going to see something more complex, you can set the page size, margins and
+To see something more complex, you can set the page size, margins and
 other report attributes, like below:
 
 ::
@@ -148,14 +147,14 @@ other report attributes, like below:
         margin_right = 0.5*cm
         margin_bottom = 0.5*cm
 
-As you can see, we use most we can from ReportLab libraries, their units, page
+As you can see, we use what we can from the ReportLab libraries, their units, page
 sizes, stylizing, etc.
 
-A report is driven by **bands**. If you are used to work with other report
-engines you know what is a band.
+A report is driven by **bands**. If you are used to working with other report
+engines you know what a band is.
 
 A band is a row with elements in the report canvas. Bands in essence are the
-same but their use vary depending you are using a band as the Page Header or
+same but their use varies depending whether you are using a band as the Page Header or
 Report Summary, for example.
 
 A report can have a band for each one of following attributes:
@@ -164,14 +163,14 @@ Detail band
 -----------
 
 The detail band is the most important band in a report. This is because the
-detail band is the reason of the existency of every report.
+detail band is the reason of the existence of every report.
 
-The detail band is used most of times to show object field values. This is the
-same for a detailing info page or just a list or grid.
+The detail band is used most of the time to show object field values. This is the
+same for a detailed info page or just a simple list or grid.
 
-The detail band is rendered one time per each object in the queryset attribute.
-So, if you have 10 objects in the queryset, you will have detail band rendered
-10 times, one time per each object.
+The detail band is rendered one time for each object in the queryset attribute.
+So, if you have 10 objects in the queryset, you will have the detail band rendered
+10 times.
 
 Let's change our report to have a detail band, see below:
 
@@ -199,29 +198,29 @@ Let's change our report to have a detail band, see below:
                     get_value=lambda instance: instance.date_creation.strftime('%m/%d/%Y')),
                 )
 
-The attribute **band_dateil** is locally declared as class, but it could be setted
-with an external class else.
+The attribute **band_detail** is locally declared as a class, but it could alternatively be set
+with an external class.
 
-The important thing here is the band has the attribute **height**, fixed with a
+The important thing here is that the band has the attribute **height**, fixed with a
 defined height in centimeters.
 
 The second thing to observe is the **elements** list, with 2 widgets representing
 2 model class fields: **id** and **date_creation**. The last one is customized
-with **get_value** attribute, for date field formatting.
+with the **get_value** attribute, for date field formatting.
 
 Page Header and Page Footer bands
 ---------------------------------
 
-Page header and Page footer bands are respectively designed to appear on the header and
-footer on every pages in the report.
+Page header and Page footer bands are designed to appear on the header and
+footer, respectively, on every page in the report.
 
-In most of reports, a page header is used to show the report title and its page number,
+In most reports, a page header is used to show the report title and its page number,
 page count and maybe the columns header if you are creating a list or grid report.
 
-In the same way, page footer band is used to show footer informations, like the print
+In the same way, a page footer band is used to show footer information, like the print
 date/time, software name, company's mark, etc.
 
-Add this code block to the end of report class to have both bands:
+Add this code block to the end of the report class to have both bands:
 
 ::
 
@@ -246,7 +245,7 @@ Add this code block to the end of report class to have both bands:
                     ]
             borders = {'top': True}
 
-Now you have to change the file top lines with imports to import some new elements:
+Now you have to change the top lines of the file with imports to import some new elements:
 
 ::
 
@@ -263,40 +262,40 @@ The new elements for you now are:
   page count, report title, report author, etc.
 - **Label** - show a free text
 - **BAND_WIDTH** - sets the width automatically to its parent band width;
-- **TA_RIGHT** and **TA_CENTER** - they sets the alignment of a widget
+- **TA_RIGHT** and **TA_CENTER** - they set the alignment of a widget
 
 Other good use of Page Header and Page Footer bands is to compose or inherit
-reports layout. Use your imagine ane do it!
+reports layout. Use your imagination!
 
-Groupping
+Grouping
 ---------
 
-The next thing now is group our purchases by a field. Lets choose the field
+The next thing now is to group our purchases by a field. Let's choose the field
 **customer**, ok?
 
-Geraldo allows you to group report by how many levels you want. This means you
-can group the report objects by 1, 2 or how many fields do you want and have
-header and footer to show their aggregation informations and other features.
+Geraldo allows you to group a report at many levels. This means you
+can group the report objects by 1, 2 or however many fields you want and have
+a header and footer to show their aggregation information and other features.
 
-But for a while, just add the following code to the end of **reports.py**:
+But for now, just add the following code to the end of **reports.py**:
 
 ::
 
         groups = [
-                ReportGroup(attribute_name='customer',
-                    band_header=ReportBand(
-                        height=0.7*cm,
-                        elements=[
+                ReportGroup(attribute_name = 'customer',
+                    band_header = ReportBand(
+                        height = 0.7*cm,
+                        elements = [
                             ObjectValue(attribute_name='customer', left=0, top=0.1*cm, width=20*cm,
                                 get_value=lambda instance: 'Customer: ' + (instance.customer.name),
                                 style={'fontName': 'Helvetica-Bold', 'fontSize': 12})
                             ],
-                        borders={'bottom': True},
+                        borders = {'bottom': True},
                         )
                     ),
                 ]
 
-In the same way you did before, you have to change the top imports to have the
+In the same way as you did before, you have to change the top imports to have the
 new elements:
 
 ::
@@ -306,12 +305,12 @@ new elements:
 
 The two important things now are:
 
-- **attribute_name** - this attribute in ReportGroup defines what field we are
-  going to use to group the objects. You must before order the queryset by this
-  attribute to have it working properly. Here you can inform a field name, free
-  attribute, property or method you have in queryset objects;
-- **band_header** - this band is for you show things on the top of group. You
-  could also use **band_footer**.
+- **attribute_name** - this attribute in ReportGroup defines which field we are
+  going to use to group the objects. You must order the queryset beforehand by this
+  attribute to have it working properly. Here you can use a field name, free
+  attribute, property or method that you have in queryset objects;
+- **band_header** - this band is for you to show things above the group. You
+  can also use **band_footer** if you wish.
 
 SubReports
 ----------
@@ -320,10 +319,10 @@ SubReport is the way you have to show object children data in a report. As you
 know, a **purchase** has **many items**, and they are available in attribute
 **purchase.purchaseitem_set.all()** os something like that.
 
-Geraldo allows you to have how many subreports you want, and they will appear
-in the same sequency you inform them in the class declaration.
+Geraldo allows you to have however many subreports you want, and they will appear
+in the same sequence that you place them in the class declaration.
 
-Just add the following block with code to the end of **reports.py**:
+Just add the following block of code to the end of **reports.py**:
 
 ::
 
@@ -347,7 +346,7 @@ And now you have to change the top imports line:
     from geraldo import Report, landscape, ReportBand, ObjectValue, SystemField,\
             BAND_WIDTH, Label, ReportGroup, SubReport
 
-The new thing and most intersting thing here is this:
+The new and most interesting thing here is this:
 
 ::
 
@@ -355,7 +354,6 @@ The new thing and most intersting thing here is this:
     
 
 This is the attribute that you use to join the detail object to the subreport.
-It is a **string** because you can do a relationship to get objects using not
-only one way.
+It is a **string** because you can do a relationship to get objects using different ways.
 
 So, you just use the macro **'%(object)s'** to set the current object!

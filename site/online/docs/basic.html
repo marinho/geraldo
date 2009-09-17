@@ -5,13 +5,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Basic Reference &mdash; Geraldo Reports Documentation v0.3.4-final documentation</title>
+    <title>Basic Reference &mdash; Geraldo Reports Documentation v0.3.6-stable documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.4-final',
+        VERSION:     '0.3.6-stable',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -19,9 +19,9 @@
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Geraldo Reports Documentation v0.3.4-final documentation" href="index.html" />
+    <link rel="top" title="Geraldo Reports Documentation v0.3.6-stable documentation" href="index.html" />
     <link rel="next" title="Widgets Reference" href="widgets.html" />
-    <link rel="prev" title="Tutorial 1" href="tutorial-1.html" /> 
+    <link rel="prev" title="Tutorial 2" href="tutorial-2.html" /> 
   </head>
   <body>
     <div class="related">
@@ -34,9 +34,9 @@
           <a href="widgets.html" title="Widgets Reference"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="tutorial-1.html" title="Tutorial 1"
+          <a href="tutorial-2.html" title="Tutorial 2"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Geraldo Reports Documentation v0.3.4-final documentation</a> &raquo;</li> 
+        <li><a href="index.html">Geraldo Reports Documentation v0.3.6-stable documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -81,7 +81,7 @@ this class. It supports some bands and report definitions.</p>
 </ul>
 <p><strong>Report bands</strong></p>
 <p>A report band must be a class inherited from <strong>ReportBand</strong> or an instance of
-<strong>ReportBand</strong> of a class inherited from <strong>ReportBand</strong></p>
+<strong>ReportBand</strong> or a class inherited from <strong>ReportBand</strong></p>
 <ul class="simple">
 <li><strong>band_begin</strong> - Default: None</li>
 <li><strong>band_summary</strong> - Default: None</li>
@@ -120,7 +120,7 @@ class </em><tt class="descclassname">geraldo.base.</tt><tt class="descname">SubR
 <p>Class to be used for subreport objects. It doesn&#8217;t need to be inherited.</p>
 <p><strong>Attributes</strong></p>
 <ul>
-<li><p class="first"><strong>queryset_string</strong> - must be a string with path for Python compatible queryset.</p>
+<li><p class="first"><strong>queryset_string</strong> - must be a string to create a Python-compatible queryset.</p>
 <blockquote>
 <p>Examples:</p>
 <blockquote>
@@ -135,13 +135,13 @@ class </em><tt class="descclassname">geraldo.base.</tt><tt class="descname">SubR
 </li>
 <li><p class="first"><strong>visible</strong> - Default: True</p>
 <blockquote>
-<p>Set False if you want to make it not visible.</p>
+<p>Set to False if you want to make it not visible.</p>
 </blockquote>
 </li>
 </ul>
 <p><strong>Report bands</strong></p>
 <p>A report band must be a class inherited from <strong>ReportBand</strong> or an instance of
-<strong>ReportBand</strong> of a class inherited from <strong>ReportBand</strong></p>
+<strong>ReportBand</strong> or a class inherited from <strong>ReportBand</strong></p>
 <ul class="simple">
 <li><strong>name</strong> - Default: None</li>
 <li><strong>band_detail</strong> - Default: None</li>
@@ -176,7 +176,7 @@ queryset.</p>
 </li>
 <li><p class="first"><strong>visible</strong> - Default: True</p>
 <blockquote>
-<p>Set False if you want to make it not visible.</p>
+<p>Set to False if you want to make it not visible.</p>
 </blockquote>
 </li>
 <li><p class="first"><strong>borders</strong> - Default: {&#8216;top&#8217;: None, &#8216;right&#8217;: None, &#8216;bottom&#8217;: None, &#8216;left&#8217;: None, &#8216;all&#8217;: None}</p>
@@ -224,8 +224,8 @@ attributes, specific to detail bands.</p>
 <blockquote>
 <p>When you use <strong>display_inline</strong> with <strong>True</strong> value and <strong>width</strong> with a
 valid value, the generator will try to align the detail band instances in
-the same way HTML does with inline displaying of left floating elements:
-it will keep each detail band at right of the last one if there is width
+the same way that HTML does with inline displaying of left floating elements:
+it will keep each detail band to the right of the last one if there is width
 available.</p>
 <p>This is useful for label reports.</p>
 </blockquote>
@@ -241,7 +241,7 @@ class </em><tt class="descclassname">geraldo.base.</tt><tt class="descname">Repo
 <dd></dd></dl>
 
 <p>Path: <strong>geraldo.ReportGroup</strong></p>
-<p>This a report grouper class. A report can be multiple groupped by attribute
+<p>This a report grouper class. A report can be grouped to multiple levels by attribute
 values.</p>
 <p><strong>Attributes</strong></p>
 <ul class="simple">
@@ -250,7 +250,7 @@ values.</p>
 </ul>
 <p><strong>Report bands</strong></p>
 <p>A report band must be a class inherited from <strong>ReportBand</strong> or an instance of
-<strong>ReportBand</strong> of a class inherited from <strong>ReportBand</strong></p>
+<strong>ReportBand</strong> or a class inherited from <strong>ReportBand</strong></p>
 <ul class="simple">
 <li><strong>band_header</strong> - Default: None</li>
 <li><strong>band_footer</strong> - Default: None</li>
@@ -277,8 +277,8 @@ values.</p>
 </ul>
 
             <h4>Previous topic</h4>
-            <p class="topless"><a href="tutorial-1.html"
-                                  title="previous chapter">Tutorial 1</a></p>
+            <p class="topless"><a href="tutorial-2.html"
+                                  title="previous chapter">Tutorial 2</a></p>
             <h4>Next topic</h4>
             <p class="topless"><a href="widgets.html"
                                   title="next chapter">Widgets Reference</a></p>
@@ -314,9 +314,9 @@ values.</p>
           <a href="widgets.html" title="Widgets Reference"
              >next</a> |</li>
         <li class="right" >
-          <a href="tutorial-1.html" title="Tutorial 1"
+          <a href="tutorial-2.html" title="Tutorial 2"
              >previous</a> |</li>
-        <li><a href="index.html">Geraldo Reports Documentation v0.3.4-final documentation</a> &raquo;</li> 
+        <li><a href="index.html">Geraldo Reports Documentation v0.3.6-stable documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

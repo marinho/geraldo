@@ -2,7 +2,7 @@ Inline SubReports
 =================
 
 Inline SubReports can be used to show little boxes in a master/detail report.
-There are other needs it can be useful.
+There are other needs where it can be useful.
 
 This is just the same SubReport test, but with subreport detail band changed to
 be inline::

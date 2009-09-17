@@ -26,7 +26,7 @@ customized widget values and some stylized elements::
         class band_begin(ReportBand):
             height = 1*cm
             elements = [
-                Label(text="This is a <b>users</b> report.<br/>This time <i>our idea</i> is show"+\
+                Label(text="This is a <b>users</b> report.<br/>This time <i>our idea</i> is to show"+\
                            "some <font color=red>other features</font> of this reports engine", top=0.1*cm,
                     left=0.1*cm, width=BAND_WIDTH),
             ]

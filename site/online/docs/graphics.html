@@ -5,13 +5,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Graphics Reference &mdash; Geraldo Reports Documentation v0.3.4-final documentation</title>
+    <title>Graphics Reference &mdash; Geraldo Reports Documentation v0.3.6-stable documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.4-final',
+        VERSION:     '0.3.6-stable',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -19,7 +19,7 @@
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Geraldo Reports Documentation v0.3.4-final documentation" href="index.html" />
+    <link rel="top" title="Geraldo Reports Documentation v0.3.6-stable documentation" href="index.html" />
     <link rel="next" title="Generators Reference" href="generators.html" />
     <link rel="prev" title="Widgets Reference" href="widgets.html" /> 
   </head>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="widgets.html" title="Widgets Reference"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Geraldo Reports Documentation v0.3.4-final documentation</a> &raquo;</li> 
+        <li><a href="index.html">Geraldo Reports Documentation v0.3.6-stable documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -47,7 +47,7 @@
             
   <div class="section" id="graphics-reference">
 <h1>Graphics Reference<a class="headerlink" href="#graphics-reference" title="Permalink to this headline">¶</a></h1>
-<p>Graphics elements are the way you have to draw images ad shapes on the band
+<p>Graphics elements are the way you have to draw images and shapes on the band
 canvas.</p>
 <p>They can be useful also to make customized borders in bands.</p>
 <div class="section" id="graphic">
@@ -68,7 +68,7 @@ create your own graphic class, never use it directly.</p>
 </li>
 <li><p class="first"><strong>visible</strong> - Default: True</p>
 <blockquote>
-<p>Set False if you want to make it not visible.</p>
+<p>Set to <strong>False</strong> if you want to make it not visible.</p>
 </blockquote>
 </li>
 <li><p class="first"><strong>stroke</strong> - Default: True</p>
@@ -83,7 +83,7 @@ create your own graphic class, never use it directly.</p>
 </li>
 </ul>
 <p><strong>Rendering attributes</strong></p>
-<p>They are read-only attributes you can use in render time.</p>
+<p>They are read-only attributes you can use at render time.</p>
 <ul class="simple">
 <li><strong>instance</strong> - current object being rendered</li>
 <li><strong>generator</strong> - generator instance</li>
@@ -95,7 +95,7 @@ create your own graphic class, never use it directly.</p>
 <ul>
 <li><p class="first"><strong>set_rect(**kwargs)</strong></p>
 <blockquote>
-<p>Used to generator set the hard rectangle when rendering pages. Override it
+<p>Used to generate a hard rectangle when rendering pages. Override it
 to set your own rule if you need.</p>
 </blockquote>
 </li>
@@ -110,7 +110,7 @@ class </em><tt class="descclassname">geraldo.graphics.</tt><tt class="descname">
 <dd></dd></dl>
 
 <p>Path: <strong>geraldo.graphics.Fixed</strong></p>
-<p>In the same way of Graphic class, you should use this just to inhert and create
+<p>In the same way as Graphic class, you should use this just to inherit and create
 your own graphic. This is a graphic with rect with <strong>left-right-top-bottom</strong>
 dimensioning.</p>
 </div>
@@ -277,13 +277,13 @@ class </em><tt class="descclassname">geraldo.graphics.</tt><tt class="descname">
 </li>
 <li><p class="first"><strong>filename</strong> - Required</p>
 <blockquote>
-<p>You can inform a filename path or a Python Imaging Library Image instance.
-Then you have to have this library installed.</p>
+<p>You can provide a filename path or a Python Imaging Library Image instance.
+If the latter, then you have to have this library installed.</p>
 </blockquote>
 </li>
 <li><p class="first"><strong>get_image</strong> - Default: None</p>
 <blockquote>
-<p>You should inform a function or lambda object to this attribute when you
+<p>You should provide a function or lambda object to this attribute when you
 want to work with Images or Charts based on object values or logic.</p>
 </blockquote>
 </li>
@@ -353,7 +353,7 @@ want to work with Images or Charts based on object values or logic.</p>
         <li class="right" >
           <a href="widgets.html" title="Widgets Reference"
              >previous</a> |</li>
-        <li><a href="index.html">Geraldo Reports Documentation v0.3.4-final documentation</a> &raquo;</li> 
+        <li><a href="index.html">Geraldo Reports Documentation v0.3.6-stable documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
