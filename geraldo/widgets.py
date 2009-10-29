@@ -50,7 +50,7 @@ class Label(Widget):
 
     def _get_text(self):
         if self.get_value:
-            return self.get_value(text)
+            return self.get_value(self._text)
 
         return self._text
 

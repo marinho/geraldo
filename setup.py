@@ -1,8 +1,12 @@
 # Geraldo setup
 
 # Downloads setuptools if not find it before try to import
-import ez_setup
-ez_setup.use_setuptools()
+try:
+    from setuptools import setup, find_packages
+except:
+    from ez_setup import use_setuptools
+    use_setuptools()
+    from setuptools import setup, find_packages
 
 from setuptools import setup
 from geraldo import get_version
