@@ -159,7 +159,7 @@ class TextGenerator(ReportGenerator):
 
             _page_output = [u' ' * self.page_columns_count] * self.page_rows_count
 
-            self._current_page_number = num
+            self._current_page_number = num + 1
 
             # Loop at band widgets
             for element in page.elements:

@@ -144,8 +144,6 @@ class PDFGenerator(ReportGenerator):
             for k,v in style.items():
                 d_style[k] = v
 
-        import datetime
-
         return ParagraphStyle(name=datetime.datetime.now().strftime('%H%M%S'), **d_style)
 
     def keep_in_frame(self, widget, width, height, paragraphs, mode):
@@ -162,7 +160,7 @@ class PDFGenerator(ReportGenerator):
         self._generation_datetime = datetime.datetime.now()
 
         for num, page in enumerate([page for page in self._rendered_pages if page.elements]):
-            self._current_page_number = num
+            self._current_page_number = num + 1
 
             # Loop at band widgets
             for element in page.elements:

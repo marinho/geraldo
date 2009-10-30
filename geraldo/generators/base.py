@@ -22,7 +22,7 @@ class ReportGenerator(GeraldoObject):
     _is_latest_page = True
     _current_top_position = 0
     _current_left_position = 0
-    _current_page_number = 0
+    _current_page_number = 1
     _current_object = None
     _current_queryset = None
     _generation_datetime = None
@@ -390,7 +390,7 @@ class ReportGenerator(GeraldoObject):
     def render_bands(self):
         """Loops into the objects list to create the report pages until the end"""
         # Preparing local auxiliar variables
-        self._current_page_number = 0
+        self._current_page_number = self.report.first_page_number
         self._current_object_index = 0
         objects = self.report.get_objects_list()
 
@@ -410,7 +410,7 @@ class ReportGenerator(GeraldoObject):
             first_object_on_page = True
 
             # Generate the report begin band
-            if self._current_page_number == 0:
+            if self._current_page_number == 1:
                 self.render_begin()
 
             # Does generate objects if there is no details band

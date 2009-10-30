@@ -277,6 +277,7 @@ class Report(BaseReport):
     keywords = ''
 
     # Page dimensions
+    first_page_number = 1
     page_size = A4
     margin_top = 1*cm
     margin_bottom = 1*cm
