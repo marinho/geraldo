@@ -1,10 +1,19 @@
-import datetime
+import datetime, os
 from base import ReportGenerator
 
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus import Paragraph, KeepInFrame
 from reportlab.lib.units import cm
+
+try:
+    # Try to import pyPdf, a library to combine lots of PDF files
+    # at once. It is important to improve Geraldo's performance
+    # on memory consumming when generating large files.
+    # http://pypi.python.org/pypi/pyPdf/
+    import pyPdf
+except ImportError:
+    pyPdf = None
 
 from geraldo.utils import get_attr_value, calculate_size
 from geraldo.widgets import Widget, Label, SystemField
@@ -18,12 +27,36 @@ class PDFGenerator(ReportGenerator):
     canvas = None
     return_canvas = False
 
-    def __init__(self, report, filename=None, canvas=None, return_canvas=False):
+    multiple_canvas = bool(pyPdf)
+    temp_files = None
+    temp_directory = '/tmp/'
+    temp_file_name = None
+    temp_files_counter = 0
+    temp_files_max_pages = 10
+
+    def __init__(self, report, filename=None, canvas=None, return_canvas=False,
+            multiple_canvas=None):
         super(PDFGenerator, self).__init__(report)
 
         self.filename = filename
         self.canvas = canvas
         self.return_canvas = return_canvas
+
+        # Sets multiple_canvas with default value if None
+        if multiple_canvas is not None:
+            self.multiple_canvas = multiple_canvas
+
+        # Sets multiple_canvas as False if a canvas has been informed as argument
+        # nor if return_canvas attribute is setted as True
+        if canvas or self.return_canvas:
+            self.multiple_canvas = False
+            
+        # Initializes multiple canvas controller variables
+        elif self.multiple_canvas:
+            self.temp_files = []
+            
+            # Just a unique name (current time + id of this object + formatting string for counter + PDF extension)
+            self.temp_file_name = datetime.datetime.now().strftime('%Y%m%d%H%M%s') + str(id(self)) + '_%s.pdf'
 
     def execute(self):
         """Generates a PDF file using ReportLab pdfgen package."""
@@ -31,7 +64,7 @@ class PDFGenerator(ReportGenerator):
 
         # Initializes the temporary PDF canvas (just to be used as reference)
         if not self.canvas:
-            self.canvas = Canvas(self.filename, pagesize=self.report.page_size)
+            self.start_canvas()
 
         # Render pages
         self.render_bands()
@@ -39,20 +72,102 @@ class PDFGenerator(ReportGenerator):
         # Initializes the definitive PDF canvas
         self.start_pdf()
 
+        # Generate the report pages (here it happens)
         self.generate_pages()
 
-        # Returns the canvas
-        if self.return_canvas:
-            return self.canvas
+        if self.multiple_canvas:
+            self.combine_multiple_canvas()
 
-        # Saves the canvas - only if it didn't return it
+        else:
+            # Returns the canvas
+            if self.return_canvas:
+                return self.canvas
+
+            # Saves the canvas - only if it didn't return it
+            self.close_current_canvas()
+
+    def start_canvas(self, filename=None):
+        """Sets the PDF canvas"""
+
+        # Canvas for multiple canvas
+        if self.multiple_canvas:
+            filename = os.path.join(
+                    self.temp_directory,
+                    filename or self.temp_file_name%(self.temp_files_counter),
+                    )
+
+            # Appends this filename to the temp files list
+            self.temp_files.append(filename)
+
+            # Increments the counter for the next file
+            self.temp_files_counter += 1
+
+            self.canvas = Canvas(filename=filename, pagesize=self.report.page_size)
+
+        # Canvas for single canvas
+        else:
+            filename = filename or self.filename
+            self.canvas = Canvas(filename=filename, pagesize=self.report.page_size)
+
+    def close_current_canvas(self):
+        """Saves and close the current canvas instance"""
         self.canvas.save()
 
-    def start_pdf(self, filename=None): # XXX
-        """Initializes the PDF document with some properties and methods"""
-        # Sets the PDF canvas
-        #self.canvas = Canvas(filename=filename, pagesize=self.report.page_size) # XXX
+    def combine_multiple_canvas(self):
+        """Combine multiple PDF files at once when is working with multiple canvas"""
+        if not self.multiple_canvas or not pyPdf or not self.temp_files:
+            return
 
+        """
+        # ------ USING GHOSTSCRIPT -------
+        if isinstance(self.filename, basestring):
+            filename = self.filename
+        else:
+            filename = os.path.join(
+                    self.temp_directory,
+                    self.temp_file_name%('_'),
+                    )
+
+        cmd = "gs -q -sPAPERSIZE=letter -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=%s %s"%(
+                filename, ' '.join(self.temp_files),
+                )
+        res = commands.getstatusoutput(cmd)
+
+        if res[0] != 0:
+            raise Exception(res)
+
+        if not isinstance(self.filename, basestring):
+            self.filename.write(file(filename,'rb').read())
+        """
+
+        # ------ USING PYPDF -------
+
+        readers = []
+        def append_pdf(input, output):
+            for page_num in range(input.numPages):
+                output.addPage(input.getPage(page_num))
+
+        output = pyPdf.PdfFileWriter()
+        for f_name in self.temp_files:
+            reader = pyPdf.PdfFileReader(file(f_name, 'rb'))
+            readers.append(reader)
+
+            append_pdf(reader, output)
+
+        if isinstance(self.filename, basestring):
+            fp = file(self.filename, 'wb')
+        else:
+            fp = self.filename
+        
+        output.write(fp)
+
+        # Closes and clear objects
+        fp.close()
+        for r in readers: del r
+        del output
+
+    def start_pdf(self):
+        """Initializes the PDF document with some properties and methods"""
         # Set PDF properties
         self.canvas.setTitle(self.report.title)
         self.canvas.setAuthor(self.report.author)
@@ -162,6 +277,13 @@ class PDFGenerator(ReportGenerator):
         for num, page in enumerate([page for page in self._rendered_pages if page.elements]):
             self._current_page_number = num + 1
 
+            # Multiple canvas support (closes current and creates a new
+            # once if reaches the max pages for temp file)
+            if num and self.multiple_canvas and num%self.temp_files_max_pages == 0:
+                self.close_current_canvas()
+                del self.canvas
+                self.start_canvas()
+
             # Loop at band widgets
             for element in page.elements:
                 # Widget element
@@ -185,6 +307,11 @@ class PDFGenerator(ReportGenerator):
                     self.generate_graphic(graphic, self.canvas)
 
             self.canvas.showPage()
+
+        # Multiple canvas support (closes the current one)
+        if self.multiple_canvas:
+            self.close_current_canvas()
+            del self.canvas
 
     def generate_widget(self, widget, canvas=None, page_number=0):
         """Renders a widget element on canvas"""
