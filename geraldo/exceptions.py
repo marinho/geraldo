@@ -10,3 +10,6 @@ class ManyObjectsFound(Exception):
 class AttributeNotFound(Exception):
     pass
 
+class NotYetImplemented(Exception):
+    pass
+

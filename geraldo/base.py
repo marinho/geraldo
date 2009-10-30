@@ -7,7 +7,7 @@ from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
 
 from utils import calculate_size, get_attr_value
 from exceptions import EmptyQueryset, ObjectNotFound, ManyObjectsFound,\
-        AttributeNotFound
+        AttributeNotFound, NotYetImplemented
 
 BAND_WIDTH = 'band-width'
 BAND_HEIGHT = 'band-height'
@@ -29,6 +29,22 @@ class GeraldoObject(object):
     def __init__(self, *kwargs):
         if 'name' in kwargs:
             self.name = kwargs.pop('name')
+
+    def destroy(self): # XXX
+        try:
+            children = self.get_children()
+        except (NotYetImplemented, AttributeError):
+            children = None
+
+        # Destroy children
+        if children:
+            for ch in children:
+                try:
+                    ch.destroy()
+                except AttributeError:
+                    pass
+
+        del self
 
     def find_by_name(self, name, many=False):
         """Find child by informed name (and raises an exception if doesn't
@@ -57,7 +73,7 @@ class GeraldoObject(object):
             except ObjectNotFound:
                 ch_found = []
 
-            found += ch_found
+            found.extend(ch_found)
 
         # Cleans using a set
         found = list(sets.Set(found))
@@ -75,7 +91,7 @@ class GeraldoObject(object):
     def get_children(self):
         """Returns all children elements from this one. This must be overriden
         by inherited class."""
-        raise Exception('Not yet implemented!')
+        raise NotYetImplemented()
 
     def remove_from_parent(self):
         """Remove this object from its parent one"""
@@ -87,12 +103,12 @@ class GeraldoObject(object):
     def remove_child(self, obj):
         """Removes a child from this one. This must be overriden by inherited
         class."""
-        raise Exception('Not yet implemented!')
+        raise NotYetImplemented()
 
     def set_parent_on_children(self):
         """Goes on every child and set their attribute 'parent' for this one.
         This must be overriden by inherited class."""
-        raise Exception('Not yet implemented!')
+        raise NotYetImplemented()
 
     def get_object_value(self, obj=None, attribute_name=None, action=None):
         """Override this method to customize the behaviour of object getting
@@ -184,21 +200,21 @@ class BaseReport(GeraldoObject):
         ret = []
 
         # Bands
-        ret += filter(bool, [
+        ret.extend(filter(bool, [
             self.band_begin,
             self.band_summary,
             self.band_page_header,
             self.band_page_footer,
             self.band_detail
-        ])
+        ]))
 
         # Groups
         if isinstance(self.groups, (list, tuple)):
-            ret += self.groups
+            ret.extend(self.groups)
 
         # Borders
         if isinstance(self.borders, dict):
-            ret += filter(lambda e: isinstance(e, Element),self.borders.values())
+            ret.extend(filter(lambda e: isinstance(e, Element),self.borders.values()))
 
         return ret
 
@@ -319,7 +335,7 @@ class Report(BaseReport):
         ret = super(Report, self).get_children()
 
         if isinstance(self.subreports, (list, tuple)):
-            ret += self.subreports
+            ret.extend(self.subreports)
 
         return ret
 
@@ -414,11 +430,11 @@ class SubReport(BaseReport):
 
     def get_children(self):
         ret = super(SubReport, self).get_children()
-        ret += filter(bool, [
+        ret.extend(filter(bool, [
             self.band_detail,
             self.band_header,
             self.band_footer,
-            ])
+            ]))
 
         return ret
 
@@ -481,12 +497,12 @@ class ReportBand(GeraldoObject):
 
     def get_children(self):
         ret = []
-        ret += self.elements
-        ret += self.child_bands
+        ret.extend(self.elements)
+        ret.extend(self.child_bands)
 
         # Borders
         if isinstance(self.borders, dict):
-            ret += filter(lambda e: isinstance(e, Element),self.borders.values())
+            ret.extend(filter(lambda e: isinstance(e, Element),self.borders.values()))
 
         return ret
 

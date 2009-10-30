@@ -168,7 +168,7 @@ class TextGenerator(ReportGenerator):
                     self.generate_widget(element, _page_output, num)
 
             # Adds the page output to output string
-            self._output += u'\n'.join(_page_output)
+            self._output = ''.join([self._output, u'\n'.join(_page_output)])
 
             # Escapes
             self.add_escapes_page_end(num);
@@ -225,19 +225,19 @@ class TextGenerator(ReportGenerator):
 
     def add_escapes_report_start(self):
         """Adds the escape commands to the output variable"""
-        self._output += self.escapes_report_start
+        self._output = ''.join([self._output, self.escapes_report_start])
 
     def add_escapes_report_end(self):
         """Adds the escape commands to the output variable"""
-        self._output += self.escapes_report_end
+        self._output = ''.join([self._output, self.escapes_report_end])
 
     def add_escapes_page_start(self, num):
         """Adds the escape commands to the output variable"""
-        self._output += self.escapes_page_start
+        self._output = ''.join([self._output, self.escapes_page_start])
 
     def add_escapes_page_end(self, num):
         """Adds the escape commands to the output variable"""
-        self._output += self.escapes_page_end
+        self._output = ''.join([self._output, self.escapes_page_end])
 
     def update_escape_chars(self):
         """Sets the escape chars to be ran for some events on report generation"""

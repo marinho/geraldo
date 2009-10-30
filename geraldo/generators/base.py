@@ -2,8 +2,9 @@ from geraldo.utils import get_attr_value, calculate_size
 from geraldo.widgets import Widget, Label, SystemField
 from geraldo.graphics import Graphic, RoundRect, Rect, Line, Circle, Arc,\
         Ellipse, Image
+from geraldo.base import GeraldoObject
 
-class ReportPage(object):
+class ReportPage(GeraldoObject):
     rect = None
     elements = None
     width = None
@@ -11,7 +12,10 @@ class ReportPage(object):
     def __init__(self):
         self.elements = []
 
-class ReportGenerator(object):
+    def get_children(self):
+        return self.elements
+
+class ReportGenerator(GeraldoObject):
     """A report generator is used to generate a report to a specific format."""
 
     _is_first_page = True
@@ -43,6 +47,9 @@ class ReportGenerator(object):
         self._groups_working_values = {}
         self._groups_changed = {}
         self._groups_stack = []
+
+    def get_children(self):
+        return self._rendered_pages
 
     def execute(self):
         """This method must be overrided to execute the report generation."""
