@@ -250,6 +250,8 @@ class SystemFieldDict(dict):
         self.widget = widget
         self.fields = fields or {}
 
+        super(SystemFieldDict, self).__init__(**fields)
+
     def __getitem__(self, key):
         if key.startswith('now:'):
             return self.widget.report.format_date(
