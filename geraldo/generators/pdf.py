@@ -35,12 +35,13 @@ class PDFGenerator(ReportGenerator):
     temp_files_max_pages = 10
 
     def __init__(self, report, filename=None, canvas=None, return_canvas=False,
-            multiple_canvas=None):
+            multiple_canvas=None, temp_directory=None):
         super(PDFGenerator, self).__init__(report)
 
         self.filename = filename
         self.canvas = canvas
         self.return_canvas = return_canvas
+        self.temp_directory = temp_directory or self.temp_directory
 
         # Sets multiple_canvas with default value if None
         if multiple_canvas is not None:
