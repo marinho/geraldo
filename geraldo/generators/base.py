@@ -1,22 +1,64 @@
+import random, shelve, os
+
 from geraldo.utils import get_attr_value, calculate_size
 from geraldo.widgets import Widget, Label, SystemField
 from geraldo.graphics import Graphic, RoundRect, Rect, Line, Circle, Arc,\
         Ellipse, Image
 from geraldo.base import GeraldoObject
 
+DEFAULT_TEMP_DIR = '/tmp/'
+
 class ReportPage(GeraldoObject):
     rect = None
-    elements = None
+    _elements = None
     width = None
+    temp_directory = DEFAULT_TEMP_DIR
+    randomic_number = None
 
-    def __init__(self):
-        self.elements = []
+    def __init__(self, temp_directory=None):
+        self._elements = []
+        self.temp_directory = temp_directory or self.temp_directory
+
+        self.randomic_number = str(random.randint(1, 999999)).zfill(6)
 
     def get_children(self):
-        return self.elements
+        return self._elements
+
+    def add_element(self, el):
+        self._elements.append(el)
+
+        # TODO
+        #el_id = id(el)
+        #self._elements.append(el_id)
+        #self.store_element(el)
+        #del el
+
+    def make_file_name(self, el_id):
+        return os.path.join(
+                self.temp_directory,
+                '%s_%s.geraldo'%(self.randomic_number, el_id),
+                )
+
+    def store_element(self, el):
+        """TODO"""
+        sh = shelve.open(self.make_file_name(id(el)))
+        sh['obj'] = el
+        sh.close()
+
+    @property
+    def elements(self):
+        for el in self._elements:
+            # TODO
+            #sh = shelve.open(self.make_file_name(el_id))
+            #el = sh['obj']
+            #sh.close()
+
+            yield el
 
 class ReportGenerator(GeraldoObject):
     """A report generator is used to generate a report to a specific format."""
+
+    temp_directory = DEFAULT_TEMP_DIR
 
     _is_first_page = True
     _is_latest_page = True
@@ -68,7 +110,7 @@ class ReportGenerator(GeraldoObject):
                     width=rect_dict['right'] - rect_dict['left'],
                     height=rect_dict['height'],
                     )
-            self._rendered_pages[-1].elements.append(graphic)
+            self._rendered_pages[-1].add_element(graphic)
 
         b_left = borders_dict.get('left', None)
         if b_left:
@@ -77,7 +119,7 @@ class ReportGenerator(GeraldoObject):
                     left=rect_dict['left'], top=rect_dict['top'],
                     right=rect_dict['left'], bottom=rect_dict['bottom']
                     )
-            self._rendered_pages[-1].elements.append(graphic)
+            self._rendered_pages[-1].add_element(graphic)
 
         b_top = borders_dict.get('top', None)
         if b_top:
@@ -86,7 +128,7 @@ class ReportGenerator(GeraldoObject):
                     left=rect_dict['left'], top=rect_dict['top'],
                     right=rect_dict['right'], bottom=rect_dict['top']
                     )
-            self._rendered_pages[-1].elements.append(graphic)
+            self._rendered_pages[-1].add_element(graphic)
 
         b_right = borders_dict.get('right', None)
         if b_right:
@@ -95,7 +137,7 @@ class ReportGenerator(GeraldoObject):
                     left=rect_dict['right'], top=rect_dict['top'],
                     right=rect_dict['right'], bottom=rect_dict['bottom']
                     )
-            self._rendered_pages[-1].elements.append(graphic)
+            self._rendered_pages[-1].add_element(graphic)
 
         b_bottom = borders_dict.get('bottom', None)
         if b_bottom:
@@ -104,7 +146,7 @@ class ReportGenerator(GeraldoObject):
                     left=rect_dict['left'], top=rect_dict['bottom'],
                     right=rect_dict['right'], bottom=rect_dict['bottom']
                     )
-            self._rendered_pages[-1].elements.append(graphic)
+            self._rendered_pages[-1].add_element(graphic)
 
     def make_band_rect(self, band, top_position, left_position):
         """Returns the right band rect on the PDF canvas"""
@@ -208,7 +250,7 @@ class ReportGenerator(GeraldoObject):
                 if temp_height > highest_height:
                     highest_height = temp_height
 
-                self._rendered_pages[-1].elements.append(widget)
+                self._rendered_pages[-1].add_element(widget)
 
             # Graphic element
             elif isinstance(element, Graphic):
@@ -258,7 +300,7 @@ class ReportGenerator(GeraldoObject):
                 if temp_height > highest_height:
                     highest_height = temp_height
 
-                self._rendered_pages[-1].elements.append(graphic)
+                self._rendered_pages[-1].add_element(graphic)
 
         # Updates top position
         if update_top:
@@ -294,6 +336,9 @@ class ReportGenerator(GeraldoObject):
         if self.get_available_height() < height:
             self.force_new_page()
 
+    def append_new_page(self):
+        self._rendered_pages.append(ReportPage(temp_directory=self.temp_directory))
+
     def force_new_page(self, insert_new_page=True):
         """Starts a new blank page"""
         # Ends the current page
@@ -301,7 +346,7 @@ class ReportGenerator(GeraldoObject):
 
         # Creates the new page
         if insert_new_page:
-            self._rendered_pages.append(ReportPage())
+            self.append_new_page()
 
         # Starts a new one
         self.start_new_page()
@@ -475,7 +520,7 @@ class ReportGenerator(GeraldoObject):
 
     def start_new_page(self, with_header=True):
         """Do everything necessary to be done to start a new page"""
-        self._rendered_pages.append(ReportPage())
+        self.append_new_page()
 
         if with_header:
             self.render_page_header()

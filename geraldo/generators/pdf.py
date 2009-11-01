@@ -29,7 +29,6 @@ class PDFGenerator(ReportGenerator):
 
     multiple_canvas = bool(pyPdf)
     temp_files = None
-    temp_directory = '/tmp/'
     temp_file_name = None
     temp_files_counter = 0
     temp_files_max_pages = 10

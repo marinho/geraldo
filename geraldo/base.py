@@ -44,6 +44,7 @@ class GeraldoObject(object):
                 except AttributeError:
                     pass
 
+        del children
         del self
 
     def find_by_name(self, name, many=False):
