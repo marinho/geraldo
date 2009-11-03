@@ -261,11 +261,15 @@ class PDFGenerator(ReportGenerator):
 
         return ParagraphStyle(name=datetime.datetime.now().strftime('%H%M%S'), **d_style)
 
-    def keep_in_frame(self, widget, width, height, paragraphs, mode):
-        widget.keep = KeepInFrame(width, height, paragraphs, mode=mode)
-        
-        widget.keep.canv = self.canvas
-        widget.keep.wrap(self.calculate_size(widget.width), self.calculate_size(widget.height))
+    def keep_in_frame(self, widget, width, height, paragraphs, mode, persistent=False):
+        keep = KeepInFrame(width, height, paragraphs, mode=mode)
+        keep.canv = self.canvas
+        keep.wrap(self.calculate_size(widget.width), self.calculate_size(widget.height))
+
+        if persistent:
+            widget.keep = keep
+
+        return keep_in_frame
 
     # METHODS THAT ARE TOTALLY SPECIFIC TO THIS GENERATOR AND MUST
     # OVERRIDE THE SUPERCLASS EQUIVALENT ONES
@@ -323,14 +327,30 @@ class PDFGenerator(ReportGenerator):
             widget.fields['current_datetime'] = self._generation_datetime
             widget.fields['report_author'] = self.report.author
 
+        # This includes also the SystemField above
+        if isinstance(widget, Label):
             para = Paragraph(widget.text, self.make_paragraph_style(widget.band, widget.style))
             para.wrapOn(canvas, widget.width, widget.height)
-            para.drawOn(canvas, widget.left, widget.top - para.height)
-        elif isinstance(widget, Label):
+
             if widget.truncate_overflow:
-                widget.keep.drawOn(canvas, widget.left, widget.top)
+                keep = keep_in_frame(
+                        widget,
+                        self.calculate_size(widget.width),
+                        self.calculate_size(widget.height),
+                        [para],
+                        mode='truncate',
+                        )
+                keep.drawOn(canvas, widget.left, widget.top)
+            elif isinstance(widget, SystemField):
+                para.drawOn(canvas, widget.left, widget.top - para.height)
             else:
-                widget.para.drawOn(canvas, widget.left, widget.top)
+                para.drawOn(canvas, widget.left, widget.top)
+
+        #elif isinstance(widget, Label):
+        #    if widget.truncate_overflow:
+        #        widget.keep.drawOn(canvas, widget.left, widget.top)
+        #    else:
+        #        widget.para.drawOn(canvas, widget.left, widget.top)
 
     def generate_graphic(self, graphic, canvas=None):
         """Renders a graphic element"""
