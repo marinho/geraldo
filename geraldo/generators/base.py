@@ -6,18 +6,14 @@ from geraldo.graphics import Graphic, RoundRect, Rect, Line, Circle, Arc,\
         Ellipse, Image
 from geraldo.base import GeraldoObject
 
-DEFAULT_TEMP_DIR = '/tmp/'
-
 class ReportPage(GeraldoObject):
     rect = None
     _elements = None
     width = None
-    temp_directory = DEFAULT_TEMP_DIR
     randomic_number = None
 
-    def __init__(self, temp_directory=None):
+    def __init__(self):
         self._elements = []
-        self.temp_directory = temp_directory or self.temp_directory
 
         self.randomic_number = str(random.randint(1, 999999)).zfill(6)
 
@@ -25,40 +21,19 @@ class ReportPage(GeraldoObject):
         return self._elements
 
     def add_element(self, el):
+        """In future this method can be used to store pages on disk and reduce
+        memory consuming"""
         self._elements.append(el)
-
-        # TODO
-        #el_id = id(el)
-        #self._elements.append(el_id)
-        #self.store_element(el)
-        #del el
-
-    def make_file_name(self, el_id):
-        return os.path.join(
-                self.temp_directory,
-                '%s_%s.geraldo'%(self.randomic_number, el_id),
-                )
-
-    def store_element(self, el):
-        """TODO"""
-        sh = shelve.open(self.make_file_name(id(el)))
-        sh['obj'] = el
-        sh.close()
 
     @property
     def elements(self):
+        """In future this method can be used to restore pages from disk and reduce
+        memory consuming"""
         for el in self._elements:
-            # TODO
-            #sh = shelve.open(self.make_file_name(el_id))
-            #el = sh['obj']
-            #sh.close()
-
             yield el
 
 class ReportGenerator(GeraldoObject):
     """A report generator is used to generate a report to a specific format."""
-
-    temp_directory = DEFAULT_TEMP_DIR
 
     _is_first_page = True
     _is_latest_page = True
@@ -342,7 +317,7 @@ class ReportGenerator(GeraldoObject):
             self.force_new_page()
 
     def append_new_page(self):
-        self._rendered_pages.append(ReportPage(temp_directory=self.temp_directory))
+        self._rendered_pages.append(ReportPage())
 
     def force_new_page(self, insert_new_page=True):
         """Starts a new blank page"""

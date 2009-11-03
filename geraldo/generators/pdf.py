@@ -15,6 +15,8 @@ try:
 except ImportError:
     pyPdf = None
 
+DEFAULT_TEMP_DIR = '/tmp/'
+
 from geraldo.utils import get_attr_value, calculate_size
 from geraldo.widgets import Widget, Label, SystemField
 from geraldo.graphics import Graphic, RoundRect, Rect, Line, Circle, Arc,\
@@ -32,6 +34,7 @@ class PDFGenerator(ReportGenerator):
     temp_file_name = None
     temp_files_counter = 0
     temp_files_max_pages = 10
+    temp_directory = DEFAULT_TEMP_DIR
 
     def __init__(self, report, filename=None, canvas=None, return_canvas=False,
             multiple_canvas=None, temp_directory=None):
@@ -118,30 +121,6 @@ class PDFGenerator(ReportGenerator):
         if not self.multiple_canvas or not pyPdf or not self.temp_files:
             return
 
-        """
-        # ------ USING GHOSTSCRIPT -------
-        if isinstance(self.filename, basestring):
-            filename = self.filename
-        else:
-            filename = os.path.join(
-                    self.temp_directory,
-                    self.temp_file_name%('_'),
-                    )
-
-        cmd = "gs -q -sPAPERSIZE=letter -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=%s %s"%(
-                filename, ' '.join(self.temp_files),
-                )
-        res = commands.getstatusoutput(cmd)
-
-        if res[0] != 0:
-            raise Exception(res)
-
-        if not isinstance(self.filename, basestring):
-            self.filename.write(file(filename,'rb').read())
-        """
-
-        # ------ USING PYPDF -------
-
         readers = []
         def append_pdf(input, output):
             for page_num in range(input.numPages):
@@ -225,11 +204,11 @@ class PDFGenerator(ReportGenerator):
 
         return ret
 
-    def make_paragraph(self, text, style=None): # XXX
+    def make_paragraph(self, text, style=None):
         """Uses the Paragraph class to return a new paragraph object"""
         return Paragraph(text, style)
 
-    def wrap_paragraph_on(self, paragraph, width, height): # XXX
+    def wrap_paragraph_on(self, paragraph, width, height):
         """Wraps the paragraph on the height/width informed"""
         paragraph.wrapOn(self.canvas, width, height)
 
