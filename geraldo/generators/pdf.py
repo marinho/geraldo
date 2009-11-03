@@ -269,7 +269,7 @@ class PDFGenerator(ReportGenerator):
         if persistent:
             widget.keep = keep
 
-        return keep_in_frame
+        return keep
 
     # METHODS THAT ARE TOTALLY SPECIFIC TO THIS GENERATOR AND MUST
     # OVERRIDE THE SUPERCLASS EQUIVALENT ONES
@@ -333,7 +333,7 @@ class PDFGenerator(ReportGenerator):
             para.wrapOn(canvas, widget.width, widget.height)
 
             if widget.truncate_overflow:
-                keep = keep_in_frame(
+                keep = self.keep_in_frame(
                         widget,
                         self.calculate_size(widget.width),
                         self.calculate_size(widget.height),
