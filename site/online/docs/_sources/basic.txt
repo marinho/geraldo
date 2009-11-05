@@ -28,6 +28,7 @@ You can also override some methods to customize some things.
 
 **Report page dimensions**
 
+- **first_page_number** - Default: 1
 - **page_size** - Default: A4
 - **margin_top** - Default: 1*cm
 - **margin_bottom** - Default: 1*cm

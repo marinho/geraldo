@@ -29,7 +29,7 @@ class PDFGenerator(ReportGenerator):
     canvas = None
     return_canvas = False
 
-    multiple_canvas = bool(pyPdf)
+    multiple_canvas = False #bool(pyPdf)
     temp_files = None
     temp_file_name = None
     temp_files_counter = 0
@@ -324,12 +324,6 @@ class PDFGenerator(ReportGenerator):
                 para.drawOn(canvas, widget.left, widget.top - para.height)
             else:
                 para.drawOn(canvas, widget.left, widget.top)
-
-        #elif isinstance(widget, Label):
-        #    if widget.truncate_overflow:
-        #        widget.keep.drawOn(canvas, widget.left, widget.top)
-        #    else:
-        #        widget.para.drawOn(canvas, widget.left, widget.top)
 
     def generate_graphic(self, graphic, canvas=None):
         """Renders a graphic element"""

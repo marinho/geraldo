@@ -199,7 +199,6 @@ class ReportGenerator(GeraldoObject):
 
                     temp_height = self.calculate_size(element.top) + self.calculate_size(widget.height)
                 elif isinstance(widget, Label):
-                    #widget.para = self.make_paragraph(widget.text, self.make_paragraph_style(band, widget.style))
                     para = self.make_paragraph(widget.text, self.make_paragraph_style(band, widget.style))
 
                     if widget.truncate_overflow:
@@ -207,7 +206,6 @@ class ReportGenerator(GeraldoObject):
                                 widget,
                                 self.calculate_size(widget.width),
                                 self.calculate_size(widget.height),
-                                #[widget.para],
                                 [para],
                                 mode='truncate',
                                 )
@@ -215,13 +213,10 @@ class ReportGenerator(GeraldoObject):
                         widget.left = band_rect['left'] + self.calculate_size(widget.left)
                         widget.top = self.calculate_top(temp_top, self.calculate_size(widget.top), self.calculate_size(widget.height))
                     else:
-                        #self.wrap_paragraph_on(widget.para, self.calculate_size(widget.width), self.calculate_size(widget.height))
                         self.wrap_paragraph_on(para, self.calculate_size(widget.width), self.calculate_size(widget.height))
                         widget.left = band_rect['left'] + self.calculate_size(widget.left)
-                        #widget.top = self.calculate_top(temp_top, self.calculate_size(widget.top), self.calculate_size(widget.para.height))
                         widget.top = self.calculate_top(temp_top, self.calculate_size(widget.top), self.calculate_size(para.height))
 
-                    #temp_height = self.calculate_size(element.top) + self.calculate_size(widget.para.height)
                     temp_height = self.calculate_size(element.top) + self.calculate_size(para.height)
                 else:
                     temp_height = self.calculate_size(element.top) + self.calculate_size(widget.height)

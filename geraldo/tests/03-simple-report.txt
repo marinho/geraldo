@@ -62,7 +62,7 @@ Report class
     ...         height = 0.5*cm
     ...         elements = [
     ...             ObjectValue(attribute_name='id', top=0, left=0),
-    ...             ObjectValue(attribute_name='name', top=0, left=3*cm, width=7*cm),
+    ...             ObjectValue(attribute_name='name', top=0, left=3*cm, width=10*cm),
     ...         ]
 
     >>> report = PermissionsReport(queryset=Permission.objects.order_by('id'))

@@ -90,11 +90,11 @@ db.define_table(purchase_item,
 
     <span class="n">resp</span> <span class="o">=</span> <span class="n">StringIO</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
 
-    <span class="n">purchases</span> <span class="o">=</span> <span class="n">db</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">purchase</span><span class="o">.</span><span class="n">id</span> <span class="o">&gt;</span> <span class="mf">0</span><span class="p">)</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">orderby</span><span class="o">=</span><span class="n">db</span><span class="o">.</span><span class="n">purchase</span><span class="o">.</span><span class="n">customer</span><span class="o">|</span><span class="n">db</span><span class="o">.</span><span class="n">purchase</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="n">purchases</span> <span class="o">=</span> <span class="n">db</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">purchase</span><span class="o">.</span><span class="n">id</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">orderby</span><span class="o">=</span><span class="n">db</span><span class="o">.</span><span class="n">purchase</span><span class="o">.</span><span class="n">customer</span><span class="o">|</span><span class="n">db</span><span class="o">.</span><span class="n">purchase</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
     <span class="n">report</span> <span class="o">=</span> <span class="n">ReportPurchase</span><span class="p">(</span><span class="n">queryset</span><span class="o">=</span><span class="n">purchases</span><span class="p">)</span>
     <span class="n">report</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">resp</span><span class="p">)</span>
 
-    <span class="n">resp</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mf">0</span><span class="p">)</span>
+    <span class="n">resp</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s">&#39;Content-Type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gluon</span><span class="o">.</span><span class="n">contenttype</span><span class="o">.</span><span class="n">contenttype</span><span class="p">(</span><span class="s">&#39;.pdf&#39;</span><span class="p">)</span>
     <span class="n">filename</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_Purchases.pdf&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">server_name</span><span class="p">)</span>
     <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s">&#39;Content-disposition&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;attachment; filename=</span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">filename</span>
@@ -114,13 +114,13 @@ db.define_table(purchase_item,
 </pre></div>
 </div>
 <p>Now you are going to work your report instance:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">purchases</span> <span class="o">=</span> <span class="n">db</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">purchase</span><span class="o">.</span><span class="n">id</span> <span class="o">&gt;</span> <span class="mf">0</span><span class="p">)</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">orderby</span><span class="o">=</span><span class="n">db</span><span class="o">.</span><span class="n">purchase</span><span class="o">.</span><span class="n">customer</span><span class="o">|</span><span class="n">db</span><span class="o">.</span><span class="n">purchase</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">purchases</span> <span class="o">=</span> <span class="n">db</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">purchase</span><span class="o">.</span><span class="n">id</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">orderby</span><span class="o">=</span><span class="n">db</span><span class="o">.</span><span class="n">purchase</span><span class="o">.</span><span class="n">customer</span><span class="o">|</span><span class="n">db</span><span class="o">.</span><span class="n">purchase</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
 <span class="n">report</span> <span class="o">=</span> <span class="n">ReportPurchase</span><span class="p">(</span><span class="n">queryset</span><span class="o">=</span><span class="n">purchases</span><span class="p">)</span>
 <span class="n">report</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">resp</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Finally you prepare the response:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">resp</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mf">0</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">resp</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s">&#39;Content-Type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gluon</span><span class="o">.</span><span class="n">contenttype</span><span class="o">.</span><span class="n">contenttype</span><span class="p">(</span><span class="s">&#39;.pdf&#39;</span><span class="p">)</span>
 <span class="n">filename</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_Purchases.pdf&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">server_name</span><span class="p">)</span>
 <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s">&#39;Content-disposition&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;attachment; filename=</span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">filename</span>
@@ -160,7 +160,7 @@ other report attributes, like below:</p>
     <span class="n">author</span> <span class="o">=</span> <span class="s">&#39;John Smith Corporation&#39;</span>
 
     <span class="n">page_size</span> <span class="o">=</span> <span class="n">landscape</span><span class="p">(</span><span class="n">A5</span><span class="p">)</span>
-    <span class="n">margin_left</span> <span class="o">=</span> <span class="mf">2</span><span class="o">*</span><span class="n">cm</span>
+    <span class="n">margin_left</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">cm</span>
     <span class="n">margin_top</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
     <span class="n">margin_right</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
     <span class="n">margin_bottom</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
@@ -194,7 +194,7 @@ So, if you have 10 objects in the queryset, you will have the detail band render
     <span class="n">author</span> <span class="o">=</span> <span class="s">&#39;John Smith Corporation&#39;</span>
 
     <span class="n">page_size</span> <span class="o">=</span> <span class="n">landscape</span><span class="p">(</span><span class="n">A5</span><span class="p">)</span>
-    <span class="n">margin_left</span> <span class="o">=</span> <span class="mf">2</span><span class="o">*</span><span class="n">cm</span>
+    <span class="n">margin_left</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">cm</span>
     <span class="n">margin_top</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
     <span class="n">margin_right</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
     <span class="n">margin_bottom</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
@@ -203,7 +203,7 @@ So, if you have 10 objects in the queryset, you will have the detail band render
         <span class="n">height</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
         <span class="n">elements</span><span class="o">=</span><span class="p">(</span>
             <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
-            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;date_creation&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">3</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;date_creation&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
                 <span class="n">get_value</span><span class="o">=</span><span class="k">lambda</span> <span class="n">instance</span><span class="p">:</span> <span class="n">instance</span><span class="o">.</span><span class="n">date_creation</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">&#39;%m/</span><span class="si">%d</span><span class="s">/%Y&#39;</span><span class="p">)),</span>
             <span class="p">)</span>
 </pre></div>
@@ -279,7 +279,7 @@ with the <strong>get_value</strong> attribute, for date field formatting.</p>
     </div>
     <div class="footer">
       &copy; Copyright 2009, Marinho Brandao.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.2.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
     </div>
   </body>
 </html>

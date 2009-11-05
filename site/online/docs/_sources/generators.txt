@@ -25,7 +25,7 @@ library 'ReportLab' to create them.
 
 - **canvas** - Default: None
 
-    **New in development version**
+    **New in version 0.3.5**
 
     If you already have a canvas instantiated, you can provide it instead
     of 'filename' to generate this report inside. This is useful to generate
@@ -33,12 +33,29 @@ library 'ReportLab' to create them.
 
 - **return_canvas** - Default: False
 
-    **New in development version**
+    **New in version 0.3.5**
 
     If you set this to **True**, the file will not be saved and the generator
     will return the canvas to you to use as you want.
 
-To use it you just do something like this:
+- **multiple_canvas** - Default: False
+
+    **New in version 0.3.7**
+
+    This attribute has default value **True** if you have **pyPDF** library
+    installed on your PYTHONPATH.
+
+    It is useful to store canvas in a temporary directory and combine all in
+    once when finished the generating. This helps to gain on memory consuming.
+
+    You can find more about pyPDF on http://pypi.python.org/pypi/pyPdf/
+
+- **temp_directory** - Default: '/tmp/'
+
+    Regarding to temporary saving files on report processing, this attribute
+    can receive a string with directory path where save those files.
+
+To use PDFGenerator you just do something like this:
 
     >>> my_report_instance.generate_by(PDFGenerator, filename='file.pdf')
 

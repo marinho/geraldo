@@ -1,3 +1,8 @@
+2009-11-05: Version 0.3.7-stable
+---------------------------------
+* Fixing problem with memory consuming when generating reports.
+  (thanks to Douglas Andrade and Leandro Lameiro)
+
 2009-08-03: Version 0.3.6-stable
 ---------------------------------
 * Fixing problem on paragraph style creation (on PDF generator)

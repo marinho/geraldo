@@ -53,8 +53,7 @@ future we will have generators for XML, HTML, PS, images and so on.</p>
 <h2>PDF Generator<a class="headerlink" href="#pdf-generator" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="geraldo.generators.PDFGenerator">
-<em class="property">
-class </em><tt class="descclassname">geraldo.generators.</tt><tt class="descname">PDFGenerator</tt><a class="headerlink" href="#geraldo.generators.PDFGenerator" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">geraldo.generators.</tt><tt class="descname">PDFGenerator</tt><a class="headerlink" href="#geraldo.generators.PDFGenerator" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>Path: <strong>geraldo.generators.PDFGenerator</strong></p>
@@ -71,7 +70,7 @@ attribute &#8216;canvas&#8217;</p>
 </li>
 <li><p class="first"><strong>canvas</strong> - Default: None</p>
 <blockquote>
-<p><strong>New in development version</strong></p>
+<p><strong>New in version 0.3.5</strong></p>
 <p>If you already have a canvas instantiated, you can provide it instead
 of &#8216;filename&#8217; to generate this report inside. This is useful to generate
 many reports in the same PDF.</p>
@@ -79,13 +78,29 @@ many reports in the same PDF.</p>
 </li>
 <li><p class="first"><strong>return_canvas</strong> - Default: False</p>
 <blockquote>
-<p><strong>New in development version</strong></p>
+<p><strong>New in version 0.3.5</strong></p>
 <p>If you set this to <strong>True</strong>, the file will not be saved and the generator
 will return the canvas to you to use as you want.</p>
 </blockquote>
 </li>
+<li><p class="first"><strong>multiple_canvas</strong> - Default: False</p>
+<blockquote>
+<p><strong>New in version 0.3.7</strong></p>
+<p>This attribute has default value <strong>True</strong> if you have <strong>pyPDF</strong> library
+installed on your PYTHONPATH.</p>
+<p>It is useful to store canvas in a temporary directory and combine all in
+once when finished the generating. This helps to gain on memory consuming.</p>
+<p>You can find more about pyPDF on <a class="reference external" href="http://pypi.python.org/pypi/pyPdf/">http://pypi.python.org/pypi/pyPdf/</a></p>
+</blockquote>
+</li>
+<li><p class="first"><strong>temp_directory</strong> - Default: &#8216;/tmp/&#8217;</p>
+<blockquote>
+<p>Regarding to temporary saving files on report processing, this attribute
+can receive a string with directory path where save those files.</p>
+</blockquote>
+</li>
 </ul>
-<p>To use it you just do something like this:</p>
+<p>To use PDFGenerator you just do something like this:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_report_instance</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s">&#39;file.pdf&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -103,8 +118,7 @@ will return the canvas to you to use as you want.</p>
 <h2>Text Generator<a class="headerlink" href="#text-generator" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="geraldo.generators.TextGenerator">
-<em class="property">
-class </em><tt class="descclassname">geraldo.generators.</tt><tt class="descname">TextGenerator</tt><a class="headerlink" href="#geraldo.generators.TextGenerator" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">geraldo.generators.</tt><tt class="descname">TextGenerator</tt><a class="headerlink" href="#geraldo.generators.TextGenerator" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>Path: <strong>geraldo.generators.TextGenerator</strong></p>
@@ -183,7 +197,7 @@ output string in. Example: &#8216;latin-1&#8217;</p>
 set for special characters or to setup the output printing):</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">geraldo.generators.text</span> <span class="kn">import</span> <span class="n">DEFAULT_ESCAPE_SET</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">my_escape_set</span> <span class="o">=</span> <span class="n">DEFAULT_ESCAPE_SET</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_escape_set</span><span class="p">[</span><span class="s">&#39;condensed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="mf">15</span><span class="p">)</span> <span class="o">+</span> <span class="nb">chr</span><span class="p">(</span><span class="mf">17</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_escape_set</span><span class="p">[</span><span class="s">&#39;condensed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span> <span class="o">+</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">17</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="n">my_report_instance</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">TextGenerator</span><span class="p">,</span> <span class="n">to_printer</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">escape_set</span><span class="o">=</span><span class="n">my_escape_set</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -191,9 +205,9 @@ set for special characters or to setup the output printing):</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">MyTextGenerator</span><span class="p">(</span><span class="n">TextGenerator</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">to_printer</span> <span class="o">=</span> <span class="bp">True</span>
 <span class="gp">... </span>    <span class="n">manual_escape_codes</span> <span class="o">=</span> <span class="bp">True</span>
-<span class="gp">... </span>    <span class="n">escapes_report_start</span> <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="mf">15</span><span class="p">)</span> <span class="c"># Sets condensed mode</span>
-<span class="gp">... </span>    <span class="n">escapes_report_end</span> <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="mf">18</span><span class="p">)</span> <span class="c"># Unsets condensed mode</span>
-<span class="gp">... </span>    <span class="n">escapes_page_start</span> <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="mf">12</span><span class="p">)</span> <span class="o">+</span> <span class="nb">chr</span><span class="p">(</span><span class="mf">10</span><span class="p">)</span> <span class="c"># Form and line feed</span>
+<span class="gp">... </span>    <span class="n">escapes_report_start</span> <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span> <span class="c"># Sets condensed mode</span>
+<span class="gp">... </span>    <span class="n">escapes_report_end</span> <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">18</span><span class="p">)</span> <span class="c"># Unsets condensed mode</span>
+<span class="gp">... </span>    <span class="n">escapes_page_start</span> <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span> <span class="o">+</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="c"># Form and line feed</span>
 <span class="gp">... </span>    <span class="n">escapes_page_end</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="n">my_report_instance</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">MyTextGenerator</span><span class="p">)</span>
 </pre></div>
@@ -261,7 +275,7 @@ set for special characters or to setup the output printing):</p>
     </div>
     <div class="footer">
       &copy; Copyright 2009, Marinho Brandao.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.2.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
     </div>
   </body>
 </html>

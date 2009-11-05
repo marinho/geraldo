@@ -25,7 +25,7 @@ library 'ReportLab' to create them.
 
 - **canvas** - Default: None
 
-    **New in development version**
+    **New in version 0.3.5**
 
     If you already have a canvas instantiated, you can provide it instead
     of 'filename' to generate this report inside. This is useful to generate
@@ -33,14 +33,14 @@ library 'ReportLab' to create them.
 
 - **return_canvas** - Default: False
 
-    **New on version 0.3.5**
+    **New in version 0.3.5**
 
     If you set this to **True**, the file will not be saved and the generator
     will return the canvas to you to use as you want.
 
 - **multiple_canvas** - Default: False
 
-    **New on version 0.3.7**
+    **New in version 0.3.7**
 
     This attribute has default value **True** if you have **pyPDF** library
     installed on your PYTHONPATH.
