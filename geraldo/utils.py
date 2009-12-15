@@ -3,6 +3,38 @@ from reportlab.lib.pagesizes import * # Check this - is the source of page sizes
 
 from exceptions import AttributeNotFound
 
+try:
+    from functools import wraps
+except ImportError:
+    wraps = None
+
+### Copied from Django Framework - django.utils.functional.memoize  #########
+
+#  Copyright (c) 2005 - 2009 Django Software Foundation.
+#  All Rights Reserved.
+
+def memoize(func, cache, num_args):
+    """
+    Wrap a function so that results for any argument tuple are stored in
+    'cache'. Note that the args to the function must be usable as dictionary
+    keys.
+
+    Only the first num_args are considered when creating the key.
+    """
+    if not wraps:
+        return func
+
+    def wrapper(*args):
+        mem_args = args[:num_args]
+        if mem_args in cache:
+            return cache[mem_args]
+        result = func(*args)
+        cache[mem_args] = result
+        return result
+    return wraps(func)(wrapper)
+
+### End of copied code from Django  #########################################
+
 def get_attr_value(obj, attr_path):
     """This function gets an attribute value from an object. If the attribute
     is a method with no arguments (or arguments with default values) it calls
@@ -49,4 +81,6 @@ def calculate_size(size):
                           # do a regex matching and calculate. TODO
     
     return size
+_calculate_size = {}
+calculate_size = memoize(calculate_size, _calculate_size, 1)
 
