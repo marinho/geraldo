@@ -12,6 +12,8 @@ build
 dist
 Geraldo.egg-info
 *.egg
+.DS_Store
+*$py.class
 site/fonts
 site/layout
 

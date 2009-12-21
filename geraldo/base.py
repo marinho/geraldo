@@ -5,15 +5,12 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.colors import black
 from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
 
-from utils import calculate_size, get_attr_value
+from utils import calculate_size, get_attr_value, landscape, format_date
 from exceptions import EmptyQueryset, ObjectNotFound, ManyObjectsFound,\
         AttributeNotFound, NotYetImplemented
 
 BAND_WIDTH = 'band-width'
 BAND_HEIGHT = 'band-height'
-
-def landscape(page_size):
-    return page_size[1], page_size[0]
 
 class GeraldoObject(object):
     """Base class inherited by all report classes, including band, subreports,
@@ -30,7 +27,7 @@ class GeraldoObject(object):
         if 'name' in kwargs:
             self.name = kwargs.pop('name')
 
-    def destroy(self): # XXX
+    def destroy(self):
         try:
             children = self.get_children()
         except (NotYetImplemented, AttributeError):
@@ -186,7 +183,7 @@ class BaseReport(GeraldoObject):
         if not self.queryset:
             return []
 
-        return [object for object in self.queryset]
+        return list(self.queryset)
 
     def format_date(self, date, expression):
         """Use a date format string method to return formatted datetime.
@@ -195,7 +192,8 @@ class BaseReport(GeraldoObject):
         this (until we find a better and agnosthic solution).
         
         Please don't hack this method up. Just override it on your report class."""
-        return date.strftime(expression)
+
+        return format_date(date, expression)
 
     def get_children(self):
         ret = []
@@ -310,10 +308,53 @@ class Report(BaseReport):
         if not self.print_if_empty and not self.queryset:
             raise EmptyQueryset("This report doesn't accept empty queryset")
 
+        # TODO: use multiprocessing
         # Initialize generator instance
         generator = generator_class(self, *args, **kwargs)
 
         return generator.execute()
+
+    def generate_under_process_by(self, generator_class, *args, **kwargs):
+        """Uses the power of multiprocessing library to run report generation under
+        a Process and save memory consumming, with better use of multi-core servers.
+        
+        This just will work well if you are generating in a destination file or
+        file-like object (i.e. an HttpResponse on Django).
+        
+        It doesn't returns nothing because Process doesn't."""
+
+        import tempfile, random, os
+        from utils import run_under_process
+
+        # Checks 'filename' argument
+        if 'filename' in kwargs and not isinstance(kwargs['filename'], basestring):
+            # Stores file-like object
+            filelike = kwargs.pop('filename')
+
+            # Make a randomic temporary filename
+            chars = map(chr, range(ord('a'), ord('z')) + range(ord('0'), ord('9')))
+            filename = ''.join([random.choice(chars) for c in range(40)])
+            kwargs['filename'] = os.path.join(tempfile.gettempdir(), filename)
+        else:
+            filelike = None
+
+        @run_under_process
+        def generate_report(report, generator_class, *args, **kwargs):
+            # Generate report into response object
+            report.generate_by(generator_class, *args, **kwargs)
+
+        # Run report generation
+        generate_report(self, generator_class, *args, **kwargs)
+
+        # Loads temp file
+        if filelike:
+            # Reads the temp file
+            fp = file(kwargs['filename'])
+            cont = fp.read()
+            fp.close()
+
+            # Writes temp file content in file-like object
+            filelike.write(cont)
 
     def get_page_rect(self):
         """Calculates a dictionary with page dimensions inside the margins

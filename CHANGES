@@ -1,3 +1,14 @@
+2009-12-20: Version 0.3.9-beta
+---------------------------------
+* Module 'utils.py' improved to have two main new functions: memoize and run_under_process
+  - 'memoize' is a decorator that stores function results in memory and use it when the
+    function is called again with the same arguments
+  - 'run_under_process' is a decorator that run a function under a multiprocessing.Process
+    instance, that means you use better the power of multi-core servers to generate reports
+* To make the things easier to use decorator 'run_under_process', we created a new method
+  on geraldo.base.Report class: 'generate_under_process_by', that stores the generation
+  output in a temp file, using a process, and loads that file in the file-like object.
+
 2009-11-05: Version 0.3.7-stable
 ---------------------------------
 * Fixing problem with memory consuming when generating reports.

@@ -1,0 +1,126 @@
+UTILITIES
+=========
+
+The tests on this document are about new changes we have done to optimize
+Geraldo's performance, scalability or just refactoring.
+
+Memoize
+-------
+
+Memoize is like a decorator that stores in memory the returned value for
+a set of arguments. The next time that function is valled with the same
+arguments, that stored value will be returned without run function code.
+
+In future we wanna use memcached to store these values.
+
+    >>> from geraldo.utils import memoize
+
+    >>> @memoize
+    ... def capitalize(word):
+    ...     print 'running...'
+    ...     return word.capitalize()
+
+    >>> capitalize('tarsila')
+    running...
+    'Tarsila'
+
+Pay attention to 'running...' not appearing
+
+    >>> capitalize('tarsila')
+    'Tarsila'
+
+MultiProcessing
+---------------
+
+A decorator to encapsulate functions that will run under a separated process.
+
+The use of multiprocessing library (available on Python 2.6, but installable
+on 2.4 or higher) is the best way to work with multiple process on Python.
+
+It is faster and more efficient than threading and will save memory
+consumming, specially on reports generation.
+
+    >>> import os
+    >>> from geraldo.utils import run_under_process
+    >>> from tempfile import gettempdir
+
+    >>> @run_under_process
+    ... def create_file(filename, content):
+    ...     fp = file(filename, 'w')
+    ...     fp.write(content)
+    ...     fp.close()
+
+    >>> filename = os.path.join(gettempdir(), 'testing-process.txt')
+    >>> create_file(filename, 'Test')
+    >>> fp = file(filename)
+
+    >>> fp.read()
+    'Test'
+
+    >>> fp.close()
+
+Getting Attribute Values
+------------------------
+
+To retrieve attribute value from an object, we have the function 'get_attr_value'
+that is able to get children attributes and run simples method (with no
+arguments) also.
+
+    >>> from geraldo.utils import get_attr_value
+
+An attribute
+
+    >>> class Word(object): the_word = 'test'
+    >>> word = Word()
+    >>> get_attr_value(word, 'the_word')
+    'test'
+
+A method of attribute
+
+    >>> get_attr_value(word, 'the_word.upper')
+    'TEST'
+
+A method...
+
+    >>> word = 'Test'
+    >>> get_attr_value(word, 'upper')
+    'TEST'
+
+Default date/time formatting function
+-------------------------------------
+
+A function that formats date/time values, using memoize optimization.
+
+    >>> import datetime
+    >>> from geraldo.utils import format_date
+
+    >>> some_day = datetime.date(2008,10,1)
+    >>> some_time = datetime.datetime(2008,10,1,10,30,1)
+
+    >>> format_date(some_day, '%d/%m/%Y')
+    '01/10/2008'
+    
+    >>> format_date(some_time, '%d/%m/%Y %H:%M:%S')
+    '01/10/2008 10:30:01'
+
+Landscape function
+------------------
+
+Just a simple and friendly way to switch a page size height/width tuple.
+
+    >>> from geraldo.utils import landscape, A4
+
+    >>> landscape(A4) == (A4[1], A4[0])
+    True
+
+Calculating sizes
+-----------------
+
+A function that calcs a dimension, that can be an expression in a string
+or just a simple value.
+
+    >>> from geraldo.utils import calculate_size, cm
+
+    >>> calculate_size(10*cm) == calculate_size('10*cm')
+    True
+
