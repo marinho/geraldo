@@ -4,6 +4,7 @@
 geraldo.graphics.Graphic class graphics.html
 geraldo.base.ReportBand class basic.html
 geraldo.graphics.Rect class graphics.html
+geraldo.utils.run_under_process function utils.html
 geraldo.widgets.ObjectValue class widgets.html
 geraldo.graphics.RoundRect class graphics.html
 geraldo.base.ReportGroup class basic.html
@@ -15,6 +16,8 @@ geraldo.widgets.Widget class widgets.html
 geraldo.generators.TextGenerator class generators.html
 geraldo.utils.BAND_WIDTH data utils.html
 geraldo.graphics.Line class graphics.html
+geraldo.utils.DISABLE_MULTIPROCESSING data utils.html
+geraldo.utils.memoize function utils.html
 geraldo.graphics.Ellipse class graphics.html
 geraldo.generators.PDFGenerator class generators.html
 geraldo.utils.landscape function utils.html

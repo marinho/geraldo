@@ -102,10 +102,37 @@ this class. It supports some bands and report definitions.</p>
 <li><strong>default_style</strong> - Default: None</li>
 </ul>
 <p><strong>Methods</strong></p>
-<ul class="simple">
-<li><strong>format_date(date, expression)</strong></li>
-<li><strong>get_objects_list()</strong></li>
-<li><strong>generate_by(generator_class, *args, **kwargs)</strong></li>
+<ul>
+<li><p class="first"><strong>format_date(date, expression)</strong></p>
+</li>
+<li><p class="first"><strong>get_objects_list()</strong></p>
+</li>
+<li><p class="first"><strong>generate_by(generator_class, *args, **kwargs)</strong></p>
+<blockquote>
+<p>This is the method used to generate a report to file. Report object is
+just an abstraction of how report must be like. When generating it to
+a real file, with real list of objects, you must generate using an
+<strong>generator</strong> - a classe from <strong>geraldo.generators</strong> package.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">report</span> <span class="o">=</span> <span class="n">MyReport</span><span class="p">(</span><span class="n">queryset</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Rio&#39;</span><span class="p">,</span><span class="s">&#39;London&#39;</span><span class="p">,</span><span class="s">&#39;Beijing&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">geraldo.generators</span> <span class="kn">import</span> <span class="n">PDFGenerator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s">&#39;test.pdf&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</blockquote>
+</li>
+<li><p class="first"><strong>generate_under_process_by(generator_class, *args, **kwargs)</strong></p>
+<blockquote>
+<p>Do the same <strong>generate_by</strong> doest, but uses multiprocessing Process
+instance to run it. This means it will use a new process to generate
+the file(s) and will use better the available resources of multi-core
+servers. In most of cases, also helps to avoid memory consumming.</p>
+<p>But there are servers configured with WSGI with no support to I/O
+when under separated process and this won&#8217;t work properly.</p>
+<p>As all of us know, Python processing is by far a better way to work
+than threading, so, this helps to solve it.</p>
+</blockquote>
+</li>
 </ul>
 </div>
 <div class="section" id="subreport">

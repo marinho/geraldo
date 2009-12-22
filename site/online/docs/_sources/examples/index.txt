@@ -21,4 +21,5 @@ source code.
     inline-subreport
     auto-expand-bands
     two-reports-at-once
+    in-multiprocessing
 

@@ -64,6 +64,30 @@ A report band must be a class inherited from **ReportBand** or an instance of
 - **get_objects_list()**
 - **generate_by(generator_class, *args, **kwargs)**
 
+    This is the method used to generate a report to file. Report object is
+    just an abstraction of how report must be like. When generating it to
+    a real file, with real list of objects, you must generate using an
+    **generator** - a classe from **geraldo.generators** package.
+
+    Example:
+
+    >>> report = MyReport(queryset=['Rio','London','Beijing'])
+    >>> from geraldo.generators import PDFGenerator
+    >>> report.generate_by(PDFGenerator, filename='test.pdf')
+
+- **generate_under_process_by(generator_class, *args, **kwargs)**
+
+    Do the same **generate_by** doest, but uses multiprocessing Process
+    instance to run it. This means it will use a new process to generate
+    the file(s) and will use better the available resources of multi-core
+    servers. In most of cases, also helps to avoid memory consumming.
+
+    But there are servers configured with WSGI with no support to I/O
+    when under separated process and this won't work properly.
+
+    As all of us know, Python processing is by far a better way to work
+    than threading, so, this helps to solve it.
+
 SubReport
 ---------
 
