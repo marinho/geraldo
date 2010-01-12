@@ -1,3 +1,5 @@
+import sys
+
 from reportlab.lib.units import * # Check this - is the source of units
 from reportlab.lib.pagesizes import * # Check this - is the source of page sizes
 from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT # Check this also
@@ -31,7 +33,10 @@ def memoize(func):
     def _inner(*args):
         return _get_memoized_value(func, args)
 
-    return wraps(func)(_inner)
+    if sys.version.startswith('2.4'):
+        return _inner
+    else:
+        return wraps(func)(_inner)
 
 def get_attr_value(obj, attr_path):
     """This function gets an attribute value from an object. If the attribute

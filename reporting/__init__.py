@@ -76,6 +76,7 @@ class ReportSite(object):
 
         # Initialize the reponse object
         resp = HttpResponse(mimetype='application/pdf')
+        resp['Content-Disposition'] = 'filename=%s.pdf'%'-'.join([app, model, name])
 
         # Get the queryset
         queryset = self.get_queryset(request, registered['model'])

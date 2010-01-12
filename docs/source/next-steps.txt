@@ -26,6 +26,7 @@ Third-party tools
 * Have a GUI tool to design reports, if possible to be used in a web browser
 * Have a way to create and print reports using a server, with no low level coding
 * **Django pluggable application to create fast reports** (currently in development)
+* Have a preview component for GUI applications (GTK/Qt/wxPython)
 
 Other features
 --------------
