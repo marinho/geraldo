@@ -58,6 +58,34 @@ A report band must be a class inherited from **ReportBand** or an instance of
 - **default_fill_color** - Default: black
 - **default_style** - Default: None
 
+**Events system**
+
+- **before_print** - Default: None
+
+    Is called by **do_before_print** method, before render the report. Expect 
+    arguments **report** and **generator**.
+
+- **before_generate** - Default: None
+
+    Is called by **do_before_generate** method, after render report and before
+    to generate the output files. Expect arguments **report** and **generator**.
+
+- **after_print** - Default: None
+
+    Is called by **do_after_print** method, after generate output files of the
+    report. Expect arguments **report** and **generator**.
+
+- **on_new_page** - Default: None
+
+    Is called by **do_on_new_page** method, when appending new pages when
+    rendering bands. Expect arguments **report**, **page**, **page_number** and
+    **generator**.
+
+    **Important:** if you are setting events as methods, you must name them as "do\_"
+    plus event name (i.e. do_before_print). Otherwise, if you are setting them as
+    attributes (setting when creating objects or setting them dinamically) you must
+    name them without "do\_", just their names (i.e. before_print).
+
 **Methods**
 
 - **format_date(date, expression)**

@@ -42,6 +42,18 @@ They are read-only attributes you can use at render time.
 - **band** - band this element is in
 - **page** - current page
 
+**Events system**
+
+- **before_print** - Default: None
+
+    Is called by **do_before_print** method, before generate the graphic output.
+    Expect arguments **graphic** and **generator**.
+
+- **after_print** - Default: None
+
+    Is called by **do_after_print** method, after generate the graphic output.
+    Expect arguments **graphic** and **generator**.
+
 **Methods**
 
 - **set_rect(**kwargs)**

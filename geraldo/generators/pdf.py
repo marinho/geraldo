@@ -70,15 +70,13 @@ class PDFGenerator(ReportGenerator):
             self.start_canvas()
 
         # Calls the before_print event
-        if self.report.before_print:
-            self.report.before_print(self.report, generator=self)
+        self.report.do_before_print(generator=self)
 
         # Render pages
         self.render_bands()
  
         # Calls the after_render event
-        if self.report.before_generate:
-            self.report.before_generate(self.report, generator=self)
+        self.report.do_before_generate(generator=self)
 
         # Initializes the definitive PDF canvas
         self.start_pdf()
@@ -87,8 +85,7 @@ class PDFGenerator(ReportGenerator):
         self.generate_pages()
 
         # Calls the after_print event
-        if self.report.after_print:
-            self.report.after_print(self.report, generator=self)
+        self.report.do_after_print(generator=self)
 
         # Multiple canvas files combination
         if self.multiple_canvas:
@@ -320,8 +317,7 @@ class PDFGenerator(ReportGenerator):
             widget.fields['report_author'] = self.report.author
 
         # Calls the before_print event
-        if widget.before_print:
-            widget.before_print(widget, generator=self)
+        widget.do_before_print(generator=self)
 
         # Exits if is not visible
         if not widget.visible:
@@ -347,16 +343,14 @@ class PDFGenerator(ReportGenerator):
                 para.drawOn(canvas, widget.left, widget.top)
 
             # Calls the after_print event
-            if widget.after_print:
-                widget.after_print(widget, generator=self)
+            widget.do_after_print(generator=self)
 
     def generate_graphic(self, graphic, canvas=None):
         """Renders a graphic element"""
         canvas = canvas or self.canvas
 
         # Calls the before_print event
-        if graphic.before_print:
-            graphic.before_print(graphic, generator=self)
+        graphic.do_before_print(generator=self)
 
         # Exits if is not visible
         if not graphic.visible:
@@ -426,6 +420,5 @@ class PDFGenerator(ReportGenerator):
             return
  
         # Calls the after_print event
-        if graphic.after_print:
-            graphic.after_print(graphic, generator=self)
+        graphic.do_after_print(generator=self)
 

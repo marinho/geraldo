@@ -67,6 +67,18 @@ own widgets, otherwise you shouldn't use it directly.
     **widget** attributes, with no word wrap. This means that those attributes
     are required.
 
+**Events system**
+
+- **before_print** - Default: None
+
+    Is called by **do_before_print** method, before generate the widget output.
+    Expect arguments **widget** and **generator**.
+
+- **after_print** - Default: None
+
+    Is called by **do_after_print** method, after generate the widget output.
+    Expect arguments **widget** and **generator**.
+
 **Rendering attributes**
 
 They are read-only attributes you can use at render time.

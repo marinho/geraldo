@@ -11,7 +11,6 @@ Engine API
 * **Table band** - a band to make it easy to create lists just using tables instead
   of detail band and lines. Table band must be an alternative to detail band
 * Support canvas draw
-* Events (i.e: BeforePrint and AfterPrint for bands and reports)
 
 Generators
 ----------

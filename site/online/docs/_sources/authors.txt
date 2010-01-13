@@ -1,0 +1,20 @@
+Authors
+=======
+
+Geraldo Reports was created and is maintained by **Marinho Brandão** <marinho at gmail dot com>.
+
+There are others guys who helped to enhance Geraldo to get better, we can feature:
+
+- Miltinho Brandão
+
+    The partner since the first day. Made lots of tests and found many bugs that we could
+    fix them and made Geraldo better.
+
+- Ari Caldeira
+
+    Commited patches, including events system.
+
+- Fran Boon
+
+    Sent improvements on documentation and made tutorial for Web2Py.
+

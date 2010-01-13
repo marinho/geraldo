@@ -498,13 +498,11 @@ class ReportGenerator(GeraldoObject):
         """Do everything necessary to be done to start a new page"""
         self.append_new_page()
 
-        if self.report.on_new_page:
-            self.report.on_new_page(
-                    self.report,
-                    page=self._rendered_pages[-1],
-                    page_number=len(self._rendered_pages),
-                    generator=self,
-                    )
+        self.report.do_on_new_page(
+                page=self._rendered_pages[-1],
+                page_number=len(self._rendered_pages),
+                generator=self,
+                )
 
         if with_header:
             self.render_page_header()

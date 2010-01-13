@@ -31,6 +31,7 @@ Content
     examples/index
     backward-incompatible-changes
     next-steps
+    authors
 
 Features
 --------
@@ -53,6 +54,7 @@ Geraldo does most of what any reports engine does. It provides the following fea
 - Flexibility to be easily customized
 - Aggregation functions
 - Hiding/showing bands and elements
+- Events system
 
 Dependencies
 ------------

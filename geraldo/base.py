@@ -1,4 +1,4 @@
-import copy, types
+import copy, types, new
 
 try: 
     set 
@@ -140,7 +140,7 @@ class BaseReport(GeraldoObject):
     default_fill_color = black
     borders = None
     
-    # Events
+    # Events (don't make a method with their names, override 'do_*' instead)
     before_print = None         # |     before render
     before_generate = None      # |     after render / before generate
     after_print = None          # V     after generate
@@ -271,6 +271,24 @@ class BaseReport(GeraldoObject):
         ( because it is called from children and the children are
         called from their children and on..."""
         raise AttributeNotFound
+
+    # Events methods
+    def do_before_print(self, generator):
+        if self.before_print:
+            self.before_print(self, generator)
+
+    def do_before_generate(self, generator):
+        if self.before_generate:
+            self.before_generate(self, generator)
+
+    def do_after_print(self, generator):
+        if self.after_print:
+            self.after_print(self, generator)
+
+    def do_on_new_page(self, page, page_number, generator):
+        if self.on_new_page:
+            self.on_new_page(self, page, page_number, generator)
+
 
 class Report(BaseReport):
     """This class must be inherited to be used as a new report.
@@ -666,7 +684,7 @@ class Element(GeraldoObject):
     _height = 0
     visible = True
     
-    # Events
+    # Events (don't make a method with their names, override 'do_*' instead)
     before_print = None
     after_print = None
 
@@ -703,6 +721,8 @@ class Element(GeraldoObject):
         new._width = self._width
         new._height = self._height
         new.visible = self.visible
+
+        # Copy events
         new.before_print = self.before_print
         new.after_print = self.after_print
 
@@ -746,4 +766,13 @@ class Element(GeraldoObject):
 
     def set_parent_on_children(self):
         pass
+
+    # Events methods
+    def do_before_print(self, generator):
+        if self.before_print:
+            self.before_print(self, generator)
+
+    def do_after_print(self, generator):
+        if self.after_print:
+            self.after_print(self, generator)
 

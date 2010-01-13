@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Without Django &mdash; Geraldo Reports Documentation v0.4-stable documentation</title>
+    <title>Using Events System &mdash; Geraldo Reports Documentation v0.4-stable documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -21,8 +21,8 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Geraldo Reports Documentation v0.4-stable documentation" href="../index.html" />
     <link rel="up" title="Examples" href="index.html" />
-    <link rel="next" title="Inline Detail Band" href="inline-detail.html" />
-    <link rel="prev" title="Charts with MatPlotLib" href="matplotlib.html" /> 
+    <link rel="next" title="Backward Incompatible Changes" href="../backward-incompatible-changes.html" />
+    <link rel="prev" title="Generating under new Process" href="in-multiprocessing.html" /> 
   </head>
   <body>
     <div class="related">
@@ -32,10 +32,10 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="inline-detail.html" title="Inline Detail Band"
+          <a href="../backward-incompatible-changes.html" title="Backward Incompatible Changes"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="matplotlib.html" title="Charts with MatPlotLib"
+          <a href="in-multiprocessing.html" title="Generating under new Process"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">Geraldo Reports Documentation v0.4-stable documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Examples</a> &raquo;</li> 
@@ -47,18 +47,25 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="without-django">
-<h1>Without Django<a class="headerlink" href="#without-django" title="Permalink to this headline">¶</a></h1>
-<p>This example is done without relation to Django querysets:</p>
+  <div class="section" id="using-events-system">
+<h1>Using Events System<a class="headerlink" href="#using-events-system" title="Permalink to this headline">¶</a></h1>
+<p>This example uses events to make customizations and also
+print messages while is printing:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
 <span class="n">cur_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span>
 
-<span class="kn">from</span> <span class="nn">reportlab.lib.pagesizes</span> <span class="kn">import</span> <span class="n">A4</span>
-<span class="kn">from</span> <span class="nn">reportlab.lib.units</span> <span class="kn">import</span> <span class="n">cm</span>
-<span class="kn">from</span> <span class="nn">reportlab.lib.enums</span> <span class="kn">import</span> <span class="n">TA_CENTER</span><span class="p">,</span> <span class="n">TA_RIGHT</span>
+<span class="kn">from</span> <span class="nn">geraldo.utils</span> <span class="kn">import</span> <span class="n">A4</span><span class="p">,</span> <span class="n">cm</span><span class="p">,</span> <span class="n">TA_CENTER</span><span class="p">,</span> <span class="n">TA_RIGHT</span>
 
 <span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span><span class="p">,</span> <span class="n">ReportBand</span><span class="p">,</span> <span class="n">Label</span><span class="p">,</span> <span class="n">ObjectValue</span><span class="p">,</span> <span class="n">SystemField</span><span class="p">,</span>\
     <span class="n">FIELD_ACTION_COUNT</span><span class="p">,</span> <span class="n">BAND_WIDTH</span>
+
+<span class="k">def</span> <span class="nf">element_before_print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">generator</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Element with before print event - hides if the text is &#39;New York&#39;&quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">!=</span> <span class="s">&#39;New York&#39;</span>
+
+<span class="k">def</span> <span class="nf">element_after_print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">generator</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Element with after print event, that works&quot;&quot;&quot;</span>
+    <span class="k">print</span> <span class="s">&#39;After print city </span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span>
 
 <span class="k">class</span> <span class="nc">SimpleListReport</span><span class="p">(</span><span class="n">Report</span><span class="p">):</span>
     <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;Demonstration without Django&#39;</span>
@@ -85,19 +92,47 @@
     <span class="k">class</span> <span class="nc">band_detail</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
         <span class="n">height</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
         <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
-            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,),</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="c"># Element with before print event - hides if the text is &#39;New York&#39;</span>
+                <span class="n">before_print</span><span class="o">=</span><span class="n">element_before_print</span><span class="p">,</span>
+
+                <span class="c">#Element with after print event, that works</span>
+                <span class="n">after_print</span><span class="o">=</span><span class="n">element_after_print</span><span class="p">,</span>
+                <span class="p">)</span>
         <span class="p">]</span>
+
+    <span class="c"># Report events overring methods</span>
+
+    <span class="k">def</span> <span class="nf">do_before_print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">generator</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Report before print event&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s"> - </span><span class="si">%s</span><span class="s"> objects&#39;</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">objects_list</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">do_before_generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">generator</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Report before generate event&quot;&quot;&quot;</span>
+        <span class="k">print</span> <span class="s">&#39;Starting generating!&#39;</span>
+
+    <span class="k">def</span> <span class="nf">do_after_print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">generator</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Report after print event&quot;&quot;&quot;</span>
+        <span class="k">print</span> <span class="s">&#39;Printing finished!&#39;</span>
+
+    <span class="k">def</span> <span class="nf">do_on_new_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">,</span> <span class="n">page_number</span><span class="p">,</span> <span class="n">generator</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Report on new page event&quot;&quot;&quot;</span>
+        <span class="k">print</span> <span class="s">&#39;Printing page # </span><span class="si">%s</span><span class="s">!&#39;</span><span class="o">%</span><span class="n">page_number</span>
 </pre></div>
 </div>
-<p>Now the object class</p>
+<p><strong>Important:</strong> if you are setting events as methods, you must name them as &#8220;do_&#8221;
+plus event name (i.e. do_before_print). Otherwise, if you are setting them as
+attributes (setting when creating objects or setting them dinamically) you must
+name them without &#8220;do_&#8221;, just their names (i.e. before_print).</p>
+<p>Executing for a list of objects (list of cities)...</p>
+<blockquote>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">MyObject</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 <span class="gp">... </span>            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Populating a list of objects</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">objects_list</span> <span class="o">=</span> <span class="p">[</span>
 <span class="gp">... </span>    <span class="n">MyObject</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Rio de Janeiro&#39;</span><span class="p">),</span>
 <span class="gp">... </span>    <span class="n">MyObject</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;New York&#39;</span><span class="p">),</span>
@@ -112,17 +147,19 @@
 <span class="gp">... </span><span class="p">]</span>
 </pre></div>
 </div>
-<p>Generating PDF...</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">report</span> <span class="o">=</span> <span class="n">SimpleListReport</span><span class="p">(</span><span class="n">queryset</span><span class="o">=</span><span class="n">objects_list</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">geraldo.generators</span> <span class="kn">import</span> <span class="n">PDFGenerator</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">report</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cur_dir</span><span class="p">,</span> <span class="s">&#39;output/without-django.pdf&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>The Result</p>
-<ul class="simple">
-<li><a class="reference external" href="http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/without-django-half-height.pdf">http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/without-django-half-height.pdf</a></li>
-<li><a class="reference external" href="http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/without-django.pdf">http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/without-django.pdf</a></li>
-</ul>
+</blockquote>
+<p>PDF generation</p>
+<blockquote>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">geraldo.generators</span> <span class="kn">import</span> <span class="n">PDFGenerator</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">report</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cur_dir</span><span class="p">,</span> <span class="s">&#39;output/generated-with-events.pdf&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</blockquote>
 </div>
 
 
@@ -132,14 +169,14 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
             <h4>Previous topic</h4>
-            <p class="topless"><a href="matplotlib.html"
-                                  title="previous chapter">Charts with MatPlotLib</a></p>
+            <p class="topless"><a href="in-multiprocessing.html"
+                                  title="previous chapter">Generating under new Process</a></p>
             <h4>Next topic</h4>
-            <p class="topless"><a href="inline-detail.html"
-                                  title="next chapter">Inline Detail Band</a></p>
+            <p class="topless"><a href="../backward-incompatible-changes.html"
+                                  title="next chapter">Backward Incompatible Changes</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
-              <li><a href="../_sources/examples/without-django.txt"
+              <li><a href="../_sources/examples/using-events.txt"
                      rel="nofollow">Show Source</a></li>
             </ul>
           <div id="searchbox" style="display: none">
@@ -166,10 +203,10 @@
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="inline-detail.html" title="Inline Detail Band"
+          <a href="../backward-incompatible-changes.html" title="Backward Incompatible Changes"
              >next</a> |</li>
         <li class="right" >
-          <a href="matplotlib.html" title="Charts with MatPlotLib"
+          <a href="in-multiprocessing.html" title="Generating under new Process"
              >previous</a> |</li>
         <li><a href="../index.html">Geraldo Reports Documentation v0.4-stable documentation</a> &raquo;</li>
           <li><a href="index.html" >Examples</a> &raquo;</li> 

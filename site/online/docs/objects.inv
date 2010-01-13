@@ -1,6 +1,6 @@
 # Sphinx inventory version 1
 # Project: Geraldo Reports Documentation
-# Version: 0.3
+# Version: 0.4
 geraldo.graphics.Graphic class graphics.html
 geraldo.base.ReportBand class basic.html
 geraldo.graphics.Rect class graphics.html

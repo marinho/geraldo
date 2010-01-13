@@ -22,4 +22,5 @@ source code.
     auto-expand-bands
     two-reports-at-once
     in-multiprocessing
+    using-events
 

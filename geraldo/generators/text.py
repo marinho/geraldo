@@ -87,15 +87,13 @@ class TextGenerator(ReportGenerator):
         super(TextGenerator, self).execute()
 
         # Calls the before_print event
-        if self.report.before_print:
-            self.report.before_print(self.report, generator=self)
+        self.report.do_before_print(generator=self)
 
         # Render pages
         self.render_bands()
  
         # Calls the after_render event
-        if self.report.before_generate:
-            self.report.before_generate(self.report, generator=self)
+        self.report.do_before_generate(generator=self)
 
         # Generate the pages
         text = self.generate_pages()
@@ -105,8 +103,7 @@ class TextGenerator(ReportGenerator):
             text = text.encode(self.encode_to)
  
         # Calls the after_print event
-        if self.report.after_print:
-            self.report.after_print(self.report, generator=self)
+        self.report.do_after_print(generator=self)
 
         # Saves to file or just returns the text
         if hasattr(self, 'filename'):
@@ -194,8 +191,7 @@ class TextGenerator(ReportGenerator):
         """Renders a widget element on canvas"""
 
         # Calls the before_print event
-        if widget.before_print:
-            widget.before_print(widget, generator=self)
+        widget.do_before_print(generator=self)
 
         # Exits if is not visible
         if not widget.visible:
@@ -212,8 +208,7 @@ class TextGenerator(ReportGenerator):
         self.print_in_page_output(page_output, text, widget.rect)
 
         # Calls the after_print event
-        if widget.after_print:
-            widget.after_print(widget, generator=self)
+        widget.do_after_print(generator=self)
 
     def generate_graphic(self, graphic, page_output):
         """Renders a graphic element"""
@@ -221,12 +216,10 @@ class TextGenerator(ReportGenerator):
         pass
 
         # Calls the before_print event - UNCOMMENT IF IMPLEMENT THIS METHOD
-        #if graphic.before_print:
-        #    graphic.before_print(graphic, generator=self)
+        #graphic.do_before_print(generator=self)
  
         # Calls the after_print event - UNCOMMENT IF IMPLEMENT THIS METHOD
-        #if graphic.after_print:
-        #    graphic.after_print(graphic, generator=self)
+        #graphic.do_after_print(generator=self)
 
     def print_in_page_output(self, page_output, text, rect):
         """Changes the array page_output (a matrix with rows and cols equivalent

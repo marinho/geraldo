@@ -5,13 +5,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Basic Reference &mdash; Geraldo Reports Documentation v0.3.6-stable documentation</title>
+    <title>Basic Reference &mdash; Geraldo Reports Documentation v0.4-stable documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.6-stable',
+        VERSION:     '0.4-stable',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -19,7 +19,7 @@
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Geraldo Reports Documentation v0.3.6-stable documentation" href="index.html" />
+    <link rel="top" title="Geraldo Reports Documentation v0.4-stable documentation" href="index.html" />
     <link rel="next" title="Widgets Reference" href="widgets.html" />
     <link rel="prev" title="Tutorial using Web2Py" href="tutorial-2.html" /> 
   </head>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="tutorial-2.html" title="Tutorial using Web2Py"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Geraldo Reports Documentation v0.3.6-stable documentation</a> &raquo;</li> 
+        <li><a href="index.html">Geraldo Reports Documentation v0.4-stable documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -100,6 +100,38 @@ this class. It supports some bands and report definitions.</p>
 <li><strong>default_stroke_color</strong> - Default: black</li>
 <li><strong>default_fill_color</strong> - Default: black</li>
 <li><strong>default_style</strong> - Default: None</li>
+</ul>
+<p><strong>Events system</strong></p>
+<ul>
+<li><p class="first"><strong>before_print</strong> - Default: None</p>
+<blockquote>
+<p>Is called by <strong>do_before_print</strong> method, before render the report. Expect
+arguments <strong>report</strong> and <strong>generator</strong>.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>before_generate</strong> - Default: None</p>
+<blockquote>
+<p>Is called by <strong>do_before_generate</strong> method, after render report and before
+to generate the output files. Expect arguments <strong>report</strong> and <strong>generator</strong>.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>after_print</strong> - Default: None</p>
+<blockquote>
+<p>Is called by <strong>do_after_print</strong> method, after generate output files of the
+report. Expect arguments <strong>report</strong> and <strong>generator</strong>.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>on_new_page</strong> - Default: None</p>
+<blockquote>
+<p>Is called by <strong>do_on_new_page</strong> method, when appending new pages when
+rendering bands. Expect arguments <strong>report</strong>, <strong>page</strong>, <strong>page_number</strong> and
+<strong>generator</strong>.</p>
+<p><strong>Important:</strong> if you are setting events as methods, you must name them as &#8220;do_&#8221;
+plus event name (i.e. do_before_print). Otherwise, if you are setting them as
+attributes (setting when creating objects or setting them dinamically) you must
+name them without &#8220;do_&#8221;, just their names (i.e. before_print).</p>
+</blockquote>
+</li>
 </ul>
 <p><strong>Methods</strong></p>
 <ul>
@@ -339,7 +371,7 @@ values.</p>
         <li class="right" >
           <a href="tutorial-2.html" title="Tutorial using Web2Py"
              >previous</a> |</li>
-        <li><a href="index.html">Geraldo Reports Documentation v0.3.6-stable documentation</a> &raquo;</li> 
+        <li><a href="index.html">Geraldo Reports Documentation v0.4-stable documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
