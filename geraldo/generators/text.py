@@ -86,8 +86,16 @@ class TextGenerator(ReportGenerator):
     def execute(self):
         super(TextGenerator, self).execute()
 
+        # Calls the before_print event
+        if self.report.before_print:
+            self.report.before_print(self.report, generator=self)
+
         # Render pages
         self.render_bands()
+ 
+        # Calls the after_render event
+        if self.report.before_generate:
+            self.report.before_generate(self.report, generator=self)
 
         # Generate the pages
         text = self.generate_pages()
@@ -95,6 +103,10 @@ class TextGenerator(ReportGenerator):
         # Encode
         if self.encode_to:
             text = text.encode(self.encode_to)
+ 
+        # Calls the after_print event
+        if self.report.after_print:
+            self.report.after_print(self.report, generator=self)
 
         # Saves to file or just returns the text
         if hasattr(self, 'filename'):
@@ -180,6 +192,15 @@ class TextGenerator(ReportGenerator):
 
     def generate_widget(self, widget, page_output, page_number=0):
         """Renders a widget element on canvas"""
+
+        # Calls the before_print event
+        if widget.before_print:
+            widget.before_print(widget, generator=self)
+
+        # Exits if is not visible
+        if not widget.visible:
+            return
+
         text = widget.text
 
         # Aligment
@@ -190,10 +211,22 @@ class TextGenerator(ReportGenerator):
 
         self.print_in_page_output(page_output, text, widget.rect)
 
+        # Calls the after_print event
+        if widget.after_print:
+            widget.after_print(widget, generator=self)
+
     def generate_graphic(self, graphic, page_output):
         """Renders a graphic element"""
         # TODO: horizontal and vertical lines, rectangles and borders should work
         pass
+
+        # Calls the before_print event - UNCOMMENT IF IMPLEMENT THIS METHOD
+        #if graphic.before_print:
+        #    graphic.before_print(graphic, generator=self)
+ 
+        # Calls the after_print event - UNCOMMENT IF IMPLEMENT THIS METHOD
+        #if graphic.after_print:
+        #    graphic.after_print(graphic, generator=self)
 
     def print_in_page_output(self, page_output, text, rect):
         """Changes the array page_output (a matrix with rows and cols equivalent

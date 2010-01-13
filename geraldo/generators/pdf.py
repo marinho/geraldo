@@ -69,8 +69,16 @@ class PDFGenerator(ReportGenerator):
         if not self.canvas:
             self.start_canvas()
 
+        # Calls the before_print event
+        if self.report.before_print:
+            self.report.before_print(self.report, generator=self)
+
         # Render pages
         self.render_bands()
+ 
+        # Calls the after_render event
+        if self.report.before_generate:
+            self.report.before_generate(self.report, generator=self)
 
         # Initializes the definitive PDF canvas
         self.start_pdf()
@@ -78,6 +86,11 @@ class PDFGenerator(ReportGenerator):
         # Generate the report pages (here it happens)
         self.generate_pages()
 
+        # Calls the after_print event
+        if self.report.after_print:
+            self.report.after_print(self.report, generator=self)
+
+        # Multiple canvas files combination
         if self.multiple_canvas:
             self.combine_multiple_canvas()
 
@@ -306,6 +319,14 @@ class PDFGenerator(ReportGenerator):
             widget.fields['current_datetime'] = self._generation_datetime
             widget.fields['report_author'] = self.report.author
 
+        # Calls the before_print event
+        if widget.before_print:
+            widget.before_print(widget, generator=self)
+
+        # Exits if is not visible
+        if not widget.visible:
+            return
+
         # This includes also the SystemField above
         if isinstance(widget, Label):
             para = Paragraph(widget.text, self.make_paragraph_style(widget.band, widget.style))
@@ -325,9 +346,21 @@ class PDFGenerator(ReportGenerator):
             else:
                 para.drawOn(canvas, widget.left, widget.top)
 
+            # Calls the after_print event
+            if widget.after_print:
+                widget.after_print(widget, generator=self)
+
     def generate_graphic(self, graphic, canvas=None):
         """Renders a graphic element"""
         canvas = canvas or self.canvas
+
+        # Calls the before_print event
+        if graphic.before_print:
+            graphic.before_print(graphic, generator=self)
+
+        # Exits if is not visible
+        if not graphic.visible:
+            return
 
         if isinstance(graphic, RoundRect):
             canvas.roundRect(
@@ -389,4 +422,10 @@ class PDFGenerator(ReportGenerator):
                     graphic.width,
                     graphic.height,
                     )
+        else:
+            return
+ 
+        # Calls the after_print event
+        if graphic.after_print:
+            graphic.after_print(graphic, generator=self)
 

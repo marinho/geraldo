@@ -409,6 +409,7 @@ class ReportGenerator(GeraldoObject):
  
     def render_bands(self):
         """Loops into the objects list to create the report pages until the end"""
+ 
         # Preparing local auxiliar variables
         self._current_page_number = self.report.first_page_number
         self._current_object_index = 0
@@ -496,6 +497,14 @@ class ReportGenerator(GeraldoObject):
     def start_new_page(self, with_header=True):
         """Do everything necessary to be done to start a new page"""
         self.append_new_page()
+
+        if self.report.on_new_page:
+            self.report.on_new_page(
+                    self.report,
+                    page=self._rendered_pages[-1],
+                    page_number=len(self._rendered_pages),
+                    generator=self,
+                    )
 
         if with_header:
             self.render_page_header()

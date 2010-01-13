@@ -1,0 +1,153 @@
+EVENTS SYSTEM
+=============
+
+This doctest exists to check Events System of reports, bands and elements.
+The Events System is a set of expected methods and their calls along the
+reports generating.
+
+The list of events is the following:
+
+Report
+ - before_print         # |     before render
+ - before_generate      # |     after render / before generate
+ - after_print          # V     after generate
+ - on_new_page
+
+Element (widgets, graphics, etc.)
+ - before_print
+ - after_print
+
+    >>> import os
+    >>> cur_dir = os.path.dirname(os.path.abspath(__file__))
+
+    >>> from geraldo.utils import A4, cm, TA_CENTER, TA_RIGHT
+    
+    >>> from geraldo import Report, ReportBand, Label, ObjectValue, SystemField,\
+    ...     FIELD_ACTION_COUNT, BAND_WIDTH
+
+Report class
+
+    >>> class SimpleListReport(Report):
+    ...     title = 'Demonstration without Django'
+    ... 
+    ...     class band_page_header(ReportBand):
+    ...         height = 1.3*cm
+    ...         elements = [
+    ...             SystemField(expression='%(report_title)s', top=0.1*cm, left=0, width=BAND_WIDTH,
+    ...                 style={'fontName': 'Helvetica-Bold', 'fontSize': 14, 'alignment': TA_CENTER}),
+    ...             Label(text="ID", top=0.8*cm, left=0),
+    ...             Label(text="Name", top=0.8*cm, left=3*cm),
+    ...         ]
+    ...         borders = {'bottom': True}
+    ... 
+    ...     class band_page_footer(ReportBand):
+    ...         height = 0.5*cm
+    ...         elements = [
+    ...             Label(text='Created with Geraldo Reports', top=0.1*cm, left=0),
+    ...             SystemField(expression='Page # %(page_number)d of %(page_count)d', top=0.1*cm,
+    ...                 width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
+    ...         ]
+    ...         borders = {'top': True}
+    ... 
+    ...     class band_detail(ReportBand):
+    ...         height = 0.5*cm
+    ...         elements = [
+    ...             ObjectValue(attribute_name='id', top=0, left=0, name='other-field-with-event'),
+    ...             ObjectValue(attribute_name='name', top=0, left=3*cm, name='field-with-event'),
+    ...         ]
+
+    >>> class MyObject(object):
+    ...     def __init__(self, **kwargs):
+    ...         for k,v in kwargs.items():
+    ...             setattr(self, k, v)
+
+
+    >>> objects_list = [
+    ...     MyObject(id=1, name='Rio de Janeiro'),
+    ...     MyObject(id=2, name='New York'),
+    ...     MyObject(id=3, name='Paris'),
+    ...     MyObject(id=4, name='London'),
+    ...     MyObject(id=5, name='Tokyo'),
+    ...     MyObject(id=6, name='Moscow'),
+    ...     MyObject(id=7, name='Beijing'),
+    ...     MyObject(id=8, name='Hamburg'),
+    ...     MyObject(id=9, name='New Delhi'),
+    ...     MyObject(id=10, name='Jakarta'),
+    ... ]
+
+    >>> report = SimpleListReport(queryset=objects_list)
+
+Setting events
+--------------
+
+Report before print event
+
+    >>> def report_before_print(self, generator):
+    ...     self.title = '%s - %s objects'%(self.title, len(objects_list))
+
+    >>> report.before_print = report_before_print
+
+Report before generate event
+
+    >>> def report_before_generate(self, generator):
+    ...     print 'Starting generating!'
+
+    >>> report.before_generate = report_before_generate
+
+Report after print event
+
+    >>> def report_after_print(self, generator):
+    ...     print 'Printing finished!'
+
+    >>> report.after_print = report_after_print
+
+Report on new page event
+
+    >>> def report_on_new_page(self, page, page_number, generator):
+    ...     print 'Printing page # %s!'%page_number
+
+    >>> report.on_new_page = report_on_new_page
+
+Element with before print event
+
+    >>> def element_before_print(self, generator):
+    ...     # Hides if the text is 'New York
+    ...     self.visible = self.text != 'New York'
+
+    >>> report.find_by_name('field-with-event').before_print = element_before_print
+
+Element with after print event, does nothing, because on before print event it is
+made invisible (so, doesn't reaches the 'after print' event, of course)
+
+    >>> def element_after_print(self, generator):
+    ...     if self.text == 'New York':
+    ...         raise Exception('Nothing will happen.')
+
+    >>> report.find_by_name('field-with-event').after_print = element_after_print
+
+Element with after print event, that works
+
+    >>> def element_after_print_2(self, generator):
+    ...     print 'After print ID %s'%self.text
+
+    >>> report.find_by_name('other-field-with-event').after_print = element_after_print_2
+
+PDF generation
+
+    >>> from geraldo.generators import PDFGenerator
+
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/generated-with-events.pdf'))
+    Printing page # 1!
+    Starting generating!
+    After print ID 1
+    After print ID 2
+    After print ID 3
+    After print ID 4
+    After print ID 5
+    After print ID 6
+    After print ID 7
+    After print ID 8
+    After print ID 9
+    After print ID 10
+    Printing finished!
+

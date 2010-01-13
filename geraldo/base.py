@@ -1,4 +1,9 @@
-import copy, types, sets
+import copy, types
+
+try: 
+    set 
+except NameError: 
+    from sets import Set as set     # Python 2.3 fallback 
 
 from reportlab.lib.units import cm
 from reportlab.lib.pagesizes import A4
@@ -74,7 +79,7 @@ class GeraldoObject(object):
             found.extend(ch_found)
 
         # Cleans using a set
-        found = list(sets.Set(found))
+        found = list(set(found))
 
         # Found nothing
         if not found:
@@ -134,6 +139,12 @@ class BaseReport(GeraldoObject):
     default_stroke_color = black
     default_fill_color = black
     borders = None
+    
+    # Events
+    before_print = None         # |     before render
+    before_generate = None      # |     after render / before generate
+    after_print = None          # V     after generate
+    on_new_page = None
 
     def __init__(self, queryset=None):
         self.queryset = queryset or self.queryset
@@ -654,6 +665,10 @@ class Element(GeraldoObject):
     _width = 0
     _height = 0
     visible = True
+    
+    # Events
+    before_print = None
+    after_print = None
 
     # 'width' property
     def _get_width(self):
@@ -688,6 +703,8 @@ class Element(GeraldoObject):
         new._width = self._width
         new._height = self._height
         new.visible = self.visible
+        new.before_print = self.before_print
+        new.after_print = self.after_print
 
         if hasattr(self, 'name'):
             new.name = self.name

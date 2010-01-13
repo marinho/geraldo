@@ -1,5 +1,9 @@
 import datetime, types, decimal
-from sets import Set
+
+try: 
+    set 
+except NameError: 
+    from sets import Set as set     # Python 2.3 fallback 
 
 from reportlab.lib.units import cm
 from reportlab.lib.colors import black
@@ -165,7 +169,7 @@ class ObjectValue(Label):
         return sum(values)
 
     def action_distinct_count(self):
-        values = Set(self.get_queryset_values())
+        values = set(self.get_queryset_values())
         return len(values)
 
     def _text(self):
