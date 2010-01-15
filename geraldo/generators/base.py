@@ -447,7 +447,12 @@ class ReportGenerator(GeraldoObject):
                 self.calc_changed_groups(first_object_on_page)
 
                 if not first_object_on_page:
+                    # The current_object of the groups' footers is the previous 
+                    # object, so we have access, in groups' footers, to the last
+                    # object before the group breaking XXX
+                    self._current_object = objects[self._current_object_index-1]
                     self.render_groups_footers()
+                    self._current_object = objects[self._current_object_index]
 
                 self.render_groups_headers()
 

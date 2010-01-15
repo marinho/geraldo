@@ -103,6 +103,7 @@ class ObjectValue(Label):
     action = FIELD_ACTION_VALUE
     display_format = '%s'
     objects = None
+    get_text = None # A lambda function to get customized display values
 
     def get_object_value(self, instance=None):
         """Return the attribute value for just an object"""
@@ -173,15 +174,19 @@ class ObjectValue(Label):
         return len(values)
 
     def _text(self):
-        try: # First of all, tries to get using parent object
+        try: # Before all, tries to get the value using parent object
             value = self.band.get_object_value(obj=self)
         #except AttributeError:
         #    raise
         except AttributeNotFound:
             value = getattr(self, 'action_'+self.action)()
 
-        text = unicode(value)
-        return self.display_format%text
+        if self.get_text:
+            text = unicode(self.get_text(self.instance, value))
+        else:
+            text = unicode(value)
+            
+        return self.display_format % text
     text = property(lambda self: self._text())
 
     def clone(self):

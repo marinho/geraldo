@@ -1,3 +1,16 @@
+2010-01-15: Version 0.4-alpha-1
+-----------------------------
+* New 'lambda' attribute on ObjectValue 'get_text' to help 'get_value' to format the value
+  after it is getted (from Ari's patch)
+
+2010-01-13: Version 0.4-alpha
+-----------------------------
+* Changed website home page to list new discussion groups
+* Fixed reporting to return right file names when downloading
+* Fixed decorator memoize to support Python 2.4
+* Changed 'Set' imports to be more elegant and compatible with new 'set' builtin type
+* Added event system (from Ari's patch)
+
 2009-12-20: Version 0.3.9-beta
 ---------------------------------
 * Module 'utils.py' improved to have two main new functions: memoize and run_under_process
