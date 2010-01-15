@@ -1,7 +1,10 @@
-2010-01-15: Version 0.4-alpha-1
+2010-01-15: Version 0.4-alpha-2
 -----------------------------
 * New 'lambda' attribute on ObjectValue 'get_text' to help 'get_value' to format the value
   after it is getted (from Ari's patch)
+* New attribute on ObjectValue 'stores_text_in_cache' to set _text property to store the
+  value in a memory variable and use it in the next times it be requested.
+* Fixed a problem on groups aggregation values.
 
 2010-01-13: Version 0.4-alpha
 -----------------------------

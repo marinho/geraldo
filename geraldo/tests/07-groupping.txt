@@ -43,7 +43,8 @@ Report class
     ...         elements = [
     ...             Label(text="Users count:", top=0.1*cm, left=0),
     ...             ObjectValue(attribute_name='id', top=0.1*cm, left=4*cm,\
-    ...                 action=FIELD_ACTION_COUNT, display_format='%s users found'),
+    ...                 action=FIELD_ACTION_COUNT, display_format='%s users found',
+    ...                 name='users-found-count'),
     ...         ]
     ...         borders = {'all': True}
     ... 
@@ -97,9 +98,11 @@ Report class
     ...                     ObjectValue(attribute_name='username', top=0.1*cm, left=11.2*cm,
     ...                         name='latest-name'),
     ...                     ObjectValue(attribute_name='id', action=FIELD_ACTION_COUNT,
-    ...                         display_format='%s superusers', left=0*cm, top=0.1*cm),
+    ...                         display_format='%s superusers', left=0*cm, top=0.1*cm,
+    ...                         name='superusers-found-count'),
     ...                     ObjectValue(attribute_name='id', action=FIELD_ACTION_SUM,
-    ...                         display_format='%s is the sum of IDs above', left=4*cm, top=0.1*cm),
+    ...                         display_format='%s is the sum of IDs above', left=4*cm, top=0.1*cm,
+    ...                         name='sum-of-ids-above'),
     ...                     Label(text='Latest:', top=0.1*cm, left=10*cm),
     ...                 ],
     ...                 borders={'top': True},
@@ -118,7 +121,7 @@ Report class
     ...                 height=0.7*cm,
     ...                 elements=[
     ...                     ObjectValue(attribute_name='id', action=FIELD_ACTION_COUNT,
-    ...                         display_format='%s staffs', left=0.5*cm, top=0.1*cm)
+    ...                         display_format='%s staffs', left=0.5*cm, top=0.1*cm, name='staffs-count')
     ...                 ],
     ...                 borders={'top': True},
     ...             ),

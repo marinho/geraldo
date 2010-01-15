@@ -185,6 +185,22 @@ with a mask or additional text.
     Use simple string formatting on the field value. You could otherwise
     use **get_value** if you want something more powerful.
 
+- **get_text** - Default: None.
+
+    This 'lambda' attribute is seemed to **get_value** because it works after
+    value getting. It's important to keep aware there are two moments from get
+    a value from instance until to render it on the output generation:
+    
+    - 1) First the value is getted (and keeps being an unformatted value)
+    - 2) After this, the value is formatted (and transformed to unicode string)
+
+- **stores_text_in_cache** - Default: True
+
+    This is a boolean attribute you can set to **False** if you to force the
+    text getting to run twice: on renderizing and on generating. If you keep
+    it as **True**, it will store the text on the first getting and use the
+    stored text on next time(s) it be requested.
+
 SystemField
 -----------
 

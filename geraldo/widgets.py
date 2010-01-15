@@ -98,12 +98,18 @@ class ObjectValue(Label):
     You can also use 'display_format' attribute to set a friendly string
     formating, with a mask or additional text.
     
-    'get_value' lambda must have 'instance' argument."""
+    'get_value' and 'get_text' lambda attributes must have 'instance' argument.
+    
+    Set 'stores_text_in_cache' to False if you want this widget get its value
+    and text on render and generate moments."""
+
     attribute_name = None
     action = FIELD_ACTION_VALUE
     display_format = '%s'
     objects = None
     get_text = None # A lambda function to get customized display values
+    stores_text_in_cache = True
+    _cached_text = None
 
     def get_object_value(self, instance=None):
         """Return the attribute value for just an object"""
@@ -142,8 +148,9 @@ class ObjectValue(Label):
         return self.get_object_value()
 
     def action_count(self):
+        # Returns the total count of objects with valid values on informed attribute
         values = self.get_queryset_values()
-        return len([value for value in values if value])
+        return len(filter(lambda v: v is not None, values))
 
     def action_avg(self):
         values = self.get_queryset_values()
@@ -170,23 +177,22 @@ class ObjectValue(Label):
         return sum(values)
 
     def action_distinct_count(self):
-        values = set(self.get_queryset_values())
-        return len(values)
+        values = filter(lambda v: v is not None, self.get_queryset_values())
+        return len(set(values))
 
     def _text(self):
-        try: # Before all, tries to get the value using parent object
-            value = self.band.get_object_value(obj=self)
-        #except AttributeError:
-        #    raise
-        except AttributeNotFound:
-            value = getattr(self, 'action_'+self.action)()
+        if not self.stores_text_in_cache or self._cached_text is None:
+            try: # Before all, tries to get the value using parent object
+                value = self.band.get_object_value(obj=self)
+            except AttributeNotFound:
+                value = getattr(self, 'action_'+self.action)()
 
-        if self.get_text:
-            text = unicode(self.get_text(self.instance, value))
-        else:
-            text = unicode(value)
+            if self.get_text:
+                self._cached_text = unicode(self.get_text(self.instance, value))
+            else:
+                self._cached_text = unicode(value)
             
-        return self.display_format % text
+        return self.display_format % self._cached_text
     text = property(lambda self: self._text())
 
     def clone(self):
@@ -195,6 +201,7 @@ class ObjectValue(Label):
         new.action = self.action
         new.display_format = self.display_format
         new.objects = self.objects
+        new.stores_text_in_cache = self.stores_text_in_cache
 
         return new
 

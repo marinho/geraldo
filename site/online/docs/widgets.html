@@ -243,6 +243,31 @@ The choices you can use in <strong>action</strong> attributes are:</p>
 use <strong>get_value</strong> if you want something more powerful.</p>
 </blockquote>
 </li>
+<li><p class="first"><strong>get_text</strong> - Default: None.</p>
+<blockquote>
+<p>This &#8216;lambda&#8217; attribute is seemed to <strong>get_value</strong> because it works after
+value getting. It&#8217;s important to keep aware there are two moments from get
+a value from instance until to render it on the output generation:</p>
+<ul class="simple">
+<li><ol class="first arabic">
+<li>First the value is getted (and keeps being an unformatted value)</li>
+</ol>
+</li>
+<li><ol class="first arabic" start="2">
+<li>After this, the value is formatted (and transformed to unicode string)</li>
+</ol>
+</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><strong>stores_text_in_cache</strong> - Default: True</p>
+<blockquote>
+<p>This is a boolean attribute you can set to <strong>False</strong> if you to force the
+text getting to run twice: on renderizing and on generating. If you keep
+it as <strong>True</strong>, it will store the text on the first getting and use the
+stored text on next time(s) it be requested.</p>
+</blockquote>
+</li>
 </ul>
 </div>
 <div class="section" id="systemfield">
