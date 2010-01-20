@@ -1,3 +1,8 @@
+2010-01-20: Version 0.4-alpha-3
+-----------------------------
+* New attribute 'additional_fonts' on Report, to be a dictionary with font names file paths
+  for additional fonts besides those from PDF defaults.
+
 2010-01-15: Version 0.4-alpha-2
 -----------------------------
 * New 'lambda' attribute on ObjectValue 'get_text' to help 'get_value' to format the value

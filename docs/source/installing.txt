@@ -1,5 +1,5 @@
-Installation
-============
+Installing
+==========
 
 Geraldo is still not available as an installer or system package. So, you have two
 ways to install it:

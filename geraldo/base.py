@@ -303,6 +303,7 @@ class Report(BaseReport):
     author = ''
     subject = '' # Can be used also as the report description
     keywords = ''
+    additional_fonts = None
 
     # Page dimensions
     first_page_number = 1
@@ -323,6 +324,7 @@ class Report(BaseReport):
 
         self.subreports = self.subreports and list(self.subreports) or []
         self.default_style = self.default_style or {}
+        self.additional_fonts = self.additional_fonts or {}
 
         # Calls the method that set this as parent if their children
         self.set_parent_on_children()

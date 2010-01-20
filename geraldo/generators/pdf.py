@@ -5,6 +5,8 @@ from reportlab.pdfgen.canvas import Canvas
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus import Paragraph, KeepInFrame
 from reportlab.lib.units import cm
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 
 try:
     # Try to import pyPdf, a library to combine lots of PDF files
@@ -68,6 +70,9 @@ class PDFGenerator(ReportGenerator):
         # Initializes the temporary PDF canvas (just to be used as reference)
         if not self.canvas:
             self.start_canvas()
+
+        # Prepare additional fonts
+        self.prepare_additional_fonts()
 
         # Calls the before_print event
         self.report.do_before_print(generator=self)
@@ -421,4 +426,16 @@ class PDFGenerator(ReportGenerator):
  
         # Calls the after_print event
         graphic.do_after_print(generator=self)
+
+    def prepare_additional_fonts(self):
+        """This method loads additional fonts and register them using ReportLab
+        PDF metrics package.
+        
+        Just supports TTF fonts, for a while."""
+
+        if not self.report.additional_fonts:
+            return
+
+        for font_name, font_file in self.report.additional_fonts.items():
+            pdfmetrics.registerFont(TTFont(font_name, font_file))
 

@@ -23,4 +23,5 @@ source code.
     two-reports-at-once
     in-multiprocessing
     using-events
+    additional-fonts
 

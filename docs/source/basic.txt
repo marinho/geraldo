@@ -25,6 +25,12 @@ You can also override some methods to customize some things.
 - **author** - Default: '';
 - **subject** - Default: ''; (you can use it as the report description)
 - **keywords** - Default: '';
+- **additional_fonts** - Default: {}
+
+    **New on 0.4.** This is a dictionary where keys have to be the font name and
+    the value have to be the font file path (full path) to support additional
+    true-type fonts inside the PDF. Once you do it, you can use the fone name
+    used on styles as you do with any other default font.
 
 **Report page dimensions**
 

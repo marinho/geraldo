@@ -64,11 +64,23 @@ this class. It supports some bands and report definitions.</p>
 <li><strong>print_if_empty</strong> - Default: False</li>
 </ul>
 <p><strong>Report properties</strong></p>
-<ul class="simple">
-<li><strong>title</strong> - Default: &#8216;&#8217;;</li>
-<li><strong>author</strong> - Default: &#8216;&#8217;;</li>
-<li><strong>subject</strong> - Default: &#8216;&#8217;; (you can use it as the report description)</li>
-<li><strong>keywords</strong> - Default: &#8216;&#8217;;</li>
+<ul>
+<li><p class="first"><strong>title</strong> - Default: &#8216;&#8217;;</p>
+</li>
+<li><p class="first"><strong>author</strong> - Default: &#8216;&#8217;;</p>
+</li>
+<li><p class="first"><strong>subject</strong> - Default: &#8216;&#8217;; (you can use it as the report description)</p>
+</li>
+<li><p class="first"><strong>keywords</strong> - Default: &#8216;&#8217;;</p>
+</li>
+<li><p class="first"><strong>additional_fonts</strong> - Default: {}</p>
+<blockquote>
+<p><strong>New on 0.4.</strong> This is a dictionary where keys have to be the font name and
+the value have to be the font file path (full path) to support additional
+true-type fonts inside the PDF. Once you do it, you can use the fone name
+used on styles as you do with any other default font.</p>
+</blockquote>
+</li>
 </ul>
 <p><strong>Report page dimensions</strong></p>
 <ul class="simple">
