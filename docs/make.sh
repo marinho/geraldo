@@ -12,5 +12,6 @@ cp build/html/_sources/examples/*.txt ../site/online/docs/_sources/examples/
 cp build/html/_static/*.css ../site/online/docs/_static/
 cp build/html/_static/*.js ../site/online/docs/_static/
 cp build/html/_static/*.png ../site/online/docs/_static/
+cp build/html/examples/*.html ../site/online/docs/examples/
 
 echo "Done!"
