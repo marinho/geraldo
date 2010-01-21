@@ -15,7 +15,7 @@ Engine API
 Generators
 ----------
 
-* **Generate in ODF formats (ODT and ODS) (currently in development)**
+* Generate in ODF formats (ODT and ODS)
 * Generate in HTML
 * Export/import structure to/from an XML format
 
