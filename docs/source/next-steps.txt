@@ -36,4 +36,6 @@ Other features
 * Maybe a better support to images
 * Map/Reduce generating (split queryset, generate parts in parallel and combine them
   after all - on one of both ways: local or distributed)
+* Incremental/asynchronous generating (just take advantage of common part and update
+  the changed other part, specially useful when the order is datetime-based)
 
