@@ -33,10 +33,10 @@ Engine API
 - Support stylizing widgets (font, colors, borders and alignments) (x)
 - Support subreports (x)
 - Report inheritance and composition (x)
-- Support canvas draw
-- Reports merging (many reports at once)
+- Support canvas drawing
+- Reports merging (many reports at once) (x)
 - Multiple columns
-- Events
+- Events (x)
 
 Generators
 ----------

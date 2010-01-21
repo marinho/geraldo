@@ -34,4 +34,6 @@ Other features
 * Cross-reference table
 * Barcodes generation
 * Maybe a better support to images
+* Map/Reduce generating (split queryset, generate parts in parallel and combine them
+  after all - on one of both ways: local or distributed)
 
