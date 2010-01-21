@@ -28,7 +28,7 @@ Element (widgets, graphics, etc.)
 Report class
 
     >>> class SimpleListReport(Report):
-    ...     title = 'Demonstration without Django'
+    ...     title = 'Demonstration of events system'
     ... 
     ...     class band_page_header(ReportBand):
     ...         height = 1.3*cm

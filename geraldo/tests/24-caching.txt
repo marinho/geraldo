@@ -1,0 +1,206 @@
+CACHING REPORTS
+===============
+
+Here are the tests to make a good caching system for cache generated reports,
+with the goal to avoid to generate the same report twice (or more times).
+
+    >>> import os
+    >>> cur_dir = os.path.dirname(os.path.abspath(__file__))
+
+    >>> from geraldo.utils import A4, cm, TA_CENTER, TA_RIGHT
+    
+    >>> from geraldo import Report, ReportBand, Label, ObjectValue, SystemField,\
+    ...     FIELD_ACTION_COUNT, BAND_WIDTH
+
+Cache Status
+------------
+
+Summing up, there are three kinds (statuses) of caching reports:
+
+    >>> from geraldo.cache import DEFAULT_CACHE_STATUS, CACHE_DISABLED,\
+    ...     CACHE_BY_QUERYSET, CACHE_BY_RENDER
+
+Default cache status must be disabled
+
+    >>> DEFAULT_CACHE_STATUS == CACHE_DISABLED
+    True
+
+- No cache - there is no cache, of course
+
+    >>> CACHE_DISABLED == 0
+    True
+
+- Cache driven by queryset - the cache is stored by a hash key generated from
+  queryset values ( before call method render_pages() ). Basically the cache will
+  respect data variation, but won't respect stylizing
+
+    >>> CACHE_BY_QUERYSET == 1
+    True
+
+- Cache driven by rendered pages - the cache is stored by a hash key generated
+  from repr() of rendered pages and respectivelly elements ( after call method
+  render_pages() ). Basically the cache will respect everything ( safer but slower ).
+
+    >>> CACHE_BY_RENDER == 1
+    True
+
+Cache Backends
+--------------
+
+For a while, Geraldo will only supports file caching, because there is no good
+reason to store files with size in kbytes on memory or database, but it's important
+to have a way to implement it, if the developer wants.
+
+**BaseCacheBackend** is an abstract class that people can inherit to make their own
+backends (use Django's cache system, for example)
+
+    >>> from geraldo.cache import BaseCacheBackend
+
+    >>> hasattr(BaseCacheBackend, 'get')
+    True
+
+    >>> hasattr(BaseCacheBackend, 'set')
+    True
+
+    >>> hasattr(BaseCacheBackend, 'exists')
+    True
+
+**FileCacheBackend** is the one Geraldo handles for itself. Just write in and read
+from a directory, named by the hash key, plus the compatible extension.
+
+    >>> from geraldo.cache import FileCacheBackend
+
+Its important to keep aware on this backend doesn't support expiration, because no
+matters how much time goes, if the data/render is the same, then the result should
+also be the same. If you really wants to implement expiration, you have to
+write your out inheritance of BaseCacheBackend
+
+Cache settings
+--------------
+
+Besides 'CACHE_STATUS' setting, you can also inform other settings about caching,
+like the following ones
+
+- Cache backend - an instance of a Cache backend class
+
+    >>> from geraldo.cache import CACHE_BACKEND
+
+- Cache file root - the directory path where files will be writen/read
+
+    >>> from geraldo.cache import CACHE_FILE_ROOT
+
+Report class
+------------
+
+The report class can implement cache's parameters for itself, for granularity.
+
+    >>> hasattr(Report, 'cache_status')
+    True
+
+    >>> hasattr(Report, 'cache_backend')
+    True
+
+Cache prefix sets the report's cache prefix (default is its class path)
+
+    >>> hasattr(Report, 'cache_prefix')
+    True
+
+Granularity to the setting 'CACHE_FILE_ROOT'
+
+    >>> hasattr(Report, 'cache_file_root')
+    True
+
+Test class
+----------
+
+    >>> class SimpleListReport(Report):
+    ...     title = 'Demonstration without Django'
+    ... 
+    ...     cache_status = CACHE_BY_QUERYSET
+    ...     cache_file_root = os.path.join(cur_dir, 'output', 'cache')
+    ... 
+    ...     class band_page_header(ReportBand):
+    ...         height = 1.3*cm
+    ...         elements = [
+    ...             SystemField(expression='%(report_title)s', top=0.1*cm, left=0, width=BAND_WIDTH,
+    ...                 style={'fontName': 'Helvetica', 'fontSize': 14, 'alignment': TA_CENTER}),
+    ...             Label(text="ID", top=0.8*cm, left=0),
+    ...             Label(text="Name", top=0.8*cm, left=3*cm),
+    ...         ]
+    ...         borders = {'bottom': True}
+    ... 
+    ...     class band_page_footer(ReportBand):
+    ...         height = 0.5*cm
+    ...         elements = [
+    ...             Label(text='Created with Geraldo Reports', top=0.1*cm, left=0),
+    ...             SystemField(expression='Page # %(page_number)d of %(page_count)d', top=0.1*cm,
+    ...                 width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
+    ...         ]
+    ...         borders = {'top': True}
+    ... 
+    ...     class band_detail(ReportBand):
+    ...         height = 0.5*cm
+    ...         elements = [
+    ...             ObjectValue(attribute_name='id', top=0, left=0, name='other-field-with-event'),
+    ...             ObjectValue(attribute_name='name', top=0, left=3*cm, name='field-with-event'),
+    ...         ]
+
+    >>> class MyObject(object):
+    ...     def __init__(self, **kwargs):
+    ...         for k,v in kwargs.items():
+    ...             setattr(self, k, v)
+
+
+    >>> objects_list = [
+    ...     MyObject(id=1, name='Rio de Janeiro'),
+    ...     MyObject(id=2, name='New York'),
+    ...     MyObject(id=3, name='Paris'),
+    ...     MyObject(id=4, name='London'),
+    ...     MyObject(id=5, name='Tokyo'),
+    ...     MyObject(id=6, name='Moscow'),
+    ...     MyObject(id=7, name='Beijing'),
+    ...     MyObject(id=8, name='Hamburg'),
+    ...     MyObject(id=9, name='New Delhi'),
+    ...     MyObject(id=10, name='Jakarta'),
+    ... ]
+
+    >>> report = SimpleListReport(queryset=objects_list)
+
+Hash keys generating
+--------------------
+
+    >>> from geraldo.cache import make_hash_key
+
+This function will check the report class to find all explicitly used attributes,
+and will make a dictionary for each item in queryset and make a long string, that
+will be converted to a hash key.
+
+    >>> make_hash_key(report, objects_list)
+    TODO
+
+It uses a method on Report 'get_cache_relevant_attributes', if exists, to get the
+attributes list.
+
+    >>> def get_cache_relevant_attributes(self):
+    ...     return ['name']
+    >>> report.get_cache_relevant_attributes = get_cache_relevant_attributes
+
+    >>> report.get_cache_relevant_attributes()
+    ['name']
+
+    >>> make_hash_key(report, objects_list)
+    TODO
+
+PDF generation
+--------------
+
+    >>> from geraldo.generators import PDFGenerator
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/cached-report.pdf'))
+
+Besides generic and granulary ways of cache enabling, you can enable or disable
+when you were executing the generation method, setting argument 'cache_enabled'
+to None (default choice), True (force enabling) or False (force disabling).
+
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/no-cached-report.pdf'),
+    ...     cache_enabled=False)
+

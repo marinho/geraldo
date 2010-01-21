@@ -15,7 +15,7 @@ and ReportLab.
 Report class
 
     >>> class SimpleListReport(Report):
-    ...     title = 'Demonstration without Django'
+    ...     title = 'Report with additional fonts'
     ...     additional_fonts = {
     ...         'HandGotDLig': os.path.join(cur_dir, 'handgotl.ttf'),  # full path to font file
     ...         'Footlight MT Light': os.path.join(cur_dir, 'ftltlt.ttf'),
