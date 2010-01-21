@@ -34,8 +34,11 @@ Other features
 * Cross-reference table
 * Barcodes generation
 * Maybe a better support to images
-* Map/Reduce generating (split queryset, generate parts in parallel and combine them
-  after all - on one of both ways: local or distributed)
-* Incremental/asynchronous generating (just take advantage of common part and update
-  the changed other part, specially useful when the order is datetime-based)
+* Map/Reduce generating - split queryset, generate parts in parallel and combine them
+  after all - on one of both ways: local or distributed.
+* Incremental/asynchronous generating - just take advantage of common part and update
+  the changed other part, specially useful when the order is datetime-based.
+* Caching generated reports - (optionally) between **render_pages** and **generate_pages**
+  methods, make a hash key of rendered objects and find it on a cache (memcache or
+  file system), if does't find, generate and store it.
 
