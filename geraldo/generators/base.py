@@ -85,6 +85,10 @@ class ReportGenerator(GeraldoObject):
                     width=rect_dict['right'] - rect_dict['left'],
                     height=rect_dict['height'],
                     )
+            # If border is a number, it is recognized as the stroke width
+            if isinstance(b_all, (int, float)):
+                graphic.stroke_width = b_all
+
             self._rendered_pages[-1].add_element(graphic)
 
         b_left = borders_dict.get('left', None)
@@ -94,6 +98,10 @@ class ReportGenerator(GeraldoObject):
                     left=rect_dict['left'], top=rect_dict['top'],
                     right=rect_dict['left'], bottom=rect_dict['bottom']
                     )
+            # If border is a number, it is recognized as the stroke width
+            if isinstance(b_left, (int, float)):
+                graphic.stroke_width = b_left
+
             self._rendered_pages[-1].add_element(graphic)
 
         b_top = borders_dict.get('top', None)
@@ -103,6 +111,10 @@ class ReportGenerator(GeraldoObject):
                     left=rect_dict['left'], top=rect_dict['top'],
                     right=rect_dict['right'], bottom=rect_dict['top']
                     )
+            # If border is a number, it is recognized as the stroke width
+            if isinstance(b_top, (int, float)):
+                graphic.stroke_width = b_top
+
             self._rendered_pages[-1].add_element(graphic)
 
         b_right = borders_dict.get('right', None)
@@ -112,6 +124,10 @@ class ReportGenerator(GeraldoObject):
                     left=rect_dict['right'], top=rect_dict['top'],
                     right=rect_dict['right'], bottom=rect_dict['bottom']
                     )
+            # If border is a number, it is recognized as the stroke width
+            if isinstance(b_right, (int, float)):
+                graphic.stroke_width = b_right
+
             self._rendered_pages[-1].add_element(graphic)
 
         b_bottom = borders_dict.get('bottom', None)
@@ -121,6 +137,10 @@ class ReportGenerator(GeraldoObject):
                     left=rect_dict['left'], top=rect_dict['bottom'],
                     right=rect_dict['right'], bottom=rect_dict['bottom']
                     )
+            # If border is a number, it is recognized as the stroke width
+            if isinstance(b_bottom, (int, float)):
+                graphic.stroke_width = b_bottom
+
             self._rendered_pages[-1].add_element(graphic)
 
     def make_band_rect(self, band, top_position, left_position):

@@ -1,0 +1,118 @@
+"""Caching functions file. You can use this stuff to store generated reports in a file
+system cache, and save time and performance."""
+
+from utils import memoize, get_attr_value
+
+try:
+    set
+except:
+    from sets import Set as set
+
+CACHE_DISABLED = 0
+CACHE_BY_QUERYSET = 1
+CACHE_BY_RENDER = 2
+DEFAULT_CACHE_STATUS = CACHE_DISABLED
+
+CACHE_BACKEND = 'geraldo.cache.FileCacheBackend'
+CACHE_FILE_ROOT = '/tmp/'
+
+class BaseCacheBackend(object):
+    """This is the base class (and abstract too) to be inherited by any cache backend
+    to store and restore reports from a cache."""
+
+    def __new__(cls, *args, **kwargs):
+        """This class is a singleton class, what means it is created just once."""
+        if not getattr(cls, '_instance', None):
+            cls._instance = object.__new__(cls, *args, **kwargs)
+
+        return cls._instance
+
+    def get(self, hash_key):
+        pass
+
+    def set(self, hash_key, stream):
+        pass
+
+    def exists(self, hash_key):
+        pass
+
+class FileCacheBackend(BaseCacheBackend):
+    """This cache backend is able to store and restore using a path on the file system."""
+
+    def get(self, hash_key):
+        pass
+
+    def set(self, hash_key, stream):
+        pass
+
+    def exists(self, hash_key):
+        pass
+
+@memoize
+def get_report_cache_attributes(report):
+    from widgets import ObjectValue
+
+    # Find widgets attributes
+    widgets = [widget.attribute_name for widget in report.find_by_type(ObjectValue)]
+
+    # Find grouppers attributes
+    groups = [group.attribute_name for group in report.groups]
+
+    return list(set(widgets + groups))
+
+try:
+    # Python 2.5 or higher
+    from hashlib import sha512 as hash_constructor
+except ImportError:
+    # Python 2.4
+    import sha
+    hash_constructor = sha.new
+
+def make_hash_key(report, objects_list):
+    """This function make a hash key from a list of objects.
+    
+    Situation 1
+    -----------
+
+    If the objects have an method 'repr_for_cache_hash_key', it is called to get their
+    string repr value. This is the default way to get repr strings from rendered pages
+    and objects.
+    
+    Situation 2
+    -----------
+
+    Otherwise, if exists, the method 'get_cache_relevant_attributes' from report will be
+    called to request what attributes have to be used from the object list to make the
+    string.
+    
+    If the method above does't exists, then all attributes explicitly found in report
+    elements will be used.
+    
+    The result list will be transformed to a long concatenated string and a hash key
+    will be generated from it."""
+
+    global get_report_cache_attributes
+
+    result = []
+
+    # Get attributes for cache from report
+    if hasattr(report, 'get_cache_relevant_attributes'):
+        report_attrs = report.get_cache_relevant_attributes
+    else:
+        report_attrs = lambda: get_report_cache_attributes(report)
+
+    for obj in objects_list:
+        # Situation 1 - mostly report pages and geraldo objects
+        if hasattr(obj, 'repr_for_cache_hash_key'):
+            result.append(obj.repr_for_cache_hash_key())
+
+        # Situation 2 - mostly queryset objects list
+        else:
+            result.append(u'/'.join([unicode(get_attr_value(obj, attr)) for attr in report_attrs()]))
+
+    # Makes the hash key
+    m = hash_constructor()
+    m.update(u'\n'.join(result))
+
+    return m.hexdigest()
+

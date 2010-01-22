@@ -249,6 +249,14 @@ queryset.</p>
 </blockquote>
 </li>
 <li><p class="first"><strong>borders</strong> - Default: {&#8216;top&#8217;: None, &#8216;right&#8217;: None, &#8216;bottom&#8217;: None, &#8216;left&#8217;: None, &#8216;all&#8217;: None}</p>
+<blockquote>
+<p>Borders values can be of three types:</p>
+<ul class="simple">
+<li>Boolean (True/False) - just set if there is a border or not</li>
+<li>Integer - set there is a border and what is its stroke width. <strong>New on 0.4.</strong></li>
+<li>Graphic (instance of Rect, Line, RoundRect, etc.) - set a complex graphic to put along the border</li>
+</ul>
+</blockquote>
 </li>
 <li><p class="first"><strong>elements</strong> - Default: []</p>
 </li>

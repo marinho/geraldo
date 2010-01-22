@@ -70,7 +70,7 @@ Report class
     ...             Label(text="Last name", top=0.8*cm, left=13*cm),
     ...             Label(text="Staff", top=0.8*cm, left=18*cm),
     ...         ]
-    ...         borders = {'bottom': Line(stroke_color=navy)}
+    ...         borders = {'bottom': Line(stroke_color=navy), 'top': 4}
     ... 
     ...     class band_page_footer(ReportBand):
     ...         height = 0.5*cm

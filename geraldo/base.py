@@ -13,6 +13,7 @@ from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
 from utils import calculate_size, get_attr_value, landscape, format_date
 from exceptions import EmptyQueryset, ObjectNotFound, ManyObjectsFound,\
         AttributeNotFound, NotYetImplemented
+from cache import DEFAULT_CACHE_STATUS, CACHE_BACKEND, CACHE_FILE_ROOT
 
 BAND_WIDTH = 'band-width'
 BAND_HEIGHT = 'band-height'
@@ -90,6 +91,37 @@ class GeraldoObject(object):
             raise ManyObjectsFound('There are many childs with name "%s"'%name)
 
         return many and found or found[0]
+
+    def find_by_type(self, typ):
+        """Find child by informed type (and raises an exception if doesn't
+        find).
+        
+        Attributes:
+            
+            * typ - class type to find
+        """
+        found = []
+
+        # Get object children
+        children = self.get_children()
+
+        for child in children:
+            # Child with the type it is searching for
+            if isinstance(child, typ):
+                found.append(child)
+
+            # Search on child's children
+            try:
+                ch_found = child.find_by_type(typ)
+            except ObjectNotFound:
+                ch_found = []
+
+            found.extend(ch_found)
+
+        # Cleans using a set
+        found = list(set(found))
+
+        return found
 
     def get_children(self):
         """Returns all children elements from this one. This must be overriden
@@ -303,7 +335,6 @@ class Report(BaseReport):
     author = ''
     subject = '' # Can be used also as the report description
     keywords = ''
-    additional_fonts = None
 
     # Page dimensions
     first_page_number = 1
@@ -317,14 +348,33 @@ class Report(BaseReport):
     # SubReports
     subreports = None
 
+    # Look and feel
+    additional_fonts = None
     default_style = None
+
+    # Caching related attributes
+    cache_status = None
+    cache_backend = None
+    cache_prefix = None
+    cache_file_root = None
 
     def __init__(self, queryset=None):
         super(Report, self).__init__(queryset)
 
+        # Default attributes
         self.subreports = self.subreports and list(self.subreports) or []
         self.default_style = self.default_style or {}
         self.additional_fonts = self.additional_fonts or {}
+
+        # Caching related attributes
+        if self.cache_status is None:
+            self.cache_status = DEFAULT_CACHE_STATUS
+        if self.cache_backend is None:
+            self.cache_backend = CACHE_BACKEND
+        if self.cache_prefix is None:
+            self.cache_prefix = '-'.join([self.__class__.__module__, self.__class__.__name__])
+        if self.cache_file_root is None:
+            self.cache_file_root = CACHE_FILE_ROOT
 
         # Calls the method that set this as parent if their children
         self.set_parent_on_children()

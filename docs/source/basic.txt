@@ -184,6 +184,13 @@ queryset.
     Set to False if you want to make it not visible.
 
 - **borders** - Default: {'top': None, 'right': None, 'bottom': None, 'left': None, 'all': None}
+
+    Borders values can be of three types:
+
+    - Boolean (True/False) - just set if there is a border or not
+    - Integer - set there is a border and what is its stroke width. **New on 0.4.**
+    - Graphic (instance of Rect, Line, RoundRect, etc.) - set a complex graphic to put along the border
+
 - **elements** - Default: []
 - **child_bands** - Default: []
 - **force_new_page** - Default: False
