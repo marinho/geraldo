@@ -23,6 +23,8 @@ from geraldo.utils import get_attr_value, calculate_size
 from geraldo.widgets import Widget, Label, SystemField
 from geraldo.graphics import Graphic, RoundRect, Rect, Line, Circle, Arc,\
         Ellipse, Image
+from geraldo.cache import DEFAULT_CACHE_STATUS, CACHE_BY_QUERYSET, CACHE_BY_RENDER,\
+        make_hash_key, get_cache_backend
 
 class PDFGenerator(ReportGenerator):
     """This is a generator to output a PDF using ReportLab library with
@@ -30,6 +32,7 @@ class PDFGenerator(ReportGenerator):
     filename = None
     canvas = None
     return_canvas = False
+    cache_enabled = bool(DEFAULT_CACHE_STATUS)
 
     multiple_canvas = False #bool(pyPdf)
     temp_files = None
@@ -39,13 +42,14 @@ class PDFGenerator(ReportGenerator):
     temp_directory = DEFAULT_TEMP_DIR
 
     def __init__(self, report, filename=None, canvas=None, return_canvas=False,
-            multiple_canvas=None, temp_directory=None):
+            multiple_canvas=None, temp_directory=None, cache_enabled=None):
         super(PDFGenerator, self).__init__(report)
 
         self.filename = filename
         self.canvas = canvas
         self.return_canvas = return_canvas
         self.temp_directory = temp_directory or self.temp_directory
+        self.cache_enabled = cache_enabled or self.cache_enabled
 
         # Sets multiple_canvas with default value if None
         if multiple_canvas is not None:
@@ -67,6 +71,10 @@ class PDFGenerator(ReportGenerator):
         """Generates a PDF file using ReportLab pdfgen package."""
         super(PDFGenerator, self).execute()
 
+        # Check the cache
+        if self.cached_before_render():
+            return True
+
         # Initializes the temporary PDF canvas (just to be used as reference)
         if not self.canvas:
             self.start_canvas()
@@ -79,6 +87,10 @@ class PDFGenerator(ReportGenerator):
 
         # Render pages
         self.render_bands()
+
+        # Check the cache
+        if self.cached_before_generate():
+            return True
  
         # Calls the after_render event
         self.report.do_before_generate(generator=self)
@@ -103,6 +115,13 @@ class PDFGenerator(ReportGenerator):
 
             # Saves the canvas - only if it didn't return it
             self.close_current_canvas()
+
+        # Store in the cache
+        self.store_in_cache()
+
+    def get_hash_key(self, hash_key):
+        """Appends pdf extension to the hash_key"""
+        return hash_key + '.pdf'
 
     def start_canvas(self, filename=None):
         """Sets the PDF canvas"""

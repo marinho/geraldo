@@ -65,19 +65,6 @@ backends (use Django's cache system, for example)
     >>> hasattr(BaseCacheBackend, 'exists')
     True
 
-Cache backends are singleton, what means not matters how many times they are created,
-only one instance is returned while it exists.
-
-    >>> c1 = BaseCacheBackend()
-    >>> c1.test = '123'
-
-    >>> c2 = BaseCacheBackend()
-    >>> c2.test
-    '123'
-
-    >>> id(c1) == id(c2)
-    True
-
 **FileCacheBackend** is the one Geraldo handles for itself. Just write in and read
 from a directory, named by the hash key, plus the compatible extension.
 
@@ -158,23 +145,17 @@ Test class
     ...             ObjectValue(attribute_name='name', top=0, left=3*cm, name='field-with-event'),
     ...         ]
 
-    >>> class MyObject(object):
-    ...     def __init__(self, **kwargs):
-    ...         for k,v in kwargs.items():
-    ...             setattr(self, k, v)
-
-
     >>> objects_list = [
-    ...     MyObject(id=1, name='Rio de Janeiro'),
-    ...     MyObject(id=2, name='New York'),
-    ...     MyObject(id=3, name='Paris'),
-    ...     MyObject(id=4, name='London'),
-    ...     MyObject(id=5, name='Tokyo'),
-    ...     MyObject(id=6, name='Moscow'),
-    ...     MyObject(id=7, name='Beijing'),
-    ...     MyObject(id=8, name='Hamburg'),
-    ...     MyObject(id=9, name='New Delhi'),
-    ...     MyObject(id=10, name='Jakarta'),
+    ...     dict(id=1, name='Rio de Janeiro'),
+    ...     dict(id=2, name='New York'),
+    ...     dict(id=3, name='Paris'),
+    ...     dict(id=4, name='London'),
+    ...     dict(id=5, name='Tokyo'),
+    ...     dict(id=6, name='Moscow'),
+    ...     dict(id=7, name='Beijing'),
+    ...     dict(id=8, name='Hamburg'),
+    ...     dict(id=9, name='New Delhi'),
+    ...     dict(id=10, name='Jakarta'),
     ... ]
 
     >>> report = SimpleListReport(queryset=objects_list)
@@ -217,6 +198,30 @@ PDF generation
 --------------
 
     >>> from geraldo.generators import PDFGenerator
+
+Hack the render method to print a 'r' to the output
+
+    >>> def render_bands(self):
+    ...     super(PDFGenerator, self).render_bands()
+    ...     print 'r'
+    >>> PDFGenerator.render_bands = render_bands
+
+Hack the generation method to print a 'g' to the output
+
+    >>> def generate_pages(self):
+    ...     self._generate_pages()
+    ...     print 'g'
+    >>> PDFGenerator._generate_pages = PDFGenerator.generate_pages
+    >>> PDFGenerator.generate_pages = generate_pages
+
+Generate the report - first time (must print 'r' and 'g' and write to cache)
+
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/cached-report.pdf'))
+    r
+    g
+
+Generate the report again (now must no print the 'r' nor the 'g')
+
     >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/cached-report.pdf'))
 
 Besides generic and granulary ways of cache enabling, you can enable or disable
@@ -225,4 +230,8 @@ to None (default choice), True (force enabling) or False (force disabling).
 
     >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/no-cached-report.pdf'),
     ...     cache_enabled=False)
+    r
+    g
+
+TODO: CACHE BY RENDER
 

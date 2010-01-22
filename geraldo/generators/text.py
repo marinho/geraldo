@@ -113,6 +113,10 @@ class TextGenerator(ReportGenerator):
         else:
             return text
 
+    def get_hash_key(self, hash_key):
+        """Appends pdf extension to the hash_key"""
+        return hash_key + '.txt'
+
     def calculate_size(self, size):
         """Uses the function 'calculate_size' to calculate a size"""
         if isinstance(size, basestring):

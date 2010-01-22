@@ -783,3 +783,42 @@ class ReportGenerator(GeraldoObject):
     def keep_in_frame(self, widget, width, height, paragraphs, mode):
         raise Exception('Not implemented')
 
+    def cached_before_render(self):
+        """Check and loads the generated report from caching system before call method
+        'render_bands'"""
+
+        if self.cache_enabled and self.report.cache_status == CACHE_BY_QUERYSET:
+            hash_key = make_hash_key(self.report, self.queryset)
+            cache = get_cache_backend(
+                    self.report.cache_backend,
+                    cache_file_root=self.report.cache_file_root,
+                    )
+            buffer = cache.get(self.get_hash_key(hash_key))
+
+            if buffer:
+                # Write to file stream
+                if hasattr(self.filename, 'write') and callable(self.filename.write):
+                    self.filename.write(buffer)
+                    return True
+                
+                # Write to file path
+                elif isinstance(self.filename, basestring):
+                    fp = file(self.filename, 'w')
+                    fp.write(buffer)
+                    fp.close()
+                    return True
+
+    def cached_before_generate(self):
+        """Check and loads the generated report from caching system before call method
+        'generate_pages'"""
+        # TODO
+        pass
+
+    def store_in_cache(self):
+        # TODO
+        pass
+
+    def get_hash_key(self, hash_key):
+        """Calculates the hash_key, appending/prepending something if necessary"""
+        return hash_key
+

@@ -20,13 +20,6 @@ class BaseCacheBackend(object):
     """This is the base class (and abstract too) to be inherited by any cache backend
     to store and restore reports from a cache."""
 
-    def __new__(cls, *args, **kwargs):
-        """This class is a singleton class, what means it is created just once."""
-        if not getattr(cls, '_instance', None):
-            cls._instance = object.__new__(cls, *args, **kwargs)
-
-        return cls._instance
-
     def get(self, hash_key):
         pass
 
@@ -38,6 +31,11 @@ class BaseCacheBackend(object):
 
 class FileCacheBackend(BaseCacheBackend):
     """This cache backend is able to store and restore using a path on the file system."""
+
+    cache_file_root = '/tmp/'
+
+    def __init__(self, cache_file_root=None):
+        self.cache_file_root = cache_file_root or self.cache_file_root
 
     def get(self, hash_key):
         pass
@@ -114,5 +112,10 @@ def make_hash_key(report, objects_list):
     m = hash_constructor()
     m.update(u'\n'.join(result))
 
-    return m.hexdigest()
+    return '%s-%s'%(report.cache_prefix, m.hexdigest())
+
+def get_cache_backend(class_path, **kwargs):
+    """This method initializes the cache backend from string path informed."""
+    cls = __import__(class_path)
+    return cls(**kwargs)
 
