@@ -100,7 +100,7 @@ The attributes **cache_status**, **cache_backend** and **cache_file_root** all h
 'real' default None, but they assume values defined on their respective general
 settings on cache.
 
-- **cache_status** - Default: None
+- **cache_status** - Default: **geraldo.cache.CACHE_DISABLED**
 
     Can be setted to 3 different values:
 
