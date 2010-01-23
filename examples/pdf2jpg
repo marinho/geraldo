@@ -16,4 +16,6 @@ convert charts-cairoplot-report.pdf charts-cairoplot-report.jpg
 convert charts-matplotlib-report.pdf charts-matplotlib-report.jpg
 convert inline-detail-report.pdf inline-detail-report.jpg
 convert inline-detail-report-half-height.pdf inline-detail-report-half-height.jpg
+convert additional-fonts.pdf additional-fonts.jpg
+convert report-with-barcodes.pdf report-with-barcodes.jpg
 

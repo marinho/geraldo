@@ -1,0 +1,241 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Showing BarCodes &mdash; Geraldo Reports Documentation v0.4-alpha-5 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4-alpha-5',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Geraldo Reports Documentation v0.4-alpha-5 documentation" href="../index.html" />
+    <link rel="up" title="Examples" href="index.html" />
+    <link rel="next" title="Backward Incompatible Changes" href="../backward-incompatible-changes.html" />
+    <link rel="prev" title="Additional Fonts" href="additional-fonts.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../backward-incompatible-changes.html" title="Backward Incompatible Changes"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="additional-fonts.html" title="Additional Fonts"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="showing-barcodes">
+<h1>Showing BarCodes<a class="headerlink" href="#showing-barcodes" title="Permalink to this headline">¶</a></h1>
+<p>Bar codes are really important on labels, bills, tickets, etc.</p>
+<p>This example demonstrates how to show barcodes of all supported types on a report.</p>
+<p>There are many different types of bar codes and we will support those ReportLab
+already does.</p>
+<p><strong>BarCode element</strong></p>
+<p><strong>geraldo.barcodes.BarCode</strong> is the graphic class that generates the bar codes of
+all supported types. It is an inheritance from Graphic element.</p>
+<p>Supported bar code types:</p>
+<ul class="simple">
+<li>Codabar</li>
+<li>Code11</li>
+<li>Code128</li>
+<li>EAN13</li>
+<li>EAN8</li>
+<li>Extended39</li>
+<li>Extended93</li>
+<li>FIM</li>
+<li>I2of5</li>
+<li>MSI</li>
+<li>POSTNET</li>
+<li>Standard39</li>
+<li>Standard93</li>
+<li>USPS_4State</li>
+</ul>
+<p>The code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
+<span class="n">cur_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span>
+
+<span class="kn">from</span> <span class="nn">geraldo.utils</span> <span class="kn">import</span> <span class="n">A4</span><span class="p">,</span> <span class="n">cm</span><span class="p">,</span> <span class="n">TA_CENTER</span><span class="p">,</span> <span class="n">TA_RIGHT</span>
+
+<span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span><span class="p">,</span> <span class="n">ReportBand</span><span class="p">,</span> <span class="n">Label</span><span class="p">,</span> <span class="n">ObjectValue</span><span class="p">,</span> <span class="n">SystemField</span><span class="p">,</span>\
+    <span class="n">FIELD_ACTION_COUNT</span><span class="p">,</span> <span class="n">BAND_WIDTH</span>
+<span class="kn">from</span> <span class="nn">geraldo.barcodes</span> <span class="kn">import</span> <span class="n">BarCode</span>
+
+<span class="k">class</span> <span class="nc">SimpleListReport</span><span class="p">(</span><span class="n">Report</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;Demonstration of BarCodes&#39;</span>
+
+    <span class="k">class</span> <span class="nc">band_page_header</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mi">1</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">SystemField</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%(report_title)s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">BAND_WIDTH</span><span class="p">,</span>
+                <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;fontName&#39;</span><span class="p">:</span> <span class="s">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s">&#39;alignment&#39;</span><span class="p">:</span> <span class="n">TA_CENTER</span><span class="p">}),</span>
+        <span class="p">]</span>
+        <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;bottom&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+
+    <span class="k">class</span> <span class="nc">band_page_footer</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;Created with Geraldo Reports&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+            <span class="n">SystemField</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;Page # </span><span class="si">%(page_number)d</span><span class="s"> of </span><span class="si">%(page_count)d</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">width</span><span class="o">=</span><span class="n">BAND_WIDTH</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;alignment&#39;</span><span class="p">:</span> <span class="n">TA_RIGHT</span><span class="p">}),</span>
+        <span class="p">]</span>
+        <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;top&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+
+    <span class="k">class</span> <span class="nc">band_detail</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mi">15</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">}),</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;Code:&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span> <span class="n">left</span><span class="o">=</span><span class="mf">6.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;code&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span> <span class="n">left</span><span class="o">=</span><span class="mi">8</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;Codabar&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.6</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">BarCode</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;Codabar&#39;</span><span class="p">,</span> <span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;code&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">1.2</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">1.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;Code11&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.6</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">6</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">BarCode</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;Code11&#39;</span><span class="p">,</span> <span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;code&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">1.2</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">6</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">1.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;Code128&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.6</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">12</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">BarCode</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;Code128&#39;</span><span class="p">,</span> <span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;code&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">1.2</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">12</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">1.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;EAN13&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">3.2</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">BarCode</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;EAN13&#39;</span><span class="p">,</span> <span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;code&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">3.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">1.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;EAN8&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">3.2</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">6</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">BarCode</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;EAN8&#39;</span><span class="p">,</span> <span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;code&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">3.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">6</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">1.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;Extended39&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">3.2</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">12</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">BarCode</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;Extended39&#39;</span><span class="p">,</span> <span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;code&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">3.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">12</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">1.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;Extended93&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">5.8</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">BarCode</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;Extended93&#39;</span><span class="p">,</span> <span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;code&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">6.4</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">1.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;USPS FIM (code: &quot;A&quot;)&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">5.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">6</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">BarCode</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;FIM&#39;</span><span class="p">,</span> <span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;code&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">6.4</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">1.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">get_value</span><span class="o">=</span><span class="k">lambda</span> <span class="n">inst</span><span class="p">:</span> <span class="s">&#39;A&#39;</span><span class="p">),</span>
+
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;I2of5&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">5.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">12</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">BarCode</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;I2of5&#39;</span><span class="p">,</span> <span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;code&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">6.4</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">12</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">1.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;MSI&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">8.4</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">BarCode</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;MSI&#39;</span><span class="p">,</span> <span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;code&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">9</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">1.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;POSTNET&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">8.4</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">6</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">BarCode</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;POSTNET&#39;</span><span class="p">,</span> <span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;code&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">9</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">6</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">1.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;Standard39&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">8.4</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">12</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">BarCode</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;Standard39&#39;</span><span class="p">,</span> <span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;code&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">9</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">12</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">1.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;Standard93&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">11</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">BarCode</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;Standard93&#39;</span><span class="p">,</span> <span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;code&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">11.6</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">1.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;USPS_4State / code: 01234567094987654321 / routing:&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">11</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">left</span><span class="o">=</span><span class="mi">6</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;routing&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">11.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">14</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">BarCode</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;USPS_4State&#39;</span><span class="p">,</span> <span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;code&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">11.6</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">6</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">height</span><span class="o">=</span><span class="mf">1.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">routing_attribute</span><span class="o">=</span><span class="s">&#39;routing&#39;</span><span class="p">,</span>
+                <span class="n">get_value</span><span class="o">=</span><span class="k">lambda</span> <span class="n">inst</span><span class="p">:</span> <span class="s">&#39;01234567094987654321&#39;</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;bottom&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Creating a list of objects we are going to list on on the report</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">objects_list</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span>    <span class="nb">dict</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Arduino Duemilanove&#39;</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="s">&#39;123456789&#39;</span><span class="p">,</span> <span class="n">routing</span><span class="o">=</span><span class="s">&#39;01234567891&#39;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="nb">dict</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Arduino Diecimila&#39;</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="s">&#39;000000000&#39;</span><span class="p">,</span> <span class="n">routing</span><span class="o">=</span><span class="s">&#39;01234567891&#39;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="nb">dict</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Robotduino&#39;</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="s">&#39;111111111&#39;</span><span class="p">,</span> <span class="n">routing</span><span class="o">=</span><span class="s">&#39;01234567891&#39;</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Creating an instance of the report</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">report</span> <span class="o">=</span> <span class="n">SimpleListReport</span><span class="p">(</span><span class="n">queryset</span><span class="o">=</span><span class="n">objects_list</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>PDF generation</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">geraldo.generators</span> <span class="kn">import</span> <span class="n">PDFGenerator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cur_dir</span><span class="p">,</span> <span class="s">&#39;output/report-with-barcodes.pdf&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The Result</p>
+<ul class="simple">
+<li><a class="reference external" href="http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/report-with-barcodes.pdf">http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/report-with-barcodes.pdf</a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="additional-fonts.html"
+                                  title="previous chapter">Additional Fonts</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="../backward-incompatible-changes.html"
+                                  title="next chapter">Backward Incompatible Changes</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/examples/barcodes.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../backward-incompatible-changes.html" title="Backward Incompatible Changes"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="additional-fonts.html" title="Additional Fonts"
+             >previous</a> |</li>
+        <li><a href="../index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2010, Marinho Brandao.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

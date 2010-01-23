@@ -141,6 +141,10 @@ class TextGenerator(ReportGenerator):
         """Wraps the paragraph on the height/width informed"""
         paragraph.wrapOn(self.report.page_size, width, height)
 
+    def wrap_barcode_on(self, barcode, width, height):
+        """Do nothing with a barcode"""
+        pass
+
     def make_paragraph_style(self, band, style=None):
         """Merge report default_style + band default_style + widget style"""
         d_style = self.report.default_style.copy()

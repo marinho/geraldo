@@ -24,4 +24,5 @@ source code.
     in-multiprocessing
     using-events
     additional-fonts
+    barcodes
 

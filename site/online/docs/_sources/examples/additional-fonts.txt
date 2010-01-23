@@ -74,4 +74,7 @@ and ReportLab::
 
     report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/additional-fonts.pdf'))
 
+The Result
+
+- http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/additional-fonts.pdf
 

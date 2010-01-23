@@ -1,0 +1,15 @@
+CHARTS
+======
+
+Test to implement charts generation on Geraldo, with no dependency to MatPlotLib,
+Cairoplot or any other reports generator.
+
+Even if being the most powerful charting library, MatPlotLib is very hard to
+implement on a report, and since Geraldo already depends on ReportLab and it
+has already a good charting generation kit, the best choice is use it.
+
+    >>> from reportlab.graphics import charts
+
+There are 2D and 3D charts, and there are many types of them. Besides that, there
+are some different ways to get data to draw them.
+

@@ -25,6 +25,7 @@ Engine API
  - Table details
 - Support graphics (x)
 - Support charts - use graphics.Image to set a rendered char image (x)
+ - Support with no dependency on charts generators
 - Support aggregation fields (x)
 - Support expression (x)
 - Support calculated fields (x)
@@ -36,7 +37,10 @@ Engine API
 - Support canvas drawing
 - Reports merging (many reports at once) (x)
 - Multiple columns
-- Events (x)
+- Events system (x)
+- Caching (x)
+- Map/Reduce generating
+- Drill down reports
 
 Generators
 ----------

@@ -4,6 +4,7 @@ from geraldo.utils import get_attr_value, calculate_size, memoize
 from geraldo.widgets import Widget, Label, SystemField
 from geraldo.graphics import Graphic, RoundRect, Rect, Line, Circle, Arc,\
         Ellipse, Image
+from geraldo.barcodes import BarCode
 from geraldo.base import GeraldoObject
 from geraldo.cache import CACHE_BY_QUERYSET, CACHE_BY_RENDER, CACHE_DISABLED,\
         make_hash_key, get_cache_backend
@@ -298,6 +299,11 @@ class ReportGenerator(GeraldoObject):
                 elif isinstance(graphic, Image):
                     graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
                     graphic.top = top_position - self.calculate_size(graphic.top) - self.calculate_size(graphic.height)
+                elif isinstance(graphic, BarCode):
+                    barcode = graphic.render()
+                    graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
+                    graphic.top = top_position - self.calculate_size(graphic.top) - self.calculate_size(graphic.height)
+                    self.wrap_barcode_on(barcode, graphic.width, graphic.height)
 
                 # Sets element height as the highest
                 temp_height = self.calculate_size(element.top) + self.calculate_size(graphic.height)
@@ -622,6 +628,10 @@ class ReportGenerator(GeraldoObject):
 
     def wrap_paragraph_on(self, paragraph, width, height):
         """Wraps the paragraph on the height/width informed"""
+        raise Exception('Not implemented')
+
+    def wrap_barcode_on(self, barcode, width, height):
+        """Wraps the barcode on the height/width informed"""
         raise Exception('Not implemented')
 
     # Stylizing

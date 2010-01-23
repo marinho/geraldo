@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Barcodes Reference &mdash; Geraldo Reports Documentation v0.4-alpha-5 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.4-alpha-5',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Geraldo Reports Documentation v0.4-alpha-5 documentation" href="index.html" />
+    <link rel="next" title="Generators Reference" href="generators.html" />
+    <link rel="prev" title="Graphics Reference" href="graphics.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="generators.html" title="Generators Reference"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="graphics.html" title="Graphics Reference"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="barcodes-reference">
+<h1>Barcodes Reference<a class="headerlink" href="#barcodes-reference" title="Permalink to this headline">¶</a></h1>
+<p><strong>New on 0.4</strong></p>
+<p>The BarCode element is just one, and it is used to show barcodes of many types
+on the report.</p>
+<p>This element is inherited from <strong>geraldo.graphics.Graphic</strong></p>
+<div class="section" id="barcode">
+<h2>BarCode<a class="headerlink" href="#barcode" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="geraldo.barcodes.BarCode">
+<em class="property">class </em><tt class="descclassname">geraldo.barcodes.</tt><tt class="descname">BarCode</tt><a class="headerlink" href="#geraldo.barcodes.BarCode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Path: <strong>geraldo.barcodes.BarCode</strong></p>
+<p>This is the once class you can use to show bar codes. It supports the following
+bar code types, supplied by <strong>ReportLab</strong> barcodes library:</p>
+<ul class="simple">
+<li>Codabar</li>
+<li>Code11</li>
+<li>Code128</li>
+<li>EAN13</li>
+<li>EAN8</li>
+<li>Extended39</li>
+<li>Extended93</li>
+<li>FIM</li>
+<li>I2of5</li>
+<li>MSI</li>
+<li>POSTNET</li>
+<li>Standard39</li>
+<li>Standard93</li>
+<li>USPS_4State</li>
+</ul>
+<p><strong>Attributes</strong></p>
+<ul>
+<li><p class="first"><strong>name</strong> - Default: None</p>
+</li>
+<li><p class="first"><strong>visible</strong> - Default: True</p>
+<blockquote>
+<p>Set to <strong>False</strong> if you want to make it not visible.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>height</strong> - Default: 1.5*cm</p>
+</li>
+<li><p class="first"><strong>width</strong> - Default: 0.03*cm</p>
+<blockquote>
+<p>This attribute <strong>does not set the barcode width</strong>, but the <strong>bar width</strong>,
+what means it is the width of the minimum bar of a barcode. You should set
+values like 0.02*cm or something like that (i.e. never 5*cm).</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>attribute_name</strong> - Default: None</p>
+<blockquote>
+<p>As same as <strong>geraldo.widgets.ObjectValue</strong>, this attribute reffers to an
+attribute, attribute path or method to get the barcode value.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>checksum</strong> - Default: 0</p>
+<blockquote>
+<p>Most of barcode types supports you set the number of digits for checksum.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>routing_attribute</strong> - Default: None</p>
+<blockquote>
+<p>Useful only for <strong>USPS_4State</strong> barcodes. Works like <strong>attribute_name</strong>, but
+<strong>routing</strong> attribute of barcode.</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>Rendering attributes</strong></p>
+<p>They are read-only attributes you can use at render time.</p>
+<ul class="simple">
+<li><strong>instance</strong> - current object being rendered</li>
+<li><strong>generator</strong> - generator instance</li>
+<li><strong>report</strong> - report instance this element is in</li>
+<li><strong>band</strong> - band this element is in</li>
+<li><strong>page</strong> - current page</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Barcodes Reference</a><ul>
+<li><a class="reference external" href="#barcode">BarCode</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="graphics.html"
+                                  title="previous chapter">Graphics Reference</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="generators.html"
+                                  title="next chapter">Generators Reference</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/barcodes.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="generators.html" title="Generators Reference"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="graphics.html" title="Graphics Reference"
+             >previous</a> |</li>
+        <li><a href="index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2010, Marinho Brandao.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

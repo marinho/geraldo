@@ -13,6 +13,7 @@ geraldo.graphics.Arc class graphics.html
 geraldo.graphics.Circle class graphics.html
 geraldo.graphics.Fixed class graphics.html
 geraldo.widgets.Widget class widgets.html
+geraldo.barcodes.BarCode class barcodes.html
 geraldo.generators.TextGenerator class generators.html
 geraldo.utils.BAND_WIDTH data utils.html
 geraldo.graphics.Line class graphics.html

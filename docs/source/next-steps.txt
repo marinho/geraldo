@@ -41,4 +41,5 @@ Other features
 * **Caching generated reports** - (optionally) between **render_pages** and **generate_pages**
   methods, make a hash key of rendered objects and find it on a cache (memcache or
   file system), if does't find, generate and store it.
+* **Drill down reports** - a link from a report "A" to a report "B"
 

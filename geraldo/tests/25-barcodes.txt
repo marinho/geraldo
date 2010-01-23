@@ -1,0 +1,139 @@
+BAR CODES
+=========
+
+Many times we need to generate bar codes as part of a report, as a bill, a ticket,
+a label, etc. and this test is to make possible the easy generation of barcodes on
+Geraldo.
+
+    >>> import os
+    >>> cur_dir = os.path.dirname(os.path.abspath(__file__))
+
+    >>> from geraldo.utils import A4, cm, TA_CENTER, TA_RIGHT
+    
+    >>> from geraldo import Report, ReportBand, Label, ObjectValue, SystemField,\
+    ...     FIELD_ACTION_COUNT, BAND_WIDTH
+
+There are many different types of bar codes and we will support those ReportLab
+already does.
+
+BarCode element
+---------------
+
+**BarCode** is the graphic class that generates the bar codes of all supported
+types. It is an inheritance from Graphic element.
+
+    >>> from geraldo.barcodes import BarCode
+    >>> from geraldo.graphics import Graphic
+    >>> issubclass(BarCode, Graphic)
+    True
+
+Supported bar code types:
+
+- Codabar
+- Code11
+- Code128
+- EAN13
+- EAN8
+- Extended39
+- Extended93
+- FIM
+- I2of5
+- MSI
+- POSTNET
+- Standard39
+- Standard93
+- USPS_4State
+
+Test class
+----------
+
+    >>> class SimpleListReport(Report):
+    ...     title = 'Demonstration of BarCodes'
+    ... 
+    ...     class band_page_header(ReportBand):
+    ...         height = 1*cm
+    ...         elements = [
+    ...             SystemField(expression='%(report_title)s', top=0.1*cm, left=0, width=BAND_WIDTH,
+    ...                 style={'fontName': 'Helvetica', 'fontSize': 14, 'alignment': TA_CENTER}),
+    ...         ]
+    ...         borders = {'bottom': True}
+    ... 
+    ...     class band_page_footer(ReportBand):
+    ...         height = 0.5*cm
+    ...         elements = [
+    ...             Label(text='Created with Geraldo Reports', top=0.1*cm, left=0),
+    ...             SystemField(expression='Page # %(page_number)d of %(page_count)d', top=0.1*cm,
+    ...                 width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
+    ...         ]
+    ...         borders = {'top': True}
+    ... 
+    ...     class band_detail(ReportBand):
+    ...         height = 15*cm
+    ...         elements = [
+    ...             ObjectValue(attribute_name='name', style={'fontSize': 12}),
+    ...             Label(text='Code:', style={'fontSize': 12}, left=6.5*cm),
+    ...             ObjectValue(attribute_name='code', style={'fontSize': 12}, left=8*cm),
+    ... 
+    ...             Label(text='Codabar', top=0.6*cm),
+    ...             BarCode(type='Codabar', attribute_name='code', top=1.2*cm, height=1.5*cm),
+    ... 
+    ...             Label(text='Code11', top=0.6*cm, left=6*cm),
+    ...             BarCode(type='Code11', attribute_name='code', top=1.2*cm, left=6*cm, height=1.5*cm),
+    ... 
+    ...             Label(text='Code128', top=0.6*cm, left=12*cm),
+    ...             BarCode(type='Code128', attribute_name='code', top=1.2*cm, left=12*cm, height=1.5*cm),
+    ... 
+    ...             Label(text='EAN13', top=3.2*cm),
+    ...             BarCode(type='EAN13', attribute_name='code', top=3.8*cm, height=1.5*cm),
+    ... 
+    ...             Label(text='EAN8', top=3.2*cm, left=6*cm),
+    ...             BarCode(type='EAN8', attribute_name='code', top=3.8*cm, left=6*cm, height=1.5*cm),
+    ... 
+    ...             Label(text='Extended39', top=3.2*cm, left=12*cm),
+    ...             BarCode(type='Extended39', attribute_name='code', top=3.8*cm, left=12*cm, height=1.5*cm),
+    ... 
+    ...             Label(text='Extended93', top=5.8*cm),
+    ...             BarCode(type='Extended93', attribute_name='code', top=6.4*cm, height=1.5*cm),
+    ... 
+    ...             Label(text='USPS FIM (code: "A")', top=5.8*cm, left=6*cm),
+    ...             BarCode(type='FIM', attribute_name='code', top=6.4*cm, left=8*cm, height=1.5*cm,
+    ...                 get_value=lambda inst: 'A'),
+    ... 
+    ...             Label(text='I2of5', top=5.8*cm, left=12*cm),
+    ...             BarCode(type='I2of5', attribute_name='code', top=6.4*cm, left=12*cm, height=1.5*cm),
+    ... 
+    ...             Label(text='MSI', top=8.4*cm),
+    ...             BarCode(type='MSI', attribute_name='code', top=9*cm, height=1.5*cm),
+    ... 
+    ...             Label(text='POSTNET', top=8.4*cm, left=6*cm),
+    ...             BarCode(type='POSTNET', attribute_name='code', top=9*cm, left=6*cm, height=1.5*cm),
+    ... 
+    ...             Label(text='Standard39', top=8.4*cm, left=12*cm),
+    ...             BarCode(type='Standard39', attribute_name='code', top=9*cm, left=12*cm, height=1.5*cm),
+    ... 
+    ...             Label(text='Standard93', top=11*cm),
+    ...             BarCode(type='Standard93', attribute_name='code', top=11.6*cm, height=1.5*cm),
+    ... 
+    ...             Label(text='USPS_4State / code: 01234567094987654321 / routing:', top=11*cm,
+    ...                 left=6*cm, width=10*cm),
+    ...             ObjectValue(attribute_name='routing', top=11.5*cm, left=14*cm),
+    ...             BarCode(type='USPS_4State', attribute_name='code', top=11.6*cm, left=6*cm,
+    ...                 height=1.5*cm, routing_attribute='routing',
+    ...                 get_value=lambda inst: '01234567094987654321'),
+    ...         ]
+    ...         borders = {'bottom': True}
+
+    >>> objects_list = [
+    ...     dict(id=1, name='Arduino Duemilanove', code='123456789', routing='01234567891'),
+    ...     dict(id=2, name='Arduino Diecimila', code='000000000', routing='01234567891'),
+    ...     dict(id=3, name='Robotduino', code='111111111', routing='01234567891'),
+    ... ]
+
+    >>> report = SimpleListReport(queryset=objects_list)
+
+PDF generation
+--------------
+
+    >>> from geraldo.generators import PDFGenerator
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/report-with-barcodes.pdf'))
+

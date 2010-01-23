@@ -260,3 +260,9 @@ Clean files from test cache file root
     >>> import shutil
     >>> shutil.rmtree(report.cache_file_root)
 
+Remove hacked methods
+
+    >>> del PDFGenerator.render_bands
+    >>> PDFGenerator.generate_pages = PDFGenerator._generate_pages
+    >>> del PDFGenerator._generate_pages
+

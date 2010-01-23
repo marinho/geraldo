@@ -1,3 +1,7 @@
+2010-01-23: Version 0.4-alpha-5
+-----------------------------
+* Implemented barcodes
+
 2010-01-22: Version 0.4-alpha-4
 -----------------------------
 * Borders now support integer numbers in place of boolean, to set their stroke widths
