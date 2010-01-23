@@ -828,3 +828,8 @@ class Element(GeraldoObject):
         if self.after_print:
             self.after_print(self, generator)
 
+    _repr_for_cache_attrs = ('left','top','height','width','visible')
+    def repr_for_cache_hash_key(self):
+        return unicode(dict([(attr, getattr(self, attr)) for attr in self._repr_for_cache_attrs]))
+
+

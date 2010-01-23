@@ -214,6 +214,9 @@ Hack the generation method to print a 'g' to the output
     >>> PDFGenerator._generate_pages = PDFGenerator.generate_pages
     >>> PDFGenerator.generate_pages = generate_pages
 
+Cached by Queryset
+------------------
+
 Generate the report - first time (must print 'r' and 'g' and write to cache)
 
     >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/cached-report.pdf'))
@@ -224,6 +227,25 @@ Generate the report again (now must no print the 'r' nor the 'g')
 
     >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/cached-report.pdf'))
 
+Cached by Rendered Pages
+------------------------
+
+    >>> report.cache_status = CACHE_BY_RENDER
+
+Generate the report - first time (must print 'r' and 'g' and write to cache)
+
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/cached-report.pdf'))
+    r
+    g
+
+Generate the report again (just print the 'r')
+
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/cached-report.pdf'))
+    r
+
+Cache manually disabled
+-----------------------
+
 Besides generic and granulary ways of cache enabling, you can enable or disable
 when you were executing the generation method, setting argument 'cache_enabled'
 to None (default choice), True (force enabling) or False (force disabling).
@@ -233,5 +255,8 @@ to None (default choice), True (force enabling) or False (force disabling).
     r
     g
 
-TODO: CACHE BY RENDER
+Clean files from test cache file root
+
+    >>> import shutil
+    >>> shutil.rmtree(report.cache_file_root)
 

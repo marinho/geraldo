@@ -12,6 +12,9 @@ class Graphic(Element):
     fill = False
     fill_color = black
 
+    _repr_for_cache_attrs = ('left','top','height','width','visible','stroke',
+            'stroke_color','stroke_width','fill','fill_color')
+
     def __init__(self, **kwargs):
         for k,v in kwargs.items():
             setattr(self, k, v)
@@ -51,6 +54,9 @@ class RoundRect(Rect):
     round corners"""
     radius = 0.5
 
+    _repr_for_cache_attrs = ('left','top','height','width','visible','stroke',
+                'stroke_color','stroke_width','fill','fill_color','radius')
+
     def clone(self):
         new = super(RoundRect, self).clone()
         new.radius = self.radius
@@ -66,6 +72,9 @@ class Fixed(Graphic):
     top = None
     right = None
     bottom = None
+
+    _repr_for_cache_attrs = ('left','top','height','width','visible','stroke',
+            'stroke_color','stroke_width','fill','fill_color','right','bottom')
 
     def set_rect(self, **kwargs):
         self.left = kwargs.get('left', self.left)
@@ -107,6 +116,10 @@ class Circle(Graphic):
     top_center = None
     radius = None
 
+    _repr_for_cache_attrs = ('left','top','height','width','visible','stroke',
+            'stroke_color','stroke_width','fill','fill_color','left_center',
+            'top_center','radius')
+
     def clone(self):
         new = super(Circle, self).clone()
         new.left_center = self.left_center
@@ -119,6 +132,9 @@ class Arc(Fixed):
     """A simple circle"""
     start_angle = 0
     extent = 90
+
+    _repr_for_cache_attrs = ('left','top','height','width','visible','stroke',
+            'stroke_color','stroke_width','fill','fill_color','start_angle','extent')
 
     def clone(self):
         new = super(Arc, self).clone()
@@ -140,6 +156,9 @@ class Image(Graphic):
     filename = None
     _image = None # PIL image object is stored here
     get_image = None # To be overrided
+
+    _repr_for_cache_attrs = ('left','top','height','width','visible','stroke',
+            'stroke_color','stroke_width','fill','fill_color','filename')
 
     def clone(self):
         new = super(Image, self).clone()

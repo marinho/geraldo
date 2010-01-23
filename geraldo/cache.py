@@ -1,6 +1,8 @@
 """Caching functions file. You can use this stuff to store generated reports in a file
 system cache, and save time and performance."""
 
+import os
+
 from utils import memoize, get_attr_value
 
 try:
@@ -23,7 +25,7 @@ class BaseCacheBackend(object):
     def get(self, hash_key):
         pass
 
-    def set(self, hash_key, stream):
+    def set(self, hash_key, content):
         pass
 
     def exists(self, hash_key):
@@ -37,14 +39,30 @@ class FileCacheBackend(BaseCacheBackend):
     def __init__(self, cache_file_root=None):
         self.cache_file_root = cache_file_root or self.cache_file_root
 
-    def get(self, hash_key):
-        pass
+        # Creates the directory if doesn't exists
+        if not os.path.exists(self.cache_file_root):
+            os.makedirs(self.cache_file_root)
 
-    def set(self, hash_key, stream):
-        pass
+    def get(self, hash_key):
+        # Returns None if doesn't exists
+        if not self.exists(hash_key):
+            return None
+
+        # Returns the file content
+        fp = file(os.path.join(self.cache_file_root, hash_key), 'rb')
+        content = fp.read()
+        fp.close()
+
+        return content
+
+    def set(self, hash_key, content):
+        # Writes the content in the file
+        fp = file(os.path.join(self.cache_file_root, hash_key), 'wb')
+        fp.write(content)
+        fp.close()
 
     def exists(self, hash_key):
-        pass
+        return os.path.exists(os.path.join(self.cache_file_root, hash_key))
 
 @memoize
 def get_report_cache_attributes(report):
@@ -116,6 +134,9 @@ def make_hash_key(report, objects_list):
 
 def get_cache_backend(class_path, **kwargs):
     """This method initializes the cache backend from string path informed."""
-    cls = __import__(class_path)
+    parts = class_path.split('.')
+    module = __import__('.'.join(parts[:-1]), fromlist=[parts[-1]])
+    cls = getattr(module, parts[-1])
+
     return cls(**kwargs)
 

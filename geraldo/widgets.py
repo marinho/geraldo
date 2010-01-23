@@ -52,6 +52,8 @@ class Label(Widget):
     'get_value' lambda must have 'text' argument."""
     _text = ''
 
+    _repr_for_cache_attrs = ('text','left','top','height','width','style','visible')
+
     def _get_text(self):
         if self.get_value:
             return self.get_value(self._text)

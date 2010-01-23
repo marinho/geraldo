@@ -74,8 +74,14 @@ class TextGenerator(ReportGenerator):
     escapes_page_start = ''
     escapes_page_end = ''
 
-    def __init__(self, report, **kwargs):
+    def __init__(self, report, cache_enabled=None, **kwargs):
         super(TextGenerator, self).__init__(report)
+
+        # Cache enabled
+        if cache_enabled is not None:
+            self.cache_enabled = cache_enabled
+        elif self.cache_enabled is None:
+            self.cache_enabled = bool(self.report.cache_status)
 
         # Specific attributes
         for k,v in kwargs.items():
@@ -113,9 +119,9 @@ class TextGenerator(ReportGenerator):
         else:
             return text
 
-    def get_hash_key(self, hash_key):
+    def get_hash_key(self, objects):
         """Appends pdf extension to the hash_key"""
-        return hash_key + '.txt'
+        return super(TextGenerator, self).get_hash_key(objects) + '.txt'
 
     def calculate_size(self, size):
         """Uses the function 'calculate_size' to calculate a size"""

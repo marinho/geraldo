@@ -1,10 +1,12 @@
 import random, shelve, os
 
-from geraldo.utils import get_attr_value, calculate_size
+from geraldo.utils import get_attr_value, calculate_size, memoize
 from geraldo.widgets import Widget, Label, SystemField
 from geraldo.graphics import Graphic, RoundRect, Rect, Line, Circle, Arc,\
         Ellipse, Image
 from geraldo.base import GeraldoObject
+from geraldo.cache import CACHE_BY_QUERYSET, CACHE_BY_RENDER, CACHE_DISABLED,\
+        make_hash_key, get_cache_backend
 
 class ReportPage(GeraldoObject):
     rect = None
@@ -32,8 +34,15 @@ class ReportPage(GeraldoObject):
         for el in self._elements:
             yield el
 
+    @memoize
+    def repr_for_cache_hash_key(self):
+        return '/'.join([el.repr_for_cache_hash_key() for el in self.elements
+            if hasattr(el, 'repr_for_cache_hash_key')])
+
 class ReportGenerator(GeraldoObject):
     """A report generator is used to generate a report to a specific format."""
+
+    cache_enabled = None
 
     _is_first_page = True
     _is_latest_page = True
@@ -783,42 +792,68 @@ class ReportGenerator(GeraldoObject):
     def keep_in_frame(self, widget, width, height, paragraphs, mode):
         raise Exception('Not implemented')
 
+    def fetch_from_cache(self):
+        if self.report.cache_status == CACHE_BY_QUERYSET:
+            hash_key = self.get_hash_key(self.report.queryset)
+        elif self.report.cache_status == CACHE_BY_RENDER:
+            hash_key = self.get_hash_key(self._rendered_pages)
+
+        cache = self.get_cache_backend()
+        buffer = cache.get(hash_key)
+
+        if buffer:
+            # Write to file stream
+            if hasattr(self.filename, 'write') and callable(self.filename.write):
+                self.filename.write(buffer)
+                return True
+                
+            # Write to file path
+            elif isinstance(self.filename, basestring):
+                fp = file(self.filename, 'w')
+                fp.write(buffer)
+                fp.close()
+                return True
+
     def cached_before_render(self):
         """Check and loads the generated report from caching system before call method
         'render_bands'"""
 
-        if self.cache_enabled and self.report.cache_status == CACHE_BY_QUERYSET:
-            hash_key = make_hash_key(self.report, self.queryset)
-            cache = get_cache_backend(
-                    self.report.cache_backend,
-                    cache_file_root=self.report.cache_file_root,
-                    )
-            buffer = cache.get(self.get_hash_key(hash_key))
+        if not self.cache_enabled or self.report.cache_status != CACHE_BY_QUERYSET:
+            return False
 
-            if buffer:
-                # Write to file stream
-                if hasattr(self.filename, 'write') and callable(self.filename.write):
-                    self.filename.write(buffer)
-                    return True
-                
-                # Write to file path
-                elif isinstance(self.filename, basestring):
-                    fp = file(self.filename, 'w')
-                    fp.write(buffer)
-                    fp.close()
-                    return True
+        return self.fetch_from_cache()
 
     def cached_before_generate(self):
         """Check and loads the generated report from caching system before call method
         'generate_pages'"""
-        # TODO
-        pass
 
-    def store_in_cache(self):
-        # TODO
-        pass
+        if not self.cache_enabled or self.report.cache_status != CACHE_BY_RENDER:
+            return False
 
-    def get_hash_key(self, hash_key):
+        return self.fetch_from_cache()
+
+    def store_in_cache(self, content):
+        """Sends the canvas content to write in the cache backend"""
+
+        if not self.cache_enabled or self.report.cache_status == CACHE_DISABLED:
+            return
+
+        if self.report.cache_status == CACHE_BY_QUERYSET:
+            hash_key = self.get_hash_key(self.report.queryset)
+        elif self.report.cache_status == CACHE_BY_RENDER:
+            hash_key = self.get_hash_key(self._rendered_pages)
+
+        cache = self.get_cache_backend()
+
+        return cache.set(hash_key, content)
+
+    def get_hash_key(self, objects):
         """Calculates the hash_key, appending/prepending something if necessary"""
-        return hash_key
+        return make_hash_key(self.report, objects)
+
+    def get_cache_backend(self):
+        return get_cache_backend(
+                self.report.cache_backend,
+                cache_file_root=self.report.cache_file_root,
+                )
 
