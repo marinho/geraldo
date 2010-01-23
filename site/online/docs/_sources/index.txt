@@ -27,6 +27,7 @@ Content
     widgets
     graphics
     generators
+    caching
     utils
     examples/index
     backward-incompatible-changes

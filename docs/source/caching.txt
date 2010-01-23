@@ -1,0 +1,68 @@
+Caching
+=======
+
+Geraldo Reports has support to reports caching. This means you can store reports
+in a directory (or other kind of cache store you want) and Geraldo will find them
+and return when the same report be generated.
+
+This is why exists the module **geraldo.cache**. There are general settings you
+can set to enable caching and extend its functios.
+
+Settings
+--------
+
+All of the following settings are generic and are used by respective ones in each
+report class, and there they can be overridden too.
+
+- **DEFAULT_CACHE_STATUS** - Default: **geraldo.cache.CACHE_DISABLED**
+
+    This setting can receive three different types of status:
+
+    - geraldo.cache.CACHE_DISABLED
+
+        Just disables the caching at all.
+
+    - geraldo.cache.CACHE_BY_QUERYSET
+
+        Enable the caching function to use queryset values as the base to generate
+        a hash key and store in the cache. You must use this if the most important
+        thing for you is the data in the report. By the way, this choice is the
+        **fastest** one.
+
+    - geraldo.cache.CACHE_BY_RENDER
+
+        Enable the caching function to use the rendered objects as the base to
+        generate a hash key and store in the cache. You must use this if you want
+        to consider style and feel when storing to cache. This is not the fastest
+        but probably the most **reliable**.
+
+- **CACHE_BACKEND** - Default: 'geraldo.cache.FileCacheBackend'
+
+    Just inform the full string path to a backend class.
+
+- **CACHE_FILE_ROOT** - Default: '/tmp/'
+
+    Just inform (if you are using the **FileCacheBackend** backend) the path of
+    directory where you want to store the cache files.
+
+Classes
+-------
+
+- **FileCacheBackend**
+
+    This is the default (and the only one Geraldo supplies) cache backend. It
+    stores files in a directory on the file system (hard disk).
+    
+    You can extend this class if you want to tun up the file system caching.
+
+- **BaseCacheBackend**
+
+    If you want to extend cache to a different kind of cache store (i.e. memcache,
+    database or someone else), you have to make a class inheriting from this one.
+
+    Basically you must set three methods:
+    
+    - **get(hash_key)**
+    - **set(hash_key, content)**
+    - **exsts(hash_key)**
+

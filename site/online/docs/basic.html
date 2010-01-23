@@ -145,6 +145,45 @@ name them without &#8220;do_&#8221;, just their names (i.e. before_print).</p>
 </blockquote>
 </li>
 </ul>
+<p><strong>Caching related attributes and methods</strong></p>
+<p>Take a look on <strong>cache</strong> documentation to see better explanations.</p>
+<p>The attributes <strong>cache_status</strong>, <strong>cache_backend</strong> and <strong>cache_file_root</strong> all have a
+&#8216;real&#8217; default None, but they assume values defined on their respective general
+settings on cache.</p>
+<ul>
+<li><p class="first"><strong>cache_status</strong> - Default: None</p>
+<blockquote>
+<p>Can be setted to 3 different values:</p>
+<ul class="simple">
+<li>geraldo.cache.CACHE_DISABLED</li>
+<li>geraldo.cache.CACHE_BY_QUERYSET</li>
+<li>geraldo.cache.CACHE_BY_RENDER</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><strong>cache_backend</strong> - Default: &#8216;geraldo.cache.FileCacheBacked&#8217;</p>
+<blockquote>
+<p>A string path to class used to set/get reports to cache.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>cache_prefix</strong> - Default: report class module + report class name</p>
+<blockquote>
+<p>Set the prefix for hash key used to identify generated reports from this class.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>cache_file_root</strong> - Default: &#8216;/tmp/&#8217;</p>
+<blockquote>
+<p>The directory path where cached files are stored.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>get_cache_relevant_attributes()</strong></p>
+<blockquote>
+<p>If you want to set manually what attributes you want to make relevante on cache
+hash key generation, declare this method to returns a list of the attributes
+names.</p>
+</blockquote>
+</li>
+</ul>
 <p><strong>Methods</strong></p>
 <ul>
 <li><p class="first"><strong>format_date(date, expression)</strong></p>
@@ -175,6 +214,23 @@ servers. In most of cases, also helps to avoid memory consumming.</p>
 when under separated process and this won&#8217;t work properly.</p>
 <p>As all of us know, Python processing is by far a better way to work
 than threading, so, this helps to solve it.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>find_by_name(name, many=False)</strong></p>
+<blockquote>
+<p>Find an object with given name in the children (and children of children
+and so on).</p>
+<p>If you set <strong>many</strong> to <strong>True</strong>, if many objects with name are found, all
+of them are returned, instead, an exception
+<strong>geraldo.exceptions.ManyObjectsFound</strong> is raised. The same is valid when
+none are found, but the exception <strong>geraldo.exceptions.ObjectNotFound</strong>
+is raised.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>find_by_type(typ)</strong></p>
+<blockquote>
+<p>Find a list of objects that are instance of class given. As same as
+<strong>find_by_name</strong>, children of children and so on are found too.</p>
 </blockquote>
 </li>
 </ul>

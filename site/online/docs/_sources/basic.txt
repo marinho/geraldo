@@ -92,6 +92,40 @@ A report band must be a class inherited from **ReportBand** or an instance of
     attributes (setting when creating objects or setting them dinamically) you must
     name them without "do\_", just their names (i.e. before_print).
 
+**Caching related attributes and methods**
+
+Take a look on **cache** documentation to see better explanations.
+
+The attributes **cache_status**, **cache_backend** and **cache_file_root** all have a
+'real' default None, but they assume values defined on their respective general
+settings on cache.
+
+- **cache_status** - Default: None
+
+    Can be setted to 3 different values:
+
+    - geraldo.cache.CACHE_DISABLED
+    - geraldo.cache.CACHE_BY_QUERYSET
+    - geraldo.cache.CACHE_BY_RENDER
+
+- **cache_backend** - Default: 'geraldo.cache.FileCacheBacked'
+
+    A string path to class used to set/get reports to cache.
+
+- **cache_prefix** - Default: report class module + report class name
+
+    Set the prefix for hash key used to identify generated reports from this class.
+
+- **cache_file_root** - Default: '/tmp/'
+
+    The directory path where cached files are stored.
+
+- **get_cache_relevant_attributes()**
+
+    If you want to set manually what attributes you want to make relevante on cache
+    hash key generation, declare this method to returns a list of the attributes
+    names.
+
 **Methods**
 
 - **format_date(date, expression)**
@@ -121,6 +155,22 @@ A report band must be a class inherited from **ReportBand** or an instance of
 
     As all of us know, Python processing is by far a better way to work
     than threading, so, this helps to solve it.
+
+- **find_by_name(name, many=False)**
+
+    Find an object with given name in the children (and children of children
+    and so on).
+    
+    If you set **many** to **True**, if many objects with name are found, all
+    of them are returned, instead, an exception
+    **geraldo.exceptions.ManyObjectsFound** is raised. The same is valid when
+    none are found, but the exception **geraldo.exceptions.ObjectNotFound**
+    is raised.
+
+- **find_by_type(typ)**
+
+    Find a list of objects that are instance of class given. As same as
+    **find_by_name**, children of children and so on are found too.
 
 SubReport
 ---------
