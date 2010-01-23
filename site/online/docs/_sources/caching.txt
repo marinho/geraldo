@@ -66,8 +66,3 @@ Classes
     - **set(hash_key, content)**
     - **exsts(hash_key)**
 
-Functions
----------
-
-- **make_hash_key**
-
