@@ -1,0 +1,370 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Graphics Reference &mdash; Geraldo Reports Documentation v0.4-alpha-5 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.4-alpha-5',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Geraldo Reports Documentation v0.4-alpha-5 documentation" href="index.html" />
+    <link rel="next" title="Generators Reference" href="generators.html" />
+    <link rel="prev" title="Widgets Reference" href="widgets.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="generators.html" title="Generators Reference"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="widgets.html" title="Widgets Reference"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="graphics-reference">
+<h1>Graphics Reference<a class="headerlink" href="#graphics-reference" title="Permalink to this headline">¶</a></h1>
+<p>Graphics elements are the way you have to draw images and shapes on the band
+canvas.</p>
+<p>They can be useful also to make customized borders in bands.</p>
+<div class="section" id="graphic">
+<h2>Graphic<a class="headerlink" href="#graphic" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="geraldo.graphics.Graphic">
+<em class="property">class </em><tt class="descclassname">geraldo.graphics.</tt><tt class="descname">Graphic</tt><a class="headerlink" href="#geraldo.graphics.Graphic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Path: <strong>geraldo.graphics.Graphic</strong></p>
+<p>This is the basic graphic class. You should use it only when inheriting to
+create your own graphic class, never use it directly.</p>
+<p>Its rect area is based on <strong>left-width-top-height</strong> dimensions.</p>
+<p><strong>Attributes</strong></p>
+<ul>
+<li><p class="first"><strong>name</strong> - Default: None</p>
+</li>
+<li><p class="first"><strong>visible</strong> - Default: True</p>
+<blockquote>
+<p>Set to <strong>False</strong> if you want to make it not visible.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>stroke</strong> - Default: True</p>
+</li>
+<li><p class="first"><strong>stroke_color</strong> - Default: reportlab.lib.colors.black</p>
+</li>
+<li><p class="first"><strong>stroke_width</strong> - Default: 1</p>
+</li>
+<li><p class="first"><strong>fill</strong> - Default: False</p>
+</li>
+<li><p class="first"><strong>fill_color</strong> - Default: reportlab.lib.colors.black</p>
+</li>
+</ul>
+<p><strong>Rendering attributes</strong></p>
+<p>They are read-only attributes you can use at render time.</p>
+<ul class="simple">
+<li><strong>instance</strong> - current object being rendered</li>
+<li><strong>generator</strong> - generator instance</li>
+<li><strong>report</strong> - report instance this element is in</li>
+<li><strong>band</strong> - band this element is in</li>
+<li><strong>page</strong> - current page</li>
+</ul>
+<p><strong>Events system</strong></p>
+<ul>
+<li><p class="first"><strong>before_print</strong> - Default: None</p>
+<blockquote>
+<p>Is called by <strong>do_before_print</strong> method, before generate the graphic output.
+Expect arguments <strong>graphic</strong> and <strong>generator</strong>.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>after_print</strong> - Default: None</p>
+<blockquote>
+<p>Is called by <strong>do_after_print</strong> method, after generate the graphic output.
+Expect arguments <strong>graphic</strong> and <strong>generator</strong>.</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>Methods</strong></p>
+<ul>
+<li><p class="first"><strong>set_rect(**kwargs)</strong></p>
+<blockquote>
+<p>Used to generate a hard rectangle when rendering pages. Override it
+to set your own rule if you need.</p>
+</blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="fixed">
+<h2>Fixed<a class="headerlink" href="#fixed" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="geraldo.graphics.Fixed">
+<em class="property">class </em><tt class="descclassname">geraldo.graphics.</tt><tt class="descname">Fixed</tt><a class="headerlink" href="#geraldo.graphics.Fixed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Path: <strong>geraldo.graphics.Fixed</strong></p>
+<p>In the same way as Graphic class, you should use this just to inherit and create
+your own graphic. This is a graphic with rect with <strong>left-right-top-bottom</strong>
+dimensioning.</p>
+</div>
+<div class="section" id="rect">
+<h2>Rect<a class="headerlink" href="#rect" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="geraldo.graphics.Rect">
+<em class="property">class </em><tt class="descclassname">geraldo.graphics.</tt><tt class="descname">Rect</tt><a class="headerlink" href="#geraldo.graphics.Rect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Path: <strong>geraldo.Rect</strong></p>
+<p>A rectangle with square borders on the canvas.</p>
+<p><strong>Example of use</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Rect</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">fill_color</span><span class="o">=</span><span class="n">yellow</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Attributes</strong></p>
+<ul class="simple">
+<li><strong>left</strong> - Required</li>
+<li><strong>width</strong> - Required</li>
+<li><strong>top</strong> - Required</li>
+<li><strong>height</strong> - Required</li>
+</ul>
+</div>
+<div class="section" id="roundrect">
+<h2>RoundRect<a class="headerlink" href="#roundrect" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="geraldo.graphics.RoundRect">
+<em class="property">class </em><tt class="descclassname">geraldo.graphics.</tt><tt class="descname">RoundRect</tt><a class="headerlink" href="#geraldo.graphics.RoundRect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Path: <strong>geraldo.RoundRect</strong></p>
+<p>A rectangle with rounded borders on the canvas.</p>
+<p><strong>Example of use</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">RoundRect</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">stroke</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">stroke_width</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">stroke_color</span><span class="o">=</span><span class="n">blue</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Attributes</strong></p>
+<ul>
+<li><p class="first"><strong>left</strong> - Required</p>
+</li>
+<li><p class="first"><strong>width</strong> - Required</p>
+</li>
+<li><p class="first"><strong>top</strong> - Required</p>
+</li>
+<li><p class="first"><strong>height</strong> - Required</p>
+</li>
+<li><p class="first"><strong>radius</strong> - Required</p>
+<blockquote>
+<p>Inform the radius number for the round corners.</p>
+</blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="line">
+<h2>Line<a class="headerlink" href="#line" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="geraldo.graphics.Line">
+<em class="property">class </em><tt class="descclassname">geraldo.graphics.</tt><tt class="descname">Line</tt><a class="headerlink" href="#geraldo.graphics.Line" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Path: <strong>geraldo.Line</strong></p>
+<p><strong>Example of use</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Line</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">10</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Attributes</strong></p>
+<ul class="simple">
+<li><strong>left</strong> - Required</li>
+<li><strong>width</strong> - Required</li>
+<li><strong>right</strong> - Required</li>
+<li><strong>bottom</strong> - Required</li>
+</ul>
+</div>
+<div class="section" id="circle">
+<h2>Circle<a class="headerlink" href="#circle" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="geraldo.graphics.Circle">
+<em class="property">class </em><tt class="descclassname">geraldo.graphics.</tt><tt class="descname">Circle</tt><a class="headerlink" href="#geraldo.graphics.Circle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Path: <strong>geraldo.Circle</strong></p>
+<p><strong>Example of use</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Circle</span><span class="p">(</span><span class="n">left_center</span><span class="o">=</span><span class="mi">6</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top_center</span><span class="o">=</span><span class="mf">3.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="n">cm</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Attributes</strong></p>
+<ul class="simple">
+<li><strong>left_center</strong> - Required</li>
+<li><strong>top_center</strong> - Required</li>
+<li><strong>radius</strong> - Required</li>
+</ul>
+</div>
+<div class="section" id="arc">
+<h2>Arc<a class="headerlink" href="#arc" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="geraldo.graphics.Arc">
+<em class="property">class </em><tt class="descclassname">geraldo.graphics.</tt><tt class="descname">Arc</tt><a class="headerlink" href="#geraldo.graphics.Arc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Path: <strong>geraldo.Arc</strong></p>
+<p><strong>Example of use</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Arc</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">10</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">start_angle</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Attributes</strong></p>
+<ul class="simple">
+<li><strong>left</strong> - Required</li>
+<li><strong>width</strong> - Required</li>
+<li><strong>right</strong> - Required</li>
+<li><strong>bottom</strong> - Required</li>
+<li><strong>start_angle</strong> - Default: 0</li>
+<li><strong>extent</strong> - Default: 90</li>
+</ul>
+</div>
+<div class="section" id="ellipse">
+<h2>Ellipse<a class="headerlink" href="#ellipse" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="geraldo.graphics.Ellipse">
+<em class="property">class </em><tt class="descclassname">geraldo.graphics.</tt><tt class="descname">Ellipse</tt><a class="headerlink" href="#geraldo.graphics.Ellipse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Path: <strong>geraldo.Ellipse</strong></p>
+<p><strong>Example of use</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Ellipse</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">10</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Attributes</strong></p>
+<ul class="simple">
+<li><strong>left</strong> - Required</li>
+<li><strong>width</strong> - Required</li>
+<li><strong>right</strong> - Required</li>
+<li><strong>bottom</strong> - Required</li>
+</ul>
+</div>
+<div class="section" id="image">
+<h2>Image<a class="headerlink" href="#image" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="geraldo.graphics.Image">
+<em class="property">class </em><tt class="descclassname">geraldo.graphics.</tt><tt class="descname">Image</tt><a class="headerlink" href="#geraldo.graphics.Image" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Path: <strong>geraldo.Image</strong></p>
+<p><strong>Example of use</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Image</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">10</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s">&#39;path/to/file.jpg&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Attributes</strong></p>
+<ul>
+<li><p class="first"><strong>left</strong> - Required</p>
+</li>
+<li><p class="first"><strong>width</strong> - Required</p>
+</li>
+<li><p class="first"><strong>top</strong> - Required</p>
+</li>
+<li><p class="first"><strong>height</strong> - Required</p>
+</li>
+<li><p class="first"><strong>filename</strong> - Required</p>
+<blockquote>
+<p>You can provide a filename path or a Python Imaging Library Image instance.
+If the latter, then you have to have this library installed.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>get_image</strong> - Default: None</p>
+<blockquote>
+<p>You should provide a function or lambda object to this attribute when you
+want to work with Images or Charts based on object values or logic.</p>
+</blockquote>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Graphics Reference</a><ul>
+<li><a class="reference external" href="#graphic">Graphic</a></li>
+<li><a class="reference external" href="#fixed">Fixed</a></li>
+<li><a class="reference external" href="#rect">Rect</a></li>
+<li><a class="reference external" href="#roundrect">RoundRect</a></li>
+<li><a class="reference external" href="#line">Line</a></li>
+<li><a class="reference external" href="#circle">Circle</a></li>
+<li><a class="reference external" href="#arc">Arc</a></li>
+<li><a class="reference external" href="#ellipse">Ellipse</a></li>
+<li><a class="reference external" href="#image">Image</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="widgets.html"
+                                  title="previous chapter">Widgets Reference</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="generators.html"
+                                  title="next chapter">Generators Reference</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/graphics.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="generators.html" title="Generators Reference"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="widgets.html" title="Widgets Reference"
+             >previous</a> |</li>
+        <li><a href="index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2010, Marinho Brandao.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

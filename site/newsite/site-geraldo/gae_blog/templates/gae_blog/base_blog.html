@@ -1,0 +1,36 @@
+{% extends "gae_blog/base.html" %}
+
+{% block title %}{{ entry }} :: {{ block.super }}{% endblock %}
+
+{% block style %}{{ block.super }}
+<style type="text/css">
+    .text {
+        margin: 10px 0 10px 0;
+        border: 1px solid silver;
+        border-style: solid none solid none;
+    }
+</style>
+{% endblock style %}
+
+{% block content %}
+{% block h1 %}<h1>{{ entry }}</h1>{% endblock %}
+
+<div class="post_details">
+    {% for tag in entry.tags %}{% include "gae_blog/tag_link.html" %}{% endfor %}
+    by {{ entry.author }}, {{ entry.pub_date|timesince }} ago
+</div>
+
+<div class="text">
+    {% include "gae_blog/render_text.html" %}
+</div>
+
+{% if not entry.disable_comments %}
+<div class="fc_comments">
+    {% include "fc_comments.html" %}
+</div>
+{% endif %}
+
+{% include "search.html" %}
+
+{% endblock content %}
+

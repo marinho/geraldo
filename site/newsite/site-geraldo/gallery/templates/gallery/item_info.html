@@ -1,0 +1,16 @@
+{% extends "base_site.html" %}
+
+{% block _content %}{{ block.super }}
+<div class="box especial inner">
+    <h1>{{ item }}</h1>
+
+    {% if user and user_is_current_user_admin %}
+    <a href="/admin/gallery/item/add/" class="noprint">Add new gallery item</a> |
+    <a href="/admin/gallery/item/{{ item.id }}/" class="noprint">Edit</a>
+    {% endif %}
+
+    <p><img src="{{ item.get_thumb_url }}"/></p>
+
+    <p><img src="{{ item.get_file_url }}"/></p>
+</div>
+{% endblock _content %}

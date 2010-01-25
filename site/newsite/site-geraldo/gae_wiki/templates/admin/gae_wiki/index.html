@@ -1,0 +1,27 @@
+{% extends "admin/gae_wiki/base.html" %}
+
+{% load pagination_tags %}
+
+{% block content %}
+<ul class="submenu">
+    <li><a href="wiki/add/">Add new wiki page</a></li>
+</ul>
+
+{% autopaginate list %}
+
+<table class="list">
+    {% for item in list %}
+    <tr>
+        <td><a href="{{ item.get_absolute_url }}">{{ item }}</a></td>
+        <td>
+            <a href="wiki/{{ item.id }}/">Edit</a> |
+            <a href="wiki/{{ item.id }}/delete/">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% paginate %}
+
+{% endblock content %}
+

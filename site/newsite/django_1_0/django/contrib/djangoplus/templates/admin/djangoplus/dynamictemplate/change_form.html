@@ -1,0 +1,15 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{% block extrahead %}{{ block.super }}
+
+<style>
+    textarea#id_content {
+        width: 100%;
+        height: 500px;
+        font-family: courier new;
+        font-size: 10pt;
+    }
+</style>
+{% endblock extrahead %}
+

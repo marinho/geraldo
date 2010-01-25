@@ -1,0 +1,164 @@
+Generators Reference
+====================
+
+Generators are classes to generate a report instance to some data format. In
+future we will have generators for XML, HTML, PS, images and so on.
+
+PDF Generator
+-------------
+
+.. currentmodule:: geraldo.generators
+.. class:: PDFGenerator
+
+Path: **geraldo.generators.PDFGenerator**
+
+This generator is the most mature generator we have. It generates PDF files to
+be viewed on Adobe Acrobat Reader or similar software. It uses the awesome
+library 'ReportLab' to create them.
+
+**Attributes:**
+
+- **filename** - Default: None
+
+    You have to provide the filename you are creating, unless you provided the
+    attribute 'canvas'
+
+- **canvas** - Default: None
+
+    **New in version 0.3.5**
+
+    If you already have a canvas instantiated, you can provide it instead
+    of 'filename' to generate this report inside. This is useful to generate
+    many reports in the same PDF.
+
+- **return_canvas** - Default: False
+
+    **New in version 0.3.5**
+
+    If you set this to **True**, the file will not be saved and the generator
+    will return the canvas to you to use as you want.
+
+- **multiple_canvas** - Default: False
+
+    **New in version 0.3.7**
+
+    This attribute has default value **True** if you have **pyPDF** library
+    installed on your PYTHONPATH.
+
+    It is useful to store canvas in a temporary directory and combine all in
+    once when finished the generating. This helps to gain on memory consuming.
+
+    You can find more about pyPDF on http://pypi.python.org/pypi/pyPdf/
+
+- **temp_directory** - Default: '/tmp/'
+
+    Regarding to temporary saving files on report processing, this attribute
+    can receive a string with directory path where save those files.
+
+To use PDFGenerator you just do something like this:
+
+    >>> my_report_instance.generate_by(PDFGenerator, filename='file.pdf')
+
+In **filename** argument you can use a file path string or a file output object.
+
+Examples:
+
+    >>> fp = file('test.pdf', 'w')
+    >>> my_report_instance.generate_by(PDFGenerator, filename=fp)
+    >>> 
+    >>> resp = HttpResponse(mimetype='application/pdf')
+    >>> my_report_instance.generate_by(PDFGenerator, filename=resp)
+
+Text Generator
+--------------
+
+.. currentmodule:: geraldo.generators
+.. class:: TextGenerator
+
+Path: **geraldo.generators.TextGenerator**
+
+This generator is still in the development stage, but it already works well. It
+can be used to generate text files or to print to matrix printers.
+
+You can use it exactly like you would use PDF generator, but this has some more
+features. When running **'generate_by'** report method, you can inform the
+attribute 'filename' like you do in PDF, but you could also do some other things.
+
+**Attributes:**
+
+- **row_height** - Default: 0.5*cm
+
+    Should be the equivalent height of a row plus the space between rows. 
+    This is important to calculate how many rows a page has.
+
+- **character_width** - Default: 0.23*cm
+
+    Should be the equivalent width of a character. This is important to 
+    calculate how many columns a page has.
+
+- **to_printer** - Default: True
+
+    Is a boolean variable which you can set to generate a text to matrix printer 
+    or not. This controls whether escape characters will be in the output or not.
+
+- **escape_set** - Default: geraldo.generators.text.DEFAULT_ESCAPE_SET
+
+    Is a dictionary with equivalence table to escape codes. As far as we know,
+    escape codes can vary depending on model or printer manufacturer
+    (i.e. Epson, Lexmark, HP, etc.). This attribute is useful to support this.
+    Default is ESC/P2 standard (Epson matrix printers)
+
+- **filename** - Default: None
+
+    Is the file path you can optionally provide to save text to.
+
+- **encode_to** - Default: None
+
+    Here you can provide the coding identifier to force Geraldo to encode the
+    output string in. Example: 'latin-1'
+
+- **manual_escape_codes** - Default: False
+
+    A boolean variable that sets whether escape codes are manually provided or not.
+
+**Examples:**
+
+Basic:
+
+    >>> my_report_instance.generate_by(TextGenerator, filename='file.txt')
+
+Returning the output:
+
+    >>> output = my_report_instance.generate_by(TextGenerator)
+
+Setting row height and/or column width:
+
+    >>> output = my_report_instance.generate_by(TextGenerator, row_height=0.7*cm, character_width=0.2*cm)
+
+Forcing the generator to encode the output:
+
+    >>> output = my_report_instance.generate_by(TextGenerator, encode_to='latin-1')
+
+Setting to be printed by a printer or not:
+
+    >>> output = my_report_instance.generate_by(TextGenerator, to_printer=False)
+
+Setting a set of escape codes for printer (matrix printers work with escape codes
+set for special characters or to setup the output printing):
+
+    >>> from geraldo.generators.text import DEFAULT_ESCAPE_SET
+    >>> my_escape_set = DEFAULT_ESCAPE_SET.copy()
+    >>> my_escape_set['condensed'] = chr(15) + chr(17)
+    >>> output = my_report_instance.generate_by(TextGenerator, to_printer=True, escape_set=my_escape_set)
+
+Forcing the output to print out escape codes before/after report or page print:
+
+    >>> MyTextGenerator(TextGenerator):
+    ...     to_printer = True
+    ...     manual_escape_codes = True
+    ...     escapes_report_start = chr(15) # Sets condensed mode
+    ...     escapes_report_end = chr(18) # Unsets condensed mode
+    ...     escapes_page_start = chr(12) + chr(10) # Form and line feed
+    ...     escapes_page_end = ''
+    >>> output = my_report_instance.generate_by(MyTextGenerator)
+

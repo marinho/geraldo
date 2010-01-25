@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Caching &mdash; Geraldo Reports Documentation v0.4-alpha-5 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.4-alpha-5',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Geraldo Reports Documentation v0.4-alpha-5 documentation" href="index.html" />
+    <link rel="next" title="Utilities Reference" href="utils.html" />
+    <link rel="prev" title="Generators Reference" href="generators.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="utils.html" title="Utilities Reference"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="generators.html" title="Generators Reference"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="caching">
+<h1>Caching<a class="headerlink" href="#caching" title="Permalink to this headline">¶</a></h1>
+<p>Geraldo Reports has support to reports caching. This means you can store reports
+in a directory (or other kind of cache store you want) and Geraldo will find them
+and return when the same report be generated.</p>
+<p>This is why exists the module <strong>geraldo.cache</strong>. There are general settings you
+can set to enable caching and extend its functios.</p>
+<div class="section" id="settings">
+<h2>Settings<a class="headerlink" href="#settings" title="Permalink to this headline">¶</a></h2>
+<p>All of the following settings are generic and are used by respective ones in each
+report class, and there they can be overridden too.</p>
+<ul>
+<li><p class="first"><strong>DEFAULT_CACHE_STATUS</strong> - Default: <strong>geraldo.cache.CACHE_DISABLED</strong></p>
+<blockquote>
+<p>This setting can receive three different types of status:</p>
+<ul>
+<li><p class="first">geraldo.cache.CACHE_DISABLED</p>
+<blockquote>
+<p>Just disables the caching at all.</p>
+</blockquote>
+</li>
+<li><p class="first">geraldo.cache.CACHE_BY_QUERYSET</p>
+<blockquote>
+<p>Enable the caching function to use queryset values as the base to generate
+a hash key and store in the cache. You must use this if the most important
+thing for you is the data in the report. By the way, this choice is the
+<strong>fastest</strong> one.</p>
+</blockquote>
+</li>
+<li><p class="first">geraldo.cache.CACHE_BY_RENDER</p>
+<blockquote>
+<p>Enable the caching function to use the rendered objects as the base to
+generate a hash key and store in the cache. You must use this if you want
+to consider style and feel when storing to cache. This is not the fastest
+but probably the most <strong>reliable</strong>.</p>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><strong>CACHE_BACKEND</strong> - Default: &#8216;geraldo.cache.FileCacheBackend&#8217;</p>
+<blockquote>
+<p>Just inform the full string path to a backend class.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>CACHE_FILE_ROOT</strong> - Default: &#8216;/tmp/&#8217;</p>
+<blockquote>
+<p>Just inform (if you are using the <strong>FileCacheBackend</strong> backend) the path of
+directory where you want to store the cache files.</p>
+</blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first"><strong>FileCacheBackend</strong></p>
+<blockquote>
+<p>This is the default (and the only one Geraldo supplies) cache backend. It
+stores files in a directory on the file system (hard disk).</p>
+<p>You can extend this class if you want to tun up the file system caching.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>BaseCacheBackend</strong></p>
+<blockquote>
+<p>If you want to extend cache to a different kind of cache store (i.e. memcache,
+database or someone else), you have to make a class inheriting from this one.</p>
+<p>Basically you must set three methods:</p>
+<ul class="simple">
+<li><strong>get(hash_key)</strong></li>
+<li><strong>set(hash_key, content)</strong></li>
+<li><strong>exsts(hash_key)</strong></li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Caching</a><ul>
+<li><a class="reference external" href="#settings">Settings</a></li>
+<li><a class="reference external" href="#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="generators.html"
+                                  title="previous chapter">Generators Reference</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="utils.html"
+                                  title="next chapter">Utilities Reference</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/caching.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="utils.html" title="Utilities Reference"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="generators.html" title="Generators Reference"
+             >previous</a> |</li>
+        <li><a href="index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2010, Marinho Brandao.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

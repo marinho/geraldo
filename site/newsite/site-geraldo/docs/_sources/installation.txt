@@ -1,0 +1,93 @@
+Installation
+============
+
+Geraldo is still not available as an installer or system package. So, you have two
+ways to install it:
+
+Option 1. Get the latest official version
+-----------------------------------------
+
+1. Get the latest tarball available from:
+
+    https://sourceforge.net/projects/geraldo/files/geraldo/
+    
+2. Then you can do the following steps to install it:
+
+**Linux**
+
+::
+    
+    tar xvfz Geraldo-latest.tar.gz
+    cd Geraldo
+    sudo python setup.py install
+
+This will copy Geraldo's packages inside Python's packages path.
+
+**Windows**
+
+If you are using Windows, Geraldo is fully compatible. You just have to use a
+tarball decompression tool, like **7-Zip** which you can download from:
+
+    http://www.7-zip.org/download.html
+    
+
+Once you have a tool to decompress tarball files, you have to decompress it,
+open a DOS Prompt window in the folder you decompress into and run the
+following command:
+
+::
+
+    python setup.py install
+    
+
+Option 2. Get the latest development version
+--------------------------------------------
+
+Our version control is centralized on GitHub Social repository, in the
+following URL:
+
+::
+
+    http://github.com/marinho/geraldo
+    
+
+To get the latest development version from repository server, you will need the
+Git version control system. Then you can run the following command in Shell or
+MS-DOS Prompty window:
+
+::
+
+    git clone git://github.com/marinho/geraldo.git
+    
+
+A folder named **geraldo** will be in your current path with all
+Geraldo files inside.
+
+Then you can go ahead and use the same commands from **Option 1** to install
+in your system.
+
+Dependencies
+------------
+
+**ReportLab**
+
+This is required, as you cannot use Geraldo without ReportLab
+installed.
+
+Get it from the following URL:
+
+    http://www.reportlab.org/
+    
+
+The tested version is **2.1**.
+
+**Python Imaging Library**
+
+Geraldo depends on PIL to work with Images manipulation on the canvas. If you
+aren't going to use them, you can live without PIL.
+
+To get PIL you can go to the following URL:
+
+    http://www.pythonware.com/products/pil/
+    
+

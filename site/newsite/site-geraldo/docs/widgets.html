@@ -1,0 +1,404 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Widgets Reference &mdash; Geraldo Reports Documentation v0.4-alpha-5 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.4-alpha-5',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Geraldo Reports Documentation v0.4-alpha-5 documentation" href="index.html" />
+    <link rel="next" title="Graphics Reference" href="graphics.html" />
+    <link rel="prev" title="Basic Reference" href="basic.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="graphics.html" title="Graphics Reference"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="basic.html" title="Basic Reference"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="widgets-reference">
+<h1>Widgets Reference<a class="headerlink" href="#widgets-reference" title="Permalink to this headline">¶</a></h1>
+<p>Widgets are report elements to show text values on report canvas.</p>
+<p>All widget classes can be initialized with their attributes as class arguments.</p>
+<div class="section" id="widget">
+<h2>Widget<a class="headerlink" href="#widget" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="geraldo.widgets.Widget">
+<em class="property">class </em><tt class="descclassname">geraldo.widgets.</tt><tt class="descname">Widget</tt><a class="headerlink" href="#geraldo.widgets.Widget" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Path: <strong>geraldo.widgets.Widget</strong></p>
+<p>Base class for reports widgets, you should use it only to inherit and make your
+own widgets, otherwise you shouldn&#8217;t use it directly.</p>
+<p><strong>Attributes</strong></p>
+<ul>
+<li><p class="first"><strong>name</strong> - Default: None</p>
+</li>
+<li><p class="first"><strong>height</strong> - Default: 0.5*cm</p>
+</li>
+<li><p class="first"><strong>width</strong> - Default: 5*cm</p>
+</li>
+<li><p class="first"><strong>left</strong> - Default: 0</p>
+</li>
+<li><p class="first"><strong>top</strong> - Default: 0</p>
+</li>
+<li><p class="first"><strong>visible</strong> - Default: True</p>
+<blockquote>
+<p>Set to <strong>False</strong> if you want to make it not visible.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>style</strong> - Default: {}</p>
+<blockquote>
+<p>This is a dictionary that uses the powerful ReportLab <strong>ParagraphStyle</strong>
+class to set style settings for this widget.</p>
+<p>Default keys are:</p>
+<ul class="simple">
+<li><strong>fontName</strong> - Default: &#8216;Times-Roman&#8217;,</li>
+<li><strong>fontSize</strong> - Default: 10,</li>
+<li><strong>leading</strong> - Default: 12,</li>
+<li><strong>leftIndent</strong> - Default: 0,</li>
+<li><strong>rightIndent</strong> - Default: 0,</li>
+<li><strong>firstLineIndent</strong> - Default: 0,</li>
+<li><strong>alignment</strong> - Default: TA_LEFT,</li>
+<li><strong>spaceBefore</strong> - Default: 0,</li>
+<li><strong>spaceAfter</strong> - Default: 0,</li>
+<li><strong>bulletFontName</strong> - Default: &#8216;Times-Roman&#8217;,</li>
+<li><strong>bulletFontSize</strong> - Default: 10,</li>
+<li><strong>bulletIndent</strong> - Default: 0,</li>
+<li><strong>textColor</strong> - Default:  black,</li>
+<li><strong>backColor</strong> - Default: None,</li>
+<li><strong>wordWrap</strong> - Default: None,</li>
+<li><strong>borderWidth</strong> - Default: 0,</li>
+<li><strong>borderPadding</strong> - Default: 0,</li>
+<li><strong>borderColor</strong> - Default: None,</li>
+<li><strong>borderRadius</strong> - Default: None,</li>
+<li><strong>allowWidows</strong> - Default: 1,</li>
+<li><strong>allowOrphans</strong> - Default: 0,</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><strong>get_value</strong> - Default: None.</p>
+<blockquote>
+<p>This is the way you can easily customize the widget output. Be careful
+with this attribute, because each widget has its own set of arguments.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>truncate_overflow</strong> - Default: False</p>
+<blockquote>
+<p>When &#8220;True&#8221;, truncate the widget to use only its defined <strong>height</strong> and
+<strong>widget</strong> attributes, with no word wrap. This means that those attributes
+are required.</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>Events system</strong></p>
+<ul>
+<li><p class="first"><strong>before_print</strong> - Default: None</p>
+<blockquote>
+<p>Is called by <strong>do_before_print</strong> method, before generate the widget output.
+Expect arguments <strong>widget</strong> and <strong>generator</strong>.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>after_print</strong> - Default: None</p>
+<blockquote>
+<p>Is called by <strong>do_after_print</strong> method, after generate the widget output.
+Expect arguments <strong>widget</strong> and <strong>generator</strong>.</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>Rendering attributes</strong></p>
+<p>They are read-only attributes you can use at render time.</p>
+<ul class="simple">
+<li><strong>instance</strong> - current object being rendered</li>
+<li><strong>generator</strong> - generator instance</li>
+<li><strong>report</strong> - report instance this element is in</li>
+<li><strong>band</strong> - band this element is in</li>
+<li><strong>page</strong> - current page</li>
+</ul>
+</div>
+<div class="section" id="label">
+<h2>Label<a class="headerlink" href="#label" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="geraldo.widgets.Label">
+<em class="property">class </em><tt class="descclassname">geraldo.widgets.</tt><tt class="descname">Label</tt><a class="headerlink" href="#geraldo.widgets.Label" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Path: <strong>geraldo.Label</strong></p>
+<p>A label is just a simple text.</p>
+<p><strong>Example of use</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;Taxes we have paid&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Attributes</strong></p>
+<ul class="simple">
+<li><strong>height</strong> - Default: 0.5*cm</li>
+<li><strong>width</strong> - Default: 5*cm</li>
+<li><strong>left</strong> - Default: 0</li>
+<li><strong>top</strong> - Default: 0</li>
+<li><strong>visible</strong> - Default: True</li>
+<li><strong>style</strong> - Default: {}</li>
+</ul>
+<p><strong>get_value</strong> must have a &#8216;text&#8217; argument.</p>
+</div>
+<div class="section" id="objectvalue">
+<h2>ObjectValue<a class="headerlink" href="#objectvalue" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="geraldo.widgets.ObjectValue">
+<em class="property">class </em><tt class="descclassname">geraldo.widgets.</tt><tt class="descname">ObjectValue</tt><a class="headerlink" href="#geraldo.widgets.ObjectValue" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Path: <strong>geraldo.ObjectValue</strong></p>
+<p>This shows the value from a method, field or property from objects in the
+queryset.</p>
+<p>You can provide an action to show the object value or an aggregation function on
+it.</p>
+<p>You can also use the &#8216;display_format&#8217; attribute to set a friendly string formatting,
+with a mask or additional text.</p>
+<p>&#8216;get_value&#8217; lambda must have an &#8216;instance&#8217; argument.</p>
+<p><strong>Example of use</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Attributes</strong></p>
+<ul>
+<li><p class="first"><strong>height</strong> - Default: 0.5*cm</p>
+</li>
+<li><p class="first"><strong>width</strong> - Default: 5*cm</p>
+</li>
+<li><p class="first"><strong>left</strong> - Default: 0</p>
+</li>
+<li><p class="first"><strong>top</strong> - Default: 0</p>
+</li>
+<li><p class="first"><strong>visible</strong> - Default: True</p>
+</li>
+<li><p class="first"><strong>style</strong> - Default: {}</p>
+</li>
+<li><p class="first"><strong>attribute_name</strong> - Required</p>
+<blockquote>
+<p>You can provide here the object attribute name you want to show in this
+widget. You can provide a field, common attribute, property or just a method,
+since it has no required argument to provide.</p>
+<p>You can use paths of callable or properties instead of attribute name in
+this attribute.</p>
+<p>Examples:</p>
+<blockquote>
+<p>attribute_name = &#8216;name.upper&#8217;
+attribute_name = &#8216;customer.name&#8217;
+attribute_name = &#8216;customer.type.name.lower&#8217;</p>
+</blockquote>
+</blockquote>
+</li>
+<li><p class="first"><strong>action</strong> - Default: geraldo.FIELD_ACTION_VALUE</p>
+<blockquote>
+<p>The action is where you say what Geraldo will do with the value of this
+field. The default action is just to show its value and nothing more.</p>
+<p>But if you are using an ObjectValue in a summary or footer band of report,
+group or subreport, you will probably have a need for aggregation functions. This
+is why this attribute exists.</p>
+<p>Field actions are all available in the <strong>geraldo</strong> package to import from.
+The choices you can use in <strong>action</strong> attributes are:</p>
+<ul class="simple">
+<li>geraldo.FIELD_ACTION_VALUE</li>
+<li>geraldo.FIELD_ACTION_COUNT</li>
+<li>geraldo.FIELD_ACTION_AVG</li>
+<li>geraldo.FIELD_ACTION_MIN</li>
+<li>geraldo.FIELD_ACTION_MAX</li>
+<li>geraldo.FIELD_ACTION_SUM</li>
+<li>geraldo.FIELD_ACTION_DISTINCT_COUNT</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><strong>display_format</strong> - Default: &#8216;%s&#8217;</p>
+<blockquote>
+<p>Use simple string formatting on the field value. You could otherwise
+use <strong>get_value</strong> if you want something more powerful.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>get_text</strong> - Default: None.</p>
+<blockquote>
+<p>This &#8216;lambda&#8217; attribute is seemed to <strong>get_value</strong> because it works after
+value getting. It&#8217;s important to keep aware there are two moments from get
+a value from instance until to render it on the output generation:</p>
+<ul class="simple">
+<li><ol class="first arabic">
+<li>First the value is getted (and keeps being an unformatted value)</li>
+</ol>
+</li>
+<li><ol class="first arabic" start="2">
+<li>After this, the value is formatted (and transformed to unicode string)</li>
+</ol>
+</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><strong>stores_text_in_cache</strong> - Default: True</p>
+<blockquote>
+<p>This is a boolean attribute you can set to <strong>False</strong> if you to force the
+text getting to run twice: on renderizing and on generating. If you keep
+it as <strong>True</strong>, it will store the text on the first getting and use the
+stored text on next time(s) it be requested.</p>
+</blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="systemfield">
+<h2>SystemField<a class="headerlink" href="#systemfield" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="geraldo.widgets.SystemField">
+<em class="property">class </em><tt class="descclassname">geraldo.widgets.</tt><tt class="descname">SystemField</tt><a class="headerlink" href="#geraldo.widgets.SystemField" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Path: <strong>geraldo.SystemField</strong></p>
+<p>This shows system information, like the report title, current date/time, page
+number, page count, etc.</p>
+<p>&#8216;get_value&#8217; must have &#8216;expression&#8217; and &#8216;fields&#8217; arguments.</p>
+<p><strong>Example of use</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ObjectValue</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%(report_title)s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Attributes</strong></p>
+<ul>
+<li><p class="first"><strong>height</strong> - Default: 0.5*cm</p>
+</li>
+<li><p class="first"><strong>width</strong> - Default: 5*cm</p>
+</li>
+<li><p class="first"><strong>left</strong> - Default: 0</p>
+</li>
+<li><p class="first"><strong>top</strong> - Default: 0</p>
+</li>
+<li><p class="first"><strong>visible</strong> - Default: True</p>
+</li>
+<li><p class="first"><strong>style</strong> - Default: {}</p>
+</li>
+<li><p class="first"><strong>expression</strong> - Default: &#8216;%(report_title)s&#8217;</p>
+<blockquote>
+<p>This is a simple string you can write with basic macros to show system field
+values.</p>
+<p>The available macros are:</p>
+<ul>
+<li><p class="first">%(report_title)s</p>
+</li>
+<li><p class="first">%(page_number)s</p>
+</li>
+<li><p class="first">%(page_count)s</p>
+</li>
+<li><p class="first">%(report_author)s</p>
+</li>
+<li><p class="first">%(now:FORMAT)s - in replace of &#8216;FORMAT&#8217; you can use date formatting
+standard template filter date formatting. But if you are using your
+own <strong>Report.format_date</strong> method, this will use it.</p>
+<blockquote>
+<p>Examples:</p>
+<ul class="simple">
+<li>&#8216;%(now:%Y)&#8217; - shows the current year</li>
+<li>&#8216;%(now:%m/%d/%Y)&#8217; - shows something like &#8216;01/23/2009&#8217;</li>
+</ul>
+<p><strong>Note:</strong> this is changed now. Before this function used Django
+template filter &#8216;date&#8217; to format datetime, but once we were
+going to use two standards, this wouldn&#8217;t be nice. If you want
+to use Django&#8217;s template filter, you can override the method
+<strong>Report.format_date(date, expression)</strong> and use it.</p>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Widgets Reference</a><ul>
+<li><a class="reference external" href="#widget">Widget</a></li>
+<li><a class="reference external" href="#label">Label</a></li>
+<li><a class="reference external" href="#objectvalue">ObjectValue</a></li>
+<li><a class="reference external" href="#systemfield">SystemField</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="basic.html"
+                                  title="previous chapter">Basic Reference</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="graphics.html"
+                                  title="next chapter">Graphics Reference</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/widgets.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="graphics.html" title="Graphics Reference"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="basic.html" title="Basic Reference"
+             >previous</a> |</li>
+        <li><a href="index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2010, Marinho Brandao.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

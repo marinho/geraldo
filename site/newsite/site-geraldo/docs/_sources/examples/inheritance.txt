@@ -1,0 +1,91 @@
+Inheritance
+===========
+
+Inheritance is useful when you have two or more reports sharing common things.
+
+Example: two reports of Users, one with some fields and another with more fields
+and landscape page orientation::
+
+    import os
+    cur_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    from django.contrib.auth.models import User
+    
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib.units import cm
+    from reportlab.lib.enums import TA_CENTER, TA_RIGHT
+    
+    from geraldo import Report, ReportBand, Label, ObjectValue, SystemField,\
+        BAND_WIDTH, landscape
+    
+    class UsersReport(Report):
+        title = 'Users'
+    
+        class band_page_header(ReportBand):
+            height = 1.3*cm
+            elements = [
+                SystemField(expression='%(report_title)s', top=0.1*cm, left=0, width=BAND_WIDTH,
+                    style={'fontName': 'Helvetica-Bold', 'fontSize': 14, 'alignment': TA_CENTER}),
+                Label(text="ID", top=0.8*cm, left=0),
+                Label(text="Username", top=0.8*cm, left=3*cm),
+                Label(text="First name", top=0.8*cm, left=8*cm),
+                Label(text="Last name", top=0.8*cm, left=13*cm),
+                Label(text="Staff", top=0.8*cm, left=18*cm),
+            ]
+            borders = {'bottom': True}
+    
+        class band_page_footer(ReportBand):
+            height = 0.5*cm
+            elements = [
+                Label(text='Created with Geraldo Reports', top=0.1*cm),
+                SystemField(expression='Printed in %(now:%Y, %b %d)s at %(now:%H:%M)s', top=0.1*cm,
+                    width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
+            ]
+            borders = {'top': True}
+    
+        class band_detail(ReportBand):
+            height = 0.7*cm
+            elements = [
+                ObjectValue(attribute_name='id', top=0, left=0),
+                ObjectValue(attribute_name='username', top=0, left=3*cm, display_format='<font size=14 name=Helvetica>%s</font>'),
+                ObjectValue(attribute_name='first_name', top=0, left=8*cm),
+                ObjectValue(attribute_name='last_name', top=0, left=13*cm),
+                ObjectValue(attribute_name='is_staff', top=0, left=18*cm,
+                    get_value=lambda instance: instance.is_staff and 'Yes' or 'No'),
+            ]
+    
+    class LandscapeUsersReport(UsersReport):
+        """An inheritance report class"""
+    
+        title = 'Detailed list of users'
+        page_size = landscape(A4)
+    
+        class band_page_footer(ReportBand):
+            height = 0.5*cm
+            elements = [
+                Label(text='Created with Geraldo Reports - Landscape', top=0.1*cm),
+                SystemField(expression='Printed in %(now:%Y, %b %d)s at %(now:%H:%M)s', top=0.1*cm,
+                    width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
+            ]
+            borders = {'top': True}
+    
+        def __init__(self, *args, **kwargs):
+            super(LandscapeUsersReport, self).__init__(*args, **kwargs)
+    
+            self.band_page_header.elements += [
+                Label(text="Date joined", top=0.8*cm, left=21*cm),
+                ]
+    
+            self.band_detail.elements += [
+                ObjectValue(attribute_name='date_joined', top=0, left=21*cm),
+                ]
+
+Generating PDF...
+
+    >>> report = LandscapeUsersReport(queryset=queryset)
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/inheritance-landscape-report.pdf'))
+
+The Result
+
+- http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/inheritance-landscape-report.pdf
+

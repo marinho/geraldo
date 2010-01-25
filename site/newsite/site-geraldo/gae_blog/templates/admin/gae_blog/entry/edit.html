@@ -1,0 +1,29 @@
+{% extends "admin/gae_blog/base.html" %}
+
+{% block style %}{{ block.super }}
+<style type="text/css">
+    table.form {
+        width: 100%;
+    }
+
+    textarea {
+        width: 100%;
+    }
+</style>
+{% endblock style %}
+
+{% block content %}
+<h1>{% if object %}Editing{% else %}Adding{% endif %} Entry</h1>
+
+<form method="post">
+    <table class="form">
+        {{ form }}
+
+        <tr>
+            <th>&nbsp;</th>
+            <td><input type="submit" value="Save"/></td>
+        </tr>
+    </table>
+</form>
+{% endblock content %}
+

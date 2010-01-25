@@ -1,0 +1,36 @@
+<script type="text/javascript">
+    var alt = 'Aprendendo Django no Planeta Terra';
+    var id = 'background';
+
+    // Each 8 hours has a different background (morning, afternoon and evening)
+    var now = new Date();
+    var hours = now.getHours() - 3;
+    hours = hours < 0 ? 24 + hours : hours;
+    rand = parseInt(hours / 8) + 1;
+
+    if (rand != 1 && rand != 2 && rand != 3) {
+        rand = 1;
+    }
+
+    // Find the random image for today (basing on month day modulo 3)
+    //var rand = ( now.getHours() % 3 ) + 1;
+
+    if (screen.width <= 900) {
+        var larg = '800';
+    } else if (screen.width <= 1100) {
+        var larg = '1024';
+    } else if (screen.width <= 1400) {
+        var larg = '1280';
+    } else {
+        var larg = '1600';
+    }
+
+    var src = '{{ MEDIA_URL }}img/fundo_'+rand+'_'+larg+'.jpg';
+
+    document.write('<img src="'+src+'" alt="'+alt+'" id="'+id+'" class="noprint"/>');
+</script>
+    
+<noscript>
+    <img src="{{ MEDIA_URL }}img/fundo_1_1600.jpg" alt="Aprendendo Django no Planeta Terra" id="background" class="noprint"/>
+</noscript>
+

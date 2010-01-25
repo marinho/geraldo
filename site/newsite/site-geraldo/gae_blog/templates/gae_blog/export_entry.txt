@@ -1,0 +1,26 @@
+- title:
+{{ wiki.title }}
+
+- slug:
+{{ wiki.title }}
+
+- format:
+{{ wiki.format }}
+
+- published:
+{{ wiki.published }}
+
+- template:
+{{ wiki.template }}
+
+- show_in_rss:
+{{ wiki.show_in_rss }}
+
+- cacheable:
+{{ wiki.cacheable }}
+
+- description:
+{{ wiki.description }}
+
+- text:
+{{ wiki.text }}

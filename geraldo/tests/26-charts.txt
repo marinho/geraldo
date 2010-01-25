@@ -13,3 +13,8 @@ has already a good charting generation kit, the best choice is use it.
 There are 2D and 3D charts, and there are many types of them. Besides that, there
 are some different ways to get data to draw them.
 
+So, firstly we are going to list the chart types below:
+
+- Pie
+- Bar
+

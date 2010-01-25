@@ -1,0 +1,29 @@
+# Sphinx inventory version 1
+# Project: Geraldo Reports Documentation
+# Version: 0.4
+geraldo.graphics.Graphic class graphics.html
+geraldo.base.ReportBand class basic.html
+geraldo.graphics.Rect class graphics.html
+geraldo.utils.run_under_process function utils.html
+geraldo.widgets.ObjectValue class widgets.html
+geraldo.graphics.RoundRect class graphics.html
+geraldo.base.ReportGroup class basic.html
+geraldo.base.Report class basic.html
+geraldo.graphics.Arc class graphics.html
+geraldo.graphics.Circle class graphics.html
+geraldo.graphics.Fixed class graphics.html
+geraldo.widgets.Widget class widgets.html
+geraldo.barcodes.BarCode class barcodes.html
+geraldo.generators.TextGenerator class generators.html
+geraldo.utils.BAND_WIDTH data utils.html
+geraldo.graphics.Line class graphics.html
+geraldo.utils.DISABLE_MULTIPROCESSING data utils.html
+geraldo.utils.memoize function utils.html
+geraldo.graphics.Ellipse class graphics.html
+geraldo.generators.PDFGenerator class generators.html
+geraldo.utils.landscape function utils.html
+geraldo.base.DetailBand class basic.html
+geraldo.widgets.Label class widgets.html
+geraldo.graphics.Image class graphics.html
+geraldo.base.SubReport class basic.html
+geraldo.widgets.SystemField class widgets.html

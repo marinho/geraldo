@@ -1,0 +1,16 @@
+<div class="box wiki">
+    {% block h1 %}<h1>{{ wiki }}</h1>{% endblock %}
+
+    {% block text %}
+    <div class="text">
+        {% include "gae_wiki/render_wiki.html"%}
+    </div>
+    {% endblock text %}
+
+    {% if not wiki.disable_comments %}
+    <div class="fc_comments">
+        {% include "fc_comments.html" %}
+    </div>
+    {% endif %}
+</div>
+

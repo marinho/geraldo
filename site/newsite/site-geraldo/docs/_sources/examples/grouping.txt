@@ -1,0 +1,137 @@
+Grouping Bands
+==============
+
+This example uses grouping bands. We must have support for multiple
+groups in a report.
+
+Grouping is something like this:
+
+- Country
+
+ - City
+
+  - Soccer team
+
+As you can see above we have 2 groupings: by country and by city (under
+country).
+
+In this test we work with users as following:
+
+- If staff
+
+ - If superuser
+
+  - User
+
+See below::
+
+    import os
+    cur_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    from django.contrib.auth.models import User
+    
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib.units import cm
+    from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY
+    from reportlab.lib.colors import navy, yellow, red
+    
+    from geraldo import Report, ReportBand, Label, ObjectValue, SystemField,\
+        FIELD_ACTION_COUNT, FIELD_ACTION_SUM, BAND_WIDTH, Line, ReportGroup
+    
+    class GrouppingReport(Report):
+        title = 'Groupping demonstration'
+    
+        class band_summary(ReportBand):
+            height = 0.8*cm
+            elements = [
+                Label(text="Users count:", top=0.1*cm, left=0),
+                ObjectValue(attribute_name='id', top=0.1*cm, left=4*cm,\
+                    action=FIELD_ACTION_COUNT, display_format='%s users found'),
+            ]
+            borders = {'all': True}
+    
+        class band_page_header(ReportBand):
+            height = 1.3*cm
+            elements = [
+                SystemField(expression='%(report_title)s', top=0.1*cm, left=0, width=BAND_WIDTH,
+                    style={'fontName': 'Helvetica-Bold', 'fontSize': 14, 'alignment': TA_CENTER}),
+                Label(text="ID", top=0.8*cm, left=0),
+                Label(text="Username", top=0.8*cm, left=3*cm),
+                Label(text="First name", top=0.8*cm, left=8*cm),
+                Label(text="Superuser", top=0.8*cm, left=13*cm),
+                Label(text="Staff", top=0.8*cm, left=18*cm),
+            ]
+            borders = {'bottom': Line(stroke_color=red, stroke_width=3)}
+    
+        class band_page_footer(ReportBand):
+            height = 0.5*cm
+            elements = [
+                Label(text='Created with Geraldo Reports', top=0.1*cm),
+            ]
+            borders = {'top': Line(stroke_color=navy)}
+    
+        class band_detail(ReportBand):
+            height = 0.7*cm
+            elements = [
+                ObjectValue(attribute_name='id', top=0, left=1*cm),
+                ObjectValue(attribute_name='username', top=0, left=3*cm),
+                ObjectValue(attribute_name='first_name', top=0, left=8*cm),
+                ObjectValue(attribute_name='is_superuser', top=0, left=13*cm,
+                    get_value=lambda instance: instance.is_superuser and 'Yes' or 'No'),
+                ObjectValue(attribute_name='is_staff', top=0, left=18*cm,
+                    get_value=lambda instance: instance.is_staff and 'Yes' or 'No'),
+            ]
+    
+        groups = [
+            ReportGroup(attribute_name='is_superuser', 
+                band_header=ReportBand(
+                    height=0.7*cm,
+                    elements=[
+                        ObjectValue(attribute_name='is_superuser', left=0, top=0.1*cm,
+                            get_value=lambda instance: 'Superuser: ' + (instance.is_superuser and 'Yes' or 'No'),
+                            style={'fontName': 'Helvetica-Bold', 'fontSize': 12})
+                    ],
+                    borders={'bottom': True},
+                ),
+                band_footer=ReportBand(
+                    height=0.7*cm,
+                    elements=[
+                        ObjectValue(attribute_name='id', action=FIELD_ACTION_COUNT,
+                            display_format='%s superusers', left=0*cm, top=0.1*cm),
+                        ObjectValue(attribute_name='id', action=FIELD_ACTION_SUM,
+                            display_format='%s is the sum of IDs above', left=4*cm, top=0.1*cm),
+                    ],
+                    borders={'top': True},
+                ),
+            ),
+            ReportGroup(attribute_name='is_staff', 
+                band_header=ReportBand(
+                    height=0.7*cm,
+                    elements=[
+                        ObjectValue(attribute_name='is_staff', left=0.5*cm, top=0.1*cm,
+                            get_value=lambda instance: 'Staff: ' + (instance.is_staff and 'Yes' or 'No'))
+                    ],
+                    borders={'bottom': True},
+                ),
+                band_footer=ReportBand(
+                    height=0.7*cm,
+                    elements=[
+                        ObjectValue(attribute_name='id', action=FIELD_ACTION_COUNT,
+                            display_format='%s staffs', left=0.5*cm, top=0.1*cm)
+                    ],
+                    borders={'top': True},
+                ),
+            ),
+        ]
+
+Generating PDF...
+
+    >>> queryset = User.objects.order_by('is_superuser','is_staff','id')
+    >>> report = GrouppingReport(queryset=queryset)
+    >>> from geraldo.generators import PDFGenerator
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/groupping-report.pdf'))
+
+The Result
+
+- http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/groupping-report.pdf
+

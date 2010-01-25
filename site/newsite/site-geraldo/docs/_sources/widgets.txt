@@ -1,0 +1,254 @@
+Widgets Reference
+=================
+
+Widgets are report elements to show text values on report canvas.
+
+All widget classes can be initialized with their attributes as class arguments.
+
+Widget
+------
+
+.. currentmodule:: geraldo.widgets
+.. class:: Widget
+
+Path: **geraldo.widgets.Widget**
+
+Base class for reports widgets, you should use it only to inherit and make your
+own widgets, otherwise you shouldn't use it directly.
+
+**Attributes**
+
+- **name** - Default: None
+- **height** - Default: 0.5*cm
+- **width** - Default: 5*cm
+- **left** - Default: 0
+- **top** - Default: 0
+- **visible** - Default: True
+
+    Set to **False** if you want to make it not visible.
+
+- **style** - Default: {}
+
+    This is a dictionary that uses the powerful ReportLab **ParagraphStyle**
+    class to set style settings for this widget.
+
+    Default keys are:
+
+    - **fontName** - Default: 'Times-Roman',
+    - **fontSize** - Default: 10,
+    - **leading** - Default: 12,
+    - **leftIndent** - Default: 0,
+    - **rightIndent** - Default: 0,
+    - **firstLineIndent** - Default: 0,
+    - **alignment** - Default: TA_LEFT,
+    - **spaceBefore** - Default: 0,
+    - **spaceAfter** - Default: 0,
+    - **bulletFontName** - Default: 'Times-Roman',
+    - **bulletFontSize** - Default: 10,
+    - **bulletIndent** - Default: 0,
+    - **textColor** - Default:  black,
+    - **backColor** - Default: None,
+    - **wordWrap** - Default: None,
+    - **borderWidth** - Default: 0,
+    - **borderPadding** - Default: 0,
+    - **borderColor** - Default: None,
+    - **borderRadius** - Default: None,
+    - **allowWidows** - Default: 1,
+    - **allowOrphans** - Default: 0,
+
+- **get_value** - Default: None.
+
+    This is the way you can easily customize the widget output. Be careful
+    with this attribute, because each widget has its own set of arguments.
+
+- **truncate_overflow** - Default: False
+
+    When "True", truncate the widget to use only its defined **height** and
+    **widget** attributes, with no word wrap. This means that those attributes
+    are required.
+
+**Events system**
+
+- **before_print** - Default: None
+
+    Is called by **do_before_print** method, before generate the widget output.
+    Expect arguments **widget** and **generator**.
+
+- **after_print** - Default: None
+
+    Is called by **do_after_print** method, after generate the widget output.
+    Expect arguments **widget** and **generator**.
+
+**Rendering attributes**
+
+They are read-only attributes you can use at render time.
+
+- **instance** - current object being rendered
+- **generator** - generator instance
+- **report** - report instance this element is in
+- **band** - band this element is in
+- **page** - current page
+
+Label
+-----
+
+.. currentmodule:: geraldo.widgets
+.. class:: Label
+
+Path: **geraldo.Label**
+
+A label is just a simple text.
+
+**Example of use**
+
+    >>> Label(text='Taxes we have paid', left=1*cm, top=0.5*cm, width=10*cm, height=0.5*cm)
+
+**Attributes**
+
+- **height** - Default: 0.5*cm
+- **width** - Default: 5*cm
+- **left** - Default: 0
+- **top** - Default: 0
+- **visible** - Default: True
+- **style** - Default: {}
+
+**get_value** must have a 'text' argument.
+
+ObjectValue
+-----------
+
+.. currentmodule:: geraldo.widgets
+.. class:: ObjectValue
+
+Path: **geraldo.ObjectValue**
+
+This shows the value from a method, field or property from objects in the
+queryset.
+    
+You can provide an action to show the object value or an aggregation function on
+it.
+    
+You can also use the 'display_format' attribute to set a friendly string formatting,
+with a mask or additional text.
+
+'get_value' lambda must have an 'instance' argument.
+
+**Example of use**
+
+    >>> ObjectValue(attribute_name='name', left=1*cm, top=0.5*cm, width=10*cm, height=0.5*cm)
+
+**Attributes**
+
+- **height** - Default: 0.5*cm
+- **width** - Default: 5*cm
+- **left** - Default: 0
+- **top** - Default: 0
+- **visible** - Default: True
+- **style** - Default: {}
+- **attribute_name** - Required
+
+    You can provide here the object attribute name you want to show in this
+    widget. You can provide a field, common attribute, property or just a method,
+    since it has no required argument to provide.
+
+    You can use paths of callable or properties instead of attribute name in
+    this attribute.
+
+    Examples:
+
+        attribute_name = 'name.upper'
+        attribute_name = 'customer.name'
+        attribute_name = 'customer.type.name.lower'
+
+- **action** - Default: geraldo.FIELD_ACTION_VALUE
+
+    The action is where you say what Geraldo will do with the value of this
+    field. The default action is just to show its value and nothing more.
+    
+    But if you are using an ObjectValue in a summary or footer band of report,
+    group or subreport, you will probably have a need for aggregation functions. This
+    is why this attribute exists.
+    
+    Field actions are all available in the **geraldo** package to import from.
+    The choices you can use in **action** attributes are:
+    
+    - geraldo.FIELD_ACTION_VALUE
+    - geraldo.FIELD_ACTION_COUNT
+    - geraldo.FIELD_ACTION_AVG
+    - geraldo.FIELD_ACTION_MIN
+    - geraldo.FIELD_ACTION_MAX
+    - geraldo.FIELD_ACTION_SUM
+    - geraldo.FIELD_ACTION_DISTINCT_COUNT
+
+- **display_format** - Default: '%s'
+
+    Use simple string formatting on the field value. You could otherwise
+    use **get_value** if you want something more powerful.
+
+- **get_text** - Default: None.
+
+    This 'lambda' attribute is seemed to **get_value** because it works after
+    value getting. It's important to keep aware there are two moments from get
+    a value from instance until to render it on the output generation:
+    
+    - 1) First the value is getted (and keeps being an unformatted value)
+    - 2) After this, the value is formatted (and transformed to unicode string)
+
+- **stores_text_in_cache** - Default: True
+
+    This is a boolean attribute you can set to **False** if you to force the
+    text getting to run twice: on renderizing and on generating. If you keep
+    it as **True**, it will store the text on the first getting and use the
+    stored text on next time(s) it be requested.
+
+SystemField
+-----------
+
+.. currentmodule:: geraldo.widgets
+.. class:: SystemField
+
+Path: **geraldo.SystemField**
+
+This shows system information, like the report title, current date/time, page
+number, page count, etc.
+    
+'get_value' must have 'expression' and 'fields' arguments.
+
+**Example of use**
+
+    >>> ObjectValue(expression='%(report_title)s', left=1*cm, top=0.5*cm, width=10*cm, height=0.5*cm)
+
+**Attributes**
+
+- **height** - Default: 0.5*cm
+- **width** - Default: 5*cm
+- **left** - Default: 0
+- **top** - Default: 0
+- **visible** - Default: True
+- **style** - Default: {}
+- **expression** - Default: '%(report_title)s'
+
+    This is a simple string you can write with basic macros to show system field
+    values.
+    
+    The available macros are:
+
+    - %(report_title)s
+    - %(page_number)s
+    - %(page_count)s
+    - %(report_author)s
+    - %(now:FORMAT)s - in replace of 'FORMAT' you can use date formatting
+      standard template filter date formatting. But if you are using your
+      own **Report.format_date** method, this will use it.
+
+        Examples:
+        
+        - '%(now:%Y)' - shows the current year
+        - '%(now:%m/%d/%Y)' - shows something like '01/23/2009'
+
+        **Note:** this is changed now. Before this function used Django
+        template filter 'date' to format datetime, but once we were
+        going to use two standards, this wouldn't be nice. If you want 
+        to use Django's template filter, you can override the method
+        **Report.format_date(date, expression)** and use it.
+

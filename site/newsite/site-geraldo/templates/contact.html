@@ -1,0 +1,36 @@
+{% extends "base_site.html" %}
+
+{% block style %}{{ block.super }}
+<style type="text/css">
+    .contato {
+        text-align: left;
+    }
+
+    .contato img {
+        float: right;
+    }
+</style>
+{% endblock style %}
+
+{% block _content %}{{ block.super }}
+<div class="box especial contato inner">
+
+<h1>Send us a contact message</h1>
+
+<p>
+Send your message and we will try to respond as soon as possible...
+</p>
+
+<form method="post">
+    <table class="form">
+        {{ form }}
+
+        <tr>
+            <th>&nbsp;</th>
+            <td><input type="submit" value="Submit"/></td>
+        </tr>
+    </table>
+</form>
+
+</div>
+{% endblock _content %}

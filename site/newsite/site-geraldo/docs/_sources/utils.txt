@@ -1,0 +1,83 @@
+Utilities Reference
+===================
+
+landscape
+---------
+
+.. currentmodule:: geraldo.utils
+.. function:: landscape
+
+Path: **geraldo.landscape**
+
+Page sizes are tuples with 2 nodes: first with **width** and second width
+**height**.
+
+**landscape** is a helper function to invert this tuple.
+
+BAND_WIDTH
+----------
+
+.. currentmodule:: geraldo.utils
+.. data:: BAND_WIDTH
+
+Path: **geraldo.BAND_WIDTH**
+
+Once you use this constant in a widget or graphic width, it will assume its
+band width automatically.
+
+memoize
+-------
+
+.. currentmodule:: geraldo.utils
+.. function:: memoize
+
+Path: **geraldo.utils.memoize**
+
+This is a decorator used internally by some functions to store their result
+values like a cache. When the same function is called again with same
+arguments values, the stored value is returned, instead of run its code again.
+
+You can use it for your own code, just wrapping your function under the
+decorator.
+
+Example of use:
+
+    >>> from geraldo.utils import memoize
+    >>> @memoize
+    ... def calc_sum(val1, val2):
+    ...     return val1 + val2
+
+run_under_process
+-----------------
+
+.. currentmodule:: geraldo.utils
+.. function:: run_under_process
+
+Path: **geraldo.utils.run_under_process**
+
+This is a decorator supplied by Geraldo to help developers to run functions
+under a new process instead of the main thread.
+
+Geraldo uses it in method **Report.generate_under_process_by**, to run the
+report generation under other process, but you can use it on your own code,
+if you don't want/can't use that method.
+
+Example of use:
+
+    >>> from geraldo.generators import PDFGenerator
+    >>> from geraldo.utils import run_under_process
+    >>> @run_under_process
+    ... def generate_by_report(report, filename):
+    ...     report.generate_by(PDFGenerator, filename=filename)
+
+DISABLE_MULTIPROCESSING
+-----------------------
+
+.. currentmodule:: geraldo.utils
+.. data:: DISABLE_MULTIPROCESSING
+
+Path: **geraldo.DISABLE_MULTIPROCESSING**
+
+A short way to disable all use of multiprocessing on Geraldo, at all. This
+is useful when you are debugging your reports.
+

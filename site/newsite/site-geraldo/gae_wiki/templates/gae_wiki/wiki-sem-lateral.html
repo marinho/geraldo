@@ -1,0 +1,11 @@
+{% extends "gae_wiki/base.html" %}
+
+{% block title %}{{ wiki }} :: {{ block.super }}{% endblock %}
+
+{% block _content %}
+<div class="inner">
+    {% include "gae_wiki/box_wiki.html" %}
+</div>
+{% endblock _content %}
+
+

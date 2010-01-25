@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Overview &mdash; Geraldo Reports Documentation v0.4-alpha-5 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.4-alpha-5',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Geraldo Reports Documentation v0.4-alpha-5 documentation" href="" />
+    <link rel="next" title="Installing" href="installing.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="installing.html" title="Installing"
+             accesskey="N">next</a> |</li>
+        <li><a href="">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
+<p>Geraldo is a reports engine with its own API, created in Python language to
+output PDFs and other formats for complex reports.</p>
+<p>Its workflow is the following:</p>
+<ol class="arabic simple">
+<li>You declare a Report class with your report structure and definitions;</li>
+<li>Instantiate your Report class, providing a queryset with a list of objects;</li>
+<li>Call report&#8217;s &#8216;generate_by&#8217; method, providing the generator class and
+filename output (can be a filename or file output). It will generate a file
+in hard disk or in memory;</li>
+<li>Do what you want with the output: you can return it in an HttpResponse, keep it
+in a file, etc.</li>
+</ol>
+<div class="section" id="content">
+<h2>Content<a class="headerlink" href="#content" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="installing.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference external" href="tutorial-1.html">Tutorial using Django</a></li>
+<li class="toctree-l1"><a class="reference external" href="tutorial-2.html">Tutorial using Web2Py</a></li>
+<li class="toctree-l1"><a class="reference external" href="basic.html">Basic Reference</a></li>
+<li class="toctree-l1"><a class="reference external" href="widgets.html">Widgets Reference</a></li>
+<li class="toctree-l1"><a class="reference external" href="graphics.html">Graphics Reference</a></li>
+<li class="toctree-l1"><a class="reference external" href="barcodes.html">Barcodes Reference</a></li>
+<li class="toctree-l1"><a class="reference external" href="generators.html">Generators Reference</a></li>
+<li class="toctree-l1"><a class="reference external" href="caching.html">Caching</a></li>
+<li class="toctree-l1"><a class="reference external" href="utils.html">Utilities Reference</a></li>
+<li class="toctree-l1"><a class="reference external" href="examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference external" href="backward-incompatible-changes.html">Backward Incompatible Changes</a></li>
+<li class="toctree-l1"><a class="reference external" href="next-steps.html">Next Steps</a></li>
+<li class="toctree-l1"><a class="reference external" href="authors.html">Authors</a></li>
+</ul>
+</div>
+<div class="section" id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<p>Geraldo does most of what any reports engine does. It provides the following features:</p>
+<ul class="simple">
+<li>A detail band, the report driver</li>
+<li>Page header, Page footer, Report begin and Report summary bands</li>
+<li>Grouping in multiple levels</li>
+<li>SubReports to print childs</li>
+<li>Multi-formats compatible in output (even if we only have PDF for a while)</li>
+<li>Child bands, to attach helper bands to other ones</li>
+<li>Support Django or any other Python framework/application</li>
+<li>Graphic elements (including images and shapes)</li>
+<li>System fields (to show report title, page numbers, current date/time, etc.)</li>
+<li>Reports composition (you can reuse your bands for other reports)</li>
+<li>Reports inheritance (you can use the same structure for a lot of reports)</li>
+<li>A powerful stylizing support (colors, fonts, sizes, etc.)</li>
+<li>Different page sizes</li>
+<li>Flexibility to be easily customized</li>
+<li>Aggregation functions</li>
+<li>Hiding/showing bands and elements</li>
+<li>Events system</li>
+</ul>
+</div>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<p>Geraldo is fully dependent on ReportLab, not only because of its PDF generation,
+but also its units and styles library. We have tested with ReportLab version 2.1</p>
+<p>Geraldo is not Django-dependent, but it can work as a Django pluggable
+application.</p>
+</div>
+<div class="section" id="a-very-little-demo-of-how-geraldo-works">
+<h2>A very little demo of how Geraldo works<a class="headerlink" href="#a-very-little-demo-of-how-geraldo-works" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span>
+<span class="kn">from</span> <span class="nn">geraldo.generators</span> <span class="kn">import</span> <span class="n">PDFGenerator</span>
+
+<span class="k">class</span> <span class="nc">MyReport</span><span class="p">(</span><span class="n">geraldo</span><span class="o">.</span><span class="n">Report</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Cars I have&quot;</span>
+
+<span class="n">objects_list</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="c"># If you are using Django</span>
+
+<span class="n">report</span> <span class="o">=</span> <span class="n">MyReport</span><span class="p">(</span><span class="n">queryset</span><span class="o">=</span><span class="n">objects_list</span><span class="p">)</span>
+
+<span class="n">report</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s">&#39;cars_list.pdf&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This code above will output your report, driven by the queryset &#8216;objects_list&#8217;,
+into file &#8216;cars_list.pdf&#8217;.</p>
+<p>Now, an example in a Django view:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+<span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span>
+<span class="kn">from</span> <span class="nn">geraldo.generators</span> <span class="kn">import</span> <span class="n">PDFGenerator</span>
+
+<span class="k">class</span> <span class="nc">MyReport</span><span class="p">(</span><span class="n">geraldo</span><span class="o">.</span><span class="n">Report</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Cars I have&quot;</span>
+
+<span class="k">def</span> <span class="nf">my_view</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">mimetype</span><span class="o">=</span><span class="s">&#39;application/pdf&#39;</span><span class="p">)</span>
+
+    <span class="n">objects_list</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="c"># If you are using Django</span>
+    <span class="n">report</span> <span class="o">=</span> <span class="n">MyReport</span><span class="p">(</span><span class="n">queryset</span><span class="o">=</span><span class="n">objects_list</span><span class="p">)</span>
+
+    <span class="n">report</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">response</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">response</span>
+</pre></div>
+</div>
+<p>As you can see, now returned the PDF output to HttpResponse, instead of a file.</p>
+</div>
+<div class="section" id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p>Geraldo is under <strong>Lesser Gnu Public License</strong>, take a look on the following URL
+to read it:</p>
+<blockquote>
+<a class="reference external" href="http://www.gnu.org/copyleft/lesser.html">http://www.gnu.org/copyleft/lesser.html</a></blockquote>
+</div>
+<div class="section" id="authors">
+<h2>Authors<a class="headerlink" href="#authors" title="Permalink to this headline">¶</a></h2>
+<p>Geraldo has been created by <strong>Marinho Brandao</strong> a brazilian Django and Python
+enthusiast.</p>
+<p>Home page: <strong>http://marinhobrandao.com/</strong></p>
+<p>E-mail: <strong>marinho at gmail dot com</strong></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Overview</a><ul>
+<li><a class="reference external" href="#content">Content</a><ul>
+</ul>
+</li>
+<li><a class="reference external" href="#features">Features</a></li>
+<li><a class="reference external" href="#dependencies">Dependencies</a></li>
+<li><a class="reference external" href="#a-very-little-demo-of-how-geraldo-works">A very little demo of how Geraldo works</a></li>
+<li><a class="reference external" href="#license">License</a></li>
+<li><a class="reference external" href="#authors">Authors</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Next topic</h4>
+            <p class="topless"><a href="installing.html"
+                                  title="next chapter">Installing</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/index.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="installing.html" title="Installing"
+             >next</a> |</li>
+        <li><a href="">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2010, Marinho Brandao.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

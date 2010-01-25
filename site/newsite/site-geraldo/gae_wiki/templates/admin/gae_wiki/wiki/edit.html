@@ -1,0 +1,17 @@
+{% extends "admin/gae_wiki/base.html" %}
+
+{% block content %}
+<h1>{% if object %}Editing{% else %}Adding{% endif %} Wiki</h1>
+
+<form method="post">
+    <table class="form">
+        {{ form }}
+
+        <tr>
+            <th>&nbsp;</th>
+            <td><input type="submit" value="Save"/></td>
+        </tr>
+    </table>
+</form>
+{% endblock content %}
+

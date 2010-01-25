@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Two Reports At Once &mdash; Geraldo Reports Documentation v0.4-alpha-5 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4-alpha-5',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Geraldo Reports Documentation v0.4-alpha-5 documentation" href="../index.html" />
+    <link rel="up" title="Examples" href="index.html" />
+    <link rel="next" title="Generating under new Process" href="in-multiprocessing.html" />
+    <link rel="prev" title="Auto expanding band height" href="auto-expand-bands.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="in-multiprocessing.html" title="Generating under new Process"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="auto-expand-bands.html" title="Auto expanding band height"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="two-reports-at-once">
+<h1>Two Reports At Once<a class="headerlink" href="#two-reports-at-once" title="Permalink to this headline">¶</a></h1>
+<p>Sometimes we need to generate two or more reports in the same file. This
+example uses the new attributes &#8216;canvas&#8217; and &#8216;return_canvas&#8217; from PDFGenerator
+to do that:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
+<span class="n">cur_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span>
+
+<span class="kn">from</span> <span class="nn">reportlab.lib.enums</span> <span class="kn">import</span> <span class="n">TA_CENTER</span><span class="p">,</span> <span class="n">TA_RIGHT</span>
+
+<span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span><span class="p">,</span> <span class="n">ReportBand</span><span class="p">,</span> <span class="n">SubReport</span><span class="p">,</span> <span class="n">ReportGroup</span>
+<span class="kn">from</span> <span class="nn">geraldo.base</span> <span class="kn">import</span> <span class="n">Element</span><span class="p">,</span> <span class="n">cm</span>
+<span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">GeraldoObject</span><span class="p">,</span> <span class="n">ObjectNotFound</span><span class="p">,</span> <span class="n">ManyObjectsFound</span>
+<span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">ObjectValue</span><span class="p">,</span> <span class="n">SystemField</span><span class="p">,</span> <span class="n">Label</span><span class="p">,</span> <span class="n">Line</span><span class="p">,</span>\
+    <span class="n">FIELD_ACTION_COUNT</span><span class="p">,</span> <span class="n">BAND_WIDTH</span>
+
+<span class="k">class</span> <span class="nc">CitiesReport</span><span class="p">(</span><span class="n">Report</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;Cities&#39;</span>
+
+    <span class="k">class</span> <span class="nc">band_page_header</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mf">1.2</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;the-page-header-band&#39;</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">SystemField</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%(report_title)s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">BAND_WIDTH</span><span class="p">,</span>
+                <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;fontName&#39;</span><span class="p">:</span> <span class="s">&#39;Helvetica-Bold&#39;</span><span class="p">,</span> <span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s">&#39;alignment&#39;</span><span class="p">:</span> <span class="n">TA_CENTER</span><span class="p">}),</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;Name&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;fontName&#39;</span><span class="p">:</span> <span class="s">&#39;Helvetica-Bold&#39;</span><span class="p">}),</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;Country&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">10</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;fontName&#39;</span><span class="p">:</span> <span class="s">&#39;Helvetica-Bold&#39;</span><span class="p">}),</span>
+        <span class="p">]</span>
+        <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;bottom&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+
+    <span class="k">class</span> <span class="nc">band_detail</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;city&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;country&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">10</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+        <span class="p">]</span>
+
+<span class="k">class</span> <span class="nc">PeopleReport</span><span class="p">(</span><span class="n">Report</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;People&#39;</span>
+
+    <span class="k">class</span> <span class="nc">band_page_header</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mf">1.2</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">SystemField</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%(report_title)s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">BAND_WIDTH</span><span class="p">,</span>
+                <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;fontName&#39;</span><span class="p">:</span> <span class="s">&#39;Helvetica-Bold&#39;</span><span class="p">,</span> <span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s">&#39;alignment&#39;</span><span class="p">:</span> <span class="n">TA_CENTER</span><span class="p">}),</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;Name&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;fontName&#39;</span><span class="p">:</span> <span class="s">&#39;Helvetica-Bold&#39;</span><span class="p">}),</span>
+        <span class="p">]</span>
+        <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;bottom&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+
+    <span class="k">class</span> <span class="nc">band_detail</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mf">0.6</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;capitalize&#39;</span><span class="p">),</span>
+        <span class="p">]</span>
+</pre></div>
+</div>
+<p>Objects list</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cities_list</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s">&#39;city&#39;</span><span class="p">:</span> <span class="s">&#39;New York&#39;</span><span class="p">,</span> <span class="s">&#39;country&#39;</span><span class="p">:</span> <span class="s">&#39;USA&#39;</span><span class="p">},</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s">&#39;city&#39;</span><span class="p">:</span> <span class="s">&#39;London&#39;</span><span class="p">,</span> <span class="s">&#39;country&#39;</span><span class="p">:</span> <span class="s">&#39;UK&#39;</span><span class="p">},</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s">&#39;city&#39;</span><span class="p">:</span> <span class="s">&#39;Paris&#39;</span><span class="p">,</span> <span class="s">&#39;country&#39;</span><span class="p">:</span> <span class="s">&#39;FR&#39;</span><span class="p">},</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s">&#39;city&#39;</span><span class="p">:</span> <span class="s">&#39;Moscow&#39;</span><span class="p">,</span> <span class="s">&#39;country&#39;</span><span class="p">:</span> <span class="s">&#39;RU&#39;</span><span class="p">},</span>
+<span class="gp">... </span><span class="p">]</span>
+</pre></div>
+</div>
+<p>People list</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">people_list</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Mary&#39;</span><span class="p">,</span><span class="s">&#39;John&#39;</span><span class="p">,</span><span class="s">&#39;Joseph&#39;</span><span class="p">,</span><span class="s">&#39;Stephen&#39;</span><span class="p">,</span><span class="s">&#39;William&#39;</span><span class="p">,</span><span class="s">&#39;Peter&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s">&#39;Mauri&#39;</span><span class="p">,</span><span class="s">&#39;Jaquez&#39;</span><span class="p">,</span><span class="s">&#39;Francois&#39;</span><span class="p">,</span><span class="s">&#39;Putin&#39;</span><span class="p">,</span><span class="s">&#39;Ivan&#39;</span><span class="p">,</span><span class="s">&#39;Yuri&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Report instances</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">report_cities</span> <span class="o">=</span> <span class="n">CitiesReport</span><span class="p">(</span><span class="n">queryset</span><span class="o">=</span><span class="n">cities_list</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report_people</span> <span class="o">=</span> <span class="n">PeopleReport</span><span class="p">(</span><span class="n">queryset</span><span class="o">=</span><span class="n">people_list</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>PDF generation</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">geraldo.generators</span> <span class="kn">import</span> <span class="n">PDFGenerator</span>
+</pre></div>
+</div>
+<p>Because of a requirement from ReportLab, you must inform the file name when
+creating the Canvas (in the first report), even if you aren&#8217;t going to save
+it really.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">canvas</span> <span class="o">=</span> <span class="n">report_cities</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">filename</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cur_dir</span><span class="p">,</span> <span class="s">&#39;output/two-reports-at-once.pdf&#39;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">return_canvas</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="p">)</span>
+</pre></div>
+</div>
+<p>Here is the magic</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">report_people</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">canvas</span><span class="o">=</span><span class="n">canvas</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="p">)</span>
+</pre></div>
+</div>
+<p>Text generation</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">geraldo.generators</span> <span class="kn">import</span> <span class="n">TextGenerator</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">text</span> <span class="o">=</span> <span class="n">report_cities</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">TextGenerator</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">text</span> <span class="o">+=</span> <span class="n">report_people</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">TextGenerator</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fp</span> <span class="o">=</span> <span class="nb">file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cur_dir</span><span class="p">,</span> <span class="s">&#39;output/two-reports-at-once.txt&#39;</span><span class="p">),</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The Result</p>
+<ul class="simple">
+<li><a class="reference external" href="http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/two-reports-at-once.pdf">http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/two-reports-at-once.pdf</a></li>
+<li><a class="reference external" href="http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/two-reports-at-once.txt">http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/two-reports-at-once.txt</a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="auto-expand-bands.html"
+                                  title="previous chapter">Auto expanding band height</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="in-multiprocessing.html"
+                                  title="next chapter">Generating under new Process</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/examples/two-reports-at-once.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="in-multiprocessing.html" title="Generating under new Process"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="auto-expand-bands.html" title="Auto expanding band height"
+             >previous</a> |</li>
+        <li><a href="../index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2010, Marinho Brandao.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

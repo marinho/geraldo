@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Next Steps &mdash; Geraldo Reports Documentation v0.4-alpha-5 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.4-alpha-5',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Geraldo Reports Documentation v0.4-alpha-5 documentation" href="index.html" />
+    <link rel="next" title="Authors" href="authors.html" />
+    <link rel="prev" title="Backward Incompatible Changes" href="backward-incompatible-changes.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="authors.html" title="Authors"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="backward-incompatible-changes.html" title="Backward Incompatible Changes"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="next-steps">
+<h1>Next Steps<a class="headerlink" href="#next-steps" title="Permalink to this headline">¶</a></h1>
+<p>Geraldo Reports is an ambitious project. We want to provide much more than we have done so far.
+See below the main goals we have to do in the future (and maybe you could help
+us to reach them early)</p>
+<div class="section" id="engine-api">
+<h2>Engine API<a class="headerlink" href="#engine-api" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><strong>Table band</strong> - a band to make it easy to create lists just using tables instead
+of detail band and lines. Table band must be an alternative to detail band</li>
+<li>Support canvas draw</li>
+</ul>
+</div>
+<div class="section" id="generators">
+<h2>Generators<a class="headerlink" href="#generators" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Generate in ODF formats (ODT and ODS)</li>
+<li>Generate in HTML</li>
+<li>Export/import structure to/from an XML format</li>
+</ul>
+</div>
+<div class="section" id="third-party-tools">
+<h2>Third-party tools<a class="headerlink" href="#third-party-tools" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Have a GUI tool to design reports, if possible to be used in a web browser</li>
+<li>Have a way to create and print reports using a server, with no low level coding</li>
+<li><strong>Django pluggable application to create fast reports</strong> (currently in development)</li>
+<li>Have a preview component for GUI applications (GTK/Qt/wxPython)</li>
+</ul>
+</div>
+<div class="section" id="other-features">
+<h2>Other features<a class="headerlink" href="#other-features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><strong>Charts</strong> generation in a easier way</li>
+<li><strong>Cross-reference</strong> table</li>
+<li><strong>Barcodes</strong> generation</li>
+<li>Maybe a better support to images</li>
+<li><strong>Map/Reduce generating</strong> - split queryset, generate parts in parallel and combine them
+after all - on one of both ways: local or distributed.</li>
+<li><strong>Incremental/asynchronous generating</strong> - just take advantage of common part and update
+the changed other part, specially useful when the order is datetime-based.</li>
+<li><strong>Caching generated reports</strong> - (optionally) between <strong>render_pages</strong> and <strong>generate_pages</strong>
+methods, make a hash key of rendered objects and find it on a cache (memcache or
+file system), if does&#8217;t find, generate and store it.</li>
+<li><strong>Drill down reports</strong> - a link from a report &#8220;A&#8221; to a report &#8220;B&#8221;</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Next Steps</a><ul>
+<li><a class="reference external" href="#engine-api">Engine API</a></li>
+<li><a class="reference external" href="#generators">Generators</a></li>
+<li><a class="reference external" href="#third-party-tools">Third-party tools</a></li>
+<li><a class="reference external" href="#other-features">Other features</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="backward-incompatible-changes.html"
+                                  title="previous chapter">Backward Incompatible Changes</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="authors.html"
+                                  title="next chapter">Authors</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/next-steps.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="authors.html" title="Authors"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="backward-incompatible-changes.html" title="Backward Incompatible Changes"
+             >previous</a> |</li>
+        <li><a href="index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2010, Marinho Brandao.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

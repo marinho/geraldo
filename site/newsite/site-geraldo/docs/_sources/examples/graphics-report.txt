@@ -1,0 +1,75 @@
+A report with all kinds of graphic elements
+===========================================
+
+This is just a report with every graphic element::
+
+    import os
+    cur_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib.units import cm
+    from reportlab.lib.colors import navy, yellow, red, purple, orange,\
+        green, white, blue
+    from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY
+    
+    from geraldo import Report, ReportBand, RoundRect, Rect, Line, Circle,\
+        Arc, Ellipse, SystemField, Label, BAND_WIDTH, Image
+    
+    class GraphicsReport(Report):
+        title = 'Graphics demonstration'
+        print_if_empty = True
+    
+        class band_begin(ReportBand):
+            height = 15*cm
+            elements = [
+                RoundRect(left=0.2*cm, top=0.5*cm, width=3*cm, height=2*cm,
+                    radius=10, stroke_color=purple),
+                Rect(left=4*cm, top=1.0*cm, width=3*cm, height=2*cm,
+                    fill=True, stroke=False, fill_color=orange),
+                Line(left=8*cm, top=3*cm, right=9*cm, bottom=0),
+                Line(left=9*cm, top=0, right=10*cm, bottom=3*cm),
+                Line(left=8.5*cm, top=3*cm, right=9*cm, bottom=6*cm),
+                Line(left=9*cm, top=6*cm, right=10*cm, bottom=3*cm),
+                Circle(left_center=5*cm, top_center=5*cm, radius=1*cm, fill_color=yellow,
+                    fill=True),
+                Arc(left=1*cm, top=3.0*cm, right=4*cm, bottom=5*cm,
+                    start_angle=150, extent=100),
+                Ellipse(left=1*cm, top=6.0*cm, right=4.5*cm, bottom=8*cm,
+                    fill_color=blue, fill=True, stroke_width=3),
+                Image(left=10*cm, top=6*cm, width=4*cm, height=5.12*cm,
+                    filename=os.path.join(cur_dir, 'photo.jpg')),
+                Image(left=13*cm, top=6*cm,
+                    filename=os.path.join(cur_dir, 'photo.jpg')),
+                #Poligon(), # --> uses drawPath
+                Label(text="""<b>William Shakespeare</b> (baptised 26 April 1564 – 23 April 1616)[a] was an English poet and playwright, widely regarded as the greatest writer in the English language and the world's preeminent dramatist.""",
+                    left=12*cm, top=1*cm, width=6*cm, height=4*cm, 
+                    style={'wordWrap': True, 'borderWidth': 1,
+                        'borderColor': green, 'borderPadding': 4,
+                        'borderRadius': 2, 'alignment': TA_JUSTIFY}),
+            ]
+    
+        class band_page_header(ReportBand):
+            height = 1.4*cm
+            elements = [
+                SystemField(expression='%(report_title)s', top=0.1*cm, left=0,
+                    width=BAND_WIDTH, style={'fontName': 'Helvetica-Bold',
+                        'fontSize': 14, 'alignment': TA_CENTER}),
+                Label(text="ID", top=0.8*cm, left=0, width=1*cm,
+                    style={'borderWidth': 1, 'borderColor': green,
+                        'borderPadding': 1, 'borderRadius': 2}),
+                Label(text="Name", top=0.8*cm, left=3*cm,
+                    style={'backColor': red, 'textColor': white,
+                    'fontName': 'Helvetica'}),
+            ]
+            borders = {'bottom': True}
+
+Generating PDF...
+
+    >>> report = GraphicsReport()
+    >>> from geraldo.generators import PDFGenerator
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/graphics-report.pdf'))
+
+The Result
+
+- http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/graphics-report.pdf
+

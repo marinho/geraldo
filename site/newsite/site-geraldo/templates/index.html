@@ -1,0 +1,136 @@
+{% extends "base_site.html" %}
+
+{% block style %}{{ block.super }}
+<style type="text/css">
+    div#printshots {
+        position: fixed;
+        margin: -275px 0 0 -425px;
+        left: 50%;
+        top: 50%;
+        width: 850px;
+        height: 550px;
+        background: url({{ MEDIA_URL }}img/printshots-bg.png) center no-repeat;
+        display: none;
+        overflow: hidden;
+        z-index: 1000;
+    }
+
+    div#printshots .inner {
+        position: absolute;
+        margin: auto auto;
+        width: 850px;
+        height: 550px;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+
+    div#printshots .inner .links {
+        margin: 30px;
+        text-align: right;
+    }
+
+    div#printshots .inner .links a {
+        color: white;
+    }
+
+    div#printshots .inner .links a.close {
+        float: right;
+    }
+
+    div#printshots .inner .links a.larrow {
+        float: left;
+        margin-top: 210px;
+    }
+
+    div#printshots .inner .links a.rarrow {
+        float: right;
+        margin-top: 210px;
+    }
+</style>
+{% endblock style %}
+
+{% block scripts %}{{ block.super }}
+<script type="text/javascript">
+    var printshots_images = ['http://sourceforge.net/dbimage.php?id=202516',
+    'http://sourceforge.net/dbimage.php?id=248790','http://sourceforge.net/dbimage.php?id=202506',
+    'http://sourceforge.net/dbimage.php?id=202510','http://sourceforge.net/dbimage.php?id=202512',
+    'http://sourceforge.net/dbimage.php?id=202514'];
+    var current_printshot = 0;
+
+    {# Hides the printshots on click #}
+    function hide_printshot(){
+        $('#printshots').hide();
+    }
+
+    function browse(num){
+        current_printshot += num;
+        if (current_printshot < 0) {
+            current_printshot = printshots_images.length - 1;
+        } else if (current_printshot > printshots_images.length - 1) {
+            current_printshot = 0;
+        }
+
+        var inner = $('div#printshots').find('.inner');
+        inner.css('background-image', 'url('+printshots_images[current_printshot]+')');
+    }
+
+    function browse_left(){
+        browse(-1);
+    }
+
+    function browse_right(){
+        browse(1);
+    }
+
+    $(document).ready(function(){
+        {# Shows the printshots #}
+        $('a#printshots').click(function(){
+            var div = $('div#printshots');
+            if (div.length === 0) {
+            var div = $('<div id="printshots"></div>').prependTo('body');
+            var div2 = $('<div class="inner"></div>').appendTo(div);
+            var div3 = $('<div class="links"></div>').appendTo(div2);
+            var fechar = $('<a href="javascript: void(0)" class="close">Close</a>').click(hide_printshot).appendTo(div3);
+            $('<br/>').appendTo(div3);
+            var larrow = $('<a href="javascript: void(0)" class="larrow"><img src="{{ MEDIA_URL }}img/arrow-left.png"/></a>').click(browse_left).appendTo(div3);
+            var rarrow = $('<a href="javascript: void(0)" class="rarrow"><img src="{{ MEDIA_URL }}img/arrow-right.png"/></a>').click(browse_right).appendTo(div3);
+            }
+
+            div.find('.inner').css('background-image', 'url('+printshots_images[current_printshot]+')');
+            div.show();
+        });
+    });
+</script>
+{% endblock scripts %}
+
+{% block _content %}
+<div class="middle-top">
+    <div class="post-it">
+        <div class="wrapper">
+            {{ html_postit }}
+        </div>
+    </div>
+
+    <div class="shortcuts">
+        <a class="box" href="javascript: void(0)" title="Printshots" id="printshots">
+            <img src="{{ MEDIA_URL }}img/icon-printshots.png" alt="Printshots"/>
+        </a>
+        <a class="box" href="/getting-started/" title="Getting started">
+            <img src="{{ MEDIA_URL }}img/icon-getting-started.png" alt="Getting started"/>
+        </a>
+        <a class="box" href="/cases/" title="Cases">
+            <img src="{{ MEDIA_URL }}img/icon-cases.png" alt="Cases"/>
+        </a>
+        <a class="box" href="/how-to-contribute/" title="How to contribute">
+            <img src="{{ MEDIA_URL }}img/icon-how-to-contribute.png" alt="How to contribute"/>
+        </a>
+    </div>
+</div>
+
+<div class="content">
+    {% block content %}
+    {% include "gae_wiki/render_wiki.html"%}
+    {% endblock content %}
+</div>
+{% endblock _content %}
+

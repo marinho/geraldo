@@ -1,0 +1,149 @@
+body {
+    background-color: #637c00;
+    margin: 0;
+    font-family: Arial, Helvetica, sans;
+    font-size: 10pt;
+    min-width: 960px;
+}
+
+img {
+    border: none;
+}
+
+h1 {
+    margin: 0 0 20px 0;
+    clear: both;
+}
+
+h3 {
+    margin: 0 0 5px 0;
+}
+
+h4 {
+    margin: 10px 0 0 0;
+}
+
+dd {
+    margin-left: 10px;
+}
+
+.all {
+    width: 940px;
+    margin: auto;
+}
+
+.top {
+    background: url(/media/img/top.jpg) no-repeat left bottom;
+    height: 120px;
+    text-align: right;
+    position: relative;
+}
+
+.top .menu {
+    margin: 0 20px 10px 0;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.top .menu li {
+    color: white;
+    display: inline;
+    list-style: none;
+    margin: 5px;
+}
+
+.top .menu li a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.footer {
+    padding: 10px;
+    text-align: center;
+    color: white;
+    font-size: 0.8em;
+}
+
+.middle, .content {
+    overflow: hidden;
+    clear: both;
+}
+
+.left {
+    width: 270px;
+    float: left;
+    background: url(/media/img/left-shadow.jpg) no-repeat top left;
+}
+
+.left .wrapper1 {
+    margin-left: 20px;
+    background-image: url(/media/img/left-middle.jpg);
+}
+
+.left .wrapper2 {
+    margin: 0 10px 0 10px;
+}
+
+.left h3 {
+    margin: 0;
+    font-size: 1.1em;
+    text-align: left;
+}
+
+.left p {
+    margin: 5px 0 10px 5px;
+    text-align: justify;
+}
+
+.left .box {
+    overflow: hidden;
+}
+
+.right {
+    width: 670px;
+    float: right;
+    background: url(/media/img/right-shadow.jpg) no-repeat right bottom;
+}
+
+.right .wrapper1 {
+    margin: 0 20px 0 0;
+    background-image: url(/media/img/right-middle.jpg);
+}
+
+.right .wrapper2 {
+    margin: 0 10px 0 10px;
+}
+
+.middle-top {
+    clear: both;
+    overflow: hidden;
+}
+
+.post-it {
+    background: url(/media/img/postit.png) no-repeat;
+    width: 200px;
+    height: 168px;
+    margin: 0 5px 0 0;
+    float: right;
+}
+
+.post-it .wrapper {
+    margin: 30px 20px 15px 30px;
+    overflow: hidden;
+}
+
+.shortcuts {
+    float: left;
+    width: 420px;
+}
+
+.shortcuts .box {
+    width: 50%;
+    height: 100px;
+    text-align: center;
+    float: left;
+    margin-bottom: 10px;
+}
+
+

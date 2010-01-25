@@ -1,0 +1,14 @@
+{% extends "base_site.html" %}
+
+{% block _content %}{{ block.super }}
+
+<div class="box especial">
+    <h1>Área reservada!</h1>
+    <img src="{{ MEDIA_URL }}img/em_breve.jpg" alt=""/>
+    <p>
+    Ooops! Esta área é reservada à tripulação, se você está vendo esta mensagem
+    é porque não é da tripulação, boa leitura do livro eletrônico!
+    </p>
+</div>
+
+{% endblock _content %}

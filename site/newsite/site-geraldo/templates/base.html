@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <title>{% block title %}Python and Django business reports engine{% endblock %} >> Geraldo Reports</title>
+        {% block meta %}
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<meta http-equiv="Content-Language" content="pt-br" />
+		<meta name="ROBOTS" content="ALL" />
+		<meta http-equiv="imagetoolbar" content="no" />
+		<meta name="MSSmartTagsPreventParsing" content="true" />
+        <meta name="Copyright" content="The layout and content of this site are Copyright (c) 2009-2010 Marinho Brandão." />
+        <meta name="Keywords" content="{% block meta-keywords %}{% endblock %}" />
+        <meta name="Description" content="{% block meta-description %}{% endblock %}" />
+        <meta name="verify-v1" content="hVn9TTTcZUg6NCkqXAN1taqYem2S3DVlnw9fBrUsmVs=" />
+        <link rel="icon" href="{{ MEDIA_URL }}img/icon.gif" type="image/gif"/>
+        {% endblock meta %}
+
+        {% block feeds %}
+        <link rel="alternate" type="application/rss+xml" title="Latest Blog entries" href="/feeds/latest/" />
+        {% endblock feeds %}
+
+        {% block style %}
+		<link href="{{ MEDIA_URL }}css/all.css" rel="stylesheet" type="text/css" />
+		<link href="{{ MEDIA_URL }}css/layout.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="{{ MEDIA_URL }}css/print.css" rel="stylesheet" type="text/css" media="print" />
+        {% endblock style %}
+
+        {% block scripts %}
+        <script src="{{ MEDIA_URL }}js/jquery.js" type="text/javascript"></script>
+        <script src="http://imasters.uol.com.br/crossbrowser/fonte.js" type="text/javascript"></script>
+
+        <!--[if lt IE 7.]>
+        <script defer type="text/javascript" src="{{ MEDIA_URL }}js/pngfix.js"></script>
+        <![endif]-->
+        {% endblock scripts %}
+    </head>
+    <body>
+        {% block _all %}
+        <div class="all">
+            <div class="top">
+                <ul class="menu">
+                    <li><a href="/" title="Home page">home</a></li>
+                    <li>|</li>
+                    <li><a href="/download/" title="Download">download</a></li>
+                    <li>|</li>
+                    <li><a href="/docs/index.html" title="Documentation">documentation</a></li>
+                    <li>|</li>
+                    <li><a href="/community/" title="Community">community</a></li>
+                    <li>|</li>
+                    <li><a href="/blog/" title="Blog">blog</a></li>
+                    <li>|</li>
+                    <li><a href="http://github.com/marinho/geraldo/" title="See the code on GitHub">code</a></li>
+                </ul>
+            </div>
+
+            <div class="middle">
+                <div class="left">
+                    <div class="wrapper1">
+                        <img src="{{ MEDIA_URL }}img/left-top.jpg"/>
+                        <div class="wrapper2">
+                            {{ html_lateral }}
+                        </div>
+                        <img src="{{ MEDIA_URL }}img/left-bottom.jpg"/>
+                    </div>
+                </div>
+
+                <div class="right">
+                    <div class="wrapper1">
+                        <img src="{{ MEDIA_URL }}img/right-top.jpg"/>
+                        <div class="wrapper2">
+                            {% block _content %}
+                            <div class="content">
+                                {% block content %}
+                                {% endblock content %}
+                            </div>
+                            {% endblock _content %}
+                        </div>
+                        <img src="{{ MEDIA_URL }}img/right-bottom.jpg"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer">
+                Copyright 2009-2010. Marinho Brandão.
+                <!--<a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=251460&amp;type=2" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a>-->
+            </div>
+        </div>
+        {% endblock _all %}
+
+        {% if not LOCAL %}
+{% comment %}Google Analytics - BEGIN{% endcomment %}
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-8437468-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+{% comment %}Google Analytics - END{% endcomment %}
+        {% endif %}
+    </body>
+</html>

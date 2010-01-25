@@ -1,0 +1,111 @@
+Two Reports At Once
+===================
+
+Sometimes we need to generate two or more reports in the same file. This
+example uses the new attributes 'canvas' and 'return_canvas' from PDFGenerator
+to do that::
+
+    import os
+    cur_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    from reportlab.lib.enums import TA_CENTER, TA_RIGHT
+    
+    from geraldo import Report, ReportBand, SubReport, ReportGroup
+    from geraldo.base import Element, cm
+    from geraldo import GeraldoObject, ObjectNotFound, ManyObjectsFound
+    from geraldo import ObjectValue, SystemField, Label, Line,\
+        FIELD_ACTION_COUNT, BAND_WIDTH
+    
+    class CitiesReport(Report):
+        title = 'Cities'
+    
+        class band_page_header(ReportBand):
+            height = 1.2*cm
+            name = 'the-page-header-band'
+            elements = [
+                SystemField(expression='%(report_title)s', top=0.1*cm, left=0, width=BAND_WIDTH,
+                    style={'fontName': 'Helvetica-Bold', 'fontSize': 14, 'alignment': TA_CENTER}),
+                Label(text="Name", top=0.8*cm, style={'fontName': 'Helvetica-Bold'}),
+                Label(text="Country", top=0.8*cm, left=10*cm, style={'fontName': 'Helvetica-Bold'}),
+            ]
+            borders = {'bottom': True}
+    
+        class band_detail(ReportBand):
+            height = 0.5*cm
+            elements = [
+                ObjectValue(attribute_name='city', top=0.1*cm),
+                ObjectValue(attribute_name='country', top=0.1*cm, left=10*cm),
+            ]
+    
+    class PeopleReport(Report):
+        title = 'People'
+    
+        class band_page_header(ReportBand):
+            height = 1.2*cm
+            elements = [
+                SystemField(expression='%(report_title)s', top=0.1*cm, left=0, width=BAND_WIDTH,
+                    style={'fontName': 'Helvetica-Bold', 'fontSize': 14, 'alignment': TA_CENTER}),
+                Label(text="Name", top=0.8*cm, style={'fontName': 'Helvetica-Bold'}),
+            ]
+            borders = {'bottom': True}
+    
+        class band_detail(ReportBand):
+            height = 0.6*cm
+            elements = [
+                ObjectValue(attribute_name='capitalize'),
+            ]
+
+Objects list
+
+    >>> cities_list = [
+    ...     {'city': 'New York', 'country': 'USA'},
+    ...     {'city': 'London', 'country': 'UK'},
+    ...     {'city': 'Paris', 'country': 'FR'},
+    ...     {'city': 'Moscow', 'country': 'RU'},
+    ... ]
+
+People list
+
+    >>> people_list = ['Mary','John','Joseph','Stephen','William','Peter',
+    ...     'Mauri','Jaquez','Francois','Putin','Ivan','Yuri']
+
+Report instances
+
+    >>> report_cities = CitiesReport(queryset=cities_list)
+    >>> report_people = PeopleReport(queryset=people_list)
+
+PDF generation
+
+    >>> from geraldo.generators import PDFGenerator
+
+Because of a requirement from ReportLab, you must inform the file name when 
+creating the Canvas (in the first report), even if you aren't going to save
+it really.
+
+    >>> canvas = report_cities.generate_by(PDFGenerator,
+    ...     filename=os.path.join(cur_dir, 'output/two-reports-at-once.pdf'),
+    ...     return_canvas=True,
+    ...     )
+
+Here is the magic
+
+    >>> report_people.generate_by(PDFGenerator,
+    ...     canvas=canvas,
+    ...     )
+
+Text generation
+
+    >>> from geraldo.generators import TextGenerator
+    >>> 
+    >>> text = report_cities.generate_by(TextGenerator)
+    >>> text += report_people.generate_by(TextGenerator)
+    >>> 
+    >>> fp = file(os.path.join(cur_dir, 'output/two-reports-at-once.txt'), 'w')
+    >>> fp.write(text)
+    >>> fp.close()
+
+The Result
+
+- http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/two-reports-at-once.pdf
+- http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/two-reports-at-once.txt
+

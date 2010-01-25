@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block style %}{{ block.super }}
+<link rel="stylesheet" href="{{ MEDIA_URL }}css/admin.css"/>
+{% endblock style %}
+
+{% block _content %}
+<div class="box admin inner">
+    {% block content %}{% endblock %}
+</div>
+{% endblock _content %}
+

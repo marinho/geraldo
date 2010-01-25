@@ -1,0 +1,53 @@
+application: geraldoreports
+version: 0
+runtime: python
+api_version: 1
+skip_files: |
+ ^(.*/)?(
+ (app\.yaml)|
+ (app\.yml)|
+ (index\.yaml)|
+ (index\.yml)|
+ (#.*#)|
+ (.*~)|
+ (.*\.py[co])|
+ (.*/RCS/.*)|
+ (\..*)|
+ (manage.py)|
+ (gdata/.*)|
+ (atom/.*)|
+ (tlslite/.*)|
+ (oauth/.*)|
+ (beautifulsoup/.*)|
+ (docutils/.*)|
+ (epydoc/.*)|
+ (appengine_django/management/commands/.*)|
+ (README)|
+ (CHANGELOG)|
+ (Makefile)|
+ (bin/.*)|
+ (images/ads/.*)|
+ (images/ext/.*)|
+ (wsgiref/.*)|
+ (elementtree/.*)|
+ (doc/.*)|
+ (profiling/.*)|
+ (vendor/.*)|
+ (fixture/.*)|
+ (media/extras/tooltip/doc/.*)
+ (media/extras/tooltip/doc/form-field-tooltip.html)
+ (local_settings.py)
+ (local_settings.pyc)
+ )$
+
+#default_expiration: "10d"
+
+handlers:
+- url: /media
+  static_dir: media
+
+- url: /docs
+  static_dir: docs
+
+- url: /.*
+  script: main.py

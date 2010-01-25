@@ -1,0 +1,25 @@
+{% extends "base_site.html" %}
+
+{% block _content %}{{ block.super }}
+<div class="box especial inner">
+    <h1>Page not found! (404)</h1>
+
+    <p>Oops! Geraldo cound't get the requested page!</p>
+
+    <style type="text/css">
+      #goog-wm { }
+      #goog-wm h3.closest-match { }
+      #goog-wm h3.closest-match a { }
+      #goog-wm h3.other-things { }
+      #goog-wm ul li { }
+      #goog-wm li.search-goog { display: block; }
+    </style>
+    <script type="text/javascript">
+      var GOOG_FIXURL_LANG = 'en_US';
+      var GOOG_FIXURL_SITE = 'http://www.geraldoreports.org/';
+    </script>
+    <script type="text/javascript" 
+        src="http://linkhelp.clients.google.com/tbproxy/lh/wm/fixurl.js"></script>
+    
+</div>
+{% endblock _content %}

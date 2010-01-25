@@ -1,0 +1,42 @@
+{% extends "gae_wiki/base.html" %}
+
+{% block title %}Todos os capítulos publicados :: {{ block.super }}{% endblock %}
+
+{% block style %}{{ block.super }}
+<link href="{{ MEDIA_URL }}css/wiki.css" rel="stylesheet" type="text/css"/>
+{% endblock style %}
+
+{% block scripts %}{{ block.super }}
+<script src="{{ MEDIA_URL }}js/wiki.js" type="text/javascript"></script>
+{% endblock scripts %}
+
+{% block _content %}
+<div class="box wiki inner">
+
+{% for wiki in wikis %}
+
+{% block h1 %}<h1>{{ wiki }}</h1>{% endblock %}
+
+{% block text %}
+<div class="text">
+    {% ifequal wiki.format 'html' %}
+    {{ wiki.text|urlize|safe }}
+    {% endifequal %}
+
+    {% ifequal wiki.format 'text' %}
+    {{ wiki.text|linebreaks|urlize }}
+    {% endifequal %}
+
+    {% ifequal wiki.format 'markdown' %}
+    {% load markup %}
+    {{ wiki.text|markdown|urlize }}
+    {% endifequal %}
+</div>
+{% endblock text %}
+
+{% endfor %}
+
+</div>
+
+{% endblock _content %}
+

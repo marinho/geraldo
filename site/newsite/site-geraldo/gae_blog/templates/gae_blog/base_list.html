@@ -1,0 +1,85 @@
+{% extends "gae_blog/base.html" %}
+
+{#{% load myutils %}#}
+
+{% block comments_head %}{% endblock %}
+{% block comments_panel %}{% endblock %}
+{% block page_comments %}{% endblock %}
+
+{% block style %}{{ block.super }}
+<style>
+    .index_latest {
+        margin-bottom: 10px;
+    }
+
+    .destaque {
+        font-size: 0.8em;
+    }
+
+    .destaque h2 {
+        border-bottom: thin solid #775f77;
+        color: #775f77;
+    }
+
+    .destaque h3 {
+    }
+
+    .destaque table {
+        width: 100%;
+    }
+
+    .destaque table td {
+        vertical-align: top;
+        width: 33%;
+    }
+
+    .post_details {
+        margin-bottom: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}{{ block.super }}
+{% block h1 %}{% endblock %}
+
+<div class="index_latest">
+    <h2><a href="{{ latest.get_absolute_url }}">{{ latest }}</a></h2>
+    <div class="post_details">
+        <b>{{ latest.author }}</b> (há {{ latest.pub_date|timesince }})
+    </div>
+    <div>
+        {% with latest as entry %}
+        {% include "gae_blog/render_description.html" %}
+        {% endwith %}
+        
+        (<a href="{{ latest.get_absolute_url }}">more...</a>)
+    </div>
+</div>
+
+{% if posts %}
+<div class="destaque">
+    <h2>Veja também</h2>
+    
+    {% for object in posts %}
+    <div class="box">
+        <h3><a href="{{ object.get_absolute_url }}">{{ object }}</a></h3>
+        <div class="post_details">
+            <b>{{ object.author }}</b> (há {{ object.pub_date|timesince }})
+        </div>
+        <div>
+            {% with object as entry %}
+            {% include "gae_blog/render_description.html" %}
+            {% endwith %}
+
+            ( <a href="{{ object.get_absolute_url }}">more...</a> )
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% endblock content %}
+
+{% block lateral %}
+{% endblock lateral %}
+

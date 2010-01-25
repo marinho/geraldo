@@ -1,0 +1,210 @@
+Tutorial using Web2Py
+=====================
+
+Once you have Geraldo installed and its dependencies resolved (read the 
+Installation document to know about the dependencies on ReportLab and Python
+Imaging Library), you can start using it from **Web2Py** without any need to adjust settings.
+
+
+Step 1. Preparing your project
+------------------------------
+
+Let's create a new URL to load a PDF report online.
+ 
+We are going to work with a common example for this kind of solution: a
+purchasing application.
+
+Let's say you have the following model:
+
+::
+
+    db.define_table(product,
+                Field('name', length=100))
+
+    db.define_table(customer,
+                Field('name', length=100))
+    
+    db.define_table(purchase,
+                Field('customer', db.customer),
+                Field('delivery_address', length=70),
+                Field('date_creation', 'datetime', default=request.now),
+                Field('date_bill', 'date'),
+                Field('date_delivery', 'date'),
+                Field('taxes', 'float', default=0.00),
+                Field('sub_total_price', 'float', default=0.00),
+                Field('total_price', 'float', default=0.00)
+                )
+
+    db.define_table(purchase_item,
+                Field('purchase', db.purchase),
+                Field('product', db.product),
+                Field('unit_price', 'float')
+                Field('quantity', 'float')
+                Field('total_price', 'float', default=0.00)
+                )
+
+Add a new function to your Controller, for example:
+
+::
+
+    def purchase_report():
+        from reports import ReportPurchase
+        from geraldo.generators import PDFGenerator
+        import gluon.contenttype
+        import StringIO
+
+        resp = StringIO.StringIO()
+        
+        purchases = db(db.purchase.id > 0).select(orderby=db.purchase.customer|db.purchase.id)
+        report = ReportPurchase(queryset=purchases)
+        report.generate_by(PDFGenerator, filename=resp)
+
+        resp.seek(0)
+        response.headers['Content-Type'] = gluon.contenttype.contenttype('.pdf')
+        filename = "%s_Purchases.pdf" % (request.env.server_name)
+        response.headers['Content-disposition'] = "attachment; filename=\"%s\"" % filename
+        return resp.read()
+
+You can see you first imported two important things:
+
+::
+
+    from reports import ReportPurchase
+    from geraldo.generators import PDFGenerator
+
+Your report class (we will create it in the next step) and the generator class
+**PDFGenerator** you will need to generate a PDF file.
+
+The next thing to note is that you instantiate a StringIO object to use to return the PDF:
+
+::
+
+        import StringIO
+        resp = StringIO.StringIO()
+    
+
+Now you are going to work your report instance:
+
+::
+
+        purchases = db(db.purchase.id > 0).select(orderby=db.purchase.customer|db.purchase.id)
+        report = ReportPurchase(queryset=purchases)
+        report.generate_by(PDFGenerator, filename=resp)
+
+Finally you prepare the response:
+
+::
+
+        resp.seek(0)
+        response.headers['Content-Type'] = gluon.contenttype.contenttype('.pdf')
+        filename = "%s_Purchases.pdf" % (request.env.server_name)
+        response.headers['Content-disposition'] = "attachment; filename=\"%s\"" % filename
+        return resp.read()
+       
+        
+- The first thing you did is to get all purchases, ordered by 'customer' and 'id'
+  fields;
+- Afterwards, you got a **report** instance from your report class
+  **ReportPurchase**, using purchases queryset as report driver queryset;
+- Next, you called the 'generate_by' method of the generator class.
+- And last, you prepared the StringIO object to be delivered to the browser.
+
+Now you have a prepared Web2Py application to use a report you are going to
+create at the next step!
+
+Declaring the report class
+--------------------------
+
+The report class must be an inheritance from **geraldo.Report** class. You can
+create a new file 'reports.py' to declare your report classes inside.
+
+::
+
+    from geraldo import Report
+
+    class ReportPurchase(Report):
+        title = 'Purchases list'
+        author = 'John Smith Corporation'
+
+To see something more complex, you can set the page size, margins and
+other report attributes, like below:
+
+::
+
+    from geraldo import Report, landscape
+    from reportlab.lib.pagesizes import A5
+    from reportlab.lib.units import cm
+
+    class ReportPurchase(Report):
+        title = 'Purchases list'
+        author = 'John Smith Corporation'
+        
+        page_size = landscape(A5)
+        margin_left = 2*cm
+        margin_top = 0.5*cm
+        margin_right = 0.5*cm
+        margin_bottom = 0.5*cm
+
+As you can see, we use what we can from the ReportLab libraries, their units, page
+sizes, stylizing, etc.
+
+A report is driven by **bands**. If you are used to working with other report
+engines you know what a band is.
+
+A band is a row with elements in the report canvas. Bands in essence are the
+same but their use varies depending whether you are using a band as the Page Header or
+Report Summary, for example.
+
+A report can have a band for each one of following attributes:
+
+Detail band
+-----------
+
+The detail band is the most important band in a report. This is because the
+detail band is the reason of the existence of every report.
+
+The detail band is used most of the time to show object field values. This is the
+same for a detailed info page or just a simple list or grid.
+
+The detail band is rendered one time for each object in the queryset attribute.
+So, if you have 10 objects in the queryset, you will have the detail band rendered
+10 times.
+
+Let's change our report to have a detail band, see below:
+
+::
+
+    from geraldo import Report, landscape, ReportBand, ObjectValue
+    from reportlab.lib.pagesizes import A5
+    from reportlab.lib.units import cm
+
+    class ReportPurchase(Report):
+        title = 'Purchases list'
+        author = 'John Smith Corporation'
+        
+        page_size = landscape(A5)
+        margin_left = 2*cm
+        margin_top = 0.5*cm
+        margin_right = 0.5*cm
+        margin_bottom = 0.5*cm
+    
+        class band_detail(ReportBand):
+            height = 0.5*cm
+            elements=(
+                ObjectValue(attribute_name='id', left=0.5*cm),
+                ObjectValue(attribute_name='date_creation', left=3*cm,
+                    get_value=lambda instance: instance.date_creation.strftime('%m/%d/%Y')),
+                )
+
+The attribute **band_detail** is locally declared as a class, but it could alternatively be set
+with an external class.
+
+The important thing here is that the band has the attribute **height**, fixed with a
+defined height in centimeters.
+
+The second thing to observe is the **elements** list, with 2 widgets representing
+2 model class fields: **id** and **date_creation**. The last one is customized
+with the **get_value** attribute, for date field formatting.
+
+
+ 	  	 

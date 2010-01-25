@@ -1,0 +1,15 @@
+{% extends "base_admin.html" %}
+
+{% block content %}{{ block.super }}
+<h1>Site Administration</h1>
+
+<ul>
+    <li><a href="{% url gae_wiki.views.admin_index %}">Wiki</a></li>
+    <li><a href="{% url gae_blog.views.admin_index %}">Blog</a></li>
+    <li><a href="gallery/">Gallery</a></li>
+</ul>
+
+<ul>
+    <li><a href="update_cache/">Update cache</a></li>
+</ul>
+{% endblock content %}

@@ -1,0 +1,80 @@
+Additional Fonts
+================
+
+This test is about support additional fonts but those supported by default by PDF
+and ReportLab::
+
+    import os
+    cur_dir = os.path.dirname(os.path.abspath(__file__))
+
+    from geraldo.utils import A4, cm, TA_CENTER, TA_RIGHT
+    
+    from geraldo import Report, ReportBand, Label, ObjectValue, SystemField,\
+        FIELD_ACTION_COUNT, BAND_WIDTH
+
+    # Report class
+
+    class SimpleListReport(Report):
+        title = 'Demonstration without Django'
+        additional_fonts = {
+            'HandGotDLig': os.path.join(cur_dir, 'handgotl.ttf'),  # full path to font file
+            'Footlight MT Light': os.path.join(cur_dir, 'ftltlt.ttf'),
+        }
+        default_style = {'fontName': 'Footlight MT Light'}
+    
+        class band_page_header(ReportBand):
+            height = 1.3*cm
+            elements = [
+                SystemField(expression='%(report_title)s', top=0.1*cm, left=0, width=BAND_WIDTH,
+                    style={'fontName': 'HandGotDLig', 'fontSize': 14, 'alignment': TA_CENTER}),
+                Label(text="ID", top=0.8*cm, left=0),
+                Label(text="Name", top=0.8*cm, left=3*cm),
+            ]
+            borders = {'bottom': True}
+    
+        class band_page_footer(ReportBand):
+            height = 0.5*cm
+            elements = [
+                Label(text='Created with Geraldo Reports', top=0.1*cm, left=0),
+                SystemField(expression='Page # %(page_number)d of %(page_count)d', top=0.1*cm,
+                    width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
+            ]
+            borders = {'top': True}
+    
+        class band_detail(ReportBand):
+            height = 0.5*cm
+            elements = [
+                ObjectValue(attribute_name='id', top=0, left=0, name='other-field-with-event'),
+                ObjectValue(attribute_name='name', top=0, left=3*cm, name='field-with-event'),
+            ]
+
+    class MyObject(object):
+        def __init__(self, **kwargs):
+            for k,v in kwargs.items():
+                setattr(self, k, v)
+
+    objects_list = [
+        MyObject(id=1, name='Rio de Janeiro'),
+        MyObject(id=2, name='New York'),
+        MyObject(id=3, name='Paris'),
+        MyObject(id=4, name='London'),
+        MyObject(id=5, name='Tokyo'),
+        MyObject(id=6, name='Moscow'),
+        MyObject(id=7, name='Beijing'),
+        MyObject(id=8, name='Hamburg'),
+        MyObject(id=9, name='New Delhi'),
+        MyObject(id=10, name='Jakarta'),
+    ]
+
+    report = SimpleListReport(queryset=objects_list)
+
+    # PDF generation
+
+    from geraldo.generators import PDFGenerator
+
+    report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/additional-fonts.pdf'))
+
+The Result
+
+- http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/additional-fonts.pdf
+

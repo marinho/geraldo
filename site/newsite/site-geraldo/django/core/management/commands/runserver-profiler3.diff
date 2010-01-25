@@ -1,0 +1,40 @@
+--- runserver.py	2008-06-09 10:57:57.000000000 +1200
++++ runserver.py	2008-06-09 10:57:47.000000000 +1200
+@@ -9,6 +9,8 @@ class Command(BaseCommand):
+             help='Tells Django to NOT use the auto-reloader.'),
+         make_option('--adminmedia', dest='admin_media_path', default='',
+             help='Specifies the directory from which to serve admin media.'),
++        make_option('--profile', action='store_true', dest='profile',
++            help='Enable profiling. Write profiles into systems temporary directory.'),
+     )
+     help = "Starts a lightweight Web server for development."
+     args = '[optional port number, or ipaddr:port]'
+@@ -39,6 +41,7 @@ class Command(BaseCommand):
+         use_reloader = options.get('use_reloader', True)
+         admin_media_path = options.get('admin_media_path', '')
+         shutdown_message = options.get('shutdown_message', '')
++        profile = options.get('profile', False)
+         quit_command = (sys.platform == 'win32') and 'CTRL-BREAK' or 'CONTROL-C'
+ 
+         def inner_run():
+@@ -50,7 +53,19 @@ class Command(BaseCommand):
+             print "Quit the server with %s." % quit_command
+             try:
+                 path = admin_media_path or django.__path__[0] + '/contrib/admin/media'
+-                handler = AdminMediaHandler(WSGIHandler(), path)
++                if profile:
++                    import hotshot, time, tempfile
++                    def make_profiler_handler(inner_handler): 
++                        def handler(environ, start_response):
++                            path = environ['PATH_INFO'].strip("/").replace('/', '.')
++                            fd, profname = tempfile.mkstemp('.prof', '%s.%3f' % (path, time.time()))
++                            os.close(fd)
++                            prof = hotshot.Profile(profname)
++                            return prof.runcall(inner_handler, environ, start_response) 
++                        return handler
++                    handler = make_profiler_handler(AdminMediaHandler(WSGIHandler(), path))
++                else:
++                    handler = AdminMediaHandler(WSGIHandler(), path)
+                 run(addr, int(port), handler)
+             except WSGIServerException, e:
+                 # Use helpful error messages instead of ugly tracebacks.

@@ -1,0 +1,6 @@
+{% for wiki in items %}
+{% include "gae_wiki/export_wiki.txt" %}
+{% if not forloop.last %}
+----------------------------------------------
+{% endif %}
+{% endfor %}

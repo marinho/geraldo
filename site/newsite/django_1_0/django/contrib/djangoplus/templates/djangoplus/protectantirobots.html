@@ -1,0 +1,15 @@
+<html>
+    <body>
+        What number is this?
+        <form method="post">
+            <img src="/protectantirobots/img/?path={{ path }}"/>
+            <input type="hidden" name="path" value="{{ path }}"/>
+            <input name="n"/>
+            <input type="submit"/>
+        </form>
+
+        {% if msg %}
+        <strong>{{ msg }}</strong>
+        {% endif %}
+    </body>
+</html>

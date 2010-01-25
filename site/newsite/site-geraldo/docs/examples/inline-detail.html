@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Inline Detail Band &mdash; Geraldo Reports Documentation v0.4-alpha-5 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4-alpha-5',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Geraldo Reports Documentation v0.4-alpha-5 documentation" href="../index.html" />
+    <link rel="up" title="Examples" href="index.html" />
+    <link rel="next" title="Inline SubReports" href="inline-subreport.html" />
+    <link rel="prev" title="Without Django" href="without-django.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="inline-subreport.html" title="Inline SubReports"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="without-django.html" title="Without Django"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="inline-detail-band">
+<h1>Inline Detail Band<a class="headerlink" href="#inline-detail-band" title="Permalink to this headline">¶</a></h1>
+<p>This report prints a detail band in &#8220;inline display&#8221;, like an HTML &lt;div&gt; tag,
+with display: inline and float: left.</p>
+<p>It is useful to make labels:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
+<span class="n">cur_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span>
+
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+
+<span class="kn">from</span> <span class="nn">reportlab.lib.pagesizes</span> <span class="kn">import</span> <span class="n">LETTER</span>
+<span class="kn">from</span> <span class="nn">reportlab.lib.units</span> <span class="kn">import</span> <span class="n">cm</span>
+<span class="kn">from</span> <span class="nn">reportlab.lib.enums</span> <span class="kn">import</span> <span class="n">TA_CENTER</span><span class="p">,</span> <span class="n">TA_RIGHT</span>
+
+<span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span><span class="p">,</span> <span class="n">ReportBand</span><span class="p">,</span> <span class="n">Label</span><span class="p">,</span> <span class="n">ObjectValue</span><span class="p">,</span> <span class="n">SystemField</span><span class="p">,</span>\
+    <span class="n">FIELD_ACTION_COUNT</span><span class="p">,</span> <span class="n">BAND_WIDTH</span>
+
+<span class="k">class</span> <span class="nc">LabelsReport</span><span class="p">(</span><span class="n">Report</span><span class="p">):</span>
+    <span class="n">page_size</span> <span class="o">=</span> <span class="n">LETTER</span>
+    <span class="n">margin_left</span> <span class="o">=</span> <span class="mf">0.48</span><span class="o">*</span><span class="n">cm</span>
+    <span class="n">margin_right</span> <span class="o">=</span> <span class="mf">0.48</span><span class="o">*</span><span class="n">cm</span>
+    <span class="n">margin_top</span> <span class="o">=</span> <span class="mf">1.27</span><span class="o">*</span><span class="n">cm</span>
+    <span class="n">margin_bottom</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
+
+    <span class="k">class</span> <span class="nc">band_detail</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mf">2.54</span><span class="o">*</span><span class="n">cm</span>
+
+        <span class="c"># This is a new attribute to force the band width</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="mf">6.67</span><span class="o">*</span><span class="n">cm</span>
+
+        <span class="c"># This attribute forces a distance at right side of the band</span>
+        <span class="n">margin_right</span> <span class="o">=</span> <span class="mf">0.31</span><span class="o">*</span><span class="n">cm</span>
+
+        <span class="c"># With this attribute as True, the band will try to align in</span>
+        <span class="c"># the same line</span>
+        <span class="n">display_inline</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;get_full_name&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.7</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">get_value</span><span class="o">=</span><span class="k">lambda</span> <span class="n">inst</span><span class="p">:</span> <span class="n">inst</span><span class="o">.</span><span class="n">get_full_name</span><span class="p">()</span> <span class="ow">or</span> <span class="n">inst</span><span class="o">.</span><span class="n">username</span><span class="p">,</span>
+                <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;fontName&#39;</span><span class="p">:</span> <span class="s">&#39;Helvetica-Bold&#39;</span><span class="p">,</span> <span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="mi">13</span><span class="p">}),</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;User ID:&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.6</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.6</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">1.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;E-mail:&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">1.2</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;email&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">1.2</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">1.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+        <span class="p">]</span>
+</pre></div>
+</div>
+<p>Generating PDF...</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">report</span> <span class="o">=</span> <span class="n">LabelsReport</span><span class="p">(</span><span class="n">queryset</span><span class="o">=</span><span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">geraldo.generators</span> <span class="kn">import</span> <span class="n">PDFGenerator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cur_dir</span><span class="p">,</span> <span class="s">&#39;output/inline-detail-report.pdf&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The Result</p>
+<ul class="simple">
+<li><a class="reference external" href="http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/inline-detail-report.pdf">http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/inline-detail-report.pdf</a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="without-django.html"
+                                  title="previous chapter">Without Django</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="inline-subreport.html"
+                                  title="next chapter">Inline SubReports</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/examples/inline-detail.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="inline-subreport.html" title="Inline SubReports"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="without-django.html" title="Without Django"
+             >previous</a> |</li>
+        <li><a href="../index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2010, Marinho Brandao.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,417 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tutorial using Django &mdash; Geraldo Reports Documentation v0.4-alpha-5 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.4-alpha-5',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Geraldo Reports Documentation v0.4-alpha-5 documentation" href="index.html" />
+    <link rel="next" title="Tutorial using Web2Py" href="tutorial-2.html" />
+    <link rel="prev" title="Installing" href="installing.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="tutorial-2.html" title="Tutorial using Web2Py"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installing.html" title="Installing"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="tutorial-using-django">
+<h1>Tutorial using Django<a class="headerlink" href="#tutorial-using-django" title="Permalink to this headline">¶</a></h1>
+<p>Once you have Geraldo installed and its dependencies resolved (read the
+Installation document to know about the dependencies on ReportLab and Python
+Imaging Library), you can start opening the <strong>settings.py</strong> from your
+project to edit.</p>
+<blockquote>
+<strong>Attention:</strong> this tutorial assumes you are going to use Geraldo
+with a Django project, but in fact you can just ignore the Django parts
+and all the rest is exactly the same for Django and non-Django cases.</blockquote>
+<div class="section" id="step-1-preparing-your-project">
+<h2>Step 1. Preparing your project<a class="headerlink" href="#step-1-preparing-your-project" title="Permalink to this headline">¶</a></h2>
+<p>To install Geraldo in your Django project, you must change the setting
+<strong>INSTALLED_APPS</strong> in your <strong>settings.py</strong> file and this should be enough.</p>
+<p>But let&#8217;s create a new URL to load a PDF report online.</p>
+<blockquote>
+<strong>Attention:</strong> Geraldo can work with online or file ways to get a PDF.
+You are not dependent on a URL or view to generate reports from Geraldo.
+This is just one of many ways you can do it.</blockquote>
+<p>We are going to work with a common example for this kind of solution: a
+purchasing application.</p>
+<p>Let&#8217;s say you have the following model classes:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Product</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Customer</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Purchase</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">customer</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s">&#39;Customer&#39;</span><span class="p">)</span>
+    <span class="n">delivery_address</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">date_creation</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
+    <span class="n">date_bill</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">date_delivery</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">taxes</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DecimalField</span><span class="p">(</span><span class="n">max_digits</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">sub_total_price</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DecimalField</span><span class="p">(</span><span class="n">max_digits</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">total_price</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DecimalField</span><span class="p">(</span><span class="n">max_digits</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">PurchaseItem</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">purchase</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s">&#39;Purchase&#39;</span><span class="p">)</span>
+    <span class="n">product</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s">&#39;Product&#39;</span><span class="p">)</span>
+    <span class="n">unit_price</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DecimalField</span><span class="p">(</span><span class="n">max_digits</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">quantity</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DecimalField</span><span class="p">(</span><span class="n">max_digits</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">total_price</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DecimalField</span><span class="p">(</span><span class="n">max_digits</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>First you declare a new URL, for example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s">&#39;purchases.views&#39;</span><span class="p">,</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">&#39;^purchase-report/$&#39;</span><span class="p">,</span> <span class="s">&#39;purchase_report&#39;</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The next step is you have a <em>view</em> for the created URL, like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+
+<span class="kn">from</span> <span class="nn">reports</span> <span class="kn">import</span> <span class="n">ReportPurchase</span>
+<span class="kn">from</span> <span class="nn">geraldo.generators</span> <span class="kn">import</span> <span class="n">PDFGenerator</span>
+<span class="kn">from</span> <span class="nn">models</span> <span class="kn">import</span> <span class="n">Purchase</span>
+
+<span class="k">def</span> <span class="nf">purchase_report</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">mimetype</span><span class="o">=</span><span class="s">&#39;application/pdf&#39;</span><span class="p">)</span>
+
+    <span class="n">purchases</span> <span class="o">=</span> <span class="n">Purchase</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;customer&#39;</span><span class="p">,</span> <span class="s">&#39;id&#39;</span><span class="p">)</span>
+    <span class="n">report</span> <span class="o">=</span> <span class="n">ReportPurchase</span><span class="p">(</span><span class="n">queryset</span><span class="o">=</span><span class="n">purchases</span><span class="p">)</span>
+    <span class="n">report</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">resp</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">resp</span>
+</pre></div>
+</div>
+<p>You can see you first imported two important things:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">reports</span> <span class="kn">import</span> <span class="n">ReportPurchase</span>
+<span class="kn">from</span> <span class="nn">geraldo.generators</span> <span class="kn">import</span> <span class="n">PDFGenerator</span>
+</pre></div>
+</div>
+<p>Your report class (we will create it in the next step) and the generator class
+<strong>PDFGenerator</strong> you will need to generate a PDF file. In the future we will
+have other generators, for other formats of file.</p>
+<p>The next thing to note is that you are going to return a PDF format <strong>HttpResponse</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">resp</span> <span class="o">=</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">mimetype</span><span class="o">=</span><span class="s">&#39;application/pdf&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now you are going to work your report instance:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">purchases</span> <span class="o">=</span> <span class="n">Purchase</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;customer&#39;</span><span class="p">,</span> <span class="s">&#39;id&#39;</span><span class="p">)</span>
+<span class="n">report</span> <span class="o">=</span> <span class="n">ReportPurchase</span><span class="p">(</span><span class="n">queryset</span><span class="o">=</span><span class="n">purchases</span><span class="p">)</span>
+<span class="n">report</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">resp</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>The first thing you did is to get all purchases, ordered by &#8216;customer&#8217; and &#8216;id&#8217;
+fields;</li>
+<li>Afterwards, you got a <strong>report</strong> instance from your report class
+<strong>ReportPurchase</strong>, using purchases queryset as report driver queryset;</li>
+<li>And last, you called the &#8216;generate_by&#8217; method of the generator class.</li>
+</ul>
+<p>Now you have a prepared Django application to use a report you are going to
+create at the next step!</p>
+</div>
+<div class="section" id="declaring-the-report-class">
+<h2>Declaring the report class<a class="headerlink" href="#declaring-the-report-class" title="Permalink to this headline">¶</a></h2>
+<p>The report class must be an inheritance from <strong>geraldo.Report</strong> class. You can
+create a new file &#8216;reports.py&#8217; to declare your report classes inside.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span>
+
+<span class="k">class</span> <span class="nc">ReportPurchase</span><span class="p">(</span><span class="n">Report</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;Purchases list&#39;</span>
+    <span class="n">author</span> <span class="o">=</span> <span class="s">&#39;John Smith Corporation&#39;</span>
+</pre></div>
+</div>
+<p>To see something more complex, you can set the page size, margins and
+other report attributes, like below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span><span class="p">,</span> <span class="n">landscape</span>
+<span class="kn">from</span> <span class="nn">reportlab.lib.pagesizes</span> <span class="kn">import</span> <span class="n">A5</span>
+<span class="kn">from</span> <span class="nn">reportlab.lib.units</span> <span class="kn">import</span> <span class="n">cm</span>
+
+<span class="k">class</span> <span class="nc">ReportPurchase</span><span class="p">(</span><span class="n">Report</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;Purchases list&#39;</span>
+    <span class="n">author</span> <span class="o">=</span> <span class="s">&#39;John Smith Corporation&#39;</span>
+
+    <span class="n">page_size</span> <span class="o">=</span> <span class="n">landscape</span><span class="p">(</span><span class="n">A5</span><span class="p">)</span>
+    <span class="n">margin_left</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">cm</span>
+    <span class="n">margin_top</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
+    <span class="n">margin_right</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
+    <span class="n">margin_bottom</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
+</pre></div>
+</div>
+<p>As you can see, we use what we can from the ReportLab libraries, their units, page
+sizes, stylizing, etc.</p>
+<p>A report is driven by <strong>bands</strong>. If you are used to working with other report
+engines you know what a band is.</p>
+<p>A band is a row with elements in the report canvas. Bands in essence are the
+same but their use varies depending whether you are using a band as the Page Header or
+Report Summary, for example.</p>
+<p>A report can have a band for each one of following attributes:</p>
+</div>
+<div class="section" id="detail-band">
+<h2>Detail band<a class="headerlink" href="#detail-band" title="Permalink to this headline">¶</a></h2>
+<p>The detail band is the most important band in a report. This is because the
+detail band is the reason of the existence of every report.</p>
+<p>The detail band is used most of the time to show object field values. This is the
+same for a detailed info page or just a simple list or grid.</p>
+<p>The detail band is rendered one time for each object in the queryset attribute.
+So, if you have 10 objects in the queryset, you will have the detail band rendered
+10 times.</p>
+<p>Let&#8217;s change our report to have a detail band, see below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span><span class="p">,</span> <span class="n">landscape</span><span class="p">,</span> <span class="n">ReportBand</span><span class="p">,</span> <span class="n">ObjectValue</span>
+<span class="kn">from</span> <span class="nn">reportlab.lib.pagesizes</span> <span class="kn">import</span> <span class="n">A5</span>
+<span class="kn">from</span> <span class="nn">reportlab.lib.units</span> <span class="kn">import</span> <span class="n">cm</span>
+
+<span class="k">class</span> <span class="nc">ReportPurchase</span><span class="p">(</span><span class="n">Report</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;Purchases list&#39;</span>
+    <span class="n">author</span> <span class="o">=</span> <span class="s">&#39;John Smith Corporation&#39;</span>
+
+    <span class="n">page_size</span> <span class="o">=</span> <span class="n">landscape</span><span class="p">(</span><span class="n">A5</span><span class="p">)</span>
+    <span class="n">margin_left</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">cm</span>
+    <span class="n">margin_top</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
+    <span class="n">margin_right</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
+    <span class="n">margin_bottom</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
+
+    <span class="k">class</span> <span class="nc">band_detail</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span><span class="o">=</span><span class="p">(</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;date_creation&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">get_value</span><span class="o">=</span><span class="k">lambda</span> <span class="n">instance</span><span class="p">:</span> <span class="n">instance</span><span class="o">.</span><span class="n">date_creation</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">&#39;%m/</span><span class="si">%d</span><span class="s">/%Y&#39;</span><span class="p">)),</span>
+            <span class="p">)</span>
+</pre></div>
+</div>
+<p>The attribute <strong>band_detail</strong> is locally declared as a class, but it could alternatively be set
+with an external class.</p>
+<p>The important thing here is that the band has the attribute <strong>height</strong>, fixed with a
+defined height in centimeters.</p>
+<p>The second thing to observe is the <strong>elements</strong> list, with 2 widgets representing
+2 model class fields: <strong>id</strong> and <strong>date_creation</strong>. The last one is customized
+with the <strong>get_value</strong> attribute, for date field formatting.</p>
+</div>
+<div class="section" id="page-header-and-page-footer-bands">
+<h2>Page Header and Page Footer bands<a class="headerlink" href="#page-header-and-page-footer-bands" title="Permalink to this headline">¶</a></h2>
+<p>Page header and Page footer bands are designed to appear on the header and
+footer, respectively, on every page in the report.</p>
+<p>In most reports, a page header is used to show the report title and its page number,
+page count and maybe the columns header if you are creating a list or grid report.</p>
+<p>In the same way, a page footer band is used to show footer information, like the print
+date/time, software name, company&#8217;s mark, etc.</p>
+<p>Add this code block to the end of the report class to have both bands:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">band_page_header</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="mf">1.3</span><span class="o">*</span><span class="n">cm</span>
+    <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">SystemField</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%(report_title)s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">BAND_WIDTH</span><span class="p">,</span>
+                <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;fontName&#39;</span><span class="p">:</span> <span class="s">&#39;Helvetica-Bold&#39;</span><span class="p">,</span> <span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s">&#39;alignment&#39;</span><span class="p">:</span> <span class="n">TA_CENTER</span><span class="p">}),</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;ID&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">u&quot;Creation Date&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">SystemField</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">u&#39;Page </span><span class="si">%(page_number)d</span><span class="s"> of </span><span class="si">%(page_count)d</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">width</span><span class="o">=</span><span class="n">BAND_WIDTH</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;alignment&#39;</span><span class="p">:</span> <span class="n">TA_RIGHT</span><span class="p">}),</span>
+            <span class="p">]</span>
+    <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;bottom&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+
+<span class="k">class</span> <span class="nc">band_page_footer</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
+    <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;Geraldo Reports&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">SystemField</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">u&#39;Printed in %(now:%Y, %b </span><span class="si">%d</span><span class="s">)s at %(now:%H:%M)s&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">width</span><span class="o">=</span><span class="n">BAND_WIDTH</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;alignment&#39;</span><span class="p">:</span> <span class="n">TA_RIGHT</span><span class="p">}),</span>
+            <span class="p">]</span>
+    <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;top&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Now you have to change the top lines of the file with imports to import some new elements:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span><span class="p">,</span> <span class="n">landscape</span><span class="p">,</span> <span class="n">ReportBand</span><span class="p">,</span> <span class="n">ObjectValue</span><span class="p">,</span> <span class="n">SystemField</span><span class="p">,</span>\
+        <span class="n">BAND_WIDTH</span><span class="p">,</span> <span class="n">Label</span>
+
+<span class="kn">from</span> <span class="nn">reportlab.lib.pagesizes</span> <span class="kn">import</span> <span class="n">A5</span>
+<span class="kn">from</span> <span class="nn">reportlab.lib.units</span> <span class="kn">import</span> <span class="n">cm</span>
+<span class="kn">from</span> <span class="nn">reportlab.lib.enums</span> <span class="kn">import</span> <span class="n">TA_RIGHT</span><span class="p">,</span> <span class="n">TA_CENTER</span>
+</pre></div>
+</div>
+<p>The new elements for you now are:</p>
+<ul class="simple">
+<li><strong>SystemField</strong> - shows a system field, like current date/time, page number,
+page count, report title, report author, etc.</li>
+<li><strong>Label</strong> - show a free text</li>
+<li><strong>BAND_WIDTH</strong> - sets the width automatically to its parent band width;</li>
+<li><strong>TA_RIGHT</strong> and <strong>TA_CENTER</strong> - they set the alignment of a widget</li>
+</ul>
+<p>Other good use of Page Header and Page Footer bands is to compose or inherit
+reports layout. Use your imagination!</p>
+</div>
+<div class="section" id="grouping">
+<h2>Grouping<a class="headerlink" href="#grouping" title="Permalink to this headline">¶</a></h2>
+<p>The next thing now is to group our purchases by a field. Let&#8217;s choose the field
+<strong>customer</strong>, ok?</p>
+<p>Geraldo allows you to group a report at many levels. This means you
+can group the report objects by 1, 2 or however many fields you want and have
+a header and footer to show their aggregation information and other features.</p>
+<p>But for now, just add the following code to the end of <strong>reports.py</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">groups</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">ReportGroup</span><span class="p">(</span><span class="n">attribute_name</span> <span class="o">=</span> <span class="s">&#39;customer&#39;</span><span class="p">,</span>
+            <span class="n">band_header</span> <span class="o">=</span> <span class="n">ReportBand</span><span class="p">(</span>
+                <span class="n">height</span> <span class="o">=</span> <span class="mf">0.7</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;customer&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">20</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                        <span class="n">get_value</span><span class="o">=</span><span class="k">lambda</span> <span class="n">instance</span><span class="p">:</span> <span class="s">&#39;Customer: &#39;</span> <span class="o">+</span> <span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">customer</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+                        <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;fontName&#39;</span><span class="p">:</span> <span class="s">&#39;Helvetica-Bold&#39;</span><span class="p">,</span> <span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">})</span>
+                    <span class="p">],</span>
+                <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;bottom&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">},</span>
+                <span class="p">)</span>
+            <span class="p">),</span>
+        <span class="p">]</span>
+</pre></div>
+</div>
+<p>In the same way as you did before, you have to change the top imports to have the
+new elements:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span><span class="p">,</span> <span class="n">landscape</span><span class="p">,</span> <span class="n">ReportBand</span><span class="p">,</span> <span class="n">ObjectValue</span><span class="p">,</span> <span class="n">SystemField</span><span class="p">,</span>\
+        <span class="n">BAND_WIDTH</span><span class="p">,</span> <span class="n">Label</span><span class="p">,</span> <span class="n">ReportGroup</span>
+</pre></div>
+</div>
+<p>The two important things now are:</p>
+<ul class="simple">
+<li><strong>attribute_name</strong> - this attribute in ReportGroup defines which field we are
+going to use to group the objects. You must order the queryset beforehand by this
+attribute to have it working properly. Here you can use a field name, free
+attribute, property or method that you have in queryset objects;</li>
+<li><strong>band_header</strong> - this band is for you to show things above the group. You
+can also use <strong>band_footer</strong> if you wish.</li>
+</ul>
+</div>
+<div class="section" id="subreports">
+<h2>SubReports<a class="headerlink" href="#subreports" title="Permalink to this headline">¶</a></h2>
+<p>SubReport is the way you have to show object children data in a report. As you
+know, a <strong>purchase</strong> has <strong>many items</strong>, and they are available in attribute
+<strong>purchase.purchaseitem_set.all()</strong> os something like that.</p>
+<p>Geraldo allows you to have however many subreports you want, and they will appear
+in the same sequence that you place them in the class declaration.</p>
+<p>Just add the following block of code to the end of <strong>reports.py</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">subreports</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">SubReport</span><span class="p">(</span>
+            <span class="n">queryset_string</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%(object)s</span><span class="s">.purchaseitem_set.all()&#39;</span><span class="p">,</span>
+            <span class="n">detail_band</span> <span class="o">=</span> <span class="n">ReportBand</span><span class="p">(</span>
+                <span class="n">height</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">elements</span><span class="o">=</span><span class="p">[</span>
+                    <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;product&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+                    <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;unit_price&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+                    <span class="p">]</span>
+                <span class="p">),</span>
+            <span class="p">),</span>
+        <span class="p">]</span>
+</pre></div>
+</div>
+<p>And now you have to change the top imports line:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span><span class="p">,</span> <span class="n">landscape</span><span class="p">,</span> <span class="n">ReportBand</span><span class="p">,</span> <span class="n">ObjectValue</span><span class="p">,</span> <span class="n">SystemField</span><span class="p">,</span>\
+        <span class="n">BAND_WIDTH</span><span class="p">,</span> <span class="n">Label</span><span class="p">,</span> <span class="n">ReportGroup</span><span class="p">,</span> <span class="n">SubReport</span>
+</pre></div>
+</div>
+<p>The new and most interesting thing here is this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">queryset_string</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%(object)s</span><span class="s">.purchaseitem_set.all()&#39;</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>This is the attribute that you use to join the detail object to the subreport.
+It is a <strong>string</strong> because you can do a relationship to get objects using different ways.</p>
+<p>So, you just use the macro <strong>&#8216;%(object)s&#8217;</strong> to set the current object!</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Tutorial using Django</a><ul>
+<li><a class="reference external" href="#step-1-preparing-your-project">Step 1. Preparing your project</a></li>
+<li><a class="reference external" href="#declaring-the-report-class">Declaring the report class</a></li>
+<li><a class="reference external" href="#detail-band">Detail band</a></li>
+<li><a class="reference external" href="#page-header-and-page-footer-bands">Page Header and Page Footer bands</a></li>
+<li><a class="reference external" href="#grouping">Grouping</a></li>
+<li><a class="reference external" href="#subreports">SubReports</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="installing.html"
+                                  title="previous chapter">Installing</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="tutorial-2.html"
+                                  title="next chapter">Tutorial using Web2Py</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/tutorial-1.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="tutorial-2.html" title="Tutorial using Web2Py"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="installing.html" title="Installing"
+             >previous</a> |</li>
+        <li><a href="index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2010, Marinho Brandao.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

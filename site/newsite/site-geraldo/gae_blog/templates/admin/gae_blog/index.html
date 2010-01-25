@@ -1,0 +1,27 @@
+{% extends "admin/gae_blog/base.html" %}
+
+{% load pagination_tags %}
+
+{% block content %}
+<ul class="submenu">
+    <li><a href="entry/add/">Add new blog entry</a></li>
+</ul>
+
+{% autopaginate list %}
+
+<table class="list">
+    {% for item in list %}
+    <tr>
+        <td><a href="{{ item.get_absolute_url }}">{{ item }}</a></td>
+        <td>
+            <a href="entry/{{ item.id }}/">Edit</a> |
+            <a href="entry/{{ item.id }}/delete/">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% paginate %}
+
+{% endblock content %}
+

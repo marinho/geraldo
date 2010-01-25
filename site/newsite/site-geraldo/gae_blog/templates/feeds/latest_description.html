@@ -1,0 +1,16 @@
+{% ifequal obj.format 'html' %}
+    {{ obj.description_or_text|safe|urlize }}
+{% endifequal %}
+
+{% ifequal obj.format 'text' %}
+    {{ obj.description_or_text|linebreaks|urlize }}
+{% endifequal %}
+
+{% ifequal obj.format 'markdown' %}
+    {% load markup %}
+    {{ obj.description_or_text|markdown|urlize }}
+{% endifequal %}
+
+<p>
+<b><a href="http://www.aprendendodjango.com{{ obj.get_absolute_url }}">Clique aqui para ler</a></b>
+</p>

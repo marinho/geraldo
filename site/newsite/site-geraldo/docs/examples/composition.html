@@ -1,0 +1,210 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Composition &mdash; Geraldo Reports Documentation v0.4-alpha-5 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4-alpha-5',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Geraldo Reports Documentation v0.4-alpha-5 documentation" href="../index.html" />
+    <link rel="up" title="Examples" href="index.html" />
+    <link rel="next" title="Charts with CairoPlot" href="cairoplot.html" />
+    <link rel="prev" title="Inheritance" href="inheritance.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="cairoplot.html" title="Charts with CairoPlot"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="inheritance.html" title="Inheritance"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="composition">
+<h1>Composition<a class="headerlink" href="#composition" title="Permalink to this headline">¶</a></h1>
+<p>Composition is useful when you have two or more reports sharing common things.</p>
+<p>But there is a big difference from Inheritance: while <strong>inheritance</strong> starts a
+report from the point where another one ends, <strong>composition</strong> is about you making
+separate things and afterwards composing a report with them.</p>
+<p>Example: two reports of Users, one with some fields and another with more fields
+and landscape page orientation:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
+<span class="n">cur_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span>
+
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+
+<span class="kn">from</span> <span class="nn">reportlab.lib.pagesizes</span> <span class="kn">import</span> <span class="n">A4</span>
+<span class="kn">from</span> <span class="nn">reportlab.lib.units</span> <span class="kn">import</span> <span class="n">cm</span>
+<span class="kn">from</span> <span class="nn">reportlab.lib.enums</span> <span class="kn">import</span> <span class="n">TA_CENTER</span><span class="p">,</span> <span class="n">TA_RIGHT</span>
+
+<span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span><span class="p">,</span> <span class="n">ReportBand</span><span class="p">,</span> <span class="n">Label</span><span class="p">,</span> <span class="n">ObjectValue</span><span class="p">,</span> <span class="n">SystemField</span><span class="p">,</span>\
+    <span class="n">BAND_WIDTH</span><span class="p">,</span> <span class="n">landscape</span>
+
+<span class="k">class</span> <span class="nc">PageHeaderBand</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="mf">1.3</span><span class="o">*</span><span class="n">cm</span>
+    <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">SystemField</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%(report_title)s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">BAND_WIDTH</span><span class="p">,</span>
+            <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;fontName&#39;</span><span class="p">:</span> <span class="s">&#39;Helvetica-Bold&#39;</span><span class="p">,</span> <span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s">&#39;alignment&#39;</span><span class="p">:</span> <span class="n">TA_CENTER</span><span class="p">}),</span>
+        <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;ID&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+        <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;Username&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+        <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;First name&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">8</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+        <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;Last name&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">13</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+        <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;Staff&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">18</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+    <span class="p">]</span>
+    <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;bottom&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+
+<span class="k">class</span> <span class="nc">PageFooterBand</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
+    <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;Created with Geraldo Reports&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+        <span class="n">SystemField</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;Printed in %(now:%Y, %b </span><span class="si">%d</span><span class="s">)s at %(now:%H:%M)s&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+            <span class="n">width</span><span class="o">=</span><span class="n">BAND_WIDTH</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;alignment&#39;</span><span class="p">:</span> <span class="n">TA_RIGHT</span><span class="p">}),</span>
+    <span class="p">]</span>
+    <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;top&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+
+<span class="k">class</span> <span class="nc">DetailBand</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="mf">0.7</span><span class="o">*</span><span class="n">cm</span>
+    <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+        <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">display_format</span><span class="o">=</span><span class="s">&#39;&lt;font size=14 name=Helvetica&gt;</span><span class="si">%s</span><span class="s">&lt;/font&gt;&#39;</span><span class="p">),</span>
+        <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;first_name&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">8</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+        <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;last_name&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">13</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+        <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;is_staff&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">18</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+            <span class="n">get_value</span><span class="o">=</span><span class="k">lambda</span> <span class="n">instance</span><span class="p">:</span> <span class="n">instance</span><span class="o">.</span><span class="n">is_staff</span> <span class="ow">and</span> <span class="s">&#39;Yes&#39;</span> <span class="ow">or</span> <span class="s">&#39;No&#39;</span><span class="p">),</span>
+    <span class="p">]</span>
+
+<span class="k">class</span> <span class="nc">UsersReport</span><span class="p">(</span><span class="n">Report</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Report 1 class&quot;&quot;&quot;</span>
+
+    <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;Users&#39;</span>
+
+    <span class="n">band_page_header</span> <span class="o">=</span> <span class="n">PageHeaderBand</span>
+    <span class="n">band_page_footer</span> <span class="o">=</span> <span class="n">PageFooterBand</span>
+    <span class="n">band_detail</span> <span class="o">=</span> <span class="n">DetailBand</span>
+
+<span class="k">class</span> <span class="nc">LandscapeUsersReport</span><span class="p">(</span><span class="n">Report</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Report 2 class&quot;&quot;&quot;</span>
+
+    <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;Users&#39;</span>
+    <span class="n">page_size</span> <span class="o">=</span> <span class="n">landscape</span><span class="p">(</span><span class="n">A4</span><span class="p">)</span>
+
+    <span class="n">band_page_header</span> <span class="o">=</span> <span class="n">PageHeaderBand</span>
+    <span class="n">band_page_footer</span> <span class="o">=</span> <span class="n">PageFooterBand</span>
+
+    <span class="k">class</span> <span class="nc">band_detail</span><span class="p">(</span><span class="n">DetailBand</span><span class="p">):</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="n">DetailBand</span><span class="o">.</span><span class="n">elements</span><span class="o">+</span><span class="p">[</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;date_joined&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">21</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">LandscapeUsersReport</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">band_page_header</span><span class="o">.</span><span class="n">elements</span> <span class="o">+=</span> <span class="p">[</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;Date joined&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">21</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">band_page_footer</span><span class="o">.</span><span class="n">elements</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span> <span class="o">+=</span> <span class="s">&#39; - Landscape&#39;</span>
+</pre></div>
+</div>
+<p>Generating PDF...</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">queryset</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report</span> <span class="o">=</span> <span class="n">UsersReport</span><span class="p">(</span><span class="n">queryset</span><span class="o">=</span><span class="n">queryset</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">geraldo.generators</span> <span class="kn">import</span> <span class="n">PDFGenerator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cur_dir</span><span class="p">,</span> <span class="s">&#39;output/composition-report.pdf&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Now generating the composed landscape report</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">report</span> <span class="o">=</span> <span class="n">LandscapeUsersReport</span><span class="p">(</span><span class="n">queryset</span><span class="o">=</span><span class="n">queryset</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cur_dir</span><span class="p">,</span> <span class="s">&#39;output/composition-landscape-report.pdf&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The Result</p>
+<ul class="simple">
+<li><a class="reference external" href="http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/composition-report.pdf">http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/composition-report.pdf</a></li>
+<li><a class="reference external" href="http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/composition-landscape-report.pdf">http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/composition-landscape-report.pdf</a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="inheritance.html"
+                                  title="previous chapter">Inheritance</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="cairoplot.html"
+                                  title="next chapter">Charts with CairoPlot</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/examples/composition.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="cairoplot.html" title="Charts with CairoPlot"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="inheritance.html" title="Inheritance"
+             >previous</a> |</li>
+        <li><a href="../index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2010, Marinho Brandao.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

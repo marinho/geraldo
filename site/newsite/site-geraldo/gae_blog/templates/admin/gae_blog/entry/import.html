@@ -1,0 +1,17 @@
+{% extends "admin/gae_blog/base.html" %}
+
+{% block content %}
+<h1>Import Blog Entries</h1>
+
+<form method="post" enctype="multipart/form-data">
+    <table class="form">
+        {{ form }}
+
+        <tr>
+            <th>&nbsp;</th>
+            <td><input type="submit" value="Import"/></td>
+        </tr>
+    </table>
+</form>
+{% endblock content %}
+

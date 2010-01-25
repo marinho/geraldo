@@ -1,0 +1,14 @@
+{% extends "base_site.html" %}
+
+{% block content %}{{ block.super }}
+{% include "search.html" %}
+{% endblock content %}
+
+{% block more %}
+<div class="tags_panel">
+    {% for tag in tags %}
+    {% include "gae_blog/tag_link.html" %}
+    {% endfor %}
+</div>
+{% endblock more %}
+

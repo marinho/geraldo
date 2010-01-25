@@ -1,0 +1,304 @@
+Basic Reference
+===============
+
+Report
+------
+
+.. currentmodule:: geraldo.base
+.. class:: Report
+
+Path: **geraldo.Report**
+
+This is the report main class. Every report must inherit or be an instance of
+this class. It supports some bands and report definitions.
+
+You can also override some methods to customize some things.
+
+**Data source**
+
+- **queryset** - Default: None
+- **print_if_empty** - Default: False
+
+**Report properties**
+
+- **title** - Default: '';
+- **author** - Default: '';
+- **subject** - Default: ''; (you can use it as the report description)
+- **keywords** - Default: '';
+- **additional_fonts** - Default: {}
+
+    **New on 0.4.** This is a dictionary where keys have to be the font name and
+    the value have to be the font file path (full path) to support additional
+    true-type fonts inside the PDF. Once you do it, you can use the fone name
+    used on styles as you do with any other default font.
+
+**Report page dimensions**
+
+- **first_page_number** - Default: 1
+- **page_size** - Default: A4
+- **margin_top** - Default: 1*cm
+- **margin_bottom** - Default: 1*cm
+- **margin_left** - Default: 1*cm
+- **margin_right** - Default: 1*cm
+
+**Report bands**
+
+A report band must be a class inherited from **ReportBand** or an instance of
+**ReportBand** or a class inherited from **ReportBand**
+
+- **band_begin** - Default: None
+- **band_summary** - Default: None
+- **band_page_header** - Default: None
+- **band_page_footer** - Default: None
+- **band_detail** - Default: None
+
+**Report composition**
+
+- **groups** - Default: None
+- **subreports** - Default: []
+
+**Look & feel**
+
+- **default_font_color** - Default: black
+- **default_stroke_color** - Default: black
+- **default_fill_color** - Default: black
+- **default_style** - Default: None
+
+**Events system**
+
+- **before_print** - Default: None
+
+    Is called by **do_before_print** method, before render the report. Expect 
+    arguments **report** and **generator**.
+
+- **before_generate** - Default: None
+
+    Is called by **do_before_generate** method, after render report and before
+    to generate the output files. Expect arguments **report** and **generator**.
+
+- **after_print** - Default: None
+
+    Is called by **do_after_print** method, after generate output files of the
+    report. Expect arguments **report** and **generator**.
+
+- **on_new_page** - Default: None
+
+    Is called by **do_on_new_page** method, when appending new pages when
+    rendering bands. Expect arguments **report**, **page**, **page_number** and
+    **generator**.
+
+    **Important:** if you are setting events as methods, you must name them as "do\_"
+    plus event name (i.e. do_before_print). Otherwise, if you are setting them as
+    attributes (setting when creating objects or setting them dinamically) you must
+    name them without "do\_", just their names (i.e. before_print).
+
+**Caching related attributes and methods**
+
+Take a look on **cache** documentation to see better explanations.
+
+The attributes **cache_status**, **cache_backend** and **cache_file_root** all have a
+'real' default None, but they assume values defined on their respective general
+settings on cache.
+
+- **cache_status** - Default: **geraldo.cache.CACHE_DISABLED**
+
+    Can be setted to 3 different values:
+
+    - geraldo.cache.CACHE_DISABLED
+    - geraldo.cache.CACHE_BY_QUERYSET
+    - geraldo.cache.CACHE_BY_RENDER
+
+- **cache_backend** - Default: 'geraldo.cache.FileCacheBacked'
+
+    A string path to class used to set/get reports to cache.
+
+- **cache_prefix** - Default: report class module + report class name
+
+    Set the prefix for hash key used to identify generated reports from this class.
+
+- **cache_file_root** - Default: '/tmp/'
+
+    The directory path where cached files are stored.
+
+- **get_cache_relevant_attributes()**
+
+    If you want to set manually what attributes you want to make relevante on cache
+    hash key generation, declare this method to returns a list of the attributes
+    names.
+
+**Methods**
+
+- **format_date(date, expression)**
+- **get_objects_list()**
+- **generate_by(generator_class, *args, **kwargs)**
+
+    This is the method used to generate a report to file. Report object is
+    just an abstraction of how report must be like. When generating it to
+    a real file, with real list of objects, you must generate using an
+    **generator** - a classe from **geraldo.generators** package.
+
+    Example:
+
+    >>> report = MyReport(queryset=['Rio','London','Beijing'])
+    >>> from geraldo.generators import PDFGenerator
+    >>> report.generate_by(PDFGenerator, filename='test.pdf')
+
+- **generate_under_process_by(generator_class, *args, **kwargs)**
+
+    Do the same **generate_by** doest, but uses multiprocessing Process
+    instance to run it. This means it will use a new process to generate
+    the file(s) and will use better the available resources of multi-core
+    servers. In most of cases, also helps to avoid memory consumming.
+
+    But there are servers configured with WSGI with no support to I/O
+    when under separated process and this won't work properly.
+
+    As all of us know, Python processing is by far a better way to work
+    than threading, so, this helps to solve it.
+
+- **find_by_name(name, many=False)**
+
+    Find an object with given name in the children (and children of children
+    and so on).
+    
+    If you set **many** to **True**, if many objects with name are found, all
+    of them are returned, instead, an exception
+    **geraldo.exceptions.ManyObjectsFound** is raised. The same is valid when
+    none are found, but the exception **geraldo.exceptions.ObjectNotFound**
+    is raised.
+
+- **find_by_type(typ)**
+
+    Find a list of objects that are instance of class given. As same as
+    **find_by_name**, children of children and so on are found too.
+
+SubReport
+---------
+
+.. currentmodule:: geraldo.base
+.. class:: SubReport
+
+Path: **geraldo.SubReport**
+
+Class to be used for subreport objects. It doesn't need to be inherited.
+
+**Attributes**
+
+- **queryset_string** - must be a string to create a Python-compatible queryset.
+    
+    Examples:
+    
+        * '%(object)s.user_permissions.all()'
+        * '%(object)s.groups.all()'
+        * 'Message.objects.filter(user=%(object)s)'
+        * 'Message.objects.filter(user__id=%(object)s.id)'
+
+- **visible** - Default: True
+
+    Set to False if you want to make it not visible.
+
+**Report bands**
+
+A report band must be a class inherited from **ReportBand** or an instance of
+**ReportBand** or a class inherited from **ReportBand**
+
+- **name** - Default: None
+- **band_detail** - Default: None
+- **band_header** - Default: None
+- **band_footer** - Default: None
+
+**Methods**
+
+- **format_date(date, expression)**
+- **get_objects_list()**
+
+ReportBand
+----------
+
+.. currentmodule:: geraldo.base
+.. class:: ReportBand
+
+Path: **geraldo.ReportBand**
+
+A band is a horizontal area in the report. It can be used to print things on
+the top, on summary, on page header, on page footer or one time per object from
+queryset.
+
+**Attributes**
+
+- **name** - Default: None
+- **height** - Default: 1*cm
+- **width** - Default: None
+- **visible** - Default: True
+
+    Set to False if you want to make it not visible.
+
+- **borders** - Default: {'top': None, 'right': None, 'bottom': None, 'left': None, 'all': None}
+
+    Borders values can be of three types:
+
+    - Boolean (True/False) - just set if there is a border or not
+    - Integer - set there is a border and what is its stroke width. **New on 0.4.**
+    - Graphic (instance of Rect, Line, RoundRect, etc.) - set a complex graphic to put along the border
+
+- **elements** - Default: []
+- **child_bands** - Default: []
+- **force_new_page** - Default: False
+- **default_style** - Default: None
+- **margin_top** - Default: 0
+- **margin_bottom** - Default: 0
+- **auto_expanded_height** - Default: False
+
+    Use 'auto_expanded_height' to make flexible bands to fit their heights to 
+    their elements.
+
+DetailBand
+----------
+
+.. currentmodule:: geraldo.base
+.. class:: DetailBand
+
+Path: **geraldo.DetailBand**
+
+An extension of ReportBand. The only difference is that this class supports more
+attributes, specific to detail bands.
+
+**Attributes**
+
+- **name** - Default: None
+- **margin_left** - Default: 0
+- **margin_right** - Default: 0
+- **display_inline** - Default: False
+
+    When you use **display_inline** with **True** value and **width** with a
+    valid value, the generator will try to align the detail band instances in
+    the same way that HTML does with inline displaying of left floating elements:
+    it will keep each detail band to the right of the last one if there is width
+    available.
+
+    This is useful for label reports.
+
+ReportGroup
+-----------
+
+.. currentmodule:: geraldo.base
+.. class:: ReportGroup
+
+Path: **geraldo.ReportGroup**
+
+This a report grouper class. A report can be grouped to multiple levels by attribute
+values.
+
+**Attributes**
+
+- **name** - Default: None
+- **attribute_name** - Default: None
+
+**Report bands**
+
+A report band must be a class inherited from **ReportBand** or an instance of
+**ReportBand** or a class inherited from **ReportBand**
+
+- **band_header** - Default: None
+- **band_footer** - Default: None
+

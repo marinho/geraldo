@@ -1,0 +1,109 @@
+SubReports
+==========
+
+This is they best way to have a master/detail structure in a report. Its logic
+is: you have a detail band that shows object details and subreports to show
+ManyToMany or ManyRelated objects, like children.
+
+This is different from ChildBand. SubReport is to show object child items in the
+report, not as band childs::
+
+    >>> import os
+    >>> cur_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    >>> from django.contrib.auth.models import User, Permission
+    
+    >>> from reportlab.lib.pagesizes import A4
+    >>> from reportlab.lib.units import cm
+    >>> from reportlab.lib.enums import TA_CENTER, TA_RIGHT
+    >>> from reportlab.lib.colors import navy, red
+    
+    >>> from geraldo import Report, ReportBand, Label, ObjectValue, SystemField,\
+    ...     FIELD_ACTION_COUNT, FIELD_ACTION_SUM, BAND_WIDTH, Line, ReportGroup,\
+    ...     SubReport
+    
+    >>> class MasterReport(Report):
+    ...     title = 'Subreports demonstration'
+    ... 
+    ...     class band_summary(ReportBand):
+    ...         height = 0.8*cm
+    ...         elements = [
+    ...             Label(text="Users count:", top=0.1*cm, left=0),
+    ...             ObjectValue(attribute_name='id', top=0.1*cm, left=4*cm,\
+    ...                 action=FIELD_ACTION_COUNT, display_format='%s users found'),
+    ...         ]
+    ...         borders = {'top': Line(stroke_color=red, stroke_width=3)}
+    ... 
+    ...     class band_page_header(ReportBand):
+    ...         height = 0.8*cm
+    ...         elements = [
+    ...             SystemField(expression='%(report_title)s', top=0.1*cm, left=0, width=BAND_WIDTH,
+    ...                 style={'fontName': 'Helvetica-Bold', 'fontSize': 14, 'alignment': TA_CENTER}),
+    ...             SystemField(expression='Page # %(page_number)d of %(page_count)d', top=0.1*cm,
+    ...                 width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
+    ...         ]
+    ...         borders = {'bottom': Line(stroke_color=red, stroke_width=3)}
+    ... 
+    ...     class band_page_footer(ReportBand):
+    ...         height = 0.5*cm
+    ...         elements = [
+    ...             Label(text='Created with Geraldo Reports', top=0.1*cm),
+    ...             SystemField(expression='Printed in %(now:%Y, %b %d)s at %(now:%H:%M)s', top=0.1*cm,
+    ...                 width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
+    ...         ]
+    ...         borders = {'top': Line(stroke_color=navy)}
+    ... 
+    ...     class band_detail(ReportBand):
+    ...         height = 2*cm
+    ...         elements = [
+    ...             Label(text="Username", top=0, left=0, style={'fontName': 'Helvetica-Bold', 'fontSize': 14}),
+    ...             Label(text="Full name", top=1*cm, left=0.2*cm, style={'fontName': 'Helvetica-Bold'}),
+    ...             Label(text="Superuser", top=1.5*cm, left=0.2*cm, style={'fontName': 'Helvetica-Bold'}),
+    ...             ObjectValue(attribute_name='username', top=0, left=4*cm, style={'fontName': 'Helvetica', 'fontSize': 14}),
+    ...             ObjectValue(attribute_name='get_full_name', top=1*cm, left=4*cm, style={'fontName': 'Helvetica'}),
+    ...             ObjectValue(attribute_name='is_superuser', top=1.5*cm, left=4*cm, style={'fontName': 'Helvetica'}),
+    ...         ]
+    ...         borders = {'bottom': Line(stroke_color=navy)}
+    ... 
+    ...     subreports = [
+    ...         SubReport(
+    ...             queryset_string = '%(object)s.user_permissions.all()',
+    ...             band_header = ReportBand(
+    ...                     height=0.5*cm,
+    ...                     elements=[
+    ...                         Label(text='ID', top=0, left=0.2*cm, style={'fontName': 'Helvetica-Bold'}),
+    ...                         Label(text='Name', top=0, left=4*cm, style={'fontName': 'Helvetica-Bold'}),
+    ...                     ],
+    ...                     borders={'top': True, 'left': True, 'right': True},
+    ...                 ),
+    ...             band_detail = ReportBand(
+    ...                     height=0.5*cm,
+    ...                     elements=[
+    ...                         ObjectValue(attribute_name='id', top=0, left=0.2*cm),
+    ...                         ObjectValue(attribute_name='name', top=0, left=4*cm),
+    ...                     ],
+    ...                     borders={'left': True, 'right': True},
+    ...                 ),
+    ...             band_footer = ReportBand(
+    ...                     height=0.5*cm,
+    ...                     elements=[
+    ...                         ObjectValue(attribute_name='id', left=4*cm,\
+    ...                             action=FIELD_ACTION_COUNT, display_format='%s permissions found',
+    ...                             style={'fontName': 'Helvetica-Bold'}),
+    ...                     ],
+    ...                     borders={'bottom': True, 'left': True, 'right': True},
+    ...                 ),
+    ...         ),
+    ...     ]
+
+Generating PDF...
+
+    >>> queryset = User.objects.order_by('username')
+    >>> report = MasterReport(queryset=queryset)
+    >>> from geraldo.generators import PDFGenerator
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/subreports-report.pdf'))
+
+The Result
+
+- http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/subreports-report.pdf
+

@@ -1,0 +1,458 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Basic Reference &mdash; Geraldo Reports Documentation v0.4-alpha-5 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.4-alpha-5',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Geraldo Reports Documentation v0.4-alpha-5 documentation" href="index.html" />
+    <link rel="next" title="Widgets Reference" href="widgets.html" />
+    <link rel="prev" title="Tutorial using Web2Py" href="tutorial-2.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="widgets.html" title="Widgets Reference"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tutorial-2.html" title="Tutorial using Web2Py"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="basic-reference">
+<h1>Basic Reference<a class="headerlink" href="#basic-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="report">
+<h2>Report<a class="headerlink" href="#report" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="geraldo.base.Report">
+<em class="property">class </em><tt class="descclassname">geraldo.base.</tt><tt class="descname">Report</tt><a class="headerlink" href="#geraldo.base.Report" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Path: <strong>geraldo.Report</strong></p>
+<p>This is the report main class. Every report must inherit or be an instance of
+this class. It supports some bands and report definitions.</p>
+<p>You can also override some methods to customize some things.</p>
+<p><strong>Data source</strong></p>
+<ul class="simple">
+<li><strong>queryset</strong> - Default: None</li>
+<li><strong>print_if_empty</strong> - Default: False</li>
+</ul>
+<p><strong>Report properties</strong></p>
+<ul>
+<li><p class="first"><strong>title</strong> - Default: &#8216;&#8217;;</p>
+</li>
+<li><p class="first"><strong>author</strong> - Default: &#8216;&#8217;;</p>
+</li>
+<li><p class="first"><strong>subject</strong> - Default: &#8216;&#8217;; (you can use it as the report description)</p>
+</li>
+<li><p class="first"><strong>keywords</strong> - Default: &#8216;&#8217;;</p>
+</li>
+<li><p class="first"><strong>additional_fonts</strong> - Default: {}</p>
+<blockquote>
+<p><strong>New on 0.4.</strong> This is a dictionary where keys have to be the font name and
+the value have to be the font file path (full path) to support additional
+true-type fonts inside the PDF. Once you do it, you can use the fone name
+used on styles as you do with any other default font.</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>Report page dimensions</strong></p>
+<ul class="simple">
+<li><strong>first_page_number</strong> - Default: 1</li>
+<li><strong>page_size</strong> - Default: A4</li>
+<li><strong>margin_top</strong> - Default: 1*cm</li>
+<li><strong>margin_bottom</strong> - Default: 1*cm</li>
+<li><strong>margin_left</strong> - Default: 1*cm</li>
+<li><strong>margin_right</strong> - Default: 1*cm</li>
+</ul>
+<p><strong>Report bands</strong></p>
+<p>A report band must be a class inherited from <strong>ReportBand</strong> or an instance of
+<strong>ReportBand</strong> or a class inherited from <strong>ReportBand</strong></p>
+<ul class="simple">
+<li><strong>band_begin</strong> - Default: None</li>
+<li><strong>band_summary</strong> - Default: None</li>
+<li><strong>band_page_header</strong> - Default: None</li>
+<li><strong>band_page_footer</strong> - Default: None</li>
+<li><strong>band_detail</strong> - Default: None</li>
+</ul>
+<p><strong>Report composition</strong></p>
+<ul class="simple">
+<li><strong>groups</strong> - Default: None</li>
+<li><strong>subreports</strong> - Default: []</li>
+</ul>
+<p><strong>Look &amp; feel</strong></p>
+<ul class="simple">
+<li><strong>default_font_color</strong> - Default: black</li>
+<li><strong>default_stroke_color</strong> - Default: black</li>
+<li><strong>default_fill_color</strong> - Default: black</li>
+<li><strong>default_style</strong> - Default: None</li>
+</ul>
+<p><strong>Events system</strong></p>
+<ul>
+<li><p class="first"><strong>before_print</strong> - Default: None</p>
+<blockquote>
+<p>Is called by <strong>do_before_print</strong> method, before render the report. Expect
+arguments <strong>report</strong> and <strong>generator</strong>.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>before_generate</strong> - Default: None</p>
+<blockquote>
+<p>Is called by <strong>do_before_generate</strong> method, after render report and before
+to generate the output files. Expect arguments <strong>report</strong> and <strong>generator</strong>.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>after_print</strong> - Default: None</p>
+<blockquote>
+<p>Is called by <strong>do_after_print</strong> method, after generate output files of the
+report. Expect arguments <strong>report</strong> and <strong>generator</strong>.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>on_new_page</strong> - Default: None</p>
+<blockquote>
+<p>Is called by <strong>do_on_new_page</strong> method, when appending new pages when
+rendering bands. Expect arguments <strong>report</strong>, <strong>page</strong>, <strong>page_number</strong> and
+<strong>generator</strong>.</p>
+<p><strong>Important:</strong> if you are setting events as methods, you must name them as &#8220;do_&#8221;
+plus event name (i.e. do_before_print). Otherwise, if you are setting them as
+attributes (setting when creating objects or setting them dinamically) you must
+name them without &#8220;do_&#8221;, just their names (i.e. before_print).</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>Caching related attributes and methods</strong></p>
+<p>Take a look on <strong>cache</strong> documentation to see better explanations.</p>
+<p>The attributes <strong>cache_status</strong>, <strong>cache_backend</strong> and <strong>cache_file_root</strong> all have a
+&#8216;real&#8217; default None, but they assume values defined on their respective general
+settings on cache.</p>
+<ul>
+<li><p class="first"><strong>cache_status</strong> - Default: <strong>geraldo.cache.CACHE_DISABLED</strong></p>
+<blockquote>
+<p>Can be setted to 3 different values:</p>
+<ul class="simple">
+<li>geraldo.cache.CACHE_DISABLED</li>
+<li>geraldo.cache.CACHE_BY_QUERYSET</li>
+<li>geraldo.cache.CACHE_BY_RENDER</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><strong>cache_backend</strong> - Default: &#8216;geraldo.cache.FileCacheBacked&#8217;</p>
+<blockquote>
+<p>A string path to class used to set/get reports to cache.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>cache_prefix</strong> - Default: report class module + report class name</p>
+<blockquote>
+<p>Set the prefix for hash key used to identify generated reports from this class.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>cache_file_root</strong> - Default: &#8216;/tmp/&#8217;</p>
+<blockquote>
+<p>The directory path where cached files are stored.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>get_cache_relevant_attributes()</strong></p>
+<blockquote>
+<p>If you want to set manually what attributes you want to make relevante on cache
+hash key generation, declare this method to returns a list of the attributes
+names.</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>Methods</strong></p>
+<ul>
+<li><p class="first"><strong>format_date(date, expression)</strong></p>
+</li>
+<li><p class="first"><strong>get_objects_list()</strong></p>
+</li>
+<li><p class="first"><strong>generate_by(generator_class, *args, **kwargs)</strong></p>
+<blockquote>
+<p>This is the method used to generate a report to file. Report object is
+just an abstraction of how report must be like. When generating it to
+a real file, with real list of objects, you must generate using an
+<strong>generator</strong> - a classe from <strong>geraldo.generators</strong> package.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">report</span> <span class="o">=</span> <span class="n">MyReport</span><span class="p">(</span><span class="n">queryset</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Rio&#39;</span><span class="p">,</span><span class="s">&#39;London&#39;</span><span class="p">,</span><span class="s">&#39;Beijing&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">geraldo.generators</span> <span class="kn">import</span> <span class="n">PDFGenerator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s">&#39;test.pdf&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</blockquote>
+</li>
+<li><p class="first"><strong>generate_under_process_by(generator_class, *args, **kwargs)</strong></p>
+<blockquote>
+<p>Do the same <strong>generate_by</strong> doest, but uses multiprocessing Process
+instance to run it. This means it will use a new process to generate
+the file(s) and will use better the available resources of multi-core
+servers. In most of cases, also helps to avoid memory consumming.</p>
+<p>But there are servers configured with WSGI with no support to I/O
+when under separated process and this won&#8217;t work properly.</p>
+<p>As all of us know, Python processing is by far a better way to work
+than threading, so, this helps to solve it.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>find_by_name(name, many=False)</strong></p>
+<blockquote>
+<p>Find an object with given name in the children (and children of children
+and so on).</p>
+<p>If you set <strong>many</strong> to <strong>True</strong>, if many objects with name are found, all
+of them are returned, instead, an exception
+<strong>geraldo.exceptions.ManyObjectsFound</strong> is raised. The same is valid when
+none are found, but the exception <strong>geraldo.exceptions.ObjectNotFound</strong>
+is raised.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>find_by_type(typ)</strong></p>
+<blockquote>
+<p>Find a list of objects that are instance of class given. As same as
+<strong>find_by_name</strong>, children of children and so on are found too.</p>
+</blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="subreport">
+<h2>SubReport<a class="headerlink" href="#subreport" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="geraldo.base.SubReport">
+<em class="property">class </em><tt class="descclassname">geraldo.base.</tt><tt class="descname">SubReport</tt><a class="headerlink" href="#geraldo.base.SubReport" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Path: <strong>geraldo.SubReport</strong></p>
+<p>Class to be used for subreport objects. It doesn&#8217;t need to be inherited.</p>
+<p><strong>Attributes</strong></p>
+<ul>
+<li><p class="first"><strong>queryset_string</strong> - must be a string to create a Python-compatible queryset.</p>
+<blockquote>
+<p>Examples:</p>
+<blockquote>
+<ul class="simple">
+<li>&#8216;%(object)s.user_permissions.all()&#8217;</li>
+<li>&#8216;%(object)s.groups.all()&#8217;</li>
+<li>&#8216;Message.objects.filter(user=%(object)s)&#8217;</li>
+<li>&#8216;Message.objects.filter(user__id=%(object)s.id)&#8217;</li>
+</ul>
+</blockquote>
+</blockquote>
+</li>
+<li><p class="first"><strong>visible</strong> - Default: True</p>
+<blockquote>
+<p>Set to False if you want to make it not visible.</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>Report bands</strong></p>
+<p>A report band must be a class inherited from <strong>ReportBand</strong> or an instance of
+<strong>ReportBand</strong> or a class inherited from <strong>ReportBand</strong></p>
+<ul class="simple">
+<li><strong>name</strong> - Default: None</li>
+<li><strong>band_detail</strong> - Default: None</li>
+<li><strong>band_header</strong> - Default: None</li>
+<li><strong>band_footer</strong> - Default: None</li>
+</ul>
+<p><strong>Methods</strong></p>
+<ul class="simple">
+<li><strong>format_date(date, expression)</strong></li>
+<li><strong>get_objects_list()</strong></li>
+</ul>
+</div>
+<div class="section" id="reportband">
+<h2>ReportBand<a class="headerlink" href="#reportband" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="geraldo.base.ReportBand">
+<em class="property">class </em><tt class="descclassname">geraldo.base.</tt><tt class="descname">ReportBand</tt><a class="headerlink" href="#geraldo.base.ReportBand" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Path: <strong>geraldo.ReportBand</strong></p>
+<p>A band is a horizontal area in the report. It can be used to print things on
+the top, on summary, on page header, on page footer or one time per object from
+queryset.</p>
+<p><strong>Attributes</strong></p>
+<ul>
+<li><p class="first"><strong>name</strong> - Default: None</p>
+</li>
+<li><p class="first"><strong>height</strong> - Default: 1*cm</p>
+</li>
+<li><p class="first"><strong>width</strong> - Default: None</p>
+</li>
+<li><p class="first"><strong>visible</strong> - Default: True</p>
+<blockquote>
+<p>Set to False if you want to make it not visible.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>borders</strong> - Default: {&#8216;top&#8217;: None, &#8216;right&#8217;: None, &#8216;bottom&#8217;: None, &#8216;left&#8217;: None, &#8216;all&#8217;: None}</p>
+<blockquote>
+<p>Borders values can be of three types:</p>
+<ul class="simple">
+<li>Boolean (True/False) - just set if there is a border or not</li>
+<li>Integer - set there is a border and what is its stroke width. <strong>New on 0.4.</strong></li>
+<li>Graphic (instance of Rect, Line, RoundRect, etc.) - set a complex graphic to put along the border</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><strong>elements</strong> - Default: []</p>
+</li>
+<li><p class="first"><strong>child_bands</strong> - Default: []</p>
+</li>
+<li><p class="first"><strong>force_new_page</strong> - Default: False</p>
+</li>
+<li><p class="first"><strong>default_style</strong> - Default: None</p>
+</li>
+<li><p class="first"><strong>margin_top</strong> - Default: 0</p>
+</li>
+<li><p class="first"><strong>margin_bottom</strong> - Default: 0</p>
+</li>
+<li><p class="first"><strong>auto_expanded_height</strong> - Default: False</p>
+<blockquote>
+<p>Use &#8216;auto_expanded_height&#8217; to make flexible bands to fit their heights to
+their elements.</p>
+</blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="detailband">
+<h2>DetailBand<a class="headerlink" href="#detailband" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="geraldo.base.DetailBand">
+<em class="property">class </em><tt class="descclassname">geraldo.base.</tt><tt class="descname">DetailBand</tt><a class="headerlink" href="#geraldo.base.DetailBand" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Path: <strong>geraldo.DetailBand</strong></p>
+<p>An extension of ReportBand. The only difference is that this class supports more
+attributes, specific to detail bands.</p>
+<p><strong>Attributes</strong></p>
+<ul>
+<li><p class="first"><strong>name</strong> - Default: None</p>
+</li>
+<li><p class="first"><strong>margin_left</strong> - Default: 0</p>
+</li>
+<li><p class="first"><strong>margin_right</strong> - Default: 0</p>
+</li>
+<li><p class="first"><strong>display_inline</strong> - Default: False</p>
+<blockquote>
+<p>When you use <strong>display_inline</strong> with <strong>True</strong> value and <strong>width</strong> with a
+valid value, the generator will try to align the detail band instances in
+the same way that HTML does with inline displaying of left floating elements:
+it will keep each detail band to the right of the last one if there is width
+available.</p>
+<p>This is useful for label reports.</p>
+</blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="reportgroup">
+<h2>ReportGroup<a class="headerlink" href="#reportgroup" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="geraldo.base.ReportGroup">
+<em class="property">class </em><tt class="descclassname">geraldo.base.</tt><tt class="descname">ReportGroup</tt><a class="headerlink" href="#geraldo.base.ReportGroup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Path: <strong>geraldo.ReportGroup</strong></p>
+<p>This a report grouper class. A report can be grouped to multiple levels by attribute
+values.</p>
+<p><strong>Attributes</strong></p>
+<ul class="simple">
+<li><strong>name</strong> - Default: None</li>
+<li><strong>attribute_name</strong> - Default: None</li>
+</ul>
+<p><strong>Report bands</strong></p>
+<p>A report band must be a class inherited from <strong>ReportBand</strong> or an instance of
+<strong>ReportBand</strong> or a class inherited from <strong>ReportBand</strong></p>
+<ul class="simple">
+<li><strong>band_header</strong> - Default: None</li>
+<li><strong>band_footer</strong> - Default: None</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Basic Reference</a><ul>
+<li><a class="reference external" href="#report">Report</a></li>
+<li><a class="reference external" href="#subreport">SubReport</a></li>
+<li><a class="reference external" href="#reportband">ReportBand</a></li>
+<li><a class="reference external" href="#detailband">DetailBand</a></li>
+<li><a class="reference external" href="#reportgroup">ReportGroup</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="tutorial-2.html"
+                                  title="previous chapter">Tutorial using Web2Py</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="widgets.html"
+                                  title="next chapter">Widgets Reference</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/basic.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="widgets.html" title="Widgets Reference"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tutorial-2.html" title="Tutorial using Web2Py"
+             >previous</a> |</li>
+        <li><a href="index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2010, Marinho Brandao.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

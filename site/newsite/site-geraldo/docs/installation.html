@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Installation &mdash; Geraldo Reports Documentation v0.4-stable documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.4-stable',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Geraldo Reports Documentation v0.4-stable documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="index.html">Geraldo Reports Documentation v0.4-stable documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>Geraldo is still not available as an installer or system package. So, you have two
+ways to install it:</p>
+<div class="section" id="option-1-get-the-latest-official-version">
+<h2>Option 1. Get the latest official version<a class="headerlink" href="#option-1-get-the-latest-official-version" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">Get the latest tarball available from:</p>
+<blockquote>
+<p><a class="reference external" href="https://sourceforge.net/projects/geraldo/files/geraldo/">https://sourceforge.net/projects/geraldo/files/geraldo/</a></p>
+</blockquote>
+</li>
+<li><p class="first">Then you can do the following steps to install it:</p>
+</li>
+</ol>
+<p><strong>Linux</strong></p>
+<div class="highlight-python"><pre>tar xvfz Geraldo-latest.tar.gz
+cd Geraldo
+sudo python setup.py install</pre>
+</div>
+<p>This will copy Geraldo&#8217;s packages inside Python&#8217;s packages path.</p>
+<p><strong>Windows</strong></p>
+<p>If you are using Windows, Geraldo is fully compatible. You just have to use a
+tarball decompression tool, like <strong>7-Zip</strong> which you can download from:</p>
+<blockquote>
+<a class="reference external" href="http://www.7-zip.org/download.html">http://www.7-zip.org/download.html</a></blockquote>
+<p>Once you have a tool to decompress tarball files, you have to decompress it,
+open a DOS Prompt window in the folder you decompress into and run the
+following command:</p>
+<div class="highlight-python"><pre>python setup.py install</pre>
+</div>
+</div>
+<div class="section" id="option-2-get-the-latest-development-version">
+<h2>Option 2. Get the latest development version<a class="headerlink" href="#option-2-get-the-latest-development-version" title="Permalink to this headline">¶</a></h2>
+<p>Our version control is centralized on GitHub Social repository, in the
+following URL:</p>
+<div class="highlight-python"><pre>http://github.com/marinho/geraldo</pre>
+</div>
+<p>To get the latest development version from repository server, you will need the
+Git version control system. Then you can run the following command in Shell or
+MS-DOS Prompty window:</p>
+<div class="highlight-python"><pre>git clone git://github.com/marinho/geraldo.git</pre>
+</div>
+<p>A folder named <strong>geraldo</strong> will be in your current path with all
+Geraldo files inside.</p>
+<p>Then you can go ahead and use the same commands from <strong>Option 1</strong> to install
+in your system.</p>
+</div>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<p><strong>ReportLab</strong></p>
+<p>This is required, as you cannot use Geraldo without ReportLab
+installed.</p>
+<p>Get it from the following URL:</p>
+<blockquote>
+<a class="reference external" href="http://www.reportlab.org/">http://www.reportlab.org/</a></blockquote>
+<p>The tested version is <strong>2.1</strong>.</p>
+<p><strong>Python Imaging Library</strong></p>
+<p>Geraldo depends on PIL to work with Images manipulation on the canvas. If you
+aren&#8217;t going to use them, you can live without PIL.</p>
+<p>To get PIL you can go to the following URL:</p>
+<blockquote>
+<a class="reference external" href="http://www.pythonware.com/products/pil/">http://www.pythonware.com/products/pil/</a></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Installation</a><ul>
+<li><a class="reference external" href="#option-1-get-the-latest-official-version">Option 1. Get the latest official version</a></li>
+<li><a class="reference external" href="#option-2-get-the-latest-development-version">Option 2. Get the latest development version</a></li>
+<li><a class="reference external" href="#dependencies">Dependencies</a></li>
+</ul>
+</li>
+</ul>
+
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/installation.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="index.html">Geraldo Reports Documentation v0.4-stable documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009, Marinho Brandao.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

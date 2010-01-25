@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>A report with all kinds of graphic elements &mdash; Geraldo Reports Documentation v0.4-alpha-5 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4-alpha-5',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Geraldo Reports Documentation v0.4-alpha-5 documentation" href="../index.html" />
+    <link rel="up" title="Examples" href="index.html" />
+    <link rel="next" title="Child Bands" href="child-bands.html" />
+    <link rel="prev" title="An Intermediary Report" href="intermediary-report.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="child-bands.html" title="Child Bands"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="intermediary-report.html" title="An Intermediary Report"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="a-report-with-all-kinds-of-graphic-elements">
+<h1>A report with all kinds of graphic elements<a class="headerlink" href="#a-report-with-all-kinds-of-graphic-elements" title="Permalink to this headline">¶</a></h1>
+<p>This is just a report with every graphic element:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
+<span class="n">cur_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span>
+
+<span class="kn">from</span> <span class="nn">reportlab.lib.pagesizes</span> <span class="kn">import</span> <span class="n">A4</span>
+<span class="kn">from</span> <span class="nn">reportlab.lib.units</span> <span class="kn">import</span> <span class="n">cm</span>
+<span class="kn">from</span> <span class="nn">reportlab.lib.colors</span> <span class="kn">import</span> <span class="n">navy</span><span class="p">,</span> <span class="n">yellow</span><span class="p">,</span> <span class="n">red</span><span class="p">,</span> <span class="n">purple</span><span class="p">,</span> <span class="n">orange</span><span class="p">,</span>\
+    <span class="n">green</span><span class="p">,</span> <span class="n">white</span><span class="p">,</span> <span class="n">blue</span>
+<span class="kn">from</span> <span class="nn">reportlab.lib.enums</span> <span class="kn">import</span> <span class="n">TA_CENTER</span><span class="p">,</span> <span class="n">TA_JUSTIFY</span>
+
+<span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span><span class="p">,</span> <span class="n">ReportBand</span><span class="p">,</span> <span class="n">RoundRect</span><span class="p">,</span> <span class="n">Rect</span><span class="p">,</span> <span class="n">Line</span><span class="p">,</span> <span class="n">Circle</span><span class="p">,</span>\
+    <span class="n">Arc</span><span class="p">,</span> <span class="n">Ellipse</span><span class="p">,</span> <span class="n">SystemField</span><span class="p">,</span> <span class="n">Label</span><span class="p">,</span> <span class="n">BAND_WIDTH</span><span class="p">,</span> <span class="n">Image</span>
+
+<span class="k">class</span> <span class="nc">GraphicsReport</span><span class="p">(</span><span class="n">Report</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;Graphics demonstration&#39;</span>
+    <span class="n">print_if_empty</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="k">class</span> <span class="nc">band_begin</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mi">15</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">RoundRect</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mf">0.2</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">radius</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">stroke_color</span><span class="o">=</span><span class="n">purple</span><span class="p">),</span>
+            <span class="n">Rect</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">4</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">1.0</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">fill</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">stroke</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">fill_color</span><span class="o">=</span><span class="n">orange</span><span class="p">),</span>
+            <span class="n">Line</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">9</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+            <span class="n">Line</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">9</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">10</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">Line</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mf">8.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">9</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">6</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">Line</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">9</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">6</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">10</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">Circle</span><span class="p">(</span><span class="n">left_center</span><span class="o">=</span><span class="mi">5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top_center</span><span class="o">=</span><span class="mi">5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">fill_color</span><span class="o">=</span><span class="n">yellow</span><span class="p">,</span>
+                <span class="n">fill</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+            <span class="n">Arc</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">3.0</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">4</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">start_angle</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="mi">100</span><span class="p">),</span>
+            <span class="n">Ellipse</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">6.0</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">4.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">fill_color</span><span class="o">=</span><span class="n">blue</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">stroke_width</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+            <span class="n">Image</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">10</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">6</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">4</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">5.12</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">filename</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cur_dir</span><span class="p">,</span> <span class="s">&#39;photo.jpg&#39;</span><span class="p">)),</span>
+            <span class="n">Image</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">13</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">6</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">filename</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cur_dir</span><span class="p">,</span> <span class="s">&#39;photo.jpg&#39;</span><span class="p">)),</span>
+            <span class="c">#Poligon(), # --&gt; uses drawPath</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;&quot;&quot;&lt;b&gt;William Shakespeare&lt;/b&gt; (baptised 26 April 1564 – 23 April 1616)[a] was an English poet and playwright, widely regarded as the greatest writer in the English language and the world&#39;s preeminent dramatist.&quot;&quot;&quot;</span><span class="p">,</span>
+                <span class="n">left</span><span class="o">=</span><span class="mi">12</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">6</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">4</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;wordWrap&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s">&#39;borderWidth&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="s">&#39;borderColor&#39;</span><span class="p">:</span> <span class="n">green</span><span class="p">,</span> <span class="s">&#39;borderPadding&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+                    <span class="s">&#39;borderRadius&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s">&#39;alignment&#39;</span><span class="p">:</span> <span class="n">TA_JUSTIFY</span><span class="p">}),</span>
+        <span class="p">]</span>
+
+    <span class="k">class</span> <span class="nc">band_page_header</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mf">1.4</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">SystemField</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%(report_title)s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="n">width</span><span class="o">=</span><span class="n">BAND_WIDTH</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;fontName&#39;</span><span class="p">:</span> <span class="s">&#39;Helvetica-Bold&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s">&#39;alignment&#39;</span><span class="p">:</span> <span class="n">TA_CENTER</span><span class="p">}),</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;ID&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;borderWidth&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;borderColor&#39;</span><span class="p">:</span> <span class="n">green</span><span class="p">,</span>
+                    <span class="s">&#39;borderPadding&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;borderRadius&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}),</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;Name&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;backColor&#39;</span><span class="p">:</span> <span class="n">red</span><span class="p">,</span> <span class="s">&#39;textColor&#39;</span><span class="p">:</span> <span class="n">white</span><span class="p">,</span>
+                <span class="s">&#39;fontName&#39;</span><span class="p">:</span> <span class="s">&#39;Helvetica&#39;</span><span class="p">}),</span>
+        <span class="p">]</span>
+        <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;bottom&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Generating PDF...</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">report</span> <span class="o">=</span> <span class="n">GraphicsReport</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">geraldo.generators</span> <span class="kn">import</span> <span class="n">PDFGenerator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cur_dir</span><span class="p">,</span> <span class="s">&#39;output/graphics-report.pdf&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The Result</p>
+<ul class="simple">
+<li><a class="reference external" href="http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/graphics-report.pdf">http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/graphics-report.pdf</a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="intermediary-report.html"
+                                  title="previous chapter">An Intermediary Report</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="child-bands.html"
+                                  title="next chapter">Child Bands</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/examples/graphics-report.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="child-bands.html" title="Child Bands"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="intermediary-report.html" title="An Intermediary Report"
+             >previous</a> |</li>
+        <li><a href="../index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2010, Marinho Brandao.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

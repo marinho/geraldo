@@ -1,0 +1,15 @@
+{% load wiki_tags blog_tags gallery_tags %}
+
+{% ifequal wiki.format 'html' %}
+{{ wiki.text|parse_blog|parse_wiki|parse_gallery|safe }}
+{% endifequal %}
+
+{% ifequal wiki.format 'text' %}
+{{ wiki.text|linebreaks|parse_blog|parse_wiki|parse_gallery|urlize }}
+{% endifequal %}
+
+{% ifequal wiki.format 'markdown' %}
+{% load markup %}
+{{ wiki.text|markdown|parse_blog|parse_wiki|parse_gallery|urlize }}
+{% endifequal %}
+

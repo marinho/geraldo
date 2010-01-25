@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Utilities Reference &mdash; Geraldo Reports Documentation v0.4-alpha-5 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.4-alpha-5',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Geraldo Reports Documentation v0.4-alpha-5 documentation" href="index.html" />
+    <link rel="next" title="Examples" href="examples/index.html" />
+    <link rel="prev" title="Caching" href="caching.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="examples/index.html" title="Examples"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="caching.html" title="Caching"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="utilities-reference">
+<h1>Utilities Reference<a class="headerlink" href="#utilities-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="landscape">
+<h2>landscape<a class="headerlink" href="#landscape" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="geraldo.utils.landscape">
+<tt class="descclassname">geraldo.utils.</tt><tt class="descname">landscape</tt><big>(</big><big>)</big><a class="headerlink" href="#geraldo.utils.landscape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Path: <strong>geraldo.landscape</strong></p>
+<p>Page sizes are tuples with 2 nodes: first with <strong>width</strong> and second width
+<strong>height</strong>.</p>
+<p><strong>landscape</strong> is a helper function to invert this tuple.</p>
+</div>
+<div class="section" id="band-width">
+<h2>BAND_WIDTH<a class="headerlink" href="#band-width" title="Permalink to this headline">¶</a></h2>
+<dl class="data">
+<dt id="geraldo.utils.BAND_WIDTH">
+<tt class="descclassname">geraldo.utils.</tt><tt class="descname">BAND_WIDTH</tt><a class="headerlink" href="#geraldo.utils.BAND_WIDTH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Path: <strong>geraldo.BAND_WIDTH</strong></p>
+<p>Once you use this constant in a widget or graphic width, it will assume its
+band width automatically.</p>
+</div>
+<div class="section" id="memoize">
+<h2>memoize<a class="headerlink" href="#memoize" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="geraldo.utils.memoize">
+<tt class="descclassname">geraldo.utils.</tt><tt class="descname">memoize</tt><big>(</big><big>)</big><a class="headerlink" href="#geraldo.utils.memoize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Path: <strong>geraldo.utils.memoize</strong></p>
+<p>This is a decorator used internally by some functions to store their result
+values like a cache. When the same function is called again with same
+arguments values, the stored value is returned, instead of run its code again.</p>
+<p>You can use it for your own code, just wrapping your function under the
+decorator.</p>
+<p>Example of use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">geraldo.utils</span> <span class="kn">import</span> <span class="n">memoize</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@memoize</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">calc_sum</span><span class="p">(</span><span class="n">val1</span><span class="p">,</span> <span class="n">val2</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">val1</span> <span class="o">+</span> <span class="n">val2</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="run-under-process">
+<h2>run_under_process<a class="headerlink" href="#run-under-process" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="geraldo.utils.run_under_process">
+<tt class="descclassname">geraldo.utils.</tt><tt class="descname">run_under_process</tt><big>(</big><big>)</big><a class="headerlink" href="#geraldo.utils.run_under_process" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Path: <strong>geraldo.utils.run_under_process</strong></p>
+<p>This is a decorator supplied by Geraldo to help developers to run functions
+under a new process instead of the main thread.</p>
+<p>Geraldo uses it in method <strong>Report.generate_under_process_by</strong>, to run the
+report generation under other process, but you can use it on your own code,
+if you don&#8217;t want/can&#8217;t use that method.</p>
+<p>Example of use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">geraldo.generators</span> <span class="kn">import</span> <span class="n">PDFGenerator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">geraldo.utils</span> <span class="kn">import</span> <span class="n">run_under_process</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@run_under_process</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">generate_by_report</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">report</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="disable-multiprocessing">
+<h2>DISABLE_MULTIPROCESSING<a class="headerlink" href="#disable-multiprocessing" title="Permalink to this headline">¶</a></h2>
+<dl class="data">
+<dt id="geraldo.utils.DISABLE_MULTIPROCESSING">
+<tt class="descclassname">geraldo.utils.</tt><tt class="descname">DISABLE_MULTIPROCESSING</tt><a class="headerlink" href="#geraldo.utils.DISABLE_MULTIPROCESSING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Path: <strong>geraldo.DISABLE_MULTIPROCESSING</strong></p>
+<p>A short way to disable all use of multiprocessing on Geraldo, at all. This
+is useful when you are debugging your reports.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Utilities Reference</a><ul>
+<li><a class="reference external" href="#landscape">landscape</a></li>
+<li><a class="reference external" href="#band-width">BAND_WIDTH</a></li>
+<li><a class="reference external" href="#memoize">memoize</a></li>
+<li><a class="reference external" href="#run-under-process">run_under_process</a></li>
+<li><a class="reference external" href="#disable-multiprocessing">DISABLE_MULTIPROCESSING</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="caching.html"
+                                  title="previous chapter">Caching</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="examples/index.html"
+                                  title="next chapter">Examples</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/utils.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="examples/index.html" title="Examples"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="caching.html" title="Caching"
+             >previous</a> |</li>
+        <li><a href="index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2010, Marinho Brandao.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>
