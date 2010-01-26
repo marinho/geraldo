@@ -1,0 +1,217 @@
+CROSS REFERENCE TABLES
+======================
+
+Cross-reference is the type of a report that shows a matrix of XYZ relations, where
+X and Y are groupping fields and Z is a field with a summary value of relation between
+X and Y.
+
+Z field could be just the first/once value of a relation, or could be an aggregation,
+like COUNT, DISTINCT COUNT, SUM, MAX, MIN, AVERAGE or a CONCATENATION, depending on
+its data type.
+
+So, just to keep the things clear:
+
+X = is the row groupper attribute
+Y = is the column groupper attribute
+Z = is the relation between X and Y. It is an aggregation or concatenation
+
+Example objects list:
+---------------------
+
+You have a list of "Cities" in "States" where someones are the "Capitals" and others
+are not. Additionally, there are their respective "Government Types", "Populations" and "Areas"
+
+    >>> cities = [
+    ...     {'city': 'New York City', 'state': 'NY', 'capital': False, 'population': 8363710, 'area': 468.9, 'government': 'Mayor'},
+    ...     {'city': 'Albany', 'state': 'NY', 'capital': True, 'population': 95658, 'area': 21.8, 'government': 'Mayor'},
+    ...     {'city': 'Austin', 'state': 'TX', 'capital': True, 'population': 757688, 'area': 296.2, 'government': 'Council-manager'},
+    ...     {'city': 'Dallas', 'state': 'TX', 'capital': False, 'population': 1279910, 'area': 385.0, 'government': 'Council-manager'},
+    ...     {'city': 'Houston', 'state': 'TX', 'capital': False, 'population': 2242193, 'area': 601.7, 'government': 'Mayor-council'},
+    ...     {'city': 'San Francisco', 'state': 'CA', 'capital': False, 'population': 808976, 'area': 231.92, 'government': 'Mayor-council'},
+    ...     {'city': 'Los Angeles', 'state': 'CA', 'capital': False, 'population': 3833995, 'area': 498.3, 'government': 'Mayor-council'},
+    ...     {'city': 'Sacramento', 'state': 'CA', 'capital': True, 'population': 463794, 'area': 99.2, 'government': 'Mayor-council'},
+    ...     {'city': 'Seattle', 'state': 'WA', 'capital': False, 'population': 602000, 'area': 142.5, 'government': 'Mayor-council'},
+    ... ]
+
+Taking the data above, we could make make different cross reference tables, like...
+
+Example 1: Count of capital or common cities of the States
+----------------------------------------------------------
+
+        | NY | TX | CA | WA 
+----------------------------
+Capital |  1 |  1 |  1 |  0 
+----------------------------
+Common  |  1 |  2 |  2 |  1 
+
+
+Example 2: Count of cities per govern type and states
+-----------------------------------------------------------------
+
+                | NY | CA | WA | TX 
+------------------------------------
+Mayor-council   | 0  | 3  | 1  | 1  
+------------------------------------
+Council-manager | 0  | 0  | 0  | 2  
+------------------------------------
+Mayor           | 2  | 0  | 0  | 0 
+
+
+Example 3: Population average of cities per govern type and states
+-----------------------------------------------------------------
+
+                |    NY    |    CA   |   WA   |   TX 
+--------------------------------------------------------
+Mayor-council   | None     | 1702255 | 602000 | 2242193
+--------------------------------------------------------
+Council-manager | None     | None    | None   | 1018799
+--------------------------------------------------------
+Mayor           | 4229684  | None    | None   | None 
+
+Example 4: Biggest area per states and their capitals/common cities
+-------------------------------------------------------------------
+
+   | Common | Capital
+----------------------
+NY | 468.9  | 21.8  
+----------------------
+CA | 498.3  | 99.2  
+----------------------
+WA | 142.5  | None  
+----------------------
+TX | 601.7  | 296.2 
+
+The basic solution
+------------------
+
+A new class that receives an object list (like a queryset) and the X and Y attributes.
+When requested, the instance of this class will return the list of rows, cols and the
+values related both. These values can be aggregated, and used by bands and charts.
+
+    >>> from geraldo.cross_reference import CrossReferenceMatrix
+    >>> cross = CrossReferenceMatrix(
+    ...     objects_list=cities,
+    ...     rows_attribute='capital',
+    ...     cols_attribute='state',
+    ... )
+
+    >>> cross.rows()
+    [False, True]
+
+    >>> cross.cols()
+    ['NY', 'CA', 'WA', 'TX']
+
+    >>> cross.values(cell='city', row=False, col='NY')
+    ['New York City']
+
+    >>> cross.values('city', False, 'TX')
+    ['Dallas', 'Houston']
+
+    >>> cross.count('city', False, 'TX')
+    2
+
+    >>> cross.count('city', col='TX')
+    3
+
+    >>> cross.max('population', row=True) # True = capital, False = not capital
+    757688
+
+    >>> cross.min('area', row=True) == 21.8
+    True
+
+    >>> cross.sum('population', col='CA')
+    5106765
+
+    >>> cross.avg('population', col='NY')
+    4229684
+
+The report should receive the queryset already converted to cross reference matrix.
+This will take the things easy, because we havan't to worry with rows, summary and
+nothing that bands already solves.
+
+A new detail band class to be used for Report and SubReport.
+
+    >>> from geraldo import Report, ObjectValue, Label, FIELD_ACTION_AVG, ManyElements
+    >>> from geraldo.utils import cm
+    >>> from geraldo.cross_reference import CrossReferenceBand
+
+    >>> class MyReport(Report):
+    ...     title = 'Demonstration of BarCodes'
+    ... 
+    ...     class band_page_header(ReportBand):
+    ...         height = 2*cm
+    ...         elements = [
+    ...             SystemField(expression='%(report_title)s', top=0.1*cm, left=0, width=BAND_WIDTH,
+    ...                 style={'fontName': 'Helvetica', 'fontSize': 14, 'alignment': TA_CENTER}),
+    ...             Label(text='Capital', width=2.5*cm, top=1*cm),
+    ...             ManyElements(
+    ...                 element_class=Label,
+    ...                 start_left=4*cm,
+    ...                 width=2*cm,
+    ...                 top=1*cm,
+    ...                 label=CROSS_COLS,
+    ...                 ),
+    ...             Label(text='Average', left=18*cm, width=3.5*cm),
+    ...         ]
+    ...         borders = {'bottom': True}
+    ... 
+    ...     class band_detail(CrossReferenceBand):
+    ...         height=0.6*cm
+    ...         elements = [
+    ...             ObjectValue(attribute_name='capital', width=2.5*cm),
+    ...             ManyElements(
+    ...                 element_class=ObjectValue,
+    ...                 start_left=4*cm,
+    ...                 width=2*cm,
+    ...                 attribute_name=CROSS_COLS,
+    ...                 ),
+    ...             ObjectValue(attribute_name=CROSS_AGGREGATION, action=FIELD_ACTION_AVG, left=18*cm, width=3.5*cm),
+    ...         ]
+    ... 
+    ...     class band_page_footer(ReportBand):
+    ...         height = 0.5*cm
+    ...         elements = [
+    ...             Label(text='Created with Geraldo Reports', top=0.1*cm, left=0),
+    ...             SystemField(expression='Page # %(page_number)d of %(page_count)d', top=0.1*cm,
+    ...                 width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
+    ...         ]
+    ...         borders = {'top': True}
+
+The Problems
+------------
+
+Problem 1:
+
+The biggest problem when making a cross reference report is because the columns are not
+fields/attribute names, but their values.
+
+Solution:
+
+Problem 2:
+
+And that problem makes the count of columns volatile, and their dimensions (width and
+left) too.
+
+Problem 3:
+
+Another problem is that sometimes you have a "complement" attribute for X field (i.e.
+you have the "City ID" and the "City Name"). What means there is not ever just Y columns
+but the someones just to complement the X values.
+
+Problem 4:
+
+Other problem: columns to sum up the cells values. I.e. you have Z cells for each state
+but in the end of the row you want the "Average" and "Total sum" of the cells.
+
+The solution for problems 3 and 4 can be the once, because complement cells are just
+summary cells with just one value, concatenated.
+
+Problem 5:
+
+The cross refence can be for detail bands, subreports and/or charts.
+
+Generating the result report
+----------------------------
+
+    >>> report = MyReport(queryset=cross)
+

@@ -51,10 +51,10 @@
 
 {% block scripts %}{{ block.super }}
 <script type="text/javascript">
-    var printshots_images = ['http://sourceforge.net/dbimage.php?id=202516',
-    'http://sourceforge.net/dbimage.php?id=248790','http://sourceforge.net/dbimage.php?id=202506',
-    'http://sourceforge.net/dbimage.php?id=202510','http://sourceforge.net/dbimage.php?id=202512',
-    'http://sourceforge.net/dbimage.php?id=202514'];
+    var printshots_images = ['{{ MEDIA_URL }}examples/example-1.jpg',
+    '{{ MEDIA_URL }}examples/example-2.jpg','{{ MEDIA_URL }}examples/example-3.jpg',
+    '{{ MEDIA_URL }}examples/example-4.jpg','{{ MEDIA_URL }}examples/example-5.jpg',
+    '{{ MEDIA_URL }}examples/example-6.jpg'];
     var current_printshot = 0;
 
     {# Hides the printshots on click #}
@@ -92,8 +92,8 @@
             var div3 = $('<div class="links"></div>').appendTo(div2);
             var fechar = $('<a href="javascript: void(0)" class="close">Close</a>').click(hide_printshot).appendTo(div3);
             $('<br/>').appendTo(div3);
-            var larrow = $('<a href="javascript: void(0)" class="larrow"><img src="{{ MEDIA_URL }}img/arrow-left.png"/></a>').click(browse_left).appendTo(div3);
-            var rarrow = $('<a href="javascript: void(0)" class="rarrow"><img src="{{ MEDIA_URL }}img/arrow-right.png"/></a>').click(browse_right).appendTo(div3);
+            var larrow = $('<a href="javascript: void(0)" class="larrow"><img src="{{ MEDIA_URL }}img/arrow-left.png" width="50" height="44"/></a>').click(browse_left).appendTo(div3);
+            var rarrow = $('<a href="javascript: void(0)" class="rarrow"><img src="{{ MEDIA_URL }}img/arrow-right.png" width="50" height="44"/></a>').click(browse_right).appendTo(div3);
             }
 
             div.find('.inner').css('background-image', 'url('+printshots_images[current_printshot]+')');
@@ -113,16 +113,16 @@
 
     <div class="shortcuts">
         <a class="box" href="javascript: void(0)" title="Printshots" id="printshots">
-            <img src="{{ MEDIA_URL }}img/icon-printshots.png" alt="Printshots"/>
+            <img src="{{ MEDIA_URL }}img/icon-printshots.png" alt="Printshots" width="100" height="97"/>
         </a>
         <a class="box" href="/getting-started/" title="Getting started">
-            <img src="{{ MEDIA_URL }}img/icon-getting-started.png" alt="Getting started"/>
+            <img src="{{ MEDIA_URL }}img/icon-getting-started.png" alt="Getting started" width="141" height="97"/>
         </a>
         <a class="box" href="/cases/" title="Cases">
-            <img src="{{ MEDIA_URL }}img/icon-cases.png" alt="Cases"/>
+            <img src="{{ MEDIA_URL }}img/icon-cases.png" alt="Cases" width="78" height="86"/>
         </a>
         <a class="box" href="/how-to-contribute/" title="How to contribute">
-            <img src="{{ MEDIA_URL }}img/icon-how-to-contribute.png" alt="How to contribute"/>
+            <img src="{{ MEDIA_URL }}img/icon-how-to-contribute.png" alt="How to contribute" width="167" height="86"/>
         </a>
     </div>
 </div>
