@@ -8,6 +8,7 @@ from geraldo.barcodes import BarCode
 from geraldo.base import GeraldoObject
 from geraldo.cache import CACHE_BY_QUERYSET, CACHE_BY_RENDER, CACHE_DISABLED,\
         make_hash_key, get_cache_backend
+from geraldo.cross_reference import ManyElements
 
 class ReportPage(GeraldoObject):
     rect = None
@@ -164,6 +165,129 @@ class ReportGenerator(GeraldoObject):
                 }
         return band_rect
 
+    def render_element(self, element, current_object, band, band_rect, temp_top,
+            highest_height, top_position):
+        # Doesn't render not visible element
+        if not element.visible:
+            return
+
+        # Widget element
+        if isinstance(element, Widget):
+            widget = element.clone()
+
+            # Set widget colors
+            widget.font_color = self.report.default_font_color
+
+            # Set widget basic attributes
+            widget.instance = current_object
+            widget.generator = self
+            widget.report = self.report # This should be done by a metaclass in Band domain TODO
+            widget.band = band # This should be done by a metaclass in Band domain TODO
+            widget.page = self._rendered_pages[-1]
+
+            if isinstance(widget, SystemField):
+                widget.left = band_rect['left'] + self.calculate_size(widget.left)
+                widget.top = self.calculate_top(temp_top, self.calculate_size(widget.top))
+
+                temp_height = self.calculate_size(element.top) + self.calculate_size(widget.height)
+            elif isinstance(widget, Label):
+                para = self.make_paragraph(widget.text, self.make_paragraph_style(band, widget.style))
+
+                if widget.truncate_overflow:
+                    self.keep_in_frame(
+                            widget,
+                            self.calculate_size(widget.width),
+                            self.calculate_size(widget.height),
+                            [para],
+                            mode='truncate',
+                            )
+
+                    widget.left = band_rect['left'] + self.calculate_size(widget.left)
+                    widget.top = self.calculate_top(temp_top, self.calculate_size(widget.top), self.calculate_size(widget.height))
+                else:
+                    self.wrap_paragraph_on(para, self.calculate_size(widget.width), self.calculate_size(widget.height))
+                    widget.left = band_rect['left'] + self.calculate_size(widget.left)
+                    widget.top = self.calculate_top(temp_top, self.calculate_size(widget.top), self.calculate_size(para.height))
+
+                temp_height = self.calculate_size(element.top) + self.calculate_size(para.height)
+            else:
+                temp_height = self.calculate_size(element.top) + self.calculate_size(widget.height)
+
+            # Sets element height as the highest
+            if temp_height > highest_height:
+                highest_height = temp_height
+
+            self._rendered_pages[-1].add_element(widget)
+
+        # Graphic element
+        elif isinstance(element, Graphic):
+            graphic = element.clone()
+
+            # Set widget basic attributes
+            graphic.instance = current_object
+            graphic.generator = self
+            graphic.report = self.report # This should be done by a metaclass in Band domain TODO
+            graphic.band = band # This should be done by a metaclass in Band domain TODO
+            graphic.page = self._rendered_pages[-1]
+
+            # Set graphic colors
+            graphic.fill_color = graphic.fill_color or self.report.default_fill_color
+            graphic.stroke_color = graphic.stroke_color or self.report.default_stroke_color
+
+            if isinstance(graphic, RoundRect):
+                graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
+                graphic.top = top_position - self.calculate_size(graphic.top) - self.calculate_size(graphic.height)
+            elif isinstance(graphic, Rect):
+                graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
+                graphic.top = top_position - self.calculate_size(graphic.top) - self.calculate_size(graphic.height)
+            elif isinstance(graphic, Line):
+                graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
+                graphic.top = top_position - self.calculate_size(graphic.top)
+                graphic.right = band_rect['left'] + self.calculate_size(graphic.right)
+                graphic.bottom = top_position - self.calculate_size(graphic.bottom)
+            elif isinstance(graphic, Circle):
+                graphic.left_center = band_rect['left'] + self.calculate_size(graphic.left_center)
+                graphic.top_center = top_position - self.calculate_size(graphic.top_center)
+            elif isinstance(graphic, Arc):
+                graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
+                graphic.top = top_position - self.calculate_size(graphic.top)
+                graphic.right = band_rect['left'] + self.calculate_size(graphic.right)
+                graphic.bottom = top_position - self.calculate_size(graphic.bottom)
+            elif isinstance(graphic, Ellipse):
+                graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
+                graphic.top = top_position - self.calculate_size(graphic.top)
+                graphic.right = band_rect['left'] + self.calculate_size(graphic.right)
+                graphic.bottom = top_position - self.calculate_size(graphic.bottom)
+            elif isinstance(graphic, Image):
+                graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
+                graphic.top = top_position - self.calculate_size(graphic.top) - self.calculate_size(graphic.height)
+            elif isinstance(graphic, BarCode):
+                barcode = graphic.render()
+                graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
+                graphic.top = top_position - self.calculate_size(graphic.top) - self.calculate_size(graphic.height)
+                self.wrap_barcode_on(barcode, graphic.width, graphic.height)
+
+            # Sets element height as the highest
+            temp_height = self.calculate_size(element.top) + self.calculate_size(graphic.height)
+            if temp_height > highest_height:
+                highest_height = temp_height
+
+            self._rendered_pages[-1].add_element(graphic)
+
+        # Many elements
+        elif isinstance(element, ManyElements):
+            # Set widget basic attributes
+            element.instance = current_object
+            element.generator = self
+            element.report = self.report # This should be done by a metaclass in Band domain TODO
+            element.band = band # This should be done by a metaclass in Band domain TODO
+            element.page = self._rendered_pages[-1]
+
+            # Get the elements and render them
+            for el in element.get_elements():
+                self.render_element(el, current_object, band, band_rect, temp_top,
+                        highest_height, top_position)
+
     def render_band(self, band, top_position=None, left_position=None,
             update_top=True, current_object=None):
         """Generate a band having the current top position or informed as its
@@ -205,112 +329,8 @@ class ReportGenerator(GeraldoObject):
 
         # Loop at band widgets
         for element in band.elements:
-            # Doesn't render not visible element
-            if not element.visible:
-                continue
-
-            # Widget element
-            if isinstance(element, Widget):
-                widget = element.clone()
-
-                # Set widget colors
-                widget.font_color = self.report.default_font_color
-
-                # Set widget basic attributes
-                widget.instance = current_object
-                widget.generator = self
-                widget.report = self.report # This should be done by a metaclass in Band domain TODO
-                widget.band = band # This should be done by a metaclass in Band domain TODO
-                widget.page = self._rendered_pages[-1]
-
-                if isinstance(widget, SystemField):
-                    widget.left = band_rect['left'] + self.calculate_size(widget.left)
-                    widget.top = self.calculate_top(temp_top, self.calculate_size(widget.top))
-
-                    temp_height = self.calculate_size(element.top) + self.calculate_size(widget.height)
-                elif isinstance(widget, Label):
-                    para = self.make_paragraph(widget.text, self.make_paragraph_style(band, widget.style))
-
-                    if widget.truncate_overflow:
-                        self.keep_in_frame(
-                                widget,
-                                self.calculate_size(widget.width),
-                                self.calculate_size(widget.height),
-                                [para],
-                                mode='truncate',
-                                )
-
-                        widget.left = band_rect['left'] + self.calculate_size(widget.left)
-                        widget.top = self.calculate_top(temp_top, self.calculate_size(widget.top), self.calculate_size(widget.height))
-                    else:
-                        self.wrap_paragraph_on(para, self.calculate_size(widget.width), self.calculate_size(widget.height))
-                        widget.left = band_rect['left'] + self.calculate_size(widget.left)
-                        widget.top = self.calculate_top(temp_top, self.calculate_size(widget.top), self.calculate_size(para.height))
-
-                    temp_height = self.calculate_size(element.top) + self.calculate_size(para.height)
-                else:
-                    temp_height = self.calculate_size(element.top) + self.calculate_size(widget.height)
-
-                # Sets element height as the highest
-                if temp_height > highest_height:
-                    highest_height = temp_height
-
-                self._rendered_pages[-1].add_element(widget)
-
-            # Graphic element
-            elif isinstance(element, Graphic):
-                graphic = element.clone()
-
-                # Set widget basic attributes
-                graphic.instance = current_object
-                graphic.generator = self
-                graphic.report = self.report # This should be done by a metaclass in Band domain TODO
-                graphic.band = band # This should be done by a metaclass in Band domain TODO
-                graphic.page = self._rendered_pages[-1]
-
-                # Set graphic colors
-                graphic.fill_color = graphic.fill_color or self.report.default_fill_color
-                graphic.stroke_color = graphic.stroke_color or self.report.default_stroke_color
-
-                if isinstance(graphic, RoundRect):
-                    graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
-                    graphic.top = top_position - self.calculate_size(graphic.top) - self.calculate_size(graphic.height)
-                elif isinstance(graphic, Rect):
-                    graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
-                    graphic.top = top_position - self.calculate_size(graphic.top) - self.calculate_size(graphic.height)
-                elif isinstance(graphic, Line):
-                    graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
-                    graphic.top = top_position - self.calculate_size(graphic.top)
-                    graphic.right = band_rect['left'] + self.calculate_size(graphic.right)
-                    graphic.bottom = top_position - self.calculate_size(graphic.bottom)
-                elif isinstance(graphic, Circle):
-                    graphic.left_center = band_rect['left'] + self.calculate_size(graphic.left_center)
-                    graphic.top_center = top_position - self.calculate_size(graphic.top_center)
-                elif isinstance(graphic, Arc):
-                    graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
-                    graphic.top = top_position - self.calculate_size(graphic.top)
-                    graphic.right = band_rect['left'] + self.calculate_size(graphic.right)
-                    graphic.bottom = top_position - self.calculate_size(graphic.bottom)
-                elif isinstance(graphic, Ellipse):
-                    graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
-                    graphic.top = top_position - self.calculate_size(graphic.top)
-                    graphic.right = band_rect['left'] + self.calculate_size(graphic.right)
-                    graphic.bottom = top_position - self.calculate_size(graphic.bottom)
-                elif isinstance(graphic, Image):
-                    graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
-                    graphic.top = top_position - self.calculate_size(graphic.top) - self.calculate_size(graphic.height)
-                elif isinstance(graphic, BarCode):
-                    barcode = graphic.render()
-                    graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
-                    graphic.top = top_position - self.calculate_size(graphic.top) - self.calculate_size(graphic.height)
-                    self.wrap_barcode_on(barcode, graphic.width, graphic.height)
-
-                # Sets element height as the highest
-                temp_height = self.calculate_size(element.top) + self.calculate_size(graphic.height)
-                if temp_height > highest_height:
-                    highest_height = temp_height
-
-                self._rendered_pages[-1].add_element(graphic)
+            self.render_element(element, current_object, band, band_rect, temp_top,
+                    highest_height, top_position)
 
         # Updates top position
         if update_top:

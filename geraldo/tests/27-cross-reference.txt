@@ -141,37 +141,40 @@ A new detail band class to be used for Report and SubReport.
     ...     title = 'Population per state and their capitais/other cities'
     ... 
     ...     class band_page_header(ReportBand):
-    ...         height = 2*cm
+    ...         height = 1.7*cm
     ...         elements = [
     ...             SystemField(expression='%(report_title)s', top=0.1*cm, left=0, width=BAND_WIDTH,
     ...                 style={'fontName': 'Helvetica', 'fontSize': 14, 'alignment': TA_CENTER}),
     ...             Label(text='Capital', width=2.5*cm, top=1*cm),
     ...             ManyElements(
     ...                 element_class=Label,
+    ...                 count=CROSS_COLS,
     ...                 start_left=4*cm,
     ...                 width=2*cm,
     ...                 top=1*cm,
-    ...                 label=CROSS_COLS,
+    ...                 text=CROSS_COLS,
     ...                 ),
-    ...             Label(text='Average', left=18*cm, width=3.5*cm),
+    ...             Label(text='Average', left=17*cm, width=3.5*cm, top=1*cm),
     ...         ]
     ...         borders = {'bottom': True}
     ... 
     ...     class band_detail(CrossReferenceBand):
     ...         height=0.6*cm
     ...         elements = [
-    ...             ObjectValue(attribute_name='capital', width=2.5*cm),
+    ...             ObjectValue(attribute_name='row', width=2.5*cm),
     ...             ManyElements( # Make one ObjectValue for each column and shows the max aggregation
     ...                 element_class=ObjectValue,
+    ...                 count=CROSS_COLS,
     ...                 start_left=4*cm,
     ...                 width=2*cm,
     ...                 attribute_name=CROSS_COLS,
-    ...                 get_value=lambda inst: inst.max('population', inst.row(), inst.attribute_name),
+    ...                 get_value=lambda self, inst: inst.max('population', self.attribute_name),
     ...                 ),
     ...             ObjectValue( # Calculates the average of this row
-    ...                 left=18*cm,
+    ...                 attribute_name='row',
+    ...                 left=17*cm,
     ...                 width=3.5*cm,
-    ...                 get_value=lambda inst: inst.avg('population', inst.row()),
+    ...                 get_value=lambda inst: inst.avg('population'),
     ...                 ),
     ...         ]
     ... 

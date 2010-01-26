@@ -118,7 +118,10 @@ class ObjectValue(Label):
         instance = instance or self.instance
 
         if self.get_value and instance:
-            return self.get_value(instance)
+            try:
+                return self.get_value(self, instance)
+            except TypeError:
+                return self.get_value(instance)
 
         value = get_attr_value(instance, self.attribute_name)
 
