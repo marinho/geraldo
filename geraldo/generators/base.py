@@ -5,10 +5,9 @@ from geraldo.widgets import Widget, Label, SystemField
 from geraldo.graphics import Graphic, RoundRect, Rect, Line, Circle, Arc,\
         Ellipse, Image
 from geraldo.barcodes import BarCode
-from geraldo.base import GeraldoObject
+from geraldo.base import GeraldoObject, ManyElements
 from geraldo.cache import CACHE_BY_QUERYSET, CACHE_BY_RENDER, CACHE_DISABLED,\
         make_hash_key, get_cache_backend
-from geraldo.cross_reference import ManyElements
 
 class ReportPage(GeraldoObject):
     rect = None

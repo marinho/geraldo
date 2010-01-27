@@ -302,3 +302,73 @@ A report band must be a class inherited from **ReportBand** or an instance of
 - **band_header** - Default: None
 - **band_footer** - Default: None
 
+ManyElements
+------------
+
+.. currentmodule:: geraldo.base
+.. class:: ManyElements
+
+Path: **geraldo.ManyElements**
+
+**New on 0.4.**
+
+This class is a factory that makes many elements using pre-defined arguments. It is
+useful to make Cross-Reference Tables, because this is the situation when you
+almost never know how many columns you ned.
+
+**Attributes**
+
+- **element_class** - Default: None
+
+    The element class you are going to used to create the instances. i.e: Label,
+    ObjectValue, etc.
+
+- **count** - Default: None
+
+    How many elements do you want to create?
+
+- **start_left** - Default: 0
+
+    The left value for the forst element (because it will be incremented with width
+    values for each one.
+
+- **start_top** - Default: 0
+
+    The same of 'start_left', but for top/height relation;
+
+- **visible** - Default: None
+
+    Make the ManyElements not visible and their elements will be also.
+
+The attributes above are just for the class control to make the elements.
+
+But this class supports other attributes, that will be passed to elements it will
+create. These attributes must be passed when initializing the class, as common
+arguments like everyone else. Example: you can use ManyElements like below::
+
+    >>> ATTRIBUTES_LIST = ('date_start', 'date_end', 'salary', 'hours')
+    >>> band_elements = [
+    ...     ObjectValue(attribute_name='job'),
+    ...     ManyElements(element_class=ObjectValue, count=4, start_left=3*cm,
+    ...         width=1*cm, attribute_name=ATTRIBUTES_LIST),
+    ... ]
+
+As you can see, there are 3 special attributes (element_class, count and start_left),
+there is also a simple value for 'width' attribute, and 'attribute_name' receives a
+list.
+
+ManyElements is smart enough to know that the attribute had a simple value or a list
+and use the list in the same sequence of creation (if the list is shorter, the latest
+item will be used), otherwise that value will be copied to all the created elements.
+
+The attribute 'left' will be increased, starting from 'start_left' plus 'width' for
+each column.
+
+Result: when rendering, Geraldo will create 4 new elements from the factory.
+
+**Methods**
+
+- **get_elements(cross_cols=None)**
+
+    This is the method that creates the elements and returns them.
+

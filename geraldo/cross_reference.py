@@ -7,10 +7,9 @@ except:
 
 import random
 from utils import get_attr_value, memoize
-from base import ReportBand, GeraldoObject
+from base import ReportBand, GeraldoObject, CROSS_COLS
 
 RANDOM_ROW_DEFAULT = RANDOM_COL_DEFAULT = ''.join([random.choice([chr(c) for c in range(48, 120)]) for i in range(100)])
-CROSS_COLS = 'cross-cols'
 
 class CrossReferenceProxy(object):
     matrix = None
@@ -20,32 +19,15 @@ class CrossReferenceProxy(object):
         self.matrix = matrix
         self.row = row
 
-    def values(self, cell, col=RANDOM_COL_DEFAULT):
-        return self.matrix.values(cell, self.row, col)
+    def __getattr__(self, name):
+        if name in ('values','max','min','sum','avg','count','distinct_count',
+                'first','last',):
+            func = getattr(self.matrix, name)
+            def _inner(cell, col=RANDOM_COL_DEFAULT):
+                return func(cell, self.row, col)
+            return _inner
 
-    @memoize
-    def max(self, cell, col=RANDOM_COL_DEFAULT):
-        return self.matrix.max(cell, self.row, col)
-
-    @memoize
-    def min(self, cell, col=RANDOM_COL_DEFAULT):
-        return self.matrix.min(cell, self.row, col)
-
-    @memoize
-    def sum(self, cell, col=RANDOM_COL_DEFAULT):
-        return self.matrix.sum(cell, self.row, col)
-
-    @memoize
-    def avg(self, cell, col=RANDOM_COL_DEFAULT):
-        return self.matrix.avg(cell, self.row, col)
-
-    @memoize
-    def count(self, cell, col=RANDOM_COL_DEFAULT):
-        return self.matrix.count(cell, self.row, col)
-
-    @memoize
-    def distinct_count(self, cell, col=RANDOM_COL_DEFAULT):
-        return self.matrix.distinct_count(cell, self.row, col)
+        raise AttributeError()
 
 
 class CrossReferenceMatrix(object):
@@ -101,8 +83,18 @@ class CrossReferenceMatrix(object):
 
     @memoize
     def avg(self, cell, row=RANDOM_ROW_DEFAULT, col=RANDOM_COL_DEFAULT):
-        values = self.values(cell, row, col)
-        return values and sum(values) / len(values) or None
+        values = map(float, self.values(cell, row, col))
+
+        if row == RANDOM_ROW_DEFAULT and col == RANDOM_COL_DEFAULT:
+            count = len(values)
+        elif row == RANDOM_ROW_DEFAULT:
+            count = len(self.rows())
+        elif col == RANDOM_COL_DEFAULT:
+            count = len(self.cols())
+        else:
+            count = len(self.rows()) * len(self.cols())
+
+        return values and sum(values) / count or None
 
     @memoize
     def count(self, cell, row=RANDOM_ROW_DEFAULT, col=RANDOM_COL_DEFAULT):
@@ -111,6 +103,14 @@ class CrossReferenceMatrix(object):
     @memoize
     def distinct_count(self, cell, row=RANDOM_ROW_DEFAULT, col=RANDOM_COL_DEFAULT):
         return len(set(self.values(cell, row, col)))
+
+    @memoize
+    def first(self, cell, row=RANDOM_ROW_DEFAULT, col=RANDOM_COL_DEFAULT):
+        return self.values(cell, row, col)[0]
+
+    @memoize
+    def last(self, cell, row=RANDOM_ROW_DEFAULT, col=RANDOM_COL_DEFAULT):
+        return self.values(cell, row, col)[-1]
 
     @memoize
     def matrix(self, cell, func='values'):
@@ -124,72 +124,4 @@ class CrossReferenceMatrix(object):
             ret.append([row] + [func(cell, row, col) for col in self.cols()])
 
         return ret
-
-class CrossReferenceBand(ReportBand):
-    pass
-
-class ManyElements(GeraldoObject):
-    """Class that makes the objects creation more dynamic.
-    
-    This will be moved to other file in the future, since it is not coupled to
-    cross reference functions."""
-
-    element_class = None
-    count = None
-    start_left = None
-    start_top = None
-    visible = True
-    element_kwargs = None
-
-    _elements = None
-
-    def __init__(self, element_class, count, start_left=None, start_top=None,
-            visible=None, **kwargs):
-        self.element_class = element_class
-        self.count = count
-        self.start_left = start_left is not None and start_left or self.start_left
-        self.start_top = start_top is not None and start_top or self.start_top
-        self.visible = visible is not None and visible or self.visible
-
-        # Stores the additinal arguments to use when creating the elements
-        self.element_kwargs = kwargs.copy()
-
-    def get_elements(self, cross_cols=None):
-        if self._elements is None:
-            count = self.count
-
-            # Get cross cols
-            if not cross_cols and isinstance(self.report.queryset, CrossReferenceMatrix):
-                cross_cols = self.report.queryset.cols()
-
-                if count == CROSS_COLS:
-                    count = len(cross_cols)
-
-            self._elements = []
-
-            # Loop for count of elements to be created
-            for num in range(count):
-                kwargs = self.element_kwargs.copy()
-
-                # Set attributes before creation
-                for k,v in kwargs.items():
-                    if v == CROSS_COLS:
-                        try:
-                            kwargs[k] = cross_cols[num]
-                        except IndexError:
-                            kwargs[k] = cross_cols[-1]
-
-                # Create the element
-                el = self.element_class(**kwargs)
-
-                # Set attributes after creation
-                if self.start_left is not None: # Maybe we should support distance here
-                    el.left = self.start_left + el.width * num
-
-                if self.start_top is not None: # Maybe we should support distance here
-                    el.top = self.start_top + el.height * num
-
-                self._elements.append(el)
-
-        return self._elements
 

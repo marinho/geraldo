@@ -27,6 +27,7 @@ Content
     widgets
     graphics
     barcodes
+    cross-reference
     generators
     caching
     utils

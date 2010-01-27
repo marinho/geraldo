@@ -25,4 +25,5 @@ source code.
     using-events
     additional-fonts
     barcodes
+    cross-reference-tables
 

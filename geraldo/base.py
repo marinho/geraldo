@@ -17,6 +17,7 @@ from cache import DEFAULT_CACHE_STATUS, CACHE_BACKEND, CACHE_FILE_ROOT
 
 BAND_WIDTH = 'band-width'
 BAND_HEIGHT = 'band-height'
+CROSS_COLS = 'cross-cols'
 
 class GeraldoObject(object):
     """Base class inherited by all report classes, including band, subreports,
@@ -832,4 +833,70 @@ class Element(GeraldoObject):
     def repr_for_cache_hash_key(self):
         return unicode(dict([(attr, getattr(self, attr)) for attr in self._repr_for_cache_attrs]))
 
+class ManyElements(GeraldoObject):
+    """Class that makes the objects creation more dynamic."""
+
+    element_class = None
+    count = None
+    start_left = None
+    start_top = None
+    visible = True
+    element_kwargs = None
+
+    _elements = None
+
+    def __init__(self, element_class, count, start_left=None, start_top=None,
+            visible=None, **kwargs):
+
+        self.element_class = element_class
+        self.count = count
+        self.start_left = start_left is not None and start_left or self.start_left
+        self.start_top = start_top is not None and start_top or self.start_top
+        self.visible = visible is not None and visible or self.visible
+
+        # Stores the additinal arguments to use when creating the elements
+        self.element_kwargs = kwargs.copy()
+
+    def get_elements(self, cross_cols=None):
+        """Returns the elements (or create them if they don't exist."""
+
+        from cross_reference import CrossReferenceMatrix
+
+        if self._elements is None:
+            count = self.count
+
+            # Get cross cols
+            if not cross_cols and isinstance(self.report.queryset, CrossReferenceMatrix):
+                cross_cols = self.report.queryset.cols()
+
+                if count == CROSS_COLS:
+                    count = len(cross_cols)
+
+            self._elements = []
+
+            # Loop for count of elements to be created
+            for num in range(count):
+                kwargs = self.element_kwargs.copy()
+
+                # Set attributes before creation
+                for k,v in kwargs.items():
+                    if v == CROSS_COLS:
+                        try:
+                            kwargs[k] = cross_cols[num]
+                        except IndexError:
+                            kwargs[k] = cross_cols[-1]
+
+                # Create the element
+                el = self.element_class(**kwargs)
+
+                # Set attributes after creation
+                if self.start_left is not None: # Maybe we should support distance here
+                    el.left = self.start_left + el.width * num
+
+                if self.start_top is not None: # Maybe we should support distance here
+                    el.top = self.start_top + el.height * num
+
+                self._elements.append(el)
+
+        return self._elements
 

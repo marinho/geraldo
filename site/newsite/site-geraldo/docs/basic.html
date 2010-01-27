@@ -5,13 +5,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Basic Reference &mdash; Geraldo Reports Documentation v0.4-alpha-5 documentation</title>
+    <title>Basic Reference &mdash; Geraldo Reports Documentation v0.4-alpha-6 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.4-alpha-5',
+        VERSION:     '0.4-alpha-6',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -19,7 +19,7 @@
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Geraldo Reports Documentation v0.4-alpha-5 documentation" href="index.html" />
+    <link rel="top" title="Geraldo Reports Documentation v0.4-alpha-6 documentation" href="index.html" />
     <link rel="next" title="Widgets Reference" href="widgets.html" />
     <link rel="prev" title="Tutorial using Web2Py" href="tutorial-2.html" /> 
   </head>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="tutorial-2.html" title="Tutorial using Web2Py"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Geraldo Reports Documentation v0.4-alpha-6 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -387,6 +387,78 @@ values.</p>
 <li><strong>band_footer</strong> - Default: None</li>
 </ul>
 </div>
+<div class="section" id="manyelements">
+<h2>ManyElements<a class="headerlink" href="#manyelements" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="geraldo.base.ManyElements">
+<em class="property">class </em><tt class="descclassname">geraldo.base.</tt><tt class="descname">ManyElements</tt><a class="headerlink" href="#geraldo.base.ManyElements" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Path: <strong>geraldo.ManyElements</strong></p>
+<p><strong>New on 0.4.</strong></p>
+<p>This class is a factory that makes many elements using pre-defined arguments. It is
+useful to make Cross-Reference Tables, because this is the situation when you
+almost never know how many columns you ned.</p>
+<p><strong>Attributes</strong></p>
+<ul>
+<li><p class="first"><strong>element_class</strong> - Default: None</p>
+<blockquote>
+<p>The element class you are going to used to create the instances. i.e: Label,
+ObjectValue, etc.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>count</strong> - Default: None</p>
+<blockquote>
+<p>How many elements do you want to create?</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>start_left</strong> - Default: 0</p>
+<blockquote>
+<p>The left value for the forst element (because it will be incremented with width
+values for each one.</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>start_top</strong> - Default: 0</p>
+<blockquote>
+<p>The same of &#8216;start_left&#8217;, but for top/height relation;</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>visible</strong> - Default: None</p>
+<blockquote>
+<p>Make the ManyElements not visible and their elements will be also.</p>
+</blockquote>
+</li>
+</ul>
+<p>The attributes above are just for the class control to make the elements.</p>
+<p>But this class supports other attributes, that will be passed to elements it will
+create. These attributes must be passed when initializing the class, as common
+arguments like everyone else. Example: you can use ManyElements like below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ATTRIBUTES_LIST</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;date_start&#39;</span><span class="p">,</span> <span class="s">&#39;date_end&#39;</span><span class="p">,</span> <span class="s">&#39;salary&#39;</span><span class="p">,</span> <span class="s">&#39;hours&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">band_elements</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span>    <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;job&#39;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">ManyElements</span><span class="p">(</span><span class="n">element_class</span><span class="o">=</span><span class="n">ObjectValue</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">start_left</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">attribute_name</span><span class="o">=</span><span class="n">ATTRIBUTES_LIST</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">]</span>
+</pre></div>
+</div>
+<p>As you can see, there are 3 special attributes (element_class, count and start_left),
+there is also a simple value for &#8216;width&#8217; attribute, and &#8216;attribute_name&#8217; receives a
+list.</p>
+<p>ManyElements is smart enough to know that the attribute had a simple value or a list
+and use the list in the same sequence of creation (if the list is shorter, the latest
+item will be used), otherwise that value will be copied to all the created elements.</p>
+<p>The attribute &#8216;left&#8217; will be increased, starting from &#8216;start_left&#8217; plus &#8216;width&#8217; for
+each column.</p>
+<p>Result: when rendering, Geraldo will create 4 new elements from the factory.</p>
+<p><strong>Methods</strong></p>
+<ul>
+<li><p class="first"><strong>get_elements(cross_cols=None)</strong></p>
+<blockquote>
+<p>This is the method that creates the elements and returns them.</p>
+</blockquote>
+</li>
+</ul>
+</div>
 </div>
 
 
@@ -403,6 +475,7 @@ values.</p>
 <li><a class="reference external" href="#reportband">ReportBand</a></li>
 <li><a class="reference external" href="#detailband">DetailBand</a></li>
 <li><a class="reference external" href="#reportgroup">ReportGroup</a></li>
+<li><a class="reference external" href="#manyelements">ManyElements</a></li>
 </ul>
 </li>
 </ul>
@@ -447,7 +520,7 @@ values.</p>
         <li class="right" >
           <a href="tutorial-2.html" title="Tutorial using Web2Py"
              >previous</a> |</li>
-        <li><a href="index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Geraldo Reports Documentation v0.4-alpha-6 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

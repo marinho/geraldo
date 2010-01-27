@@ -123,19 +123,15 @@ values related both. These values can be aggregated, and used by bands and chart
     5106765
 
     >>> cross.avg('population', col='NY')
-    4229684
+    4229684.0
 
 The report should receive the queryset already converted to cross reference matrix.
 This will take the things easy, because we havan't to worry with rows, summary and
 nothing that bands already solves.
 
-A new detail band class to be used for Report and SubReport.
-
     >>> from geraldo import Report, ObjectValue, Label, ReportBand, SystemField,\
-    ...     BAND_WIDTH
+    ...     BAND_WIDTH, FIELD_ACTION_COUNT, DetailBand, CROSS_COLS, ManyElements
     >>> from geraldo.utils import cm, TA_RIGHT, TA_CENTER
-    >>> from geraldo.cross_reference import CrossReferenceBand, ManyElements, \
-    ...     CROSS_COLS
 
     >>> class MyReport(Report):
     ...     title = 'Population per state and their capitais/other cities'
@@ -158,7 +154,7 @@ A new detail band class to be used for Report and SubReport.
     ...         ]
     ...         borders = {'bottom': True}
     ... 
-    ...     class band_detail(CrossReferenceBand):
+    ...     class band_detail(DetailBand):
     ...         height=0.6*cm
     ...         elements = [
     ...             ObjectValue(attribute_name='row', width=2.5*cm),
@@ -168,7 +164,7 @@ A new detail band class to be used for Report and SubReport.
     ...                 start_left=4*cm,
     ...                 width=2*cm,
     ...                 attribute_name=CROSS_COLS,
-    ...                 get_value=lambda self, inst: inst.max('population', self.attribute_name),
+    ...                 get_value=lambda self, inst: inst.sum('population', self.attribute_name),
     ...                 ),
     ...             ObjectValue( # Calculates the average of this row
     ...                 attribute_name='row',
@@ -177,6 +173,27 @@ A new detail band class to be used for Report and SubReport.
     ...                 get_value=lambda inst: inst.avg('population'),
     ...                 ),
     ...         ]
+    ... 
+    ...     class band_summary(ReportBand):
+    ...         height = 0.5*cm
+    ...         elements = [
+    ...             Label(text='Totals', width=2.5*cm),
+    ...             ManyElements(
+    ...                 element_class=ObjectValue,
+    ...                 count=CROSS_COLS,
+    ...                 start_left=4*cm,
+    ...                 width=2*cm,
+    ...                 attribute_name=CROSS_COLS,
+    ...                 get_value=lambda self, inst: inst.matrix.sum('population', col=self.attribute_name),
+    ...                 ),
+    ...             ObjectValue(
+    ...                 attribute_name='row',
+    ...                 left=17*cm,
+    ...                 width=3.5*cm,
+    ...                 get_value=lambda inst: inst.matrix.avg('population'),
+    ...                 ),
+    ...         ]
+    ...         borders = {'top': True}
     ... 
     ...     class band_page_footer(ReportBand):
     ...         height = 0.5*cm
@@ -195,12 +212,14 @@ Problem 1:
 The biggest problem when making a cross reference report is because the columns are not
 fields/attribute names, but their values.
 
-Solution:
+Solution: The solution was the creation of element class geraldo.cross_reference.ManyElements
 
 Problem 2:
 
 And that problem makes the count of columns volatile, and their dimensions (width and
 left) too.
+
+Solution: The solution was the creation of element class geraldo.cross_reference.ManyElements
 
 Problem 3:
 
@@ -216,9 +235,17 @@ but in the end of the row you want the "Average" and "Total sum" of the cells.
 The solution for problems 3 and 4 can be the once, because complement cells are just
 summary cells with just one value, concatenated.
 
+Solution: The solution was use the optional use set of 'col' argument when calling an
+aggregation method, like this:
+
+    >>> cross.avg('population', row=True)
+    329285.0
+
 Problem 5:
 
 The cross refence can be for detail bands, subreports and/or charts.
+
+Solution: for a while it is not working for SubReport # FIXME
 
 Generating the result report
 ----------------------------

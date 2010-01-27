@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Cross-Reference Tables &mdash; Geraldo Reports Documentation v0.4-alpha-5 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4-alpha-5',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Geraldo Reports Documentation v0.4-alpha-5 documentation" href="../index.html" />
+    <link rel="up" title="Examples" href="index.html" />
+    <link rel="next" title="Backward Incompatible Changes" href="../backward-incompatible-changes.html" />
+    <link rel="prev" title="Showing BarCodes" href="barcodes.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../backward-incompatible-changes.html" title="Backward Incompatible Changes"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="barcodes.html" title="Showing BarCodes"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="cross-reference-tables">
+<h1>Cross-Reference Tables<a class="headerlink" href="#cross-reference-tables" title="Permalink to this headline">¶</a></h1>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># We have a list of &quot;Cities&quot; in &quot;States&quot; where someones are the &quot;Capitals&quot; and</span>
+<span class="c"># others are not. Additionally, there are their respective &quot;Government Types&quot;,</span>
+<span class="c"># &quot;Populations&quot; and &quot;Areas&quot;</span>
+
+<span class="kn">from</span> <span class="nn">geraldo.cross_reference</span> <span class="kn">import</span> <span class="n">CrossReferenceMatrix</span>
+<span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span><span class="p">,</span> <span class="n">ObjectValue</span><span class="p">,</span> <span class="n">Label</span><span class="p">,</span> <span class="n">ReportBand</span><span class="p">,</span> <span class="n">SystemField</span><span class="p">,</span>\
+    <span class="n">BAND_WIDTH</span><span class="p">,</span> <span class="n">FIELD_ACTION_COUNT</span>
+<span class="kn">from</span> <span class="nn">geraldo.utils</span> <span class="kn">import</span> <span class="n">cm</span><span class="p">,</span> <span class="n">TA_RIGHT</span><span class="p">,</span> <span class="n">TA_CENTER</span>
+<span class="kn">from</span> <span class="nn">geraldo.cross_reference</span> <span class="kn">import</span> <span class="n">CrossReferenceBand</span><span class="p">,</span> <span class="n">ManyElements</span><span class="p">,</span> \
+    <span class="n">CROSS_COLS</span>
+
+<span class="k">class</span> <span class="nc">MyReport</span><span class="p">(</span><span class="n">Report</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;Population per state and their capitais/other cities&#39;</span>
+
+    <span class="k">class</span> <span class="nc">band_page_header</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mf">1.7</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">SystemField</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%(report_title)s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">BAND_WIDTH</span><span class="p">,</span>
+                <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;fontName&#39;</span><span class="p">:</span> <span class="s">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s">&#39;alignment&#39;</span><span class="p">:</span> <span class="n">TA_CENTER</span><span class="p">}),</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;Capital&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">2.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">ManyElements</span><span class="p">(</span>
+                <span class="n">element_class</span><span class="o">=</span><span class="n">Label</span><span class="p">,</span>
+                <span class="n">count</span><span class="o">=</span><span class="n">CROSS_COLS</span><span class="p">,</span>
+                <span class="n">start_left</span><span class="o">=</span><span class="mi">4</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">top</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">text</span><span class="o">=</span><span class="n">CROSS_COLS</span><span class="p">,</span>
+                <span class="p">),</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;Average&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">17</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">3.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;bottom&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+
+    <span class="k">class</span> <span class="nc">band_detail</span><span class="p">(</span><span class="n">CrossReferenceBand</span><span class="p">):</span>
+        <span class="n">height</span><span class="o">=</span><span class="mf">0.6</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;row&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">2.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">ManyElements</span><span class="p">(</span> <span class="c"># Make one ObjectValue for each column and shows the max aggregation</span>
+                <span class="n">element_class</span><span class="o">=</span><span class="n">ObjectValue</span><span class="p">,</span>
+                <span class="n">count</span><span class="o">=</span><span class="n">CROSS_COLS</span><span class="p">,</span>
+                <span class="n">start_left</span><span class="o">=</span><span class="mi">4</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">attribute_name</span><span class="o">=</span><span class="n">CROSS_COLS</span><span class="p">,</span>
+                <span class="n">get_value</span><span class="o">=</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">inst</span><span class="p">:</span> <span class="n">inst</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s">&#39;population&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">attribute_name</span><span class="p">),</span>
+                <span class="p">),</span>
+            <span class="n">ObjectValue</span><span class="p">(</span> <span class="c"># Calculates the average of this row</span>
+                <span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;row&#39;</span><span class="p">,</span>
+                <span class="n">left</span><span class="o">=</span><span class="mi">17</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">width</span><span class="o">=</span><span class="mf">3.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">get_value</span><span class="o">=</span><span class="k">lambda</span> <span class="n">inst</span><span class="p">:</span> <span class="n">inst</span><span class="o">.</span><span class="n">avg</span><span class="p">(</span><span class="s">&#39;population&#39;</span><span class="p">),</span>
+                <span class="p">),</span>
+        <span class="p">]</span>
+
+    <span class="k">class</span> <span class="nc">band_summary</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;Totals&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">2.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">ManyElements</span><span class="p">(</span>
+                <span class="n">element_class</span><span class="o">=</span><span class="n">ObjectValue</span><span class="p">,</span>
+                <span class="n">count</span><span class="o">=</span><span class="n">CROSS_COLS</span><span class="p">,</span>
+                <span class="n">start_left</span><span class="o">=</span><span class="mi">4</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">attribute_name</span><span class="o">=</span><span class="n">CROSS_COLS</span><span class="p">,</span>
+                <span class="n">get_value</span><span class="o">=</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">inst</span><span class="p">:</span> <span class="n">inst</span><span class="o">.</span><span class="n">matrix</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s">&#39;population&#39;</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">attribute_name</span><span class="p">),</span>
+                <span class="p">),</span>
+            <span class="n">ObjectValue</span><span class="p">(</span>
+                <span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;row&#39;</span><span class="p">,</span>
+                <span class="n">left</span><span class="o">=</span><span class="mi">17</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">width</span><span class="o">=</span><span class="mf">3.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">get_value</span><span class="o">=</span><span class="k">lambda</span> <span class="n">inst</span><span class="p">:</span> <span class="n">inst</span><span class="o">.</span><span class="n">matrix</span><span class="o">.</span><span class="n">avg</span><span class="p">(</span><span class="s">&#39;population&#39;</span><span class="p">),</span>
+                <span class="p">),</span>
+        <span class="p">]</span>
+        <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;top&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+
+    <span class="k">class</span> <span class="nc">band_page_footer</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;Created with Geraldo Reports&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+            <span class="n">SystemField</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;Page # </span><span class="si">%(page_number)d</span><span class="s"> of </span><span class="si">%(page_count)d</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">width</span><span class="o">=</span><span class="n">BAND_WIDTH</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;alignment&#39;</span><span class="p">:</span> <span class="n">TA_RIGHT</span><span class="p">}),</span>
+        <span class="p">]</span>
+        <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;top&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+
+<span class="n">cities</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s">&#39;city&#39;</span><span class="p">:</span> <span class="s">&#39;New York City&#39;</span><span class="p">,</span> <span class="s">&#39;state&#39;</span><span class="p">:</span> <span class="s">&#39;NY&#39;</span><span class="p">,</span> <span class="s">&#39;capital&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&#39;population&#39;</span><span class="p">:</span> <span class="mi">8363710</span><span class="p">,</span> <span class="s">&#39;area&#39;</span><span class="p">:</span> <span class="mf">468.9</span><span class="p">,</span> <span class="s">&#39;government&#39;</span><span class="p">:</span> <span class="s">&#39;Mayor&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">&#39;city&#39;</span><span class="p">:</span> <span class="s">&#39;Albany&#39;</span><span class="p">,</span> <span class="s">&#39;state&#39;</span><span class="p">:</span> <span class="s">&#39;NY&#39;</span><span class="p">,</span> <span class="s">&#39;capital&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s">&#39;population&#39;</span><span class="p">:</span> <span class="mi">95658</span><span class="p">,</span> <span class="s">&#39;area&#39;</span><span class="p">:</span> <span class="mf">21.8</span><span class="p">,</span> <span class="s">&#39;government&#39;</span><span class="p">:</span> <span class="s">&#39;Mayor&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">&#39;city&#39;</span><span class="p">:</span> <span class="s">&#39;Austin&#39;</span><span class="p">,</span> <span class="s">&#39;state&#39;</span><span class="p">:</span> <span class="s">&#39;TX&#39;</span><span class="p">,</span> <span class="s">&#39;capital&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s">&#39;population&#39;</span><span class="p">:</span> <span class="mi">757688</span><span class="p">,</span> <span class="s">&#39;area&#39;</span><span class="p">:</span> <span class="mf">296.2</span><span class="p">,</span> <span class="s">&#39;government&#39;</span><span class="p">:</span> <span class="s">&#39;Council-manager&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">&#39;city&#39;</span><span class="p">:</span> <span class="s">&#39;Dallas&#39;</span><span class="p">,</span> <span class="s">&#39;state&#39;</span><span class="p">:</span> <span class="s">&#39;TX&#39;</span><span class="p">,</span> <span class="s">&#39;capital&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&#39;population&#39;</span><span class="p">:</span> <span class="mi">1279910</span><span class="p">,</span> <span class="s">&#39;area&#39;</span><span class="p">:</span> <span class="mf">385.0</span><span class="p">,</span> <span class="s">&#39;government&#39;</span><span class="p">:</span> <span class="s">&#39;Council-manager&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">&#39;city&#39;</span><span class="p">:</span> <span class="s">&#39;Houston&#39;</span><span class="p">,</span> <span class="s">&#39;state&#39;</span><span class="p">:</span> <span class="s">&#39;TX&#39;</span><span class="p">,</span> <span class="s">&#39;capital&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&#39;population&#39;</span><span class="p">:</span> <span class="mi">2242193</span><span class="p">,</span> <span class="s">&#39;area&#39;</span><span class="p">:</span> <span class="mf">601.7</span><span class="p">,</span> <span class="s">&#39;government&#39;</span><span class="p">:</span> <span class="s">&#39;Mayor-council&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">&#39;city&#39;</span><span class="p">:</span> <span class="s">&#39;San Francisco&#39;</span><span class="p">,</span> <span class="s">&#39;state&#39;</span><span class="p">:</span> <span class="s">&#39;CA&#39;</span><span class="p">,</span> <span class="s">&#39;capital&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&#39;population&#39;</span><span class="p">:</span> <span class="mi">808976</span><span class="p">,</span> <span class="s">&#39;area&#39;</span><span class="p">:</span> <span class="mf">231.92</span><span class="p">,</span> <span class="s">&#39;government&#39;</span><span class="p">:</span> <span class="s">&#39;Mayor-council&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">&#39;city&#39;</span><span class="p">:</span> <span class="s">&#39;Los Angeles&#39;</span><span class="p">,</span> <span class="s">&#39;state&#39;</span><span class="p">:</span> <span class="s">&#39;CA&#39;</span><span class="p">,</span> <span class="s">&#39;capital&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&#39;population&#39;</span><span class="p">:</span> <span class="mi">3833995</span><span class="p">,</span> <span class="s">&#39;area&#39;</span><span class="p">:</span> <span class="mf">498.3</span><span class="p">,</span> <span class="s">&#39;government&#39;</span><span class="p">:</span> <span class="s">&#39;Mayor-council&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">&#39;city&#39;</span><span class="p">:</span> <span class="s">&#39;Sacramento&#39;</span><span class="p">,</span> <span class="s">&#39;state&#39;</span><span class="p">:</span> <span class="s">&#39;CA&#39;</span><span class="p">,</span> <span class="s">&#39;capital&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s">&#39;population&#39;</span><span class="p">:</span> <span class="mi">463794</span><span class="p">,</span> <span class="s">&#39;area&#39;</span><span class="p">:</span> <span class="mf">99.2</span><span class="p">,</span> <span class="s">&#39;government&#39;</span><span class="p">:</span> <span class="s">&#39;Mayor-council&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">&#39;city&#39;</span><span class="p">:</span> <span class="s">&#39;Seattle&#39;</span><span class="p">,</span> <span class="s">&#39;state&#39;</span><span class="p">:</span> <span class="s">&#39;WA&#39;</span><span class="p">,</span> <span class="s">&#39;capital&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&#39;population&#39;</span><span class="p">:</span> <span class="mi">602000</span><span class="p">,</span> <span class="s">&#39;area&#39;</span><span class="p">:</span> <span class="mf">142.5</span><span class="p">,</span> <span class="s">&#39;government&#39;</span><span class="p">:</span> <span class="s">&#39;Mayor-council&#39;</span><span class="p">},</span>
+<span class="p">]</span>
+
+<span class="n">cross</span> <span class="o">=</span> <span class="n">CrossReferenceMatrix</span><span class="p">(</span>
+    <span class="n">objects_list</span><span class="o">=</span><span class="n">cities</span><span class="p">,</span>
+    <span class="n">rows_attribute</span><span class="o">=</span><span class="s">&#39;capital&#39;</span><span class="p">,</span>
+    <span class="n">cols_attribute</span><span class="o">=</span><span class="s">&#39;state&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Generating the result report</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">report</span> <span class="o">=</span> <span class="n">MyReport</span><span class="p">(</span><span class="n">queryset</span><span class="o">=</span><span class="n">cross</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>PDF generation</strong></p>
+<blockquote>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cur_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">geraldo.generators</span> <span class="kn">import</span> <span class="n">PDFGenerator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cur_dir</span><span class="p">,</span> <span class="s">&#39;output/cross-reference-table.pdf&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</blockquote>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="barcodes.html"
+                                  title="previous chapter">Showing BarCodes</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="../backward-incompatible-changes.html"
+                                  title="next chapter">Backward Incompatible Changes</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/examples/cross-reference-tables.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../backward-incompatible-changes.html" title="Backward Incompatible Changes"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="barcodes.html" title="Showing BarCodes"
+             >previous</a> |</li>
+        <li><a href="../index.html">Geraldo Reports Documentation v0.4-alpha-5 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2010, Marinho Brandao.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>
