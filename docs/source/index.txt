@@ -73,17 +73,21 @@ A very little demo of how Geraldo works
 
 ::
 
-    from geraldo import Report
+    from geraldo import Report, DetailBand, ObjectValue
+    from geraldo.utils import cm
     from geraldo.generators import PDFGenerator
-
-    class MyReport(geraldo.Report):
-        title = "Cars I have"
-
-    objects_list = User.objects.all() # If you are using Django
-
-    report = MyReport(queryset=objects_list)
-
-    report.generate_by(PDFGenerator, filename='cars_list.pdf')
+    
+    names = ['Mychelle', 'Leticia', 'Tarsila', 'Marta', 'Vera', 'Leni']
+    
+    class MyReport(Report):
+        class band_detail(DetailBand):
+            height=0.7*cm
+            elements=[
+                ObjectValue(attribute_name='capitalize'),
+                ]
+    
+    report = MyReport(queryset=names)
+    report.generate_by(PDFGenerator, filename='female-names.pdf')
 
 This code above will output your report, driven by the queryset 'objects_list',
 into file 'cars_list.pdf'.
@@ -93,11 +97,16 @@ Now, an example in a Django view:
 ::
 
     from django.http import HttpResponse
-    from geraldo import Report
+    from geraldo import Report, DetailBand, ObjectValue
     from geraldo.generators import PDFGenerator
+    from geraldo.utils import cm
 
-    class MyReport(geraldo.Report):
-        title = "Cars I have"
+    class MyReport(Report):
+        class band_detail(DetailBand):
+            height=0.7*cm
+            elements=[
+                ObjectValue(attribute_name='username'),
+                ]
 
     def my_view(request):
         response = HttpResponse(mimetype='application/pdf')

@@ -107,28 +107,37 @@ application.</p>
 </div>
 <div class="section" id="a-very-little-demo-of-how-geraldo-works">
 <h2>A very little demo of how Geraldo works<a class="headerlink" href="#a-very-little-demo-of-how-geraldo-works" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span><span class="p">,</span> <span class="n">DetailBand</span><span class="p">,</span> <span class="n">ObjectValue</span>
+<span class="kn">from</span> <span class="nn">geraldo.utils</span> <span class="kn">import</span> <span class="n">cm</span>
 <span class="kn">from</span> <span class="nn">geraldo.generators</span> <span class="kn">import</span> <span class="n">PDFGenerator</span>
 
-<span class="k">class</span> <span class="nc">MyReport</span><span class="p">(</span><span class="n">geraldo</span><span class="o">.</span><span class="n">Report</span><span class="p">):</span>
-    <span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Cars I have&quot;</span>
+<span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Mychelle&#39;</span><span class="p">,</span> <span class="s">&#39;Leticia&#39;</span><span class="p">,</span> <span class="s">&#39;Tarsila&#39;</span><span class="p">,</span> <span class="s">&#39;Marta&#39;</span><span class="p">,</span> <span class="s">&#39;Vera&#39;</span><span class="p">,</span> <span class="s">&#39;Leni&#39;</span><span class="p">]</span>
 
-<span class="n">objects_list</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="c"># If you are using Django</span>
+<span class="k">class</span> <span class="nc">MyReport</span><span class="p">(</span><span class="n">Report</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">band_detail</span><span class="p">(</span><span class="n">DetailBand</span><span class="p">):</span>
+        <span class="n">height</span><span class="o">=</span><span class="mf">0.7</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;capitalize&#39;</span><span class="p">),</span>
+            <span class="p">]</span>
 
-<span class="n">report</span> <span class="o">=</span> <span class="n">MyReport</span><span class="p">(</span><span class="n">queryset</span><span class="o">=</span><span class="n">objects_list</span><span class="p">)</span>
-
-<span class="n">report</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s">&#39;cars_list.pdf&#39;</span><span class="p">)</span>
+<span class="n">report</span> <span class="o">=</span> <span class="n">MyReport</span><span class="p">(</span><span class="n">queryset</span><span class="o">=</span><span class="n">names</span><span class="p">)</span>
+<span class="n">report</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s">&#39;female-names.pdf&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This code above will output your report, driven by the queryset &#8216;objects_list&#8217;,
 into file &#8216;cars_list.pdf&#8217;.</p>
 <p>Now, an example in a Django view:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
-<span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span>
+<span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span><span class="p">,</span> <span class="n">DetailBand</span><span class="p">,</span> <span class="n">ObjectValue</span>
 <span class="kn">from</span> <span class="nn">geraldo.generators</span> <span class="kn">import</span> <span class="n">PDFGenerator</span>
+<span class="kn">from</span> <span class="nn">geraldo.utils</span> <span class="kn">import</span> <span class="n">cm</span>
 
-<span class="k">class</span> <span class="nc">MyReport</span><span class="p">(</span><span class="n">geraldo</span><span class="o">.</span><span class="n">Report</span><span class="p">):</span>
-    <span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Cars I have&quot;</span>
+<span class="k">class</span> <span class="nc">MyReport</span><span class="p">(</span><span class="n">Report</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">band_detail</span><span class="p">(</span><span class="n">DetailBand</span><span class="p">):</span>
+        <span class="n">height</span><span class="o">=</span><span class="mf">0.7</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">),</span>
+            <span class="p">]</span>
 
 <span class="k">def</span> <span class="nf">my_view</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">mimetype</span><span class="o">=</span><span class="s">&#39;application/pdf&#39;</span><span class="p">)</span>

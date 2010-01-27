@@ -58,11 +58,17 @@ dd {
     text-decoration: none;
 }
 
+.credits {
+    text-align: right;
+    margin-right: 10px;
+}
+
 .footer {
     padding: 10px;
     text-align: center;
     color: white;
     font-size: 0.8em;
+    overflow: hidden;
 }
 
 .middle, .content {
