@@ -7,7 +7,7 @@ except:
 
 import random
 from utils import get_attr_value, memoize
-from base import ReportBand, GeraldoObject, CROSS_COLS
+from base import ReportBand, GeraldoObject, CROSS_COLS, CROSS_ROWS
 
 RANDOM_ROW_DEFAULT = RANDOM_COL_DEFAULT = ''.join([random.choice([chr(c) for c in range(48, 120)]) for i in range(100)])
 
@@ -43,7 +43,7 @@ class CrossReferenceMatrix(object):
     cols_attr = None
 
     def __init__(self, objects_list, rows_attribute, cols_attribute):
-        self.objects_list = objects_list
+        self.objects_list = objects_list or []
         self.rows_attr = rows_attribute
         self.cols_attr = cols_attribute
 
@@ -106,22 +106,69 @@ class CrossReferenceMatrix(object):
 
     @memoize
     def first(self, cell, row=RANDOM_ROW_DEFAULT, col=RANDOM_COL_DEFAULT):
-        return self.values(cell, row, col)[0]
+        try:
+            return self.values(cell, row, col)[0]
+        except IndexError:
+            return None
 
     @memoize
     def last(self, cell, row=RANDOM_ROW_DEFAULT, col=RANDOM_COL_DEFAULT):
-        return self.values(cell, row, col)[-1]
+        try:
+            return self.values(cell, row, col)[-1]
+        except IndexError:
+            return None
 
     @memoize
-    def matrix(self, cell, func='values'):
+    def matrix(self, cell, func='values', show_rows=False, show_cols=False):
         ret = []
 
-        ret.append([''] + self.cols())
+        # Show column names if argument requires
+        if show_cols:
+            # Show the 0,0 cell (row/column relation)
+            prep = show_rows and [''] or []
+
+            ret.append(prep + self.cols())
 
         func = getattr(self, func)
 
         for row in self.rows():
-            ret.append([row] + [func(cell, row, col) for col in self.cols()])
+            # Show rows values if argument requires
+            prep = show_rows and [row] or []
+            ret.append(prep + [func(cell, row, col) for col in self.cols()])
+
+        return ret
+
+    @memoize
+    def summarize_rows(self, cell, func='values', show_rows=False):
+        ret = []
+
+        func = getattr(self, func)
+
+        for row in self.rows():
+            val = func(cell, row)
+
+            # Show rows values if argument requires
+            if show_rows:
+                ret.append([row, val])
+            else:
+                ret.append(val)
+
+        return ret
+
+    @memoize
+    def summarize_cols(self, cell, func='values', show_cols=False):
+        ret = []
+
+        func = getattr(self, func)
+
+        for col in self.cols():
+            val = func(cell, col=col)
+
+            # Show cols values if argument requires
+            if show_cols:
+                ret.append([col, val])
+            else:
+                ret.append(val)
 
         return ret
 

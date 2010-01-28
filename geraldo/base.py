@@ -18,6 +18,7 @@ from cache import DEFAULT_CACHE_STATUS, CACHE_BACKEND, CACHE_FILE_ROOT
 BAND_WIDTH = 'band-width'
 BAND_HEIGHT = 'band-height'
 CROSS_COLS = 'cross-cols'
+CROSS_ROWS = 'cross-rows'
 
 class GeraldoObject(object):
     """Base class inherited by all report classes, including band, subreports,

@@ -8,6 +8,7 @@ from geraldo.barcodes import BarCode
 from geraldo.base import GeraldoObject, ManyElements
 from geraldo.cache import CACHE_BY_QUERYSET, CACHE_BY_RENDER, CACHE_DISABLED,\
         make_hash_key, get_cache_backend
+from geraldo.charts import BaseChart
 
 class ReportPage(GeraldoObject):
     rect = None
@@ -265,6 +266,9 @@ class ReportGenerator(GeraldoObject):
                 graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
                 graphic.top = top_position - self.calculate_size(graphic.top) - self.calculate_size(graphic.height)
                 self.wrap_barcode_on(barcode, graphic.width, graphic.height)
+            elif isinstance(element, BaseChart):
+                graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
+                graphic.top = top_position - self.calculate_size(graphic.top) - self.calculate_size(graphic.height)
 
             # Sets element height as the highest
             temp_height = self.calculate_size(element.top) + self.calculate_size(graphic.height)
@@ -286,6 +290,7 @@ class ReportGenerator(GeraldoObject):
             for el in element.get_elements():
                 self.render_element(el, current_object, band, band_rect, temp_top,
                         highest_height, top_position)
+
 
     def render_band(self, band, top_position=None, left_position=None,
             update_top=True, current_object=None):

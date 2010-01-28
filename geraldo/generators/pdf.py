@@ -25,6 +25,7 @@ from geraldo.graphics import Graphic, RoundRect, Rect, Line, Circle, Arc,\
         Ellipse, Image
 from geraldo.barcodes import BarCode
 from geraldo.cache import make_hash_key, get_cache_backend, CACHE_DISABLED
+from geraldo.charts import BaseChart
 
 class PDFGenerator(ReportGenerator):
     """This is a generator to output a PDF using ReportLab library with
@@ -466,7 +467,14 @@ class PDFGenerator(ReportGenerator):
                     )
         elif isinstance(graphic, BarCode):
             barcode = graphic.render()
-            barcode.drawOn(canvas, graphic.left, graphic.top)
+
+            if barcode:
+                barcode.drawOn(canvas, graphic.left, graphic.top)
+        elif isinstance(graphic, BaseChart):
+            drawing = graphic.render()
+
+            if drawing:
+                drawing.drawOn(canvas, graphic.left, graphic.top)
         else:
             return
  

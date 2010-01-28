@@ -125,7 +125,9 @@ class ObjectValue(Label):
 
         value = get_attr_value(instance, self.attribute_name)
 
-        # For method attributes
+        # For method attributes --- FIXME: check what does this code here, because
+        #                           get_attr_value has a code to do that, using
+        #                           callable() checking
         if type(value) == types.MethodType:
             value = value()
 
