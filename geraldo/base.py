@@ -886,6 +886,11 @@ class ManyElements(GeraldoObject):
                             kwargs[k] = cross_cols[num]
                         except IndexError:
                             kwargs[k] = cross_cols[-1]
+                    elif isinstance(v, (list,tuple)) and v:
+                        try:
+                            kwargs[k] = v[num]
+                        except IndexError:
+                            kwargs[k] = v[-1]
 
                 # Create the element
                 el = self.element_class(**kwargs)
