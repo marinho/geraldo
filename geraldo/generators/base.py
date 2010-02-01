@@ -54,6 +54,7 @@ class ReportGenerator(GeraldoObject):
     _current_object = None
     _current_queryset = None
     _generation_datetime = None
+    _highest_height = 0
 
     # Groupping
     _groups_values = None
@@ -166,7 +167,7 @@ class ReportGenerator(GeraldoObject):
         return band_rect
 
     def render_element(self, element, current_object, band, band_rect, temp_top,
-            highest_height, top_position):
+            top_position):
         # Doesn't render not visible element
         if not element.visible:
             return
@@ -214,8 +215,8 @@ class ReportGenerator(GeraldoObject):
                 temp_height = self.calculate_size(element.top) + self.calculate_size(widget.height)
 
             # Sets element height as the highest
-            if temp_height > highest_height:
-                highest_height = temp_height
+            if temp_height > self._highest_height:
+                self._highest_height = temp_height
 
             self._rendered_pages[-1].add_element(widget)
 
@@ -272,8 +273,8 @@ class ReportGenerator(GeraldoObject):
 
             # Sets element height as the highest
             temp_height = self.calculate_size(element.top) + self.calculate_size(graphic.height)
-            if temp_height > highest_height:
-                highest_height = temp_height
+            if temp_height > self._highest_height:
+                self._highest_height = temp_height
 
             self._rendered_pages[-1].add_element(graphic)
 
@@ -288,8 +289,7 @@ class ReportGenerator(GeraldoObject):
 
             # Get the elements and render them
             for el in element.get_elements():
-                self.render_element(el, current_object, band, band_rect, temp_top,
-                        highest_height, top_position)
+                self.render_element(el, current_object, band, band_rect, temp_top, top_position)
 
 
     def render_band(self, band, top_position=None, left_position=None,
@@ -329,17 +329,17 @@ class ReportGenerator(GeraldoObject):
         self.render_border(band.borders, band_rect)
 
         # Variable that stores the highest height at all elements
-        highest_height = 0
+        self._highest_height = 0
 
         # Loop at band widgets
         for element in band.elements:
             self.render_element(element, current_object, band, band_rect, temp_top,
-                    highest_height, top_position)
+                    top_position)
 
         # Updates top position
         if update_top:
             if band.auto_expand_height:
-                band_height = highest_height
+                band_height = self._highest_height
             else:
                 band_height = self.calculate_size(band.height)
 
