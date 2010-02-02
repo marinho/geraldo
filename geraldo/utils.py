@@ -11,6 +11,27 @@ try:
 except ImportError:
     wraps = lambda func: func
 
+# FLAGS
+
+FIELD_ACTION_VALUES = 'values'  # \
+FIELD_ACTION_FIRST = 'first'    #  > Used only by cross reference functions
+FIELD_ACTION_LAST = 'last'      # /
+FIELD_ACTION_VALUE = 'value'
+FIELD_ACTION_COUNT = 'count'
+FIELD_ACTION_AVG = 'avg'
+FIELD_ACTION_MIN = 'min'
+FIELD_ACTION_MAX = 'max'
+FIELD_ACTION_SUM = 'sum'
+FIELD_ACTION_DISTINCT_COUNT = 'distinct_count'
+
+SYSTEM_FIELD_CHOICES = {
+    'report_title': 'ReportTitle',
+    'page_number': 'PageNumber',
+    'page_count': 'PageCount',
+    'current_datetime': 'CurrentDateTime',
+    'report_author': 'Author',
+}
+
 def _get_memoized_value(func, args, kwargs):
     """Used internally by memoize decorator to get/store function results"""
     key = (repr(args), repr(kwargs))

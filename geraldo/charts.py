@@ -228,7 +228,12 @@ class BaseChart(Graphic):
 
             if not isinstance(data, CrossReferenceMatrix):
                 if self.rows_attribute and self.cols_attribute:
-                    data = CrossReferenceMatrix(data, self.rows_attribute, self.cols_attribute)
+                    data = CrossReferenceMatrix(
+                            data,
+                            self.rows_attribute,
+                            self.cols_attribute,
+                            decimal_as_float=True,
+                            )
 
             self._cross_data = data
 
@@ -386,6 +391,9 @@ class BarChart(BaseMatrixChart):
                     chart.bars[num].fillColor = color
                 except IndexError:
                     break
+
+class HorizontalBarChart(BarChart):
+    horizontal = True
 
 class SpiderChart(BaseMatrixChart):
     chart_class = OriginalSpiderChart

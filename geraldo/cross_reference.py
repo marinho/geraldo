@@ -5,7 +5,7 @@ try:
 except:
     from sets import Set as set
 
-import random
+import random, decimal
 from utils import get_attr_value, memoize
 from base import ReportBand, GeraldoObject, CROSS_COLS, CROSS_ROWS
 
@@ -41,31 +41,45 @@ class CrossReferenceMatrix(object):
     objects_list = None
     rows_attr = None
     cols_attr = None
+    decimal_as_float = False
 
-    def __init__(self, objects_list, rows_attribute, cols_attribute):
+    def __init__(self, objects_list, rows_attribute, cols_attribute, decimal_as_float=None):
         self.objects_list = objects_list or []
         self.rows_attr = rows_attribute
         self.cols_attr = cols_attribute
+
+        if decimal_as_float is not None:
+            self.decimal_as_float = decimal_as_float
 
     def __iter__(self):
         for row in self.rows():
             yield CrossReferenceProxy(self, row)
 
+    def get_attr_value(self, obj, attr):
+        """Returns the attribute value on an object, and converts decimal to float if necessary."""
+
+        value = get_attr_value(obj, attr)
+        
+        if isinstance(value, decimal.Decimal) and self.decimal_as_float:
+            value = float(value)
+
+        return value
+
     @memoize
     def rows(self):
-        return list(set([get_attr_value(obj, self.rows_attr) for obj in self.objects_list]))
+        return list(set([self.get_attr_value(obj, self.rows_attr) for obj in self.objects_list]))
 
     @memoize
     def cols(self):
-        return list(set([get_attr_value(obj, self.cols_attr) for obj in self.objects_list]))
+        return list(set([self.get_attr_value(obj, self.cols_attr) for obj in self.objects_list]))
 
     @memoize
     def values(self, cell, row=RANDOM_ROW_DEFAULT, col=RANDOM_COL_DEFAULT):
         """Receives the cell, row and col values and make the cross reference among them."""
 
-        return [get_attr_value(obj, cell) for obj in self.objects_list
-            if (row == RANDOM_ROW_DEFAULT or get_attr_value(obj, self.rows_attr) == row) and
-               (col == RANDOM_COL_DEFAULT or get_attr_value(obj, self.cols_attr) == col)]
+        return [self.get_attr_value(obj, cell) for obj in self.objects_list
+            if (row == RANDOM_ROW_DEFAULT or self.get_attr_value(obj, self.rows_attr) == row) and
+               (col == RANDOM_COL_DEFAULT or self.get_attr_value(obj, self.cols_attr) == col)]
 
     @memoize
     def max(self, cell, row=RANDOM_ROW_DEFAULT, col=RANDOM_COL_DEFAULT):

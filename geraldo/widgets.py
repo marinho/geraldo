@@ -9,7 +9,9 @@ from reportlab.lib.units import cm
 from reportlab.lib.colors import black
 
 from base import BAND_WIDTH, BAND_HEIGHT, Element
-from utils import get_attr_value
+from utils import get_attr_value, SYSTEM_FIELD_CHOICES, FIELD_ACTION_VALUE, FIELD_ACTION_COUNT,\
+        FIELD_ACTION_AVG, FIELD_ACTION_MIN, FIELD_ACTION_MAX, FIELD_ACTION_SUM,\
+        FIELD_ACTION_DISTINCT_COUNT
 from exceptions import AttributeNotFound
 
 class Widget(Element):
@@ -72,23 +74,6 @@ class Label(Widget):
             new._text = self._text
 
         return new
-
-FIELD_ACTION_VALUE = 'value'
-FIELD_ACTION_COUNT = 'count'
-FIELD_ACTION_AVG = 'avg'
-FIELD_ACTION_MIN = 'min'
-FIELD_ACTION_MAX = 'max'
-FIELD_ACTION_SUM = 'sum'
-FIELD_ACTION_DISTINCT_COUNT = 'distinct_count'
-FIELD_ACTION_CHOICES = {
-    FIELD_ACTION_VALUE: 'Value',
-    FIELD_ACTION_COUNT: 'Count',
-    FIELD_ACTION_AVG: 'Avg',
-    FIELD_ACTION_MIN: 'Min',
-    FIELD_ACTION_MAX: 'Max',
-    FIELD_ACTION_SUM: 'Sum',
-    FIELD_ACTION_DISTINCT_COUNT: 'Distinct count',
-}
 
 class ObjectValue(Label):
     """This shows the value from a method, field or property from objects got
@@ -211,14 +196,6 @@ class ObjectValue(Label):
         new.stores_text_in_cache = self.stores_text_in_cache
 
         return new
-
-SYSTEM_FIELD_CHOICES = {
-    'report_title': 'ReportTitle',
-    'page_number': 'PageNumber',
-    'page_count': 'PageCount',
-    'current_datetime': 'CurrentDateTime',
-    'report_author': 'Author',
-}
 
 class SystemField(Label):
     """This shows system informations, like the report title, current date/time,
