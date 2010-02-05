@@ -227,7 +227,7 @@ class BaseChart(Graphic):
                 data = get_attr_value(self.instance, data)
 
             if not isinstance(data, CrossReferenceMatrix):
-                if self.rows_attribute and self.cols_attribute:
+                if self.rows_attribute: # and self.cols_attribute:
                     data = CrossReferenceMatrix(
                             data,
                             self.rows_attribute,
