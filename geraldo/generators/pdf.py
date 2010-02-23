@@ -42,7 +42,7 @@ class PDFGenerator(ReportGenerator):
     temp_directory = DEFAULT_TEMP_DIR
 
     def __init__(self, report, filename=None, canvas=None, return_canvas=False,
-            multiple_canvas=None, temp_directory=None, cache_enabled=None):
+            multiple_canvas=None, temp_directory=None, cache_enabled=None, **kwargs):
         super(PDFGenerator, self).__init__(report)
 
         self.filename = filename

@@ -221,9 +221,11 @@ class SystemField(Label):
         self.fields['current_datetime'] = datetime.datetime.now()
 
     def text(self):
+        page_number = self.fields.get('page_number') or (self.generator._current_page_number + self.generator.start_page_number_by)
+
         fields = {
             'report_title': self.fields.get('report_title') or self.report.title,
-            'page_number': self.fields.get('page_number') or self.generator._current_page_number,
+            'page_number': page_number,
             'page_count': self.fields.get('page_count') or self.generator.get_page_count(),
             'current_datetime': self.fields.get('current_datetime') or datetime.datetime.now(),
             'report_author': self.fields.get('report_author') or self.report.author,

@@ -45,6 +45,7 @@ class ReportGenerator(GeraldoObject):
     """A report generator is used to generate a report to a specific format."""
 
     cache_enabled = None
+    start_page_number_by = 0
 
     _is_first_page = True
     _is_latest_page = True
@@ -66,7 +67,7 @@ class ReportGenerator(GeraldoObject):
     _rendered_pages = None
     _page_rect = None
 
-    def __init__(self, report):
+    def __init__(self, report, **kwargs):
         """This method should be overrided to receive others arguments"""
         self.report = report
 
@@ -76,6 +77,8 @@ class ReportGenerator(GeraldoObject):
         self._groups_working_values = {}
         self._groups_changed = {}
         self._groups_stack = []
+
+        self.start_page_number_by = kwargs.get('start_page_number_by', 0)
 
     def get_children(self):
         return self._rendered_pages

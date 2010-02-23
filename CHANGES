@@ -1,3 +1,7 @@
+2010-02-22: Version 0.4-alpha-11
+-----------------------------
+* New option 'start_page_number_by' on generators to set what is the first page number
+
 2010-01-23: Version 0.4-alpha-5
 -----------------------------
 * Implemented barcodes
