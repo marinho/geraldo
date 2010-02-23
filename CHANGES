@@ -1,23 +1,23 @@
-2010-02-22: Version 0.4-alpha-11
------------------------------
+2010-02-22: Version 0.4-alpha-12
+--------------------------------
 * New option 'start_page_number_by' on generators to set what is the first page number
 
 2010-01-23: Version 0.4-alpha-5
------------------------------
+-------------------------------
 * Implemented barcodes
 
 2010-01-22: Version 0.4-alpha-4
------------------------------
+-------------------------------
 * Borders now support integer numbers in place of boolean, to set their stroke widths
 * Implemented caching functions
 
 2010-01-20: Version 0.4-alpha-3
------------------------------
+-------------------------------
 * New attribute 'additional_fonts' on Report, to be a dictionary with font names file paths
   for additional fonts besides those from PDF defaults.
 
 2010-01-15: Version 0.4-alpha-2
------------------------------
+-------------------------------
 * New 'lambda' attribute on ObjectValue 'get_text' to help 'get_value' to format the value
   after it is getted (from Ari's patch)
 * New attribute on ObjectValue 'stores_text_in_cache' to set _text property to store the
