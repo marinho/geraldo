@@ -21,8 +21,7 @@ DEFAULT_TEMP_DIR = '/tmp/'
 
 from geraldo.utils import get_attr_value, calculate_size
 from geraldo.widgets import Widget, Label, SystemField
-from geraldo.graphics import Graphic, RoundRect, Rect, Line, Circle, Arc,\
-        Ellipse, Image
+from geraldo.graphics import Graphic, RoundRect, Rect, Line, Circle, Arc, Ellipse, Image
 from geraldo.barcodes import BarCode
 from geraldo.cache import make_hash_key, get_cache_backend, CACHE_DISABLED
 from geraldo.charts import BaseChart

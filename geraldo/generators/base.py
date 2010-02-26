@@ -46,6 +46,8 @@ class ReportGenerator(GeraldoObject):
 
     cache_enabled = None
     start_page_number_by = 0
+    render_page_header_only_first_page = False
+    render_page_footer_only_last_page = False
 
     _is_first_page = True
     _is_latest_page = True
@@ -426,8 +428,12 @@ class ReportGenerator(GeraldoObject):
         if not self.report.band_page_header:
             return
 
-        # Doesn't generate this band if it is not visible
+        # Doesn't render this band if it is not visible
         if not self.report.band_page_header.visible:
+            return
+
+        # Doesn't render this band if this is not the first page and there is a setting blocking it
+        if self.render_page_header_only_first_page and not self._is_first_page:
             return
 
         # Call method that print the band area and its widgets
@@ -442,8 +448,12 @@ class ReportGenerator(GeraldoObject):
         if not self.report.band_page_footer:
             return
 
-        # Doesn't generate this band if it is not visible
+        # Doesn't render this band if it is not visible
         if not self.report.band_page_footer.visible:
+            return
+
+        # Doesn't render this band if this is not the first page and there is a setting blocking it
+        if self.render_page_footer_only_last_page and not self._is_latest_page:
             return
 
         # Call method that print the band area and its widgets
