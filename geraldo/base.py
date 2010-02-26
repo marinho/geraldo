@@ -148,9 +148,11 @@ class GeraldoObject(object):
         raise NotYetImplemented()
 
     def get_object_value(self, obj=None, attribute_name=None, action=None):
-        """Override this method to customize the behaviour of object getting
-        its value."""
-        return self.parent.get_object_value(obj, attribute_name, action)
+        """Override this method to customize the behaviour of object getting its value."""
+        try:
+            return self.parent.get_object_value(obj, attribute_name, action)
+        except AttributeError:
+            raise AttributeNotFound()
 
 class BaseReport(GeraldoObject):
     """Basic Report class, inherited and used to make reports adn subreports"""
@@ -876,6 +878,8 @@ class ManyElements(GeraldoObject):
             self._elements = []
 
             # Loop for count of elements to be created
+            next_left = self.start_left
+            next_top = self.start_top
             for num in range(count):
                 kwargs = self.element_kwargs.copy()
 
@@ -897,10 +901,12 @@ class ManyElements(GeraldoObject):
 
                 # Set attributes after creation
                 if self.start_left is not None: # Maybe we should support distance here
-                    el.left = self.start_left + el.width * num
+                    el.left = next_left
+                    next_left += el.width
 
                 if self.start_top is not None: # Maybe we should support distance here
-                    el.top = self.start_top + el.height * num
+                    el.top = next_top
+                    next_top += el.height
 
                 self._elements.append(el)
 

@@ -1,3 +1,8 @@
+2010-02-26: Version 0.4-alpha-13
+--------------------------------
+* Fixed method GeraldoObject.get_object_value to raise correct exception when don't find an attribute
+* Fixed ManyElements to calculate right incremental left and top
+
 2010-02-22: Version 0.4-alpha-12
 --------------------------------
 * New option 'start_page_number_by' on generators to set what is the first page number
