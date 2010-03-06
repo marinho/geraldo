@@ -325,6 +325,9 @@ class BaseReport(GeraldoObject):
         if self.on_new_page:
             self.on_new_page(self, page, page_number, generator)
 
+    def get_variable_value(self, name, system_fields):
+        """Returns the value for a given variable name"""
+        return system_fields.widget.generator.variables[name]
 
 class Report(BaseReport):
     """This class must be inherited to be used as a new report.

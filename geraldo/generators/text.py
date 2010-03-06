@@ -75,7 +75,7 @@ class TextGenerator(ReportGenerator):
     escapes_page_end = ''
 
     def __init__(self, report, cache_enabled=None, **kwargs):
-        super(TextGenerator, self).__init__(report)
+        super(TextGenerator, self).__init__(report, **kwargs)
 
         # Cache enabled
         if cache_enabled is not None:
@@ -97,6 +97,10 @@ class TextGenerator(ReportGenerator):
 
         # Render pages
         self.render_bands()
+
+        # Returns rendered pages
+        if self.return_pages:
+            return self._rendered_pages
  
         # Calls the after_render event
         self.report.do_before_generate(generator=self)

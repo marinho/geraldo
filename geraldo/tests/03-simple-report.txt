@@ -53,8 +53,8 @@ Report class
     ...         height = 0.5*cm
     ...         elements = [
     ...             Label(text='Created with Geraldo Reports', top=0.1*cm, left=0),
-    ...             SystemField(expression='Page # %(page_number)d of %(page_count)d', top=0.1*cm,
-    ...                 width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
+    ...             SystemField(expression='Page # %(page_number)d (%(first_page_number)d ~ %(last_page_number)d, total: %(page_count)d)',
+    ...                 top=0.1*cm, width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
     ...         ]
     ...         borders = {'top': True}
     ... 
@@ -71,15 +71,21 @@ PDF generation
 
     >>> from geraldo.generators import PDFGenerator
 
-    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/simple-report.pdf'))
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/simple-report.pdf'), first_page_number=5)
 
 Text generation
 
     >>> from geraldo.generators import TextGenerator
 
-    >>> report.generate_by(TextGenerator, filename=os.path.join(cur_dir, 'output/simple-report.txt'), to_printer=False, encode_to='latin-1')
+    >>> report.generate_by(
+    ...     TextGenerator,
+    ...     filename=os.path.join(cur_dir, 'output/simple-report.txt'),
+    ...     to_printer=False,
+    ...     encode_to='latin-1',
+    ...     first_page_number=5,
+    ... )
 
-Page with half height
+Page with half height (starting page number from default: 1)
 
     >>> report.page_size = (A4[0], A4[1] / 2)
 

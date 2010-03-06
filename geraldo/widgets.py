@@ -207,6 +207,8 @@ class SystemField(Label):
     fields = {
             'report_title': None,
             'page_number': None,
+            'first_page_number': None,
+            'last_page_number': None,
             'page_count': None,
             'current_datetime': None,
             'report_author': None,
@@ -221,12 +223,15 @@ class SystemField(Label):
         self.fields['current_datetime'] = datetime.datetime.now()
 
     def text(self):
-        page_number = self.fields.get('page_number') or (self.generator._current_page_number + self.generator.start_page_number_by)
+        page_number = (self.fields.get('page_number') or self.generator._current_page_number) + self.generator.first_page_number - 1
+        page_count = self.fields.get('page_count') or self.generator.get_page_count()
 
         fields = {
             'report_title': self.fields.get('report_title') or self.report.title,
             'page_number': page_number,
-            'page_count': self.fields.get('page_count') or self.generator.get_page_count(),
+            'first_page_number': self.generator.first_page_number,
+            'last_page_number': page_count + self.generator.first_page_number - 1,
+            'page_count': page_count,
             'current_datetime': self.fields.get('current_datetime') or datetime.datetime.now(),
             'report_author': self.fields.get('report_author') or self.report.author,
         }
@@ -260,6 +265,9 @@ class SystemFieldDict(dict):
                     self.fields.get('current_datetime', datetime.datetime.now()),
                     key[4:]
                     )
+
+        elif key.startswith('var:'):
+            return self.widget.report.get_variable_value(name=key[4:], system_fields=self)
 
         return self.fields[key]
 

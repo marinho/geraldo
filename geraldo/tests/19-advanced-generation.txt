@@ -29,6 +29,8 @@ A simple report
     ...                 style={'fontName': 'Helvetica-Bold', 'fontSize': 14, 'alignment': TA_CENTER}),
     ...             Label(text="Name", top=0.8*cm, style={'fontName': 'Helvetica-Bold'}),
     ...             Label(text="Country", top=0.8*cm, left=10*cm, style={'fontName': 'Helvetica-Bold'}),
+    ...             SystemField(expression='Page # %(page_number)d of %(var:last_page)d', top=0.1*cm,
+    ...                 width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
     ...         ]
     ...         borders = {'bottom': True}
     ...
@@ -38,6 +40,12 @@ A simple report
     ...             ObjectValue(attribute_name='city', top=0.1*cm),
     ...             ObjectValue(attribute_name='country', top=0.1*cm, left=10*cm),
     ...         ]
+    ... 
+    ...     def get_variable_value(self, name, system_fields):
+    ...         try:
+    ...             return super(CitiesReport, self).get_variable_value(name, system_fields)
+    ...         except KeyError:
+    ...             return system_fields.get(name, system_fields['page_count'])
 
 Another simple report
 
@@ -50,6 +58,8 @@ Another simple report
     ...             SystemField(expression='%(report_title)s', top=0.1*cm, left=0, width=BAND_WIDTH,
     ...                 style={'fontName': 'Helvetica-Bold', 'fontSize': 14, 'alignment': TA_CENTER}),
     ...             Label(text="Name", top=0.8*cm, style={'fontName': 'Helvetica-Bold'}),
+    ...             SystemField(expression='Page # %(page_number)d of %(var:last_page)d', top=0.1*cm,
+    ...                 width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
     ...         ]
     ...         borders = {'bottom': True}
     ...
@@ -58,6 +68,12 @@ Another simple report
     ...         elements = [
     ...             ObjectValue(attribute_name='capitalize'),
     ...         ]
+    ... 
+    ...     def get_variable_value(self, name, system_fields):
+    ...         try:
+    ...             return super(PeopleReport, self).get_variable_value(name, system_fields)
+    ...         except KeyError:
+    ...             return system_fields.get(name, system_fields['page_count'])
 
 Objects list
 
@@ -89,20 +105,35 @@ it really.
     >>> canvas = report_cities.generate_by(PDFGenerator,
     ...     filename=os.path.join(cur_dir, 'output/two-reports-at-once.pdf'),
     ...     return_canvas=True,
+    ...     variables={'last_page': 2},
     ...     )
 
     >>> report_people.generate_by(PDFGenerator,
     ...     canvas=canvas,
+    ...     first_page_number=2,
+    ...     variables={'last_page': 2},
     ...     )
 
 Text generation
 
     >>> from geraldo.generators import TextGenerator
 
-    >>> text = report_cities.generate_by(TextGenerator)
-    >>> text += report_people.generate_by(TextGenerator)
+    >>> text = report_cities.generate_by(TextGenerator, variables={'last_page': 2})
+    >>> text += report_people.generate_by(TextGenerator, variables={'last_page': 2})
 
     >>> fp = file(os.path.join(cur_dir, 'output/two-reports-at-once.txt'), 'w')
     >>> fp.write(text)
     >>> fp.close()
+
+There is other way to do the same thing but just rendering without generate canvas, to
+generate once canvas from cached pages.
+
+    >>> pages = report_cities.generate_by(PDFGenerator,
+    ...     return_pages=True,
+    ...     )
+
+    >>> report_people.generate_by(PDFGenerator,
+    ...     filename=os.path.join(cur_dir, 'output/two-reports-at-once-canvas.pdf'),
+    ...     pages=pages,
+    ...     )
 

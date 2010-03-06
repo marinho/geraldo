@@ -42,8 +42,9 @@ class PDFGenerator(ReportGenerator):
     temp_directory = DEFAULT_TEMP_DIR
 
     def __init__(self, report, filename=None, canvas=None, return_canvas=False,
-            multiple_canvas=None, temp_directory=None, cache_enabled=None, **kwargs):
-        super(PDFGenerator, self).__init__(report)
+            multiple_canvas=None, temp_directory=None, cache_enabled=None,
+            **kwargs):
+        super(PDFGenerator, self).__init__(report, **kwargs)
 
         self.filename = filename
         self.canvas = canvas
@@ -62,7 +63,7 @@ class PDFGenerator(ReportGenerator):
 
         # Sets multiple_canvas as False if a canvas has been informed as argument
         # nor if return_canvas attribute is setted as True
-        if canvas or self.return_canvas:
+        if canvas or self.return_canvas or self.return_pages:
             self.multiple_canvas = False
             
         # Initializes multiple canvas controller variables
@@ -92,6 +93,10 @@ class PDFGenerator(ReportGenerator):
 
         # Render pages
         self.render_bands()
+
+        # Returns rendered pages
+        if self.return_pages:
+            return self._rendered_pages
 
         # Check the cache
         if self.cached_before_generate():

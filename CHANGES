@@ -1,3 +1,11 @@
+2010-03-06: Version 0.4-alpha-14
+--------------------------------
+* Generator's attribute 'first_page_number_by' changed to 'first_page_number_by'
+* Widget SystemField now support new macros %(first_page_number)s and %(last_page_number)s
+* New kind of macro 'var:something' to get variable values and attribute 'variables'
+* New method on class BaseReport (Report and SubReport): get_variable_value
+* New feature to support generators return rendered pages without generate them (attribute 'return_pages')
+
 2010-02-26: Version 0.4-alpha-13
 --------------------------------
 * Fixed method GeraldoObject.get_object_value to raise correct exception when don't find an attribute

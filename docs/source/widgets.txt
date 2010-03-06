@@ -235,6 +235,8 @@ number, page count, etc.
 
     - %(report_title)s
     - %(page_number)s
+    - %(first_page_number)s
+    - %(last_page_number)s
     - %(page_count)s
     - %(report_author)s
     - %(now:FORMAT)s - in replace of 'FORMAT' you can use date formatting
