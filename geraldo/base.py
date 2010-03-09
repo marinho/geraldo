@@ -10,7 +10,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.colors import black
 from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
 
-from utils import calculate_size, get_attr_value, landscape, format_date
+from utils import calculate_size, get_attr_value, landscape, format_date, memoize
 from exceptions import EmptyQueryset, ObjectNotFound, ManyObjectsFound,\
         AttributeNotFound, NotYetImplemented
 from cache import DEFAULT_CACHE_STATUS, CACHE_BACKEND, CACHE_FILE_ROOT
@@ -329,6 +329,34 @@ class BaseReport(GeraldoObject):
         """Returns the value for a given variable name"""
         return system_fields.widget.generator.variables[name]
 
+
+# Useful to find declared report classes without manual registration
+_registered_report_classes = []
+
+class ReportMetaclass(type):
+    """This metaclass registers the declared classes to a local variable."""
+    
+    def __new__(cls, name, bases, attrs):
+        new_class = super(ReportMetaclass, cls).__new__(cls, name, bases, attrs)
+
+        # Defines a registration ID
+        if attrs.get('_registered_id', None) is None:
+            new_class._registered_id = '%s.%s'%(new_class.__module__, name)
+
+        # Appends the new class to list of registered report classes
+        if new_class._registered_id != 'geraldo.base.Report':
+            _registered_report_classes.append(new_class)
+
+        return new_class
+
+@memoize
+def get_report_class_by_registered_id(reg_id):
+    for report_class in _registered_report_classes:
+        if getattr(report_class, '_registered_id', None) == reg_id:
+            return report_class
+
+    return None
+
 class Report(BaseReport):
     """This class must be inherited to be used as a new report.
     
@@ -336,6 +364,8 @@ class Report(BaseReport):
     margins definitions.
     
     Depends on ReportLab to work properly"""
+
+    __metaclass__ = ReportMetaclass
 
     # Report properties
     title = ''

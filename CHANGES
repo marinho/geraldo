@@ -1,3 +1,8 @@
+2010-03-09: Version 0.4-alpha-15
+--------------------------------
+* Added automatic report class registration, a variable to store them and a function
+  'geraldo.base.get_report_class_by_registered_id' to find it by registration ID
+
 2010-03-06: Version 0.4-alpha-14
 --------------------------------
 * Generator's attribute 'first_page_number_by' changed to 'first_page_number_by'
