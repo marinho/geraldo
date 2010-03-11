@@ -1,3 +1,7 @@
+2010-03-10: Version 0.4-alpha-16
+--------------------------------
+* Label widget fixed to support get_value with 'self' and 'text' arguments
+
 2010-03-09: Version 0.4-alpha-15
 --------------------------------
 * Added automatic report class registration, a variable to store them and a function

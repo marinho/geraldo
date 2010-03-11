@@ -58,7 +58,10 @@ class Label(Widget):
 
     def _get_text(self):
         if self.get_value:
-            return self.get_value(self._text)
+            try:
+                return self.get_value(self, self._text)
+            except TypeError:
+                return self.get_value(self._text)
 
         return self._text
 
