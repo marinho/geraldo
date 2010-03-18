@@ -1,3 +1,7 @@
+2010-03-18: Version 0.4-alpha-17
+--------------------------------
+* Chart colors now support hex strings
+
 2010-03-10: Version 0.4-alpha-16
 --------------------------------
 * Label widget fixed to support get_value with 'self' and 'text' arguments

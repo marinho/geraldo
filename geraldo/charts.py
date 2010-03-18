@@ -1,5 +1,6 @@
-from reportlab.graphics.shapes import Drawing, String
+import re, random
 
+from reportlab.graphics.shapes import Drawing, String
 from reportlab.graphics.charts.barcharts import HorizontalBarChart as OriginalHorizBarChart
 from reportlab.graphics.charts.barcharts import VerticalBarChart as OriginalVertBarChart
 from reportlab.graphics.charts.barcharts import HorizontalBarChart3D as OriginalHorizBarChart3D
@@ -9,6 +10,7 @@ from reportlab.graphics.charts.linecharts import HorizontalLineChart as Original
 from reportlab.graphics.charts.piecharts import Pie as OriginalPieChart
 from reportlab.graphics.charts.spider import SpiderChart as OriginalSpiderChart
 from reportlab.graphics.charts.legends import LineLegend
+from reportlab.lib.colors import HexColor, getAllNamedColors
 
 from utils import cm, memoize, get_attr_value
 from cross_reference import CrossReferenceMatrix, CROSS_COLS, CROSS_ROWS
@@ -57,6 +59,8 @@ class BaseChart(Graphic):
             self.legend_labels = None
         elif not self.colors:
             self.colors = self.get_available_colors()
+        else:
+            self.prepare_colors()
 
         # Prepare chart additional kwargs
         self.chart_style = self.chart_style or {}
@@ -87,8 +91,6 @@ class BaseChart(Graphic):
     @memoize
     def get_available_colors(self):
         """Returns a list of available colors"""
-        import random
-        from reportlab.lib.colors import getAllNamedColors
 
         # Get reportlab available colors
         colors = getAllNamedColors()
@@ -104,6 +106,17 @@ class BaseChart(Graphic):
         random.shuffle(colors)
 
         return colors
+
+    def prepare_colors(self):
+        colors = []
+
+        for color in self.colors:
+            try:
+                colors.append(HexColor(color))
+            except ValueError:
+                pass
+
+        self.colors = colors + self.get_available_colors()
 
     def get_drawing(self, chart):
         """Create and returns the drawing, to be generated"""
