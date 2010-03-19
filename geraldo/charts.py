@@ -1,4 +1,4 @@
-import re, random
+import re, random, decimal
 
 from reportlab.graphics.shapes import Drawing, String
 from reportlab.graphics.charts.barcharts import HorizontalBarChart as OriginalHorizBarChart
@@ -37,6 +37,7 @@ class BaseChart(Graphic):
     legend_labels = False
     values_labels = ' %s '
     replace_none_by_zero = True
+    round_values = False
     summarize_by = None # Can be None, CROSS_ROWS or CROSS_COLS
 
     def __init__(self, **kwargs):
@@ -82,6 +83,7 @@ class BaseChart(Graphic):
         new.legend_labels = self.legend_labels
         new.values_labels = self.values_labels
         new.replace_none_by_zero = self.replace_none_by_zero
+        new.round_values = self.round_values
         new.summarize_by = self.summarize_by
 
         return new
@@ -279,9 +281,28 @@ class BaseChart(Graphic):
 
             return value
 
+        def round_values(value):
+            if isinstance(value, (float, decimal.Decimal)):
+                value = int(round(value))
+            elif isinstance(value, (list, tuple)):
+                value = map(int, map(round, value))
+
+            return value
+
         # Replace None to Zero
         if self.replace_none_by_zero:
             data = map(none_to_zero,  data)
+
+        # Truncate decimal places
+        if self.round_values:
+            data = map(round_values,  data)
+
+            # Stores major value in temporary variable to use it later
+            if data:
+                if isinstance(data[0], int):
+                    self._max_value = max(data)
+                elif isinstance(data[0], (list, tuple)):
+                    self._max_value = max(map(max, data))
 
         return data
 
@@ -351,6 +372,18 @@ class LineChart(BaseMatrixChart):
                     chart.lines[num].strokeColor = color
                 except IndexError:
                     break
+
+        # Value Axis min value
+        if getattr(self, 'y_axis_min_value', None) != None:
+            chart.valueAxis.valueMin = self.y_axis_min_value
+
+        # Informed value axis step value
+        if getattr(self, 'y_axis_step_value', None):
+            chart.valueAxis.valueStep = self.y_axis_step_value
+
+        # Value axis without decimal values
+        elif self.round_values and getattr(self, '_max_value', None):
+            chart.valueAxis.valueStep = round(self._max_value / 4)
 
 class BarChart(BaseMatrixChart):
     chart_class = None
