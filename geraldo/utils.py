@@ -23,6 +23,7 @@ FIELD_ACTION_MIN = 'min'
 FIELD_ACTION_MAX = 'max'
 FIELD_ACTION_SUM = 'sum'
 FIELD_ACTION_DISTINCT_COUNT = 'distinct_count'
+FIELD_ACTION_PERCENT = 'percent'
 
 SYSTEM_FIELD_CHOICES = {
     'report_title': 'ReportTitle',

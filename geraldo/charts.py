@@ -172,6 +172,12 @@ class BaseChart(Graphic):
         legend.x = drawing.width
         legend.y = drawing.height - (self.title and self.title.get('height', DEFAULT_TITLE_HEIGHT) or 0)
 
+        # Sets legend extra attributes if legend_labels is a dictionary
+        if isinstance(self.legend_labels, dict):
+            for k,v in self.legend_labels.items():
+                if k != 'labels' and v:
+                    setattr(legend, k, v)
+
         drawing.add(legend)
 
         return legend
@@ -182,7 +188,9 @@ class BaseChart(Graphic):
             return self.get_axis_labels()
 
         # Base labels
-        if isinstance(self.legend_labels, (tuple,list)):
+        if isinstance(self.legend_labels, dict):
+            labels = self.legend_labels['labels']
+        elif isinstance(self.legend_labels, (tuple,list)):
             labels = self.legend_labels
         else:
             labels = self.get_cross_data().rows()
@@ -468,8 +476,6 @@ class PieChart(BaseChart):
             self.summarize_by = CROSS_ROWS
 
     def set_chart_attributes(self, chart):
-        chart.labels = self.get_axis_labels()
-
         # Sets the slice colors
         if self.colors:
             for num, color in enumerate(self.colors):
@@ -491,10 +497,27 @@ class PieChart(BaseChart):
         if pos >= 0:
             chart.slices[pos].popout = 20
 
+        # Default labels
+        chart.labels = self.get_axis_labels()
+
+        # Cells labels
+        if isinstance(self.values_labels, dict):
+            for k,v in self.values_labels.items():
+                if k == 'labels' and v:
+                    chart.labels = v
+                else:
+                    setattr(chart.slices, k, v)
+
     def clone(self):
         new = super(PieChart, self).clone()
         new.slice_popout = self.slice_popout
         return new
+
+    def get_drawing(self, chart):
+        if self.action == 'percent':
+            chart.labels = ['%s - %s%%'%(label,val) for label, val in zip(chart.labels, chart.data)]
+
+        return super(PieChart, self).get_drawing(chart)
 
 class DoughnutChart(PieChart):
     chart_class = OriginalDoughnutChart

@@ -1,3 +1,8 @@
+2010-03-22: Version 0.4-alpha-19
+--------------------------------
+* Some fixes in cross reference and chart functions
+* New function on charts and cross reference: FIELD_ACTION_PERCENT
+
 2010-03-19: Version 0.4-alpha-18
 --------------------------------
 * Charts support to round values

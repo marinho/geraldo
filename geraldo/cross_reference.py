@@ -21,7 +21,7 @@ class CrossReferenceProxy(object):
 
     def __getattr__(self, name):
         if name in ('values','max','min','sum','avg','count','distinct_count',
-                'first','last',):
+                'first','last','percent',):
             func = getattr(self.matrix, name)
             def _inner(cell, col=RANDOM_COL_DEFAULT):
                 return func(cell, self.row, col)
@@ -117,6 +117,12 @@ class CrossReferenceMatrix(object):
     @memoize
     def distinct_count(self, cell, row=RANDOM_ROW_DEFAULT, col=RANDOM_COL_DEFAULT):
         return len(set(self.values(cell, row, col)))
+
+    @memoize
+    def percent(self, cell, row=RANDOM_ROW_DEFAULT, col=RANDOM_COL_DEFAULT):
+        total = self.sum(cell)
+        values = self.values(cell, row, col)
+        return total and (sum(values) / total * 100) or None
 
     @memoize
     def first(self, cell, row=RANDOM_ROW_DEFAULT, col=RANDOM_COL_DEFAULT):
