@@ -1,3 +1,7 @@
+2010-03-23: Version 0.4-alpha-20
+--------------------------------
+* Fixed CrossReferenceMatrix class to sort rows and cols values
+
 2010-03-22: Version 0.4-alpha-19
 --------------------------------
 * Some fixes in cross reference and chart functions

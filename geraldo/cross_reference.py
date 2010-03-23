@@ -65,13 +65,29 @@ class CrossReferenceMatrix(object):
 
         return value
 
+    def sort_rows(self, a, b):
+        return cmp(a, b)
+
+    def sort_cols(self, a, b):
+        return cmp(a, b)
+
     @memoize
     def rows(self):
-        return list(set([self.get_attr_value(obj, self.rows_attr) for obj in self.objects_list]))
+        ret = list(set([self.get_attr_value(obj, self.rows_attr) for obj in self.objects_list]))
+
+        # Sort list by method
+        ret.sort(self.sort_rows)
+
+        return ret
 
     @memoize
     def cols(self):
-        return list(set([self.get_attr_value(obj, self.cols_attr) for obj in self.objects_list]))
+        ret = list(set([self.get_attr_value(obj, self.cols_attr) for obj in self.objects_list]))
+
+        # Sort list by method
+        ret.sort(self.sort_cols)
+
+        return ret
 
     @memoize
     def values(self, cell, row=RANDOM_ROW_DEFAULT, col=RANDOM_COL_DEFAULT):
