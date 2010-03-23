@@ -9,7 +9,7 @@ from reportlab.graphics.charts.doughnut import Doughnut as OriginalDoughnutChart
 from reportlab.graphics.charts.linecharts import HorizontalLineChart as OriginalLineChart
 from reportlab.graphics.charts.piecharts import Pie as OriginalPieChart
 from reportlab.graphics.charts.spider import SpiderChart as OriginalSpiderChart
-from reportlab.graphics.charts.legends import LineLegend
+from reportlab.graphics.charts.legends import Legend
 from reportlab.lib.colors import HexColor, getAllNamedColors
 
 from utils import cm, memoize, get_attr_value
@@ -161,9 +161,7 @@ class BaseChart(Graphic):
         labels = self.get_legend_labels()
 
         # Legend object
-        legend = LineLegend()
-        #legend.fontName = 'Times-Roman'
-        #legend.fontSize = 12
+        legend = Legend()
 
         legend.colorNamePairs = zip(self.colors[:len(labels)], labels)
         legend.columnMaximum = len(legend.colorNamePairs)
