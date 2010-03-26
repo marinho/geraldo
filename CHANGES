@@ -1,3 +1,9 @@
+2010-03-26: Version 0.4-alpha-21
+--------------------------------
+* Improved CrossReferenceMatrix class to support cols and rows values informed manually
+* Fixed method ManyElements.get_elements to not use an internal cache (it was doing it
+  wrong with no need)
+
 2010-03-23: Version 0.4-alpha-20
 --------------------------------
 * Fixed CrossReferenceMatrix class to sort rows and cols values

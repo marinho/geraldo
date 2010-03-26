@@ -879,8 +879,6 @@ class ManyElements(GeraldoObject):
     visible = True
     element_kwargs = None
 
-    _elements = None
-
     def __init__(self, element_class, count, start_left=None, start_top=None,
             visible=None, **kwargs):
 
@@ -898,50 +896,49 @@ class ManyElements(GeraldoObject):
 
         from cross_reference import CrossReferenceMatrix
 
-        if self._elements is None:
-            count = self.count
+        count = self.count
 
-            # Get cross cols
-            if not cross_cols and isinstance(self.report.queryset, CrossReferenceMatrix):
-                cross_cols = self.report.queryset.cols()
+        # Get cross cols
+        if not cross_cols and isinstance(self.report.queryset, CrossReferenceMatrix):
+            cross_cols = self.report.queryset.cols()
 
-                if count == CROSS_COLS:
-                    count = len(cross_cols)
+            if count == CROSS_COLS:
+                count = len(cross_cols)
 
-            self._elements = []
+        _elements = []
 
-            # Loop for count of elements to be created
-            next_left = self.start_left
-            next_top = self.start_top
-            for num in range(count):
-                kwargs = self.element_kwargs.copy()
+        # Loop for count of elements to be created
+        next_left = self.start_left
+        next_top = self.start_top
+        for num in range(count):
+            kwargs = self.element_kwargs.copy()
 
-                # Set attributes before creation
-                for k,v in kwargs.items():
-                    if v == CROSS_COLS:
-                        try:
-                            kwargs[k] = cross_cols[num]
-                        except IndexError:
-                            kwargs[k] = cross_cols[-1]
-                    elif isinstance(v, (list,tuple)) and v:
-                        try:
-                            kwargs[k] = v[num]
-                        except IndexError:
-                            kwargs[k] = v[-1]
+            # Set attributes before creation
+            for k,v in kwargs.items():
+                if v == CROSS_COLS:
+                    try:
+                        kwargs[k] = cross_cols[num]
+                    except IndexError:
+                        kwargs[k] = cross_cols[-1]
+                elif isinstance(v, (list,tuple)) and v:
+                    try:
+                        kwargs[k] = v[num]
+                    except IndexError:
+                        kwargs[k] = v[-1]
 
-                # Create the element
-                el = self.element_class(**kwargs)
+            # Create the element
+            el = self.element_class(**kwargs)
 
-                # Set attributes after creation
-                if self.start_left is not None: # Maybe we should support distance here
-                    el.left = next_left
-                    next_left += el.width
+            # Set attributes after creation
+            if self.start_left is not None: # Maybe we should support distance here
+                el.left = next_left
+                next_left += el.width
 
-                if self.start_top is not None: # Maybe we should support distance here
-                    el.top = next_top
-                    next_top += el.height
+            if self.start_top is not None: # Maybe we should support distance here
+                el.top = next_top
+                next_top += el.height
 
-                self._elements.append(el)
+            _elements.append(el)
 
-        return self._elements
+        return _elements
 

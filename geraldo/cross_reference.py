@@ -40,13 +40,18 @@ class CrossReferenceMatrix(object):
 
     objects_list = None
     rows_attr = None
+    rows_values = None
     cols_attr = None
+    cols_values = None
     decimal_as_float = False
 
-    def __init__(self, objects_list, rows_attribute, cols_attribute, decimal_as_float=None):
+    def __init__(self, objects_list, rows_attribute, cols_attribute, decimal_as_float=None,
+            rows_values=None, cols_values=None):
         self.objects_list = objects_list or []
         self.rows_attr = rows_attribute
         self.cols_attr = cols_attribute
+        self.rows_values = rows_values
+        self.cols_values = cols_values
 
         if decimal_as_float is not None:
             self.decimal_as_float = decimal_as_float
@@ -73,21 +78,23 @@ class CrossReferenceMatrix(object):
 
     @memoize
     def rows(self):
-        ret = list(set([self.get_attr_value(obj, self.rows_attr) for obj in self.objects_list]))
+        if self.rows_values is None:
+            self.rows_values = list(set([self.get_attr_value(obj, self.rows_attr) for obj in self.objects_list]))
 
-        # Sort list by method
-        ret.sort(self.sort_rows)
+            # Sort list by method
+            self.rows_values.sort(self.sort_rows)
 
-        return ret
+        return self.rows_values
 
     @memoize
     def cols(self):
-        ret = list(set([self.get_attr_value(obj, self.cols_attr) for obj in self.objects_list]))
+        if self.cols_values is None:
+            self.cols_values = list(set([self.get_attr_value(obj, self.cols_attr) for obj in self.objects_list]))
 
-        # Sort list by method
-        ret.sort(self.sort_cols)
+            # Sort list by method
+            self.cols_values.sort(self.sort_cols)
 
-        return ret
+        return self.cols_values
 
     @memoize
     def values(self, cell, row=RANDOM_ROW_DEFAULT, col=RANDOM_COL_DEFAULT):
