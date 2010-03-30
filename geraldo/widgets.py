@@ -1,4 +1,4 @@
-import datetime, types, decimal
+import datetime, types, decimal, re
 
 try: 
     set 
@@ -78,6 +78,8 @@ class Label(Widget):
 
         return new
 
+EXP_QUOTED = re.compile('\(([^\'"].+?[^\'"])\)')
+
 class ObjectValue(Label):
     """This shows the value from a method, field or property from objects got
     from the queryset.
@@ -101,6 +103,24 @@ class ObjectValue(Label):
     stores_text_in_cache = True
     expression = None
     _cached_text = None
+
+    def __init__(self, *args, **kwargs):
+        super(ObjectValue, self).__init__(*args, **kwargs)
+
+        if self.expression:
+            self.prepare_expression()
+
+    def prepare_expression(self):
+        if not self.expression:
+            pass
+
+        self.expression = self.expression.replace(' ','')
+
+        while True:
+            f = EXP_QUOTED.findall(self.expression)
+            if not f: break
+
+            self.expression = EXP_QUOTED.sub('("%s")'%(f[0]), self.expression, 1)
 
     def get_object_value(self, instance=None, attribute_name=None):
         """Return the attribute value for just an object"""
@@ -232,31 +252,6 @@ class ObjectValue(Label):
                 })
 
         return eval(self.expression, global_vars)
-
-"""
-class Globals(dict):
-    _internal = None
-
-    def __init__(self, widget):
-        self._internal = {}
-
-        self._internal['count'] = widget.action_count
-        self._internal['avg'] = widget.action_avg
-        self._internal['min'] = widget.action_min
-        self._internal['max'] = widget.action_max
-        self._internal['sum'] = widget.action_sum
-        self._internal['distinct_count'] = widget.action_distinct_count
-
-        if isinstance(widget.report, SubReport):
-            self._internal['parent'] = widget.report.parent_object
-            self._internal['p'] = widget.report.parent_object, # Just a short alias
-
-    def __getitem__(self, key):
-        if key in self._internal:
-            return self._internal[key]
-
-        return key
-"""
 
 class SystemField(Label):
     """This shows system informations, like the report title, current date/time,

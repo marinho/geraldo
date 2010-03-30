@@ -43,18 +43,18 @@ Testing expression language
 
     >>> from geraldo.expressions import run_expression
 
-    >>> run_expression(objects, 'name')
-    >>> run_expression(objects, 'age,')
-    >>> run_expression(objects, 'age * weight')
-    >>> run_expression(objects, 'age**2')
-    >>> run_expression(objects, 'count(name)')
-    >>> run_expression(objects, 'max(age) + min(weight)')
-    >>> run_expression(objects, 'min(weight)')
-    >>> run_expression(objects, 'sum(age)')
-    >>> run_expression(objects, 'avg(weight)')
-    >>> run_expression(objects, 'distinct_count(genre)')
-    >>> run_expression(objects, 'sum(age * weight)')
-    >>> run_expression(objects, 'sum(age * weight) + age / weight')
+    >>> #run_expression(objects, 'name')
+    >>> #run_expression(objects, 'age,')
+    >>> #run_expression(objects, 'age * weight')
+    >>> #run_expression(objects, 'age**2')
+    >>> #run_expression(objects, 'count(name)')
+    >>> #run_expression(objects, 'max(age) + min(weight)')
+    >>> #run_expression(objects, 'min(weight)')
+    >>> #run_expression(objects, 'sum(age)')
+    >>> #run_expression(objects, 'avg(weight)')
+    >>> #run_expression(objects, 'distinct_count(genre)')
+    >>> #run_expression(objects, 'sum(age * weight)')
+    >>> #run_expression(objects, 'sum(age * weight) + age / weight')
 
 Report class
 ------------
@@ -63,24 +63,24 @@ Report class
     ...     class band_detail(DetailBand):
     ...         height = 0.7*cm
     ...         elements = [
-    ...             #ObjectValue(attribute_name='name'),
-    ...             #ObjectValue(expression='age,', left=2*cm),
-    ...             #ObjectValue(expression='weight', left=3.5*cm),
-    ...             #ObjectValue(expression='age * weight', left=5*cm),
-    ...             #ObjectValue(expression='age**2', left=6.5*cm),
+    ...             ObjectValue(attribute_name='name'),
+    ...             ObjectValue(expression='age,', left=2*cm),
+    ...             ObjectValue(expression='weight', left=3.5*cm),
+    ...             ObjectValue(expression='age * weight', left=5*cm),
+    ...             ObjectValue(expression='age**2', left=6.5*cm),
     ...         ]
     ... 
     ...     class band_summary(DetailBand):
     ...         height = 0.7*cm
     ...         border = {'bottom': True}
     ...         elements = [
-    ...             #ObjectValue(expression='count(name)'),
-    ...             #ObjectValue(expression='max(age) + min(weight)', left=2*cm),
-    ...             #ObjectValue(expression='min(weight)', left=3.5*cm),
-    ...             #ObjectValue(expression='sum(age)', left=5*cm),
-    ...             #ObjectValue(expression='avg(weight)', left=6.5*cm),
-    ...             #ObjectValue(expression='distinct_count(genre)', left=8*cm),
-    ...             #ObjectValue(expression='sum(age * weight)', left=5*cm),
+    ...             ObjectValue(expression='count(name)'),
+    ...             ObjectValue(expression='max(age) + min(weight)', left=2*cm),
+    ...             ObjectValue(expression='min(weight)', left=3.5*cm),
+    ...             ObjectValue(expression='sum(age)', left=5*cm),
+    ...             ObjectValue(expression='avg(weight)', left=6.5*cm),
+    ...             ObjectValue(expression='distinct_count(genre)', left=8*cm),
+    ...             #ObjectValue(expression='sum(age * weight)', left=5*cm), # <-- NOT YET
     ...         ]
     ... 
     ...     #groups = [
