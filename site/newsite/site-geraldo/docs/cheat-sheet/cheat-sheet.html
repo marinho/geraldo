@@ -1,0 +1,567 @@
+<html>
+    <head>
+        <title>Geraldo Reports Cheat-Sheet</title>
+        <style type="text/css">
+            body {
+                font-family: helvetica, arial, verdana, tahoma, sans serif;
+                font-size: 9pt;
+                background: #637C00;
+                margin: 4px;
+            }
+
+            pre {
+                margin: 5px;
+                font-size: 1.0em;
+            }
+
+            ul {
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+
+            li {
+                list-style: none;
+                width: 50%;
+                float: left;
+            }
+
+            li.clear {
+                width: 100%;
+            }
+
+            .all {
+                border: 1px solid white;
+                padding: 3px 6px 3px 3px;
+                background: white;
+                -moz-border-radius: 9px; /* Firefox */
+                -webkit-border-radius: 9px; /* Webkit - Chrome - Safari */
+                border-radius: 9px; /* CSS3 */
+                overflow: hidden;
+            }
+
+            .column {
+                width: 24%;
+                overflow: hidden;
+                float: left;
+            }
+
+            .box {
+                margin: 3px 0 3px 3px;
+                -moz-border-radius: 5px; /* Firefox */
+                -webkit-border-radius: 5px; /* Webkit - Chrome - Safari */
+                border-radius: 5px; /* CSS3 */
+                border: 2px solid black;
+                overflow: hidden;
+            }
+
+            .inner {
+                margin: 3px;
+            }
+
+            .logo {
+                text-align: center;
+            }
+
+            .logo img {
+                margin: 5px;
+            }
+
+            .box h2 {
+                -moz-border-radius: 5px 5px 0 0; /* Firefox */
+                -webkit-border-radius: 5px 5px 0 0; /* Webkit - Chrome - Safari */
+                border-radius: 5px 5px 0 0; /* CSS3 */
+                background: #eee;
+                margin: 0 0 3px 0;
+                padding: 3px;
+                font-size: 1.4em;
+                border-bottom: 1px solid silver;
+            }
+
+            .box h3 {
+                background: #eee;
+                margin: 0 0 3px 0;
+                padding: 3px;
+                font-size: 1em;
+            }
+
+            .sep {
+                border-bottom: 1px solid silver;
+                padding-bottom: 3px;
+                margin-bottom: 3px;
+                width: 100%;
+            }
+
+            .base {
+                background: #edffa3;
+            }
+
+            .base h2 {
+                background: #b3e000;
+            }
+
+            .base h3 {
+                background: #d2ed66;
+            }
+
+            .elements {
+                background: #d0e3ed;
+            }
+
+            .elements h2 {
+                background: #66bfed;
+            }
+
+            .elements h3 {
+                background: #b0d8ed;
+            }
+
+            .advanced {
+                background: #ffd8ed;
+            }
+
+            .advanced h2 {
+                background: #ffa5d5;
+            }
+
+            .advanced h3 {
+                background: #ffbee1;
+            }
+
+            .extra {
+                background: #ffedbe;
+            }
+
+            .extra h2 {
+                background: #ffcb43;
+            }
+
+            .extra h3 {
+                background: #ffe192;
+            }
+
+            .third-part {
+                background: ;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="all">
+            <div class="column">
+                <div class="logo box">
+                    <img src="logo-black.png"/>
+                </div>
+                <div class="box base">
+                    <h2>base</h2>
+
+                    <h3><i>BaseReport</i></h3>
+                    <ul class="inner">
+                        <li>band_begin</li>
+                        <li>band_summary</li>
+                        <li>band_page_header</li>
+                        <li>band_page_footer</li>
+                        <li>band_detail</li>
+                        <li>groups</li>
+                        <li class="sep"></li>
+                        <li>queryset</li>
+                        <li>print_if_empty</li>
+                        <li class="sep"></li>
+                        <li>before_print</li>
+                        <li>before_generate</li>
+                        <li>after_print</li>
+                        <li>on_new_page</li>
+                        <li class="sep"></li>
+                        <li>borders</li>
+                        <li>default_font_color</li>
+                        <li>default_stroke_color</li>
+                        <li>default_fill_color</li>
+                    </ul>
+
+                    <h3>Report(BaseReport)</h3>
+                    <ul class="inner">
+                        <li>title</li>
+                        <li>author</li>
+                        <li>subject</li>
+                        <li>keywords</li>
+                        <li>page_size</li>
+                        <li>first_page_number</li>
+                        <li class="sep"></li>
+                        <li>additional_fonts</li>
+                        <li>default_style</li>
+                        <li>margin_top</li>
+                        <li>margin_bottom</li>
+                        <li>margin_left</li>
+                        <li>margin_right</li>
+                        <li class="sep"></li>
+                        <li class="sep">subreports</li>
+                        <li>cache_status</li>
+                        <li>cache_backend</li>
+                        <li>cache_prefix</li>
+                        <li>cache_file_root</li>
+                    </ul>
+
+                    <h3>SubReport(BaseReport)</h3>
+                    <ul class="inner">
+                        <li>queryset_string</li>
+                        <li>band_detail</li>
+                        <li>band_header</li>
+                        <li>band_footer</li>
+                        <li>visible</li>
+                    </ul>
+
+                    <h3>ReportGroup</h3>
+                    <ul class="inner">
+                        <li>attribute_name</li>
+                        <li>band_header</li>
+                        <li>band_footer</li>
+                    </ul>
+
+                    <h3>ReportBand</h3>
+                    <ul class="inner">
+                        <li>height</li>
+                        <li>width</li>
+                        <li>visible</li>
+                        <li>borders</li>
+                        <li>elements</li>
+                        <li>child_bands</li>
+                        <li>force_new_page</li>
+                        <li>default_style</li>
+                        <li>auto_expand_height</li>
+                    </ul>
+
+                    <h3>DetailBand(ReportBand)</h3>
+                    <ul class="inner">
+                        <li>margin_top</li>
+                        <li>margin_bottom</li>
+                        <li>margin_left</li>
+                        <li>margin_right</li>
+                        <li>display_inline</li>
+                    </ul>
+
+                    <h3>ManyElements</h3>
+                    <ul class="inner">
+                        <li>element_class</li>
+                        <li>count</li>
+                        <li>start_left</li>
+                        <li>start_top</li>
+                        <li>visible</li>
+                        <li>element **kwargs</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="column">
+                <div class="box base">
+                    <h2>base</h2>
+
+                    <h3><i>Element</i></h3>
+                    <ul class="inner">
+                        <li>left</li>
+                        <li>top</li>
+                        <li>width</li>
+                        <li>height</li>
+                        <li>visible</li>
+                        <li class="sep"></li>
+                        <li>before_print</li>
+                        <li>after_print</li>
+                    </ul>
+                </div>
+                <div class="box elements">
+                    <h2>widgets</h2>
+
+                    <h3><i>Widget(Element)</i></h3>
+                    <ul class="inner">
+                        <li>style</li>
+                        <li>truncate_overflow</li>
+                        <li>get_value</li>
+                        <li class="sep"></li>
+                        <li><i>instance</i></li>
+                        <li><i>report</i></li>
+                        <li><i>generator</i></li>
+                        <li><i>band</i></li>
+                    </ul>
+
+                    <h3>Label(Widget)</h3>
+                    <ul class="inner">
+                        <li>text</li>
+                    </ul>
+
+                    <h3>ObjectValue(Label)</h3>
+                    <ul class="inner">
+                        <li>attribute_name</li>
+                        <li>action</li>
+                        <li>display_format</li>
+                        <li>objects</li>
+                        <li>get_text</li>
+                        <li>stores_text_in_cache</li>
+                    </ul>
+
+                    <h3>SystemField(Label)</h3>
+                    <ul class="inner">
+                        <li>expression</li>
+                    </ul>
+                </div>
+                <div class="box elements">
+                    <h2>graphics</h2>
+
+                    <h3><i>Graphic(Element)</i></h3>
+                    <ul class="inner">
+                        <li>stroke</li>
+                        <li>stroke_color</li>
+                        <li>stroke_width</li>
+                        <li>fill</li>
+                        <li>fill_color</li>
+                    </ul>
+
+                    <h3>Rect(Graphic)</h3>
+
+                    <h3>RoundRect(Rect)</h3>
+                    <ul class="inner">
+                        <li>radius</li>
+                    </ul>
+
+                    <h3><i>Fixed(Graphic)</i></h3>
+                    <ul class="inner">
+                        <li>left</li>
+                        <li>top</li>
+                        <li>right</li>
+                        <li>bottom</li>
+                    </ul>
+
+                    <h3>Line(Fixed)</h3>
+
+                    <h3>Circle(Graphic)</h3>
+                    <ul class="inner">
+                        <li>left_center</li>
+                        <li>top_center</li>
+                        <li>radius</li>
+                    </ul>
+
+                    <h3>Arc(Fixed)</h3>
+                    <ul class="inner">
+                        <li>start_angle</li>
+                        <li>extent</li>
+                    </ul>
+
+                    <h3>Ellipse(Fixed)</h3>
+
+                    <h3>Image(Graphic)</h3>
+                    <ul class="inner">
+                        <li>filename</li>
+                        <li>get_image</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="column">
+                <div class="box advanced">
+                    <h2>cache</h2>
+                    <ul class="inner">
+                        <li>FileCacheBackend</li>
+                        <li>CACHE_BACKEND</li>
+                        <li>CACHE_FILE_ROOT</li>
+                    </ul>
+
+                    <h3>DEFAULT_CACHE_STATUS</h3>
+                    <ul class="inner">
+                        <li>CACHE_DISABLED</li>
+                        <li>CACHE_BY_QUERYSET</li>
+                        <li>CACHE_BY_RENDER</li>
+                    </ul>
+                </div>
+                <div class="box advanced">
+                    <h2>generators</h2>
+
+                    <h3><i>ReportGenerator</i></h3>
+                    <ul class="inner">
+                        <li>cache_enabled</li>
+                        <li>first_page_number</li>
+                        <li>variables</li>
+                        <li>return_pages</li>
+                        <li>pages</li>
+                        <li>filename</li>
+                    </ul>
+
+                    <h3>PDFGenerator(ReportGenerator)</h3>
+                    <ul class="inner">
+                        <li>canvas</li>
+                        <li>return_canvas</li>
+                        <li>multiple_canvas</li>
+                    </ul>
+
+                    <h3>TextGenerator(ReportGenerator)</h3>
+                    <ul class="inner">
+                        <li>row_height</li>
+                        <li>character_width</li>
+                        <li>encode_to</li>
+                        <li>manual_escape_codes</li>
+                        <li class="sep"></li>
+                        <li>escapes_report_start</li>
+                        <li>escapes_report_end</li>
+                        <li>escapes_page_start</li>
+                        <li>escapes_page_end</li>
+                    </ul>
+                </div>
+                <div class="box advanced">
+                    <h2>cross_reference</h2>
+                    <ul class="inner">
+                        <li>CROSS_COLS</li>
+                        <li>CROSS_ROWS</li>
+                    </ul>
+
+                    <h3>CrossReferenceMatrix</h3>
+                    <ul class="inner">
+                        <li>.rows()</li>
+                        <li>.cols()</li>
+                        <li>.values()</li>
+                        <li>.max()</li>
+                        <li>.min()</li>
+                        <li>.sum()</li>
+                        <li>.avg()</li>
+                        <li>.count()</li>
+                        <li>.distinct_count()</li>
+                        <li>.percent()</li>
+                        <li>.first()</li>
+                        <li>.last()</li>
+                        <li>.matrix()</li>
+                        <li>.summarize_rows()</li>
+                        <li>.summarize_cols()</li>
+                        <li>.matrix()</li>
+                    </ul>
+                </div>
+                <div class="box advanced">
+                    <h2>charts</h2>
+                    <ul class="inner">
+                        <li>LineChart</li>
+                        <li>BarChart</li>
+                        <li>HorizontalBarChart</li>
+                        <li>SpiderChart</li>
+                        <li>PieChart</li>
+                        <li>DoughnutChart</li>
+                    </ul>
+                </div>
+                <div class="box advanced">
+                    <h2>barcodes</h2>
+                    <ul class="inner">
+                        <li>BarCode</li>
+                    </ul>
+
+                    <h3>Available Types</h3>
+                    <ul class="inner">
+                        <li>"Codabar"</li>
+                        <li>"Code11"</li>
+                        <li>"Code128"</li>
+                        <li>"EAN13"</li>
+                        <li>"EAN8"</li>
+                        <li>"Extended39"</li>
+                        <li>"Extended93"</li>
+                        <li>"FIM"</li>
+                        <li>"I2of5"</li>
+                        <li>"MSI"</li>
+                        <li>"POSTNET"</li>
+                        <li>"Standard39"</li>
+                        <li>"Standard93"</li>
+                        <li>"USPS_4State"</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="column" style="width: 28%;">
+                <div class="box extra">
+                    <h2>exceptions</h2>
+                    <ul class="inner">
+                        <li>EmptyQueryset</li>
+                        <li>ObjectNotFound</li>
+                        <li>ManyObjectsFound</li>
+                        <li>AttributeNotFound</li>
+                        <li>NotYetImplemented</li>
+                    </ul>
+                </div>
+                <div class="box extra">
+                    <h2>utils</h2>
+
+                    <h3>Auto-Dimensioning</h3>
+                    <ul class="inner">
+                        <li>BAND_WIDTH</li>
+                        <li>BAND_HEIGHT</li>
+                    </ul>
+
+                    <h3>ObjectValue Actions</h3>
+                    <ul class="inner">
+                        <li>FIELD_ACTION_VALUES</li>
+                        <li>FIELD_ACTION_FIRST</li>
+                        <li>FIELD_ACTION_LAST</li>
+                        <li>FIELD_ACTION_VALUE</li>
+                        <li>FIELD_ACTION_COUNT</li>
+                        <li>FIELD_ACTION_AVG</li>
+                        <li>FIELD_ACTION_MIN</li>
+                        <li>FIELD_ACTION_MAX</li>
+                        <li>FIELD_ACTION_SUM</li>
+                        <li>FIELD_ACTION_DISTINCT_COUNT</li>
+                        <li>FIELD_ACTION_PERCENT</li>
+                    </ul>
+
+                    <h3>Utilities</h3>
+                    <ul class="inner">
+                        <li>@memoize</li>
+                        <li>@run_under_process</li>
+                    </ul>
+                </div>
+                <div class="box third-part">
+                    <h2>reportlab</h2>
+
+                    <h3>reportlab.lib.units</h3>
+                    <ul class="inner">
+                        <li>cm</li>
+                        <li>inch</li>
+                        <li>mm</li>
+                        <li>pica</li>
+                    </ul>
+
+                    <h3>reportlab.lib.pagesizes</h3>
+                    <ul class="inner">
+                        <li>A0</li>
+                        <li>A1</li>
+                        <li>A2</li>
+                        <li>A3</li>
+                        <li>A4</li>
+                        <li>A5</li>
+                        <li>A6</li>
+                        <li>letter</li>
+                        <li>legal</li>
+                        <li>elevenSeventeen</li>
+                        <li class="sep"></li>
+                        <li>landscape(<i>page size</i>)</li>
+                        <li>portrait(<i>page size</i>)</li>
+                    </ul>
+
+                    <h3>reportlab.lib.colors</h3>
+                    <ul class="inner">
+                        <li>Color</li>
+                        <li>CMYKColor(c, m, y, k)</li>
+                        <li>HexColor('#ffffff')</li>
+                        <li>black</li>
+                        <li>white</li>
+                        <li>blue</li>
+                        <li>red</li>
+                        <li>yellow</li>
+                        <li>green</li>
+                        <li>...</li>
+                    </ul>
+                </div>
+                <div class="box example">
+                    <h2>very simple example</h2>
+                    <pre>from geraldo import *
+from geraldo.generators import *
+from geraldo.utils import cm
+
+class LettersReport(Report):
+ class band_detail(DetailBand):
+  height=0.7*cm
+  elements=[ObjectValue(attribute_name='l')]
+
+objs = [{'l': 'A'}, {'l': 'B'}, {'l': 'C'}]
+r = LettersReport(queryset=objs)
+r.generate_by(PDFGenerator,filename='r.pdf')</pre>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

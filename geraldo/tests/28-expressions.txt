@@ -1,0 +1,96 @@
+OBJECTVALUE EXPRESIONS
+======================
+
+In replacement of (the limited) "action" attribute of ObjectValue, we are implementing
+the "expression" attribute, that support complex math expressions and calculated values.
+
+This test aims to test all kinds of expressions, including them on summary, grouppings,
+subreports and detail bands even on math calculation, etc.
+
+    >>> import os
+    >>> cur_dir = os.path.dirname(os.path.abspath(__file__))
+
+    >>> from geraldo import Report, ReportBand, DetailBand, SubReport, ReportGroup,\
+    ...     Label, ObjectValue
+    >>> from geraldo.utils import cm
+
+Data to test
+------------
+
+    >>> objects = [
+    ...     {'name': 'Leticia', 'age': 29, 'weight': 55.7, 'genre': 'female', 'status': 'parent',
+    ...         'notes': [{'val': 40.8}, {'val': 30.6}, {'val': 20.4}, {'val': 10.2}],
+    ...         'timing': [{'hours': 2.5}, {'hours': 3.4}, {'hours': 5.2}]},
+    ...     {'name': 'Marinho', 'age': 28, 'weight': 76, 'genre': 'male', 'status': 'parent',
+    ...         'notes': [{'val': 15.8}, {'val': 10.4}, {'val': 10.64}, {'val': 104.2}],
+    ...         'timing': [{'hours': 2.5}, {'hours': 4.4}, {'hours': 15.2}]},
+    ...     {'name': 'Tarsila', 'age': 4, 'weight': 16.2, 'genre': 'female', 'status': 'child',
+    ...         'notes': [{'val': 46.8}, {'val': 3.67}, {'val': 50.4}, {'val': 110.2}],
+    ...         'timing': [{'hours': 7.5}, {'hours': 3.4}, {'hours': 9.2}]},
+    ...     {'name': 'Linus', 'age': 0, 'weight': 1.5, 'genre': 'male', 'status': 'child',
+    ...         'notes': [{'val': 16.8}, {'val': 37.6}, {'val': 2.54}, {'val': 16.2}],
+    ...         'timing': [{'hours': 2.5}, {'hours': 9.4}, {'hours': 0.2}]},
+    ...     {'name': 'Mychelle', 'age': 19, 'weight': 50, 'genre': 'female', 'status': 'nephew',
+    ...         'notes': [{'val': 77.8}, {'val': 130.6}, {'val': 0.4}, {'val': 1089.2}],
+    ...         'timing': [{'hours': 1.5}, {'hours': 3.4}, {'hours': 5.2}]},
+    ...     {'name': 'Mychell', 'age': 17, 'weight': 55, 'genre': 'male', 'status': 'niece',
+    ...         'notes': [{'val': 150.8}, {'val': 0.9}, {'val': 120.4}, {'val': 1.2}],
+    ...         'timing': [{'hours': 2.5}, {'hours': 3.4}, {'hours': 1.2}]},
+    ... ]
+
+Testing expression language
+---------------------------
+
+    >>> from geraldo.expressions import run_expression
+
+    >>> run_expression(objects, 'name')
+    >>> run_expression(objects, 'age,')
+    >>> run_expression(objects, 'age * weight')
+    >>> run_expression(objects, 'age**2')
+    >>> run_expression(objects, 'count(name)')
+    >>> run_expression(objects, 'max(age) + min(weight)')
+    >>> run_expression(objects, 'min(weight)')
+    >>> run_expression(objects, 'sum(age)')
+    >>> run_expression(objects, 'avg(weight)')
+    >>> run_expression(objects, 'distinct_count(genre)')
+    >>> run_expression(objects, 'sum(age * weight)')
+    >>> run_expression(objects, 'sum(age * weight) + age / weight')
+
+Report class
+------------
+
+    >>> class MyReportWithExpressions(Report):
+    ...     class band_detail(DetailBand):
+    ...         height = 0.7*cm
+    ...         elements = [
+    ...             #ObjectValue(attribute_name='name'),
+    ...             #ObjectValue(expression='age,', left=2*cm),
+    ...             #ObjectValue(expression='weight', left=3.5*cm),
+    ...             #ObjectValue(expression='age * weight', left=5*cm),
+    ...             #ObjectValue(expression='age**2', left=6.5*cm),
+    ...         ]
+    ... 
+    ...     class band_summary(DetailBand):
+    ...         height = 0.7*cm
+    ...         border = {'bottom': True}
+    ...         elements = [
+    ...             #ObjectValue(expression='count(name)'),
+    ...             #ObjectValue(expression='max(age) + min(weight)', left=2*cm),
+    ...             #ObjectValue(expression='min(weight)', left=3.5*cm),
+    ...             #ObjectValue(expression='sum(age)', left=5*cm),
+    ...             #ObjectValue(expression='avg(weight)', left=6.5*cm),
+    ...             #ObjectValue(expression='distinct_count(genre)', left=8*cm),
+    ...             #ObjectValue(expression='sum(age * weight)', left=5*cm),
+    ...         ]
+    ... 
+    ...     #groups = [
+    ...     #    ReportGroup(attribute_name=''),
+    ...     #]
+
+    >>> report = MyReportWithExpressions(queryset=objects)
+
+PDF generation
+
+    >>> from geraldo.generators import PDFGenerator
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/expressions.pdf'))
+

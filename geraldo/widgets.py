@@ -8,7 +8,7 @@ except NameError:
 from reportlab.lib.units import cm
 from reportlab.lib.colors import black
 
-from base import BAND_WIDTH, BAND_HEIGHT, Element
+from base import BAND_WIDTH, BAND_HEIGHT, Element, SubReport
 from utils import get_attr_value, SYSTEM_FIELD_CHOICES, FIELD_ACTION_VALUE, FIELD_ACTION_COUNT,\
         FIELD_ACTION_AVG, FIELD_ACTION_MIN, FIELD_ACTION_MAX, FIELD_ACTION_SUM,\
         FIELD_ACTION_DISTINCT_COUNT
@@ -99,11 +99,13 @@ class ObjectValue(Label):
     objects = None
     get_text = None # A lambda function to get customized display values
     stores_text_in_cache = True
+    expression = None
     _cached_text = None
 
-    def get_object_value(self, instance=None):
+    def get_object_value(self, instance=None, attribute_name=None):
         """Return the attribute value for just an object"""
         instance = instance or self.instance
+        attribute_name = attribute_name or self.attribute_name
 
         if self.get_value and instance:
             try:
@@ -111,7 +113,7 @@ class ObjectValue(Label):
             except TypeError:
                 return self.get_value(instance)
 
-        value = get_attr_value(instance, self.attribute_name)
+        value = get_attr_value(instance, attribute_name)
 
         # For method attributes --- FIXME: check what does this code here, because
         #                           get_attr_value has a code to do that, using
@@ -121,12 +123,12 @@ class ObjectValue(Label):
 
         return value
 
-    def get_queryset_values(self):
+    def get_queryset_values(self, attribute_name=None):
         """Uses the method 'get_object_value' to get the attribute value from
         all objects in the objects list, as a list"""
 
         objects = self.generator.get_current_queryset()
-        return map(self.get_object_value, objects)
+        return map(lambda obj: self.get_object_value(obj, attribute_name), objects)
 
     def _clean_empty_values(self, values):
         def _clean(val):
@@ -139,40 +141,40 @@ class ObjectValue(Label):
 
         return map(_clean, values)
 
-    def action_value(self):
-        return self.get_object_value()
+    def action_value(self, attribute_name=None):
+        return self.get_object_value(attribute_name=attribute_name)
 
-    def action_count(self):
+    def action_count(self, attribute_name=None):
         # Returns the total count of objects with valid values on informed attribute
-        values = self.get_queryset_values()
+        values = self.get_queryset_values(attribute_name)
         return len(filter(lambda v: v is not None, values))
 
-    def action_avg(self):
-        values = self.get_queryset_values()
+    def action_avg(self, attribute_name=None):
+        values = self.get_queryset_values(attribute_name)
 
         # Clear empty values
         values = self._clean_empty_values(values)
 
         return sum(values) / len(values)
 
-    def action_min(self):
-        values = self.get_queryset_values()
+    def action_min(self, attribute_name=None):
+        values = self.get_queryset_values(attribute_name)
         return min(values)
 
-    def action_max(self):
-        values = self.get_queryset_values()
+    def action_max(self, attribute_name=None):
+        values = self.get_queryset_values(attribute_name)
         return max(values)
 
-    def action_sum(self):
-        values = self.get_queryset_values()
+    def action_sum(self, attribute_name=None):
+        values = self.get_queryset_values(attribute_name)
 
         # Clear empty values
         values = self._clean_empty_values(values)
 
         return sum(values)
 
-    def action_distinct_count(self):
-        values = filter(lambda v: v is not None, self.get_queryset_values())
+    def action_distinct_count(self, attribute_name=None):
+        values = filter(lambda v: v is not None, self.get_queryset_values(attribute_name))
         return len(set(values))
 
     def _text(self):
@@ -180,7 +182,10 @@ class ObjectValue(Label):
             try: # Before all, tries to get the value using parent object
                 value = self.band.get_object_value(obj=self)
             except AttributeNotFound:
-                value = getattr(self, 'action_'+self.action)()
+                if self.expression:
+                    value = self.get_value_by_expression()
+                else:
+                    value = getattr(self, 'action_'+self.action)()
 
             if self.get_text:
                 self._cached_text = unicode(self.get_text(self.instance, value))
@@ -197,8 +202,61 @@ class ObjectValue(Label):
         new.display_format = self.display_format
         new.objects = self.objects
         new.stores_text_in_cache = self.stores_text_in_cache
+        new.expression = self.expression
 
         return new
+
+    def get_value_by_expression(self):
+        """Parses self.expression to get complex calculated values"""
+
+        if not self.instance:
+            global_vars = {}
+        elif isinstance(self.instance, dict):
+            global_vars = self.instance
+        else:
+            global_vars = self.instance.__dict__
+
+        global_vars.update({
+            'count': self.action_count,
+            'avg': self.action_avg,
+            'min': self.action_min,
+            'max': self.action_max,
+            'sum': self.action_sum,
+            'distinct_count': self.action_distinct_count,
+            })
+
+        if isinstance(self.report, SubReport):
+            global_vars.update({
+                'parent': self.report.parent_object,
+                'p': self.report.parent_object, # Just a short alias
+                })
+
+        return eval(self.expression, global_vars)
+
+"""
+class Globals(dict):
+    _internal = None
+
+    def __init__(self, widget):
+        self._internal = {}
+
+        self._internal['count'] = widget.action_count
+        self._internal['avg'] = widget.action_avg
+        self._internal['min'] = widget.action_min
+        self._internal['max'] = widget.action_max
+        self._internal['sum'] = widget.action_sum
+        self._internal['distinct_count'] = widget.action_distinct_count
+
+        if isinstance(widget.report, SubReport):
+            self._internal['parent'] = widget.report.parent_object
+            self._internal['p'] = widget.report.parent_object, # Just a short alias
+
+    def __getitem__(self, key):
+        if key in self._internal:
+            return self._internal[key]
+
+        return key
+"""
 
 class SystemField(Label):
     """This shows system informations, like the report title, current date/time,

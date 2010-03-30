@@ -1,3 +1,8 @@
+2010-03-30: Version 0.4-alpha-22
+--------------------------------
+* Fixed charts about values_labels with font-size
+* Started implementation of smart expressions in ObjectValue
+
 2010-03-26: Version 0.4-alpha-21
 --------------------------------
 * Improved CrossReferenceMatrix class to support cols and rows values informed manually

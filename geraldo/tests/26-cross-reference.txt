@@ -99,7 +99,7 @@ values related both. These values can be aggregated, and used by bands and chart
     [False, True]
 
     >>> cross.cols()
-    ['NY', 'CA', 'WA', 'TX']
+    ['CA', 'NY', 'TX', 'WA']
 
     >>> cross.values(cell='city', row=False, col='NY')
     ['New York City']

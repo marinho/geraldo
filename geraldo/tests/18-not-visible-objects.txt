@@ -59,7 +59,7 @@ A report with an example of every class
     ...     subreports = [
     ...         SubReport(
     ...             name = 'the-sub-report',
-    ...             queryset_string = '%(object)s["people"]',
+    ...             queryset_string = '%(parent)s["people"]',
     ...             band_header = ReportBand(
     ...                     height = 0.6*cm,
     ...                     name='the-sub-report-header-band',
@@ -81,7 +81,7 @@ A report with an example of every class
     ...             ),
     ...         SubReport(
     ...             name = 'the-sub-report-2',
-    ...             queryset_string = '%(object)s["places"]',
+    ...             queryset_string = '%(parent)s["places"]',
     ...             band_detail = ReportBand(
     ...                     height = 0.6*cm,
     ...                     name='the-sub-report-detail-band-2',
