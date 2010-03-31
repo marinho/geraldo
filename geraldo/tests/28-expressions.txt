@@ -41,7 +41,9 @@ Data to test
 Testing expression language
 ---------------------------
 
-    >>> from geraldo.expressions import run_expression
+TODO in the future
+
+    >>> #from geraldo.expressions import run_expression
 
     >>> #run_expression(objects, 'name')
     >>> #run_expression(objects, 'age,')
