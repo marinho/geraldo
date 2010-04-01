@@ -572,7 +572,7 @@ class ReportGenerator(GeraldoObject):
 
         self.report.do_on_new_page(
                 page=self._rendered_pages[-1],
-                page_number=len(self._rendered_pages),
+                page_number=len(self._rendered_pages) + self.report.first_page_number - 1,
                 generator=self,
                 )
 
