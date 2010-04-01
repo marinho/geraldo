@@ -42,7 +42,7 @@ A report with an example of every class
     ...     subreports = [
     ...         SubReport(
     ...             name = 'the-sub-report',
-    ...             queryset_string = '%(object)s.user_permissions.all()',
+    ...             queryset_string = '%(parent)s.user_permissions.all()',
     ...             band_header = ReportBand(
     ...                     name='the-sub-report-header-band',
     ...                     elements=[

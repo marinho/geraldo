@@ -13,6 +13,11 @@ except ImportError:
 
 # FLAGS
 
+BAND_WIDTH = 'band-width'
+BAND_HEIGHT = 'band-height'
+CROSS_COLS = 'cross-cols'
+CROSS_ROWS = 'cross-rows'
+
 FIELD_ACTION_VALUES = 'values'  # \
 FIELD_ACTION_FIRST = 'first'    #  > Used only by cross reference functions
 FIELD_ACTION_LAST = 'last'      # /
@@ -105,9 +110,10 @@ def calculate_size(size):
     
     return size
 
-@memoize
-def landscape(page_size):
-    return page_size[1], page_size[0]
+# Replaced by ReportLab landscape and portrait functions
+#@memoize
+#def landscape(page_size):
+#    return page_size[1], page_size[0]
 
 @memoize
 def format_date(date, expression):

@@ -10,15 +10,11 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.colors import black
 from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
 
-from utils import calculate_size, get_attr_value, landscape, format_date, memoize
+from utils import calculate_size, get_attr_value, landscape, format_date, memoize,\
+        BAND_WIDTH, BAND_HEIGHT, CROSS_COLS, CROSS_ROWS
 from exceptions import EmptyQueryset, ObjectNotFound, ManyObjectsFound,\
         AttributeNotFound, NotYetImplemented
 from cache import DEFAULT_CACHE_STATUS, CACHE_BACKEND, CACHE_FILE_ROOT
-
-BAND_WIDTH = 'band-width'
-BAND_HEIGHT = 'band-height'
-CROSS_COLS = 'cross-cols'
-CROSS_ROWS = 'cross-rows'
 
 class GeraldoObject(object):
     """Base class inherited by all report classes, including band, subreports,
@@ -558,7 +554,11 @@ class SubReport(BaseReport):
     def queryset(self):
         if not self._queryset and self.parent_object and self.queryset_string:
             # Replaces the string representer to a local variable identifier
-            queryset_string = self.queryset_string%{'object': 'parent_object'}
+            queryset_string = self.queryset_string%{
+                    'object': 'parent_object',  # TODO: Remove in future
+                    'parent': 'parent_object',
+                    'p': 'parent_object', # Just a short alias
+                    }
 
             # Loads the queryset from string
             self._queryset = eval(

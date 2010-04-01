@@ -121,7 +121,7 @@ Report class
     ... 
     ...     subreports = [
     ...         SubReport(
-    ...             queryset_string = '%(object)s.user_permissions.all()',
+    ...             queryset_string = '%(parent)s.user_permissions.all()',
     ...             band_detail = ReportBand(
     ...                     default_style={'fontName': 'Helvetica'},
     ...                     height=0.5*cm,

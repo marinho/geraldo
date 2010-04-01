@@ -366,8 +366,10 @@ class LineChart(BaseMatrixChart):
         super(LineChart, self).set_chart_attributes(chart)
 
         # Cells labels
-        if self.values_labels:
+        if isinstance(self.values_labels, (tuple, list)):
             self.chart_style.setdefault('lineLabelFormat', self.values_labels)
+        elif isinstance(self.values_labels, dict) and self.values_labels.get('labels', None):
+            self.chart_style.setdefault('lineLabelFormat', self.values_labels['labels'])
         else:
             self.chart_style.pop('lineLabelFormat', None)
 
@@ -423,7 +425,10 @@ class BarChart(BaseMatrixChart):
 
         # Cells labels
         if self.values_labels:
-            self.chart_style.setdefault('barLabelFormat', self.values_labels)
+            if isinstance(self.values_labels, (tuple, list)):
+                self.chart_style.setdefault('barLabelFormat', self.values_labels)
+            elif isinstance(self.values_labels, dict) and self.values_labels.get('labels', None):
+                self.chart_style.setdefault('barLabelFormat', self.values_labels['labels'])
 
             # Label orientation
             if self.horizontal:

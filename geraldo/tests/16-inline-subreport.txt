@@ -68,7 +68,7 @@ Report class
     ... 
     ...     subreports = [
     ...         SubReport(
-    ...             queryset_string = '%(object)s.user_permissions.all()',
+    ...             queryset_string = '%(parent)s.user_permissions.all()',
     ...             band_header = ReportBand(
     ...                     height=0.9*cm,
     ...                     elements=[

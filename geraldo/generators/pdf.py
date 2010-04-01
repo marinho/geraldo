@@ -30,6 +30,7 @@ from geraldo.charts import BaseChart
 class PDFGenerator(ReportGenerator):
     """This is a generator to output a PDF using ReportLab library with
     preference by its Platypus API"""
+
     filename = None
     canvas = None
     return_canvas = False
