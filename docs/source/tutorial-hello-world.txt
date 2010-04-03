@@ -84,6 +84,8 @@ generate in TXT or others formats, there is a way to generate PDF files, the
 
 Save and run the python script.
 
+.. image:: http://www.geraldoreports.org/media/examples/tuto-image-1.jpg
+
 Good. Working. But as you know, this isn't enough to write a good report, so, let's
 add something to improve our report a little. Change the report class to be like below:
 
@@ -122,6 +124,8 @@ Change also the imports to be like this:
     from geraldo.utils import cm, BAND_WIDTH, TA_CENTER, TA_RIGHT
 
 Save and run the python script.
+
+.. image:: http://www.geraldoreports.org/media/examples/tuto-image-2.jpg
 
 Wow! Now it's better, but, what about the page footer? And totals? Ok... let's go...
 
@@ -173,6 +177,9 @@ Change the class to be like below:
             borders = {'top': True}
 
 Save and run the python script.
+
+.. image:: http://www.geraldoreports.org/media/examples/tuto-image-3.jpg
+.. image:: http://www.geraldoreports.org/media/examples/tuto-image-4.jpg
 
 Gut.
 
@@ -275,6 +282,8 @@ little confuse. So, change the data lines to be like below:
     family.sort(lambda a,b: cmp(a['genre'], b['genre']) or cmp(a['status'], b['status']))
 
 Save and run the python script.
+
+.. image:: http://www.geraldoreports.org/media/examples/tuto-image-5.jpg
 
 Did you like? Well... this is a good start. Read the rest of **docs** and **examples** and
 good coding!
