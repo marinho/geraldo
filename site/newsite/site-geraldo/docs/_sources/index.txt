@@ -21,8 +21,9 @@ Content
     :maxdepth: 1
 
     installing
-    tutorial-1
-    tutorial-2
+    tutorial-hello-world
+    tutorial-django
+    tutorial-web2py
     basic
     widgets
     graphics
