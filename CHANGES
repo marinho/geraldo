@@ -1,3 +1,7 @@
+2010-04-06: Version 0.4-alpha-23
+--------------------------------
+* Fixed calculation involving aggregation as float and simple value as decimal (and vice-versa)
+
 2010-03-30: Version 0.4-alpha-22
 --------------------------------
 * Fixed charts about values_labels with font-size
