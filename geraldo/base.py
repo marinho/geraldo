@@ -641,6 +641,10 @@ class ReportBand(GeraldoObject):
     default_style = None
     auto_expand_height = False
     is_detail = False
+    
+    # Events (don't make a method with their names, override 'do_*' instead)
+    before_print = None
+    after_print = None
 
     def __init__(self, **kwargs):
         for k,v in kwargs.items():
@@ -708,6 +712,15 @@ class ReportBand(GeraldoObject):
             for v in self.borders.values():
                 if isinstance(v, GeraldoObject):
                     v.parent = self
+
+    # Events methods
+    def do_before_print(self, generator):
+        if self.before_print:
+            self.before_print(self, generator)
+
+    def do_after_print(self, generator):
+        if self.after_print:
+            self.after_print(self, generator)
 
 class DetailBand(ReportBand):
     """You should use this class instead of ReportBand in detail bands.

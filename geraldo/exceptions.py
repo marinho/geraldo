@@ -13,3 +13,7 @@ class AttributeNotFound(Exception):
 class NotYetImplemented(Exception):
     pass
 
+class AbortEvent(Exception):
+    """Exception class used inside event methods to abort that printing/rendering"""
+    pass
+

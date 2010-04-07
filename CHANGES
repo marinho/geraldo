@@ -1,3 +1,8 @@
+2010-04-07: Version 0.4-alpha-25
+--------------------------------
+* Implemented events 'before_print' and 'after_print' on ReportBand, and exception AbortEvent
+  to abort a rendering inside a "before_*" event
+
 2010-04-07: Version 0.4-alpha-24
 --------------------------------
 * Implemented new attribute 'get_queryset' on SubRepor can be assigned to a lambda function to
