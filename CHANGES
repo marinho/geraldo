@@ -1,3 +1,8 @@
+2010-04-07: Version 0.4-alpha-24
+--------------------------------
+* Implemented new attribute 'get_queryset' on SubRepor can be assigned to a lambda function to
+  replace queryset_string
+
 2010-04-06: Version 0.4-alpha-23
 --------------------------------
 * Fixed calculation involving aggregation as float and simple value as decimal (and vice-versa)
