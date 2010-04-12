@@ -1,3 +1,8 @@
+2010-04-11: Version 0.4-alpha-27
+--------------------------------
+* Fixed charts on summarize
+* Improved expressions to support calculation as argument (i.e: sum(age*weight**2))
+
 2010-04-08: Version 0.4-alpha-26
 --------------------------------
 * Fixed chart legends x chart widths (they were in conflicts)

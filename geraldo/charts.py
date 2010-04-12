@@ -459,7 +459,7 @@ class BarChart(BaseMatrixChart):
         data = super(BarChart, self).get_data()
 
         # Forces multiple colors
-        if self.summarize_by:
+        if self.summarize_by and data:
             data = [[i] for i in data[0]]
 
         return data
