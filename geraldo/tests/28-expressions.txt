@@ -70,6 +70,7 @@ Report class
     ...             ObjectValue(expression='weight', left=3.5*cm),
     ...             ObjectValue(expression='age * weight', left=5*cm),
     ...             ObjectValue(expression='age**2', left=6.5*cm),
+    ...             ObjectValue(expression='age * weight ** 2', left=9.5*cm),
     ...         ]
     ... 
     ...     class band_summary(DetailBand):
@@ -82,7 +83,7 @@ Report class
     ...             ObjectValue(expression='sum(age)', left=5*cm),
     ...             ObjectValue(expression='avg(weight)', left=6.5*cm),
     ...             ObjectValue(expression='distinct_count(genre)', left=8*cm),
-    ...             #ObjectValue(expression='sum(age * weight)', left=5*cm), # <-- NOT YET
+    ...             ObjectValue(expression='sum(age * weight ** 2)', left=9.5*cm),
     ...         ]
     ... 
     ...     #groups = [

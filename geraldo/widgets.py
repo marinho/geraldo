@@ -79,6 +79,7 @@ class Label(Widget):
         return new
 
 EXP_QUOTED = re.compile('\(([^\'"].+?[^\'"])\)')
+EXP_TOKENS = re.compile('(\W+|\*\*|\+|\-|\*|\/)')
 
 class ObjectValue(Label):
     """This shows the value from a method, field or property from objects got
@@ -129,12 +130,23 @@ class ObjectValue(Label):
         instance = instance or self.instance
         attribute_name = attribute_name or self.attribute_name
 
+        # Checks this is an expression
+        tokens = EXP_TOKENS.split(attribute_name)
+        if len(tokens) > 1:
+            values = {}
+            for token in tokens:
+                if not token in ('+','-','*','/','**') and not  token.isdigit():
+                    values[token] = self.get_object_value(instance, token)
+            return eval(attribute_name, values)
+
+        # Checks lambda and instance
         if self.get_value and instance:
             try:
                 return self.get_value(self, instance)
             except TypeError:
                 return self.get_value(instance)
 
+        # Gets value with function
         value = get_attr_value(instance, attribute_name)
 
         # For method attributes --- FIXME: check what does this code here, because
