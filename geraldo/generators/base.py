@@ -9,6 +9,7 @@ from geraldo.base import GeraldoObject, ManyElements
 from geraldo.cache import CACHE_BY_QUERYSET, CACHE_BY_RENDER, CACHE_DISABLED,\
         make_hash_key, get_cache_backend
 from geraldo.charts import BaseChart
+from geraldo.exceptions import AbortEvent
 
 class ReportPage(GeraldoObject):
     rect = None
@@ -305,6 +306,12 @@ class ReportGenerator(GeraldoObject):
         """Generate a band having the current top position or informed as its
         top coordinate"""
 
+        # Calls the before_print event
+        try:
+            band.do_before_print(generator=self)
+        except AbortEvent:
+            return False
+
         # Sets the current object
         current_object = current_object or self._current_object
 
@@ -371,6 +378,11 @@ class ReportGenerator(GeraldoObject):
             self.force_blank_page_by_height(self.calculate_size(child_band.height))
 
             self.render_band(child_band)
+
+        # Calls the before_print event
+        band.do_after_print(generator=self)
+
+        return True
 
     def force_blank_page_by_height(self, height):
         """Check if the height is in client available report height and
@@ -482,7 +494,7 @@ class ReportGenerator(GeraldoObject):
         self._current_object_index = 0
         objects = self.report.get_objects_list()
 
-        # just an alias to make it easier
+        # just an alias to make it shorter
         d_band = self.report.band_detail
 
         # Empty report
@@ -524,11 +536,17 @@ class ReportGenerator(GeraldoObject):
                 self.render_groups_headers()
 
                 # Generate this band only if it is visible
+                # - "done True" means band was rendered ok
+                # - "done False" means band rendering was aborted
+                # - "done None" means band didn't render, but wasn't aborted
                 if d_band.visible:
-                    self.render_band(d_band)
+                    done = self.render_band(d_band)
+                else:
+                    done = None
 
                 # Renders subreports
-                self.render_subreports()
+                if done != False:
+                    self.render_subreports()
 
                 # Next object
                 self._current_object_index += 1
@@ -536,17 +554,18 @@ class ReportGenerator(GeraldoObject):
 
                 # Break this if this page doesn't suppport nothing more...
                 # ... if there is no more available height
-                if self.get_available_height() < self.calculate_size(d_band.height):
-                    # right margin is not considered to calculate the necessary space
-                    d_width = self.calculate_size(d_band.width) + self.calculate_size(getattr(d_band, 'margin_left', 0))
+                if done != False:
+                    if self.get_available_height() < self.calculate_size(d_band.height):
+                        # right margin is not considered to calculate the necessary space
+                        d_width = self.calculate_size(d_band.width) + self.calculate_size(getattr(d_band, 'margin_left', 0))
 
-                    # ... and this is not an inline displayed detail band or there is no width available
-                    if not getattr(d_band, 'display_inline', False) or self.get_available_width() < d_width:
+                        # ... and this is not an inline displayed detail band or there is no width available
+                        if not getattr(d_band, 'display_inline', False) or self.get_available_width() < d_width:
+                            break
+
+                    # ... or this band forces a new page and this is not the last object in objects list
+                    elif d_band.force_new_page and self._current_object_index < len(objects):
                         break
-
-                # ... or this band forces a new page and this is not the last object in objects list
-                elif d_band.force_new_page and self._current_object_index < len(objects):
-                    break
 
             # Sets this is the latest page or not
             self._is_latest_page = self._current_object_index >= len(objects)

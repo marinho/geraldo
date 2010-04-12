@@ -1,0 +1,290 @@
+Tutorial to say Hello
+=====================
+
+Once you have Geraldo installed and its dependencies resolved (read the 
+Installation document to know about the dependencies on ReportLab and Python
+Imaging Library), you must keep in mind Geraldo Reports isn't dependent of
+any framework, neither a web or desktop paradigm, that means Geraldo just
+make reports and you do the rest by your favorite way.
+
+Supposing we are working without an ORM or a persistency layer, nor an
+objects-oriented list with objects, the most simple and probably way we are
+using is a list of dictionaries, like below:
+
+::
+
+    family = [
+        {'name': 'Leticia', 'age': 29, 'weight': 55.7, 'genre': 'female', 'status': 'parent'},
+        {'name': 'Marinho', 'age': 28, 'weight': 76, 'genre': 'male', 'status': 'parent'},
+        {'name': 'Tarsila', 'age': 4, 'weight': 16.2, 'genre': 'female', 'status': 'child'},
+        {'name': 'Linus', 'age': 0, 'weight': 1.5, 'genre': 'male', 'status': 'child'},
+        {'name': 'Mychelle', 'age': 19, 'weight': 50, 'genre': 'female', 'status': 'nephew'},
+        {'name': 'Mychell', 'age': 17, 'weight': 55, 'genre': 'male', 'status': 'niece'},
+    ]
+
+The dictionaries have common keys, like 'name' and 'age' that we want to show in
+a report, so, let's do that!
+
+Open a new file with the dictionaries list above and the imports below:
+
+::
+
+    from geraldo import Report, ReportBand, DetailBand, SystemField, Label, ObjectValue
+    from geraldo.utils import cm
+
+Actually, we could sum up the imported elements with short descriptions below:
+
+- Report - the main class of a report, that means you must start everything from this
+class if you want to make a report.
+
+- ReportBand - each imaginary slice of a report is an instance of a band, if you are
+used to HTML, you could see bands like divs.
+
+- DetailBand - is the especialized band class used as detail band of a report. The
+detail band is the only one required and everything is "driven" by it. Each object of
+a given list will have an instance of this band showing in the report.
+
+- SystemField - is the widget used to show things like the current page number, the
+current date, the report title, etc.
+
+- Label - is the widget used to show free text in a report.
+
+- ObjectValue - is the widget used to show object values and expressions.
+
+- cm - is the unit representing the metric "centimeter" you can use to define dimensions
+and positions on the report.
+
+Well, once we have the basic things clear, we can declare or first report class:
+
+::
+
+    class MyFamilyReport(Report):
+        class band_detail(DetailBand):
+            height = 0.7*cm
+            elements = [
+                Label(text='Name'),
+                ObjectValue(expression='name', left=1.5*cm),
+            ]
+            borders = {'bottom': True}
+
+The class above is enough to show a basic "hello world" example. The attribute
+'band_detail' could be either a class or an instance, whatever, but the important
+is that it must be something based on a ReportBand, or better, a DetailBand.
+
+Now, we want to generate the PDF file of this, of course. But, considering we could
+generate in TXT or others formats, there is a way to generate PDF files, the
+**PDFGenerator**, like below:
+
+::
+
+    from geraldo.generators import PDFGenerator
+    
+    my_report = MyFamilyReport(queryset=family)
+    my_report.generate_by(PDFGenerator, filename='family.pdf')
+
+Save and run the python script.
+
+.. image:: http://www.geraldoreports.org/media/examples/tuto-image-1.jpg
+
+Good. Working. But as you know, this isn't enough to write a good report, so, let's
+add something to improve our report a little. Change the report class to be like below:
+
+::
+
+    class MyFamilyReport(Report):
+        title = 'My Family'
+        
+        class band_detail(DetailBand):
+            height = 0.7*cm
+            elements = [
+                ObjectValue(expression='name', left=0.5*cm),
+                ObjectValue(expression='age', left=5*cm),
+                ObjectValue(expression='weight', left=6.5*cm),
+            ]
+            borders = {'bottom': True}
+        
+        class band_page_header(ReportBand):
+            height = 1.3*cm
+            elements = [
+                SystemField(expression='%(report_title)s', top=0.1*cm, left=0, width=BAND_WIDTH,
+                    style={'fontName': 'Helvetica-Bold', 'fontSize': 14, 'alignment': TA_CENTER}),
+                SystemField(expression=u'Page %(page_number)d of %(page_count)d', top=0.1*cm,
+                    width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
+                Label(text="Name", top=0.8*cm, left=0.5*cm),
+                Label(text="Age", top=0.8*cm, left=5*cm),
+                Label(text="Weight", top=0.8*cm, left=6.5*cm),
+            ]
+            borders = {'all': True}
+
+Change also the imports to be like this:
+
+::
+
+    from geraldo import Report, ReportBand, DetailBand, SystemField, Label, ObjectValue
+    from geraldo.utils import cm, BAND_WIDTH, TA_CENTER, TA_RIGHT
+
+Save and run the python script.
+
+.. image:: http://www.geraldoreports.org/media/examples/tuto-image-2.jpg
+
+Wow! Now it's better, but, what about the page footer? And totals? Ok... let's go...
+
+Change the class to be like below:
+
+::
+
+    class MyFamilyReport(Report):
+        title = 'My Family'
+        
+        class band_detail(DetailBand):
+            height = 0.7*cm
+            elements = [
+                ObjectValue(expression='name', left=0.5*cm),
+                ObjectValue(expression='age', left=5*cm),
+                ObjectValue(expression='weight', left=6.5*cm),
+            ]
+            borders = {'bottom': True}
+        
+        class band_page_header(ReportBand):
+            height = 1.3*cm
+            elements = [
+                SystemField(expression='%(report_title)s', top=0.1*cm, left=0, width=BAND_WIDTH,
+                    style={'fontName': 'Helvetica-Bold', 'fontSize': 14, 'alignment': TA_CENTER}),
+                SystemField(expression=u'Page %(page_number)d of %(page_count)d', top=0.1*cm,
+                    width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
+                Label(text="Name", top=0.8*cm, left=0.5*cm),
+                Label(text="Age", top=0.8*cm, left=5*cm),
+                Label(text="Weight", top=0.8*cm, left=6.5*cm),
+            ]
+            borders = {'all': True}
+
+        class band_page_footer(ReportBand):
+            height = 0.5*cm
+            elements = [
+                Label(text='Geraldo Reports', top=0.1*cm),
+                SystemField(expression='Printed in %(now:%Y, %b %d)s at %(now:%H:%M)s', top=0.1*cm,
+                    width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
+                ]
+            borders = {'top': True}
+
+        class band_summary(ReportBand):
+            height = 0.5*cm
+            elements = [
+                Label(text='Totals:'),
+                ObjectValue(expression='avg(age)', left=5*cm),
+                ObjectValue(expression='sum(weight)', left=6.5*cm),
+                ]
+            borders = {'top': True}
+
+Save and run the python script.
+
+.. image:: http://www.geraldoreports.org/media/examples/tuto-image-3.jpg
+.. image:: http://www.geraldoreports.org/media/examples/tuto-image-4.jpg
+
+Gut.
+
+Now, let's group those people by their genre and status...
+
+::
+
+    class MyFamilyReport(Report):
+        title = 'My Family'
+        
+        class band_detail(DetailBand):
+            height = 0.7*cm
+            elements = [
+                ObjectValue(expression='name', left=0.5*cm),
+                ObjectValue(expression='age', left=5*cm),
+                ObjectValue(expression='weight', left=6.5*cm),
+            ]
+            borders = {'bottom': True}
+        
+        class band_page_header(ReportBand):
+            height = 1.3*cm
+            elements = [
+                SystemField(expression='%(report_title)s', top=0.1*cm, left=0, width=BAND_WIDTH,
+                    style={'fontName': 'Helvetica-Bold', 'fontSize': 14, 'alignment': TA_CENTER}),
+                SystemField(expression=u'Page %(page_number)d of %(page_count)d', top=0.1*cm,
+                    width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
+                Label(text="Name", top=0.8*cm, left=0.5*cm),
+                Label(text="Age", top=0.8*cm, left=5*cm),
+                Label(text="Weight", top=0.8*cm, left=6.5*cm),
+            ]
+            borders = {'all': True}
+
+        class band_page_footer(ReportBand):
+            height = 0.5*cm
+            elements = [
+                Label(text='Geraldo Reports', top=0.1*cm),
+                SystemField(expression='Printed in %(now:%Y, %b %d)s at %(now:%H:%M)s', top=0.1*cm,
+                    width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
+                ]
+            borders = {'top': True}
+
+        class band_summary(ReportBand):
+            height = 0.5*cm
+            elements = [
+                Label(text='Totals:'),
+                ObjectValue(expression='avg(age)', left=5*cm, style={'fontName': 'Helvetica-Bold'}),
+                ObjectValue(expression='sum(weight)', left=6.5*cm, style={'fontName': 'Helvetica-Bold'}),
+                ]
+            borders = {'top': True}
+
+        groups = [
+            ReportGroup(
+                attribute_name='genre',
+                band_header=DetailBand(
+                    height=0.6*cm,
+                    elements=[
+                        ObjectValue(expression='genre', style={'fontSize': 12})
+                    ]
+                ),
+                band_footer=ReportBand(
+                    height = 0.5*cm,
+                    elements = [
+                        ObjectValue(expression='avg(age)', left=5*cm),
+                        ObjectValue(expression='sum(weight)', left=6.5*cm),
+                        ],
+                    borders = {'top': True},
+                ),
+            ),
+            ReportGroup(
+                attribute_name='status',
+                band_header=DetailBand(
+                    height=0.6*cm,
+                    elements=[
+                        ObjectValue(expression='status', style={'fontSize': 11}, left=0.2*cm)
+                    ]
+                )
+            ),
+        ]
+
+And change also the imports to be like this:
+
+::
+
+    from geraldo import Report, ReportBand, DetailBand, SystemField, Label, ObjectValue, ReportGroup
+    from geraldo.utils import cm, BAND_WIDTH, TA_CENTER, TA_RIGHT
+
+Before save, you must sort list by genre and status, otherwise informations will be a
+little confuse. So, change the data lines to be like below:
+
+::
+
+    family = [
+        {'name': 'Leticia', 'age': 29, 'weight': 55.7, 'genre': 'female', 'status': 'parent'},
+        {'name': 'Marinho', 'age': 28, 'weight': 76, 'genre': 'male', 'status': 'parent'},
+        {'name': 'Tarsila', 'age': 4, 'weight': 16.2, 'genre': 'female', 'status': 'child'},
+        {'name': 'Linus', 'age': 0, 'weight': 1.5, 'genre': 'male', 'status': 'child'},
+        {'name': 'Mychelle', 'age': 19, 'weight': 50, 'genre': 'female', 'status': 'nephew'},
+        {'name': 'Mychell', 'age': 17, 'weight': 55, 'genre': 'male', 'status': 'niece'},
+    ]
+    family.sort(lambda a,b: cmp(a['genre'], b['genre']) or cmp(a['status'], b['status']))
+
+Save and run the python script.
+
+.. image:: http://www.geraldoreports.org/media/examples/tuto-image-5.jpg
+
+Did you like? Well... this is a good start. Read the rest of **docs** and **examples** and
+good coding!
+

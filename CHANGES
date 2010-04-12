@@ -1,3 +1,23 @@
+2010-04-08: Version 0.4-alpha-26
+--------------------------------
+* Fixed chart legends x chart widths (they were in conflicts)
+* Fixed bar charts to show full size bars (instead lower value)
+* Fixed bar charts to show right axis X and Y values
+
+2010-04-07: Version 0.4-alpha-25
+--------------------------------
+* Implemented events 'before_print' and 'after_print' on ReportBand, and exception AbortEvent
+  to abort a rendering inside a "before_*" event
+
+2010-04-07: Version 0.4-alpha-24
+--------------------------------
+* Implemented new attribute 'get_queryset' on SubRepor can be assigned to a lambda function to
+  replace queryset_string
+
+2010-04-06: Version 0.4-alpha-23
+--------------------------------
+* Fixed calculation involving aggregation as float and simple value as decimal (and vice-versa)
+
 2010-03-30: Version 0.4-alpha-22
 --------------------------------
 * Fixed charts about values_labels with font-size

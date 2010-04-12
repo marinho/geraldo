@@ -102,6 +102,8 @@ class ObjectValue(Label):
     get_text = None # A lambda function to get customized display values
     stores_text_in_cache = True
     expression = None
+    converts_decimal_to_float = False
+    converts_float_to_decimal = True
     _cached_text = None
 
     def __init__(self, *args, **kwargs):
@@ -154,8 +156,10 @@ class ObjectValue(Label):
         def _clean(val):
             if not val:
                 return 0
-            elif isinstance(val, decimal.Decimal):
+            elif isinstance(val, decimal.Decimal) and self.converts_decimal_to_float:
                 return float(val)
+            elif isinstance(val, float) and self.converts_float_to_decimal:
+                return decimal.Decimal(str(val))
             
             return val
 
@@ -226,8 +230,10 @@ class ObjectValue(Label):
 
         return new
 
-    def get_value_by_expression(self):
-        """Parses self.expression to get complex calculated values"""
+    def get_value_by_expression(self, expression=None):
+        """Parses a given expression to get complex calculated values"""
+
+        expression = expression or self.expression
 
         if not self.instance:
             global_vars = {}
@@ -251,7 +257,7 @@ class ObjectValue(Label):
                 'p': self.report.parent_object, # Just a short alias
                 })
 
-        return eval(self.expression, global_vars)
+        return eval(expression, global_vars)
 
 class SystemField(Label):
     """This shows system informations, like the report title, current date/time,

@@ -1,0 +1,361 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tutorial to say Hello &mdash; Geraldo Reports Documentation v0.4-alpha-6 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.4-alpha-6',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Geraldo Reports Documentation v0.4-alpha-6 documentation" href="index.html" />
+    <link rel="next" title="Tutorial using Django" href="tutorial-django.html" />
+    <link rel="prev" title="Installing" href="installing.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="tutorial-django.html" title="Tutorial using Django"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installing.html" title="Installing"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Geraldo Reports Documentation v0.4-alpha-6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="tutorial-to-say-hello">
+<h1>Tutorial to say Hello<a class="headerlink" href="#tutorial-to-say-hello" title="Permalink to this headline">¶</a></h1>
+<p>Once you have Geraldo installed and its dependencies resolved (read the
+Installation document to know about the dependencies on ReportLab and Python
+Imaging Library), you must keep in mind Geraldo Reports isn&#8217;t dependent of
+any framework, neither a web or desktop paradigm, that means Geraldo just
+make reports and you do the rest by your favorite way.</p>
+<p>Supposing we are working without an ORM or a persistency layer, nor an
+objects-oriented list with objects, the most simple and probably way we are
+using is a list of dictionaries, like below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">family</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Leticia&#39;</span><span class="p">,</span> <span class="s">&#39;age&#39;</span><span class="p">:</span> <span class="mi">29</span><span class="p">,</span> <span class="s">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">55.7</span><span class="p">,</span> <span class="s">&#39;genre&#39;</span><span class="p">:</span> <span class="s">&#39;female&#39;</span><span class="p">,</span> <span class="s">&#39;status&#39;</span><span class="p">:</span> <span class="s">&#39;parent&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Marinho&#39;</span><span class="p">,</span> <span class="s">&#39;age&#39;</span><span class="p">:</span> <span class="mi">28</span><span class="p">,</span> <span class="s">&#39;weight&#39;</span><span class="p">:</span> <span class="mi">76</span><span class="p">,</span> <span class="s">&#39;genre&#39;</span><span class="p">:</span> <span class="s">&#39;male&#39;</span><span class="p">,</span> <span class="s">&#39;status&#39;</span><span class="p">:</span> <span class="s">&#39;parent&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Tarsila&#39;</span><span class="p">,</span> <span class="s">&#39;age&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">16.2</span><span class="p">,</span> <span class="s">&#39;genre&#39;</span><span class="p">:</span> <span class="s">&#39;female&#39;</span><span class="p">,</span> <span class="s">&#39;status&#39;</span><span class="p">:</span> <span class="s">&#39;child&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Linus&#39;</span><span class="p">,</span> <span class="s">&#39;age&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">,</span> <span class="s">&#39;genre&#39;</span><span class="p">:</span> <span class="s">&#39;male&#39;</span><span class="p">,</span> <span class="s">&#39;status&#39;</span><span class="p">:</span> <span class="s">&#39;child&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Mychelle&#39;</span><span class="p">,</span> <span class="s">&#39;age&#39;</span><span class="p">:</span> <span class="mi">19</span><span class="p">,</span> <span class="s">&#39;weight&#39;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s">&#39;genre&#39;</span><span class="p">:</span> <span class="s">&#39;female&#39;</span><span class="p">,</span> <span class="s">&#39;status&#39;</span><span class="p">:</span> <span class="s">&#39;nephew&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Mychell&#39;</span><span class="p">,</span> <span class="s">&#39;age&#39;</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span> <span class="s">&#39;weight&#39;</span><span class="p">:</span> <span class="mi">55</span><span class="p">,</span> <span class="s">&#39;genre&#39;</span><span class="p">:</span> <span class="s">&#39;male&#39;</span><span class="p">,</span> <span class="s">&#39;status&#39;</span><span class="p">:</span> <span class="s">&#39;niece&#39;</span><span class="p">},</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The dictionaries have common keys, like &#8216;name&#8217; and &#8216;age&#8217; that we want to show in
+a report, so, let&#8217;s do that!</p>
+<p>Open a new file with the dictionaries list above and the imports below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span><span class="p">,</span> <span class="n">ReportBand</span><span class="p">,</span> <span class="n">DetailBand</span><span class="p">,</span> <span class="n">SystemField</span><span class="p">,</span> <span class="n">Label</span><span class="p">,</span> <span class="n">ObjectValue</span>
+<span class="kn">from</span> <span class="nn">geraldo.utils</span> <span class="kn">import</span> <span class="n">cm</span>
+</pre></div>
+</div>
+<p>Actually, we could sum up the imported elements with short descriptions below:</p>
+<ul class="simple">
+<li>Report - the main class of a report, that means you must start everything from this</li>
+</ul>
+<p>class if you want to make a report.</p>
+<ul class="simple">
+<li>ReportBand - each imaginary slice of a report is an instance of a band, if you are</li>
+</ul>
+<p>used to HTML, you could see bands like divs.</p>
+<ul class="simple">
+<li>DetailBand - is the especialized band class used as detail band of a report. The</li>
+</ul>
+<p>detail band is the only one required and everything is &#8220;driven&#8221; by it. Each object of
+a given list will have an instance of this band showing in the report.</p>
+<ul class="simple">
+<li>SystemField - is the widget used to show things like the current page number, the</li>
+</ul>
+<p>current date, the report title, etc.</p>
+<ul class="simple">
+<li>Label - is the widget used to show free text in a report.</li>
+<li>ObjectValue - is the widget used to show object values and expressions.</li>
+<li>cm - is the unit representing the metric &#8220;centimeter&#8221; you can use to define dimensions</li>
+</ul>
+<p>and positions on the report.</p>
+<p>Well, once we have the basic things clear, we can declare or first report class:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">MyFamilyReport</span><span class="p">(</span><span class="n">Report</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">band_detail</span><span class="p">(</span><span class="n">DetailBand</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mf">0.7</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;Name&#39;</span><span class="p">),</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">1.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;bottom&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The class above is enough to show a basic &#8220;hello world&#8221; example. The attribute
+&#8216;band_detail&#8217; could be either a class or an instance, whatever, but the important
+is that it must be something based on a ReportBand, or better, a DetailBand.</p>
+<p>Now, we want to generate the PDF file of this, of course. But, considering we could
+generate in TXT or others formats, there is a way to generate PDF files, the
+<strong>PDFGenerator</strong>, like below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">geraldo.generators</span> <span class="kn">import</span> <span class="n">PDFGenerator</span>
+
+<span class="n">my_report</span> <span class="o">=</span> <span class="n">MyFamilyReport</span><span class="p">(</span><span class="n">queryset</span><span class="o">=</span><span class="n">family</span><span class="p">)</span>
+<span class="n">my_report</span><span class="o">.</span><span class="n">generate_by</span><span class="p">(</span><span class="n">PDFGenerator</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s">&#39;family.pdf&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Save and run the python script.</p>
+<img alt="http://www.geraldoreports.org/media/examples/tuto-image-1.jpg" src="http://www.geraldoreports.org/media/examples/tuto-image-1.jpg" />
+<p>Good. Working. But as you know, this isn&#8217;t enough to write a good report, so, let&#8217;s
+add something to improve our report a little. Change the report class to be like below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">MyFamilyReport</span><span class="p">(</span><span class="n">Report</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;My Family&#39;</span>
+
+    <span class="k">class</span> <span class="nc">band_detail</span><span class="p">(</span><span class="n">DetailBand</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mf">0.7</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;age&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;weight&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">6.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;bottom&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+
+    <span class="k">class</span> <span class="nc">band_page_header</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mf">1.3</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">SystemField</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%(report_title)s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">BAND_WIDTH</span><span class="p">,</span>
+                <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;fontName&#39;</span><span class="p">:</span> <span class="s">&#39;Helvetica-Bold&#39;</span><span class="p">,</span> <span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s">&#39;alignment&#39;</span><span class="p">:</span> <span class="n">TA_CENTER</span><span class="p">}),</span>
+            <span class="n">SystemField</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">u&#39;Page </span><span class="si">%(page_number)d</span><span class="s"> of </span><span class="si">%(page_count)d</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">width</span><span class="o">=</span><span class="n">BAND_WIDTH</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;alignment&#39;</span><span class="p">:</span> <span class="n">TA_RIGHT</span><span class="p">}),</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;Name&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;Age&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;Weight&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">6.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;all&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Change also the imports to be like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span><span class="p">,</span> <span class="n">ReportBand</span><span class="p">,</span> <span class="n">DetailBand</span><span class="p">,</span> <span class="n">SystemField</span><span class="p">,</span> <span class="n">Label</span><span class="p">,</span> <span class="n">ObjectValue</span>
+<span class="kn">from</span> <span class="nn">geraldo.utils</span> <span class="kn">import</span> <span class="n">cm</span><span class="p">,</span> <span class="n">BAND_WIDTH</span><span class="p">,</span> <span class="n">TA_CENTER</span><span class="p">,</span> <span class="n">TA_RIGHT</span>
+</pre></div>
+</div>
+<p>Save and run the python script.</p>
+<img alt="http://www.geraldoreports.org/media/examples/tuto-image-2.jpg" src="http://www.geraldoreports.org/media/examples/tuto-image-2.jpg" />
+<p>Wow! Now it&#8217;s better, but, what about the page footer? And totals? Ok... let&#8217;s go...</p>
+<p>Change the class to be like below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">MyFamilyReport</span><span class="p">(</span><span class="n">Report</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;My Family&#39;</span>
+
+    <span class="k">class</span> <span class="nc">band_detail</span><span class="p">(</span><span class="n">DetailBand</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mf">0.7</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;age&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;weight&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">6.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;bottom&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+
+    <span class="k">class</span> <span class="nc">band_page_header</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mf">1.3</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">SystemField</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%(report_title)s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">BAND_WIDTH</span><span class="p">,</span>
+                <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;fontName&#39;</span><span class="p">:</span> <span class="s">&#39;Helvetica-Bold&#39;</span><span class="p">,</span> <span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s">&#39;alignment&#39;</span><span class="p">:</span> <span class="n">TA_CENTER</span><span class="p">}),</span>
+            <span class="n">SystemField</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">u&#39;Page </span><span class="si">%(page_number)d</span><span class="s"> of </span><span class="si">%(page_count)d</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">width</span><span class="o">=</span><span class="n">BAND_WIDTH</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;alignment&#39;</span><span class="p">:</span> <span class="n">TA_RIGHT</span><span class="p">}),</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;Name&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;Age&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;Weight&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">6.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;all&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+
+    <span class="k">class</span> <span class="nc">band_page_footer</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;Geraldo Reports&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">SystemField</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;Printed in %(now:%Y, %b </span><span class="si">%d</span><span class="s">)s at %(now:%H:%M)s&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">width</span><span class="o">=</span><span class="n">BAND_WIDTH</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;alignment&#39;</span><span class="p">:</span> <span class="n">TA_RIGHT</span><span class="p">}),</span>
+            <span class="p">]</span>
+        <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;top&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+
+    <span class="k">class</span> <span class="nc">band_summary</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;Totals:&#39;</span><span class="p">),</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;avg(age)&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;sum(weight)&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">6.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="p">]</span>
+        <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;top&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Save and run the python script.</p>
+<img alt="http://www.geraldoreports.org/media/examples/tuto-image-3.jpg" src="http://www.geraldoreports.org/media/examples/tuto-image-3.jpg" />
+<img alt="http://www.geraldoreports.org/media/examples/tuto-image-4.jpg" src="http://www.geraldoreports.org/media/examples/tuto-image-4.jpg" />
+<p>Gut.</p>
+<p>Now, let&#8217;s group those people by their genre and status...</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">MyFamilyReport</span><span class="p">(</span><span class="n">Report</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;My Family&#39;</span>
+
+    <span class="k">class</span> <span class="nc">band_detail</span><span class="p">(</span><span class="n">DetailBand</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mf">0.7</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;age&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;weight&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">6.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;bottom&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+
+    <span class="k">class</span> <span class="nc">band_page_header</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mf">1.3</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">SystemField</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%(report_title)s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">BAND_WIDTH</span><span class="p">,</span>
+                <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;fontName&#39;</span><span class="p">:</span> <span class="s">&#39;Helvetica-Bold&#39;</span><span class="p">,</span> <span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s">&#39;alignment&#39;</span><span class="p">:</span> <span class="n">TA_CENTER</span><span class="p">}),</span>
+            <span class="n">SystemField</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">u&#39;Page </span><span class="si">%(page_number)d</span><span class="s"> of </span><span class="si">%(page_count)d</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">width</span><span class="o">=</span><span class="n">BAND_WIDTH</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;alignment&#39;</span><span class="p">:</span> <span class="n">TA_RIGHT</span><span class="p">}),</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;Name&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;Age&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;Weight&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.8</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">6.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;all&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+
+    <span class="k">class</span> <span class="nc">band_page_footer</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;Geraldo Reports&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+            <span class="n">SystemField</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;Printed in %(now:%Y, %b </span><span class="si">%d</span><span class="s">)s at %(now:%H:%M)s&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">width</span><span class="o">=</span><span class="n">BAND_WIDTH</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;alignment&#39;</span><span class="p">:</span> <span class="n">TA_RIGHT</span><span class="p">}),</span>
+            <span class="p">]</span>
+        <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;top&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+
+    <span class="k">class</span> <span class="nc">band_summary</span><span class="p">(</span><span class="n">ReportBand</span><span class="p">):</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Label</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;Totals:&#39;</span><span class="p">),</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;avg(age)&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;fontName&#39;</span><span class="p">:</span> <span class="s">&#39;Helvetica-Bold&#39;</span><span class="p">}),</span>
+            <span class="n">ObjectValue</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;sum(weight)&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">6.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;fontName&#39;</span><span class="p">:</span> <span class="s">&#39;Helvetica-Bold&#39;</span><span class="p">}),</span>
+            <span class="p">]</span>
+        <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;top&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+
+    <span class="n">groups</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">ReportGroup</span><span class="p">(</span>
+            <span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;genre&#39;</span><span class="p">,</span>
+            <span class="n">band_header</span><span class="o">=</span><span class="n">DetailBand</span><span class="p">(</span>
+                <span class="n">height</span><span class="o">=</span><span class="mf">0.6</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">elements</span><span class="o">=</span><span class="p">[</span>
+                    <span class="n">ObjectValue</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;genre&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">})</span>
+                <span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">band_footer</span><span class="o">=</span><span class="n">ReportBand</span><span class="p">(</span>
+                <span class="n">height</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">ObjectValue</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;avg(age)&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+                    <span class="n">ObjectValue</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;sum(weight)&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">6.5</span><span class="o">*</span><span class="n">cm</span><span class="p">),</span>
+                    <span class="p">],</span>
+                <span class="n">borders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;top&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">},</span>
+            <span class="p">),</span>
+        <span class="p">),</span>
+        <span class="n">ReportGroup</span><span class="p">(</span>
+            <span class="n">attribute_name</span><span class="o">=</span><span class="s">&#39;status&#39;</span><span class="p">,</span>
+            <span class="n">band_header</span><span class="o">=</span><span class="n">DetailBand</span><span class="p">(</span>
+                <span class="n">height</span><span class="o">=</span><span class="mf">0.6</span><span class="o">*</span><span class="n">cm</span><span class="p">,</span>
+                <span class="n">elements</span><span class="o">=</span><span class="p">[</span>
+                    <span class="n">ObjectValue</span><span class="p">(</span><span class="n">expression</span><span class="o">=</span><span class="s">&#39;status&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="mi">11</span><span class="p">},</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.2</span><span class="o">*</span><span class="n">cm</span><span class="p">)</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+        <span class="p">),</span>
+    <span class="p">]</span>
+</pre></div>
+</div>
+<p>And change also the imports to be like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">geraldo</span> <span class="kn">import</span> <span class="n">Report</span><span class="p">,</span> <span class="n">ReportBand</span><span class="p">,</span> <span class="n">DetailBand</span><span class="p">,</span> <span class="n">SystemField</span><span class="p">,</span> <span class="n">Label</span><span class="p">,</span> <span class="n">ObjectValue</span><span class="p">,</span> <span class="n">ReportGroup</span>
+<span class="kn">from</span> <span class="nn">geraldo.utils</span> <span class="kn">import</span> <span class="n">cm</span><span class="p">,</span> <span class="n">BAND_WIDTH</span><span class="p">,</span> <span class="n">TA_CENTER</span><span class="p">,</span> <span class="n">TA_RIGHT</span>
+</pre></div>
+</div>
+<p>Before save, you must sort list by genre and status, otherwise informations will be a
+little confuse. So, change the data lines to be like below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">family</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Leticia&#39;</span><span class="p">,</span> <span class="s">&#39;age&#39;</span><span class="p">:</span> <span class="mi">29</span><span class="p">,</span> <span class="s">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">55.7</span><span class="p">,</span> <span class="s">&#39;genre&#39;</span><span class="p">:</span> <span class="s">&#39;female&#39;</span><span class="p">,</span> <span class="s">&#39;status&#39;</span><span class="p">:</span> <span class="s">&#39;parent&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Marinho&#39;</span><span class="p">,</span> <span class="s">&#39;age&#39;</span><span class="p">:</span> <span class="mi">28</span><span class="p">,</span> <span class="s">&#39;weight&#39;</span><span class="p">:</span> <span class="mi">76</span><span class="p">,</span> <span class="s">&#39;genre&#39;</span><span class="p">:</span> <span class="s">&#39;male&#39;</span><span class="p">,</span> <span class="s">&#39;status&#39;</span><span class="p">:</span> <span class="s">&#39;parent&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Tarsila&#39;</span><span class="p">,</span> <span class="s">&#39;age&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">16.2</span><span class="p">,</span> <span class="s">&#39;genre&#39;</span><span class="p">:</span> <span class="s">&#39;female&#39;</span><span class="p">,</span> <span class="s">&#39;status&#39;</span><span class="p">:</span> <span class="s">&#39;child&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Linus&#39;</span><span class="p">,</span> <span class="s">&#39;age&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">,</span> <span class="s">&#39;genre&#39;</span><span class="p">:</span> <span class="s">&#39;male&#39;</span><span class="p">,</span> <span class="s">&#39;status&#39;</span><span class="p">:</span> <span class="s">&#39;child&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Mychelle&#39;</span><span class="p">,</span> <span class="s">&#39;age&#39;</span><span class="p">:</span> <span class="mi">19</span><span class="p">,</span> <span class="s">&#39;weight&#39;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s">&#39;genre&#39;</span><span class="p">:</span> <span class="s">&#39;female&#39;</span><span class="p">,</span> <span class="s">&#39;status&#39;</span><span class="p">:</span> <span class="s">&#39;nephew&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Mychell&#39;</span><span class="p">,</span> <span class="s">&#39;age&#39;</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span> <span class="s">&#39;weight&#39;</span><span class="p">:</span> <span class="mi">55</span><span class="p">,</span> <span class="s">&#39;genre&#39;</span><span class="p">:</span> <span class="s">&#39;male&#39;</span><span class="p">,</span> <span class="s">&#39;status&#39;</span><span class="p">:</span> <span class="s">&#39;niece&#39;</span><span class="p">},</span>
+<span class="p">]</span>
+<span class="n">family</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">:</span> <span class="nb">cmp</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="s">&#39;genre&#39;</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="s">&#39;genre&#39;</span><span class="p">])</span> <span class="ow">or</span> <span class="nb">cmp</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="s">&#39;status&#39;</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="s">&#39;status&#39;</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Save and run the python script.</p>
+<img alt="http://www.geraldoreports.org/media/examples/tuto-image-5.jpg" src="http://www.geraldoreports.org/media/examples/tuto-image-5.jpg" />
+<p>Did you like? Well... this is a good start. Read the rest of <strong>docs</strong> and <strong>examples</strong> and
+good coding!</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="installing.html"
+                                  title="previous chapter">Installing</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="tutorial-django.html"
+                                  title="next chapter">Tutorial using Django</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/tutorial-hello-world.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="tutorial-django.html" title="Tutorial using Django"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="installing.html" title="Installing"
+             >previous</a> |</li>
+        <li><a href="index.html">Geraldo Reports Documentation v0.4-alpha-6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2010, Marinho Brandao.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

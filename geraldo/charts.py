@@ -128,19 +128,16 @@ class BaseChart(Graphic):
         # Make the title
         title = self.make_title(drawing)
 
-        # Make the legend
-        legend = self.make_legend(drawing, chart)
-
         # Setting chart dimensions
         chart.height = self.height
         chart.width = self.width
 
+        # Make the legend
+        legend = self.make_legend(drawing, chart)
+
         if title:
             chart.height -= self.title.get('height', DEFAULT_TITLE_HEIGHT)
             self.top += self.title.get('height', DEFAULT_TITLE_HEIGHT)
-
-        if legend:
-            chart.width = legend.getBounds()[0]
 
         # Setting additional chart attributes
         self.set_chart_style(chart)
@@ -167,7 +164,7 @@ class BaseChart(Graphic):
         legend.columnMaximum = len(legend.colorNamePairs)
         legend.deltay = 5
         legend.alignment = 'right'
-        legend.x = drawing.width
+        legend.x = drawing.width + 40
         legend.y = drawing.height - (self.title and self.title.get('height', DEFAULT_TITLE_HEIGHT) or 0)
 
         # Sets legend extra attributes if legend_labels is a dictionary
@@ -186,7 +183,7 @@ class BaseChart(Graphic):
             return self.get_axis_labels()
 
         # Base labels
-        if isinstance(self.legend_labels, dict):
+        if isinstance(self.legend_labels, dict) and self.legend_labels.get('labels', None):
             labels = self.legend_labels['labels']
         elif isinstance(self.legend_labels, (tuple,list)):
             labels = self.legend_labels
@@ -203,7 +200,9 @@ class BaseChart(Graphic):
 
     def get_axis_labels(self):
         # Base labels
-        if isinstance(self.axis_labels, (tuple,list)):
+        if isinstance(self.axis_labels, dict) and self.axis_labels.get('labels', None):
+            labels = self.axis_labels['labels']
+        elif isinstance(self.axis_labels, (tuple,list)):
             labels = self.axis_labels
         elif self.summarize_by == CROSS_ROWS:
             labels = self.get_cross_data().rows()
@@ -441,6 +440,13 @@ class BarChart(BaseMatrixChart):
         # Set bar strokes
         chart.bars.strokeWidth = 0
 
+        # Forces bars to start from 0 (instead of lower value)
+        chart.valueAxis.forceZero = 1
+
+        # Shows axis X labels
+        if not self.summarize_by: # XXX
+            chart.categoryAxis.categoryNames = self.get_axis_labels()
+
         # Set the bar colors
         if self.colors:
             for num, color in enumerate(self.colors):
@@ -448,6 +454,15 @@ class BarChart(BaseMatrixChart):
                     chart.bars[num].fillColor = color
                 except IndexError:
                     break
+
+    def get_data(self):
+        data = super(BarChart, self).get_data()
+
+        # Forces multiple colors
+        if self.summarize_by:
+            data = [[i] for i in data[0]]
+
+        return data
 
 class HorizontalBarChart(BarChart):
     horizontal = True

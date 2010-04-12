@@ -26,6 +26,7 @@ from geraldo.graphics import Graphic, RoundRect, Rect, Line, Circle, Arc,\
 from geraldo.barcodes import BarCode
 from geraldo.cache import make_hash_key, get_cache_backend, CACHE_DISABLED
 from geraldo.charts import BaseChart
+from geraldo.exceptions import AbortEvent
 
 class PDFGenerator(ReportGenerator):
     """This is a generator to output a PDF using ReportLab library with
@@ -103,7 +104,7 @@ class PDFGenerator(ReportGenerator):
         if self.cached_before_generate():
             return
  
-        # Calls the after_render event
+        # Calls the "after render" event
         self.report.do_before_generate(generator=self)
 
         # Initializes the definitive PDF canvas
@@ -372,7 +373,10 @@ class PDFGenerator(ReportGenerator):
             widget.fields['report_author'] = self.report.author
 
         # Calls the before_print event
-        widget.do_before_print(generator=self)
+        try:
+            widget.do_before_print(generator=self)
+        except AbortEvent:
+            return
 
         # Exits if is not visible
         if not widget.visible:
@@ -405,7 +409,10 @@ class PDFGenerator(ReportGenerator):
         canvas = canvas or self.canvas
 
         # Calls the before_print event
-        graphic.do_before_print(generator=self)
+        try:
+            graphic.do_before_print(generator=self)
+        except AbortEvent:
+            return
 
         # Exits if is not visible
         if not graphic.visible:

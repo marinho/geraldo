@@ -514,15 +514,17 @@ class Report(BaseReport):
 class SubReport(BaseReport):
     """Class to be used for subreport objects. It doesn't need to be inherited.
     
-    'queryset_string' must be a string with path for Python compatible queryset.
+    - 'queryset_string' must be a string with path for Python compatible queryset.
+    - 'get_queryset' is an optional lambda attribute can be used in replacement to
+      queryset_string to make more dynamic querysets
     
     Examples:
     
         * '%(object)s.user_permissions.all()'
         * '%(object)s.groups.all()'
         * 'Message.objects.filter(user=%(object)s)'
-        * 'Message.objects.filter(user__id=%(object)s.id)'
-    """
+        * 'Message.objects.filter(user__id=%(object)s.id)'"""
+
     _queryset_string = None
     _parent_object = None
     _queryset = None
@@ -532,6 +534,8 @@ class SubReport(BaseReport):
     band_footer = None
 
     visible = True
+
+    get_queryset = None # This must be a lambda function
 
     def __init__(self, **kwargs):
         for k,v in kwargs.items():
@@ -552,16 +556,22 @@ class SubReport(BaseReport):
             self.band_detail.is_detail = True
 
     def queryset(self):
-        if not self._queryset and self.parent_object and self.queryset_string:
-            # Replaces the string representer to a local variable identifier
-            queryset_string = self.queryset_string%{
+        if not self._queryset:
+            # Lambda function
+            if self.get_queryset:
+                self._queryset = self.get_queryset(self, self.parent_object)
+
+            # Queryset string
+            elif self.parent_object and self.queryset_string:
+                # Replaces the string representer to a local variable identifier
+                queryset_string = self.queryset_string%{
                     'object': 'parent_object',  # TODO: Remove in future
                     'parent': 'parent_object',
                     'p': 'parent_object', # Just a short alias
                     }
 
-            # Loads the queryset from string
-            self._queryset = eval(
+                # Loads the queryset from string
+                self._queryset = eval(
                     queryset_string,
                     {'parent_object': self.parent_object},
                     )
@@ -631,6 +641,10 @@ class ReportBand(GeraldoObject):
     default_style = None
     auto_expand_height = False
     is_detail = False
+    
+    # Events (don't make a method with their names, override 'do_*' instead)
+    before_print = None
+    after_print = None
 
     def __init__(self, **kwargs):
         for k,v in kwargs.items():
@@ -698,6 +712,15 @@ class ReportBand(GeraldoObject):
             for v in self.borders.values():
                 if isinstance(v, GeraldoObject):
                     v.parent = self
+
+    # Events methods
+    def do_before_print(self, generator):
+        if self.before_print:
+            self.before_print(self, generator)
+
+    def do_after_print(self, generator):
+        if self.after_print:
+            self.after_print(self, generator)
 
 class DetailBand(ReportBand):
     """You should use this class instead of ReportBand in detail bands.

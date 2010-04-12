@@ -6,6 +6,7 @@ from geraldo.utils import get_attr_value, calculate_size
 from geraldo.widgets import Widget, Label, SystemField
 from geraldo.graphics import Graphic, RoundRect, Rect, Line, Circle, Arc,\
         Ellipse, Image
+from geraldo.exceptions import AbortEvent
 
 # In development
 
@@ -209,7 +210,10 @@ class TextGenerator(ReportGenerator):
         """Renders a widget element on canvas"""
 
         # Calls the before_print event
-        widget.do_before_print(generator=self)
+        try:
+            widget.do_before_print(generator=self)
+        except AbortEvent:
+            return
 
         # Exits if is not visible
         if not widget.visible:

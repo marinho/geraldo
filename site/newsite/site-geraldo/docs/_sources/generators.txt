@@ -18,6 +18,11 @@ library 'ReportLab' to create them.
 
 **Attributes:**
 
+- **first_page_number** - Default: 1
+
+    Set a different number to this attribute if you want to start page counting from
+    a customized number.
+
 - **filename** - Default: None
 
     You have to provide the filename you are creating, unless you provided the
