@@ -505,4 +505,3 @@ class PDFGenerator(ReportGenerator):
 
         for font_name, font_file in self.report.additional_fonts.items():
             pdfmetrics.registerFont(TTFont(font_name, font_file))
-

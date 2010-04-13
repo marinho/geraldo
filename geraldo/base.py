@@ -319,7 +319,7 @@ class BaseReport(GeraldoObject):
 
     def do_on_new_page(self, page, page_number, generator):
         if self.on_new_page:
-            self.on_new_page(self, page, page_number, generator)
+            self.on_new_page(page, page_number, generator)
 
     def get_variable_value(self, name, system_fields):
         """Returns the value for a given variable name"""
