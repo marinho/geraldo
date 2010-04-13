@@ -174,6 +174,18 @@ class ReportGenerator(GeraldoObject):
                 'height': self.calculate_size(band.height),
                 }
         return band_rect
+ 
+    def make_widget_rect(self, widget, band_rect):
+        """Returns the right widget rect on the PDF canvas"""
+        widget_rect = {
+                'left': band_rect['left'] + calculate_size(widget.left),
+                'top': band_rect['top'] - calculate_size(widget.top),
+                'right': band_rect['left'] + calculate_size(widget.left) + calculate_size(widget.width),
+                'bottom': band_rect['top'] - calculate_size(widget.top) + calculate_size(widget.height),
+                'height': calculate_size(widget.height),
+                'width': calculate_size(widget.width),
+                }
+        return widget_rect
 
     def render_element(self, element, current_object, band, band_rect, temp_top,
             top_position):
@@ -194,6 +206,9 @@ class ReportGenerator(GeraldoObject):
             widget.report = self.report # This should be done by a metaclass in Band domain TODO
             widget.band = band # This should be done by a metaclass in Band domain TODO
             widget.page = self._rendered_pages[-1]
+
+            # Border rect
+            widget_rect = self.make_widget_rect(widget, band_rect)
 
             if isinstance(widget, SystemField):
                 widget.left = band_rect['left'] + self.calculate_size(widget.left)
@@ -228,6 +243,9 @@ class ReportGenerator(GeraldoObject):
                 self._highest_height = temp_height
 
             self._rendered_pages[-1].add_element(widget)
+
+            # Borders
+            self.render_border(widget.borders or {}, widget_rect)
 
         # Graphic element
         elif isinstance(element, Graphic):
@@ -528,7 +546,7 @@ class ReportGenerator(GeraldoObject):
                 if not first_object_on_page:
                     # The current_object of the groups' footers is the previous 
                     # object, so we have access, in groups' footers, to the last
-                    # object before the group breaking XXX
+                    # object before the group breaking
                     self._current_object = objects[self._current_object_index-1]
                     self.render_groups_footers()
                     self._current_object = objects[self._current_object_index]

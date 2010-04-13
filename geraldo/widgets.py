@@ -27,6 +27,7 @@ class Widget(Element):
     report = None
     generator = None
     band = None
+    borders = None
 
     def __init__(self, **kwargs):
         """This initializer is prepared to set arguments informed as attribute
@@ -45,6 +46,7 @@ class Widget(Element):
         new.report = self.report
         new.generator = self.generator
         new.band = self.band
+        new.borders = self.borders
 
         return new
 
