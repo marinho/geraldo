@@ -116,8 +116,8 @@ class ReportGenerator(GeraldoObject):
         if b_left:
             graphic = isinstance(b_left, Graphic) and b_left or Line()
             graphic.set_rect(
-                    left=rect_dict['left'], top=rect_dict['top'],
-                    right=rect_dict['left'], bottom=rect_dict['bottom']
+                    left=rect_dict['left'], top=rect_dict['top'] - rect_dict['height'],
+                    right=rect_dict['left'], height=rect_dict['height']
                     )
             # If border is a number, it is recognized as the stroke width
             if isinstance(b_left, (int, float)):
@@ -129,8 +129,8 @@ class ReportGenerator(GeraldoObject):
         if b_top:
             graphic = isinstance(b_top, Graphic) and b_top or Line()
             graphic.set_rect(
-                    left=rect_dict['left'], top=rect_dict['top'],
-                    right=rect_dict['right'], bottom=rect_dict['top']
+                    left=rect_dict['left'], top=rect_dict['top'] - rect_dict['height'],
+                    right=rect_dict['right'], bottom=rect_dict['top'] - rect_dict['height']
                     )
             # If border is a number, it is recognized as the stroke width
             if isinstance(b_top, (int, float)):
@@ -142,8 +142,8 @@ class ReportGenerator(GeraldoObject):
         if b_right:
             graphic = isinstance(b_right, Graphic) and b_right or Line()
             graphic.set_rect(
-                    left=rect_dict['right'], top=rect_dict['top'],
-                    right=rect_dict['right'], bottom=rect_dict['bottom']
+                    left=rect_dict['right'], top=rect_dict['top'] - rect_dict['height'],
+                    right=rect_dict['right'], height=rect_dict['height']
                     )
             # If border is a number, it is recognized as the stroke width
             if isinstance(b_right, (int, float)):
@@ -155,8 +155,8 @@ class ReportGenerator(GeraldoObject):
         if b_bottom:
             graphic = isinstance(b_right, Graphic) and b_right or Line()
             graphic.set_rect(
-                    left=rect_dict['left'], top=rect_dict['bottom'],
-                    right=rect_dict['right'], bottom=rect_dict['bottom']
+                    left=rect_dict['left'], top=rect_dict['top'],
+                    right=rect_dict['right'], bottom=rect_dict['top']
                     )
             # If border is a number, it is recognized as the stroke width
             if isinstance(b_bottom, (int, float)):
@@ -207,8 +207,11 @@ class ReportGenerator(GeraldoObject):
             widget.band = band # This should be done by a metaclass in Band domain TODO
             widget.page = self._rendered_pages[-1]
 
-            # Border rect
-            widget_rect = self.make_widget_rect(widget, band_rect)
+            # Changes the widget size according to padding                                 
+            widget.left += self.calculate_size(widget.padding_left)
+            widget.top += self.calculate_size(widget.padding_top)
+            widget.width -= self.calculate_size(widget.padding_left) + self.calculate_size(widget.padding_right)
+            widget.height -= self.calculate_size(widget.padding_top) + self.calculate_size(widget.padding_bottom)
 
             if isinstance(widget, SystemField):
                 widget.left = band_rect['left'] + self.calculate_size(widget.left)
@@ -243,9 +246,6 @@ class ReportGenerator(GeraldoObject):
                 self._highest_height = temp_height
 
             self._rendered_pages[-1].add_element(widget)
-
-            # Borders
-            self.render_border(widget.borders or {}, widget_rect)
 
         # Graphic element
         elif isinstance(element, Graphic):
@@ -318,7 +318,6 @@ class ReportGenerator(GeraldoObject):
             for el in element.get_elements():
                 self.render_element(el, current_object, band, band_rect, temp_top, top_position)
 
-
     def render_band(self, band, top_position=None, left_position=None,
             update_top=True, current_object=None):
         """Generate a band having the current top position or informed as its
@@ -368,6 +367,24 @@ class ReportGenerator(GeraldoObject):
         for element in band.elements:
             self.render_element(element, current_object, band, band_rect, temp_top,
                     top_position)
+
+
+        # Loop at band widgets to draw their borders
+        # This needs to be here, so we know the highest_height of them all
+        for element in band.elements:
+            # Doesn't render not visible element
+            if not element.visible:
+                continue
+
+            # Widget element
+            if isinstance(element, Widget):
+                widget = element.clone()
+                # Renders the widget borders                                                   
+                if band.auto_expand_height:
+                        widget.height = self._highest_height
+                        
+                widget_rect = self.make_widget_rect(widget, band_rect)                         
+                self.render_border(widget.borders or {}, widget_rect)
 
         # Updates top position
         if update_top:

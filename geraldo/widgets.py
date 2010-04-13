@@ -28,6 +28,10 @@ class Widget(Element):
     generator = None
     band = None
     borders = None
+    padding_top = 0
+    padding_bottom = 0
+    padding_left = 0
+    padding_right = 0
 
     def __init__(self, **kwargs):
         """This initializer is prepared to set arguments informed as attribute
@@ -47,6 +51,10 @@ class Widget(Element):
         new.generator = self.generator
         new.band = self.band
         new.borders = self.borders
+        new.padding_top = self.padding_top
+        new.padding_bottom = self.padding_bottom
+        new.padding_left = self.padding_left
+        new.padding_right = self.padding_right
 
         return new
 
