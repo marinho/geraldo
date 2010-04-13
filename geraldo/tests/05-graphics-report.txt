@@ -38,9 +38,9 @@ Report class
     ...                 start_angle=150, extent=100),
     ...             Ellipse(left=1*cm, top=6.0*cm, right=4.5*cm, bottom=8*cm,
     ...                 fill_color=blue, fill=True, stroke_width=3),
-    ...             Image(left=10*cm, top=6*cm, width=4*cm, height=5.12*cm,
+    ...             Image(left=10*cm, top=8*cm, width=4*cm, height=5.12*cm,
     ...                 filename=os.path.join(cur_dir, 'photo.jpg')),
-    ...             Image(left=13*cm, top=6*cm,
+    ...             Image(left=13*cm, top=8*cm,
     ...                 filename=os.path.join(cur_dir, 'photo.jpg')),
     ...             #Poligon(), # --> uses drawPath
     ...             Label(text="""<b>William Shakespeare</b> (baptised 26 April 1564 – 23 April 1616)[a] was an English poet and playwright, widely regarded as the greatest writer in the English language and the world's preeminent dramatist.""",
@@ -48,6 +48,11 @@ Report class
     ...                 style={'wordWrap': True, 'borderWidth': 1,
     ...                     'borderColor': green, 'borderPadding': 4,
     ...                     'borderRadius': 2, 'alignment': TA_JUSTIFY}),
+    ...             Rect(left=12*cm, top=5*cm, width=6*cm, height=2*cm, 
+    ...                 fill=True, stroke=False, fill_color=yellow),
+    ...             Label(text="Box with outside border",
+    ...                 left=12*cm, top=5*cm, width=6*cm, height=2*cm, 
+    ...                 borders={'all': True}),
     ...         ]
     ... 
     ...     class band_page_header(ReportBand):

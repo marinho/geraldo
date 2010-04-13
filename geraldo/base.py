@@ -633,8 +633,7 @@ class ReportBand(GeraldoObject):
     height = 1*cm
     width = None # Useful only on detail bands
     visible = True
-    borders = {'top': None, 'right': None, 'bottom': None, 'left': None,
-            'all': None}
+    borders = {'top': None, 'right': None, 'bottom': None, 'left': None, 'all': None}
     elements = None
     child_bands = None
     force_new_page = False

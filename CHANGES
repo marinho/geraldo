@@ -1,3 +1,8 @@
+2010-04-11: Version 0.4-alpha-28
+--------------------------------
+* Fixed ObjectValue when run a circular reference with expressions like 'name.upper'
+* Implemented widget borders, useful for outside text borders (thanks to Ari Caldeira)
+
 2010-04-11: Version 0.4-alpha-27
 --------------------------------
 * Fixed charts on summarize

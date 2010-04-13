@@ -27,6 +27,7 @@ class Widget(Element):
     report = None
     generator = None
     band = None
+    borders = None
 
     def __init__(self, **kwargs):
         """This initializer is prepared to set arguments informed as attribute
@@ -45,6 +46,7 @@ class Widget(Element):
         new.report = self.report
         new.generator = self.generator
         new.band = self.band
+        new.borders = self.borders
 
         return new
 
@@ -79,7 +81,7 @@ class Label(Widget):
         return new
 
 EXP_QUOTED = re.compile('\(([^\'"].+?[^\'"])\)')
-EXP_TOKENS = re.compile('(\W+|\*\*|\+|\-|\*|\/)')
+EXP_TOKENS = re.compile('([\w\._]+|\*\*|\+|\-|\*|\/)')
 
 class ObjectValue(Label):
     """This shows the value from a method, field or property from objects got
@@ -132,6 +134,7 @@ class ObjectValue(Label):
 
         # Checks this is an expression
         tokens = EXP_TOKENS.split(attribute_name)
+        tokens = filter(bool, tokens) # Cleans empty parts
         if len(tokens) > 1:
             values = {}
             for token in tokens:
