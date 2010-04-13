@@ -79,7 +79,7 @@ class Label(Widget):
         return new
 
 EXP_QUOTED = re.compile('\(([^\'"].+?[^\'"])\)')
-EXP_TOKENS = re.compile('(\W+|\*\*|\+|\-|\*|\/)')
+EXP_TOKENS = re.compile('([\w\._]+|\*\*|\+|\-|\*|\/)')
 
 class ObjectValue(Label):
     """This shows the value from a method, field or property from objects got
@@ -132,6 +132,7 @@ class ObjectValue(Label):
 
         # Checks this is an expression
         tokens = EXP_TOKENS.split(attribute_name)
+        tokens = filter(bool, tokens) # Cleans empty parts
         if len(tokens) > 1:
             values = {}
             for token in tokens:
