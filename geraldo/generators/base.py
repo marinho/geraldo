@@ -237,9 +237,9 @@ class ReportGenerator(GeraldoObject):
                     widget.left = band_rect['left'] + self.calculate_size(widget.left)
                     widget.top = self.calculate_top(temp_top, self.calculate_size(widget.top), self.calculate_size(para.height))
 
-                temp_height = self.calculate_size(element.top) + self.calculate_size(para.height)
+                temp_height = self.calculate_size(element.top) + self.calculate_size(para.height) + self.calculate_size(element.padding_bottom)
             else:
-                temp_height = self.calculate_size(element.top) + self.calculate_size(widget.height)
+                temp_height = self.calculate_size(element.top) + self.calculate_size(element.height)
 
             # Sets element height as the highest
             if temp_height > self._highest_height:
@@ -367,7 +367,6 @@ class ReportGenerator(GeraldoObject):
         for element in band.elements:
             self.render_element(element, current_object, band, band_rect, temp_top,
                     top_position)
-
 
         # Loop at band widgets to draw their borders
         # This needs to be here, so we know the highest_height of them all
@@ -528,6 +527,10 @@ class ReportGenerator(GeraldoObject):
         self._current_page_number = self.report.first_page_number
         self._current_object_index = 0
         objects = self.report.get_objects_list()
+        
+        # Sets the current object, so it can be used in header band
+        if len(objects):
+            self._current_object = objects[self._current_object_index]
 
         # just an alias to make it shorter
         d_band = self.report.band_detail
