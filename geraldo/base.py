@@ -215,9 +215,8 @@ class BaseReport(GeraldoObject):
             self.band_detail.is_detail = True
 
         # Groups
-        if self.groups:
-            groups = self.groups
-            self.groups = [isinstance(group, ReportGroup) and group or group() for group in groups]
+        groups = self.groups
+        self.groups = [isinstance(group, ReportGroup) and group or group() for group in groups]
 
     def get_objects_list(self):
         """Returns the list with objects to be rendered.
@@ -557,6 +556,22 @@ class SubReport(BaseReport):
 
         # Sets detail band
         if self.band_detail:
+            self.band_detail.is_detail = True
+
+    def transform_classes_to_objects(self):
+        """Finds all band classes in the report and instantiante them. This
+        is important to have a safety on separe inherited reports each one
+        from other."""
+
+        # Basic bands
+        if self.band_header and not isinstance(self.band_header, ReportBand):
+            self.band_header = self.band_header()
+
+        if self.band_footer and not isinstance(self.band_footer, ReportBand):
+            self.band_footer = self.band_footer()
+
+        if self.band_detail and not isinstance(self.band_detail, ReportBand):
+            self.band_detail = self.band_detail()
             self.band_detail.is_detail = True
 
     def queryset(self):
