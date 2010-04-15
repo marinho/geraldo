@@ -5,7 +5,7 @@ from geraldo.widgets import Widget, Label, SystemField
 from geraldo.graphics import Graphic, RoundRect, Rect, Line, Circle, Arc,\
         Ellipse, Image
 from geraldo.barcodes import BarCode
-from geraldo.base import GeraldoObject, ManyElements
+from geraldo.base import GeraldoObject, ManyElements, SubReport
 from geraldo.cache import CACHE_BY_QUERYSET, CACHE_BY_RENDER, CACHE_DISABLED,\
         make_hash_key, get_cache_backend
 from geraldo.charts import BaseChart
@@ -317,6 +317,10 @@ class ReportGenerator(GeraldoObject):
             # Get the elements and render them
             for el in element.get_elements():
                 self.render_element(el, current_object, band, band_rect, temp_top, top_position)
+                
+        # Subreports
+        elif isinstance(element, SubReport):
+            self.render_subreports([element])
 
     def render_band(self, band, top_position=None, left_position=None,
             update_top=True, current_object=None):
@@ -829,7 +833,7 @@ class ReportGenerator(GeraldoObject):
 
     # SubReports
 
-    def render_subreports(self):
+    def render_subreports(self, subreports=None):
         """Renders subreports bands for the current object in, usings its
         own queryset.
         
@@ -842,7 +846,10 @@ class ReportGenerator(GeraldoObject):
                 self.render_page_footer()
                 self.force_new_page(insert_new_page=False)
 
-        for subreport in self.report.subreports:
+        subreports = subreports or self.report.subreports or []
+
+        #for subreport in self.report.subreports:
+        for subreport in subreports:
             # Subreports must have detail band
             if not subreport.band_detail or not subreport.visible:
                 continue

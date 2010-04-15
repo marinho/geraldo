@@ -113,4 +113,3 @@ class BarCode(Graphic):
         self._width = value
 
     width = property(_get_width, _set_width)
-

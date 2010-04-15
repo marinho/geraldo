@@ -215,8 +215,9 @@ class BaseReport(GeraldoObject):
             self.band_detail.is_detail = True
 
         # Groups
-        groups = self.groups
-        self.groups = [isinstance(group, ReportGroup) and group or group() for group in groups]
+        if self.groups:
+            groups = self.groups
+            self.groups = [isinstance(group, ReportGroup) and group or group() for group in groups]
 
     def get_objects_list(self):
         """Returns the list with objects to be rendered.
@@ -547,6 +548,9 @@ class SubReport(BaseReport):
                 warnings.warn("Attribute 'detail_band' in SubReport class is deprecated. Use 'band_detail' as well.")
 
             setattr(self, k, v)
+
+        # Transforms band classes to band objects
+        self.transform_classes_to_objects()
 
         # Calls the method that set this as parent if their children
         self.set_parent_on_children()
