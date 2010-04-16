@@ -1,3 +1,8 @@
+2010-04-16: Version 0.4-alpha-29
+--------------------------------
+* Fixed on_new_page to support real current page number, instead of internal number (thanks to Ari Caldeira)
+* Created a new test with all kinds of page number variations are possible
+
 2010-04-11: Version 0.4-alpha-28
 --------------------------------
 * Fixed ObjectValue when run a circular reference with expressions like 'name.upper'
