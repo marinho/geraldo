@@ -9,7 +9,6 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.fonts import addMapping
 
-
 try:
     # Try to import pyPdf, a library to combine lots of PDF files
     # at once. It is important to improve Geraldo's performance
@@ -505,7 +504,22 @@ class PDFGenerator(ReportGenerator):
         if not self.report.additional_fonts:
             return
 
-        for font_family_name, fonts in self.report.additional_fonts.iteritems():
-            for font_name, font_file, is_bold, is_italic in fonts:
-                pdfmetrics.registerFont(TTFont(font_name, font_file))
-                addMapping(font_family_name, is_bold, is_italic, font_name)
+        for font_family_name, fonts_or_file in self.report.additional_fonts.iteritems():
+            # Supports font family with many styles (i.e: normal, italic, bold, bold-italic, etc.)
+            if isinstance(fonts_or_file, (list, tuple, dict)):
+                for font_item in fonts_or_file:
+                    # List of tuples with format like ('font-name', 'font-file', True/False bold, True/False italic)
+                    if isinstance(font_item, (list, tuple)):
+                        font_name, font_file, is_bold, is_italic = font_item
+                        pdfmetrics.registerFont(TTFont(font_name, font_file))
+                        addMapping(font_family_name, is_bold, is_italic, font_name)
+
+                    # List of dicts with format like {'file': '', 'name': '', 'bold': False, 'italic': False}
+                    elif isinstance(font_item, dict):
+                        pdfmetrics.registerFont(TTFont(font_item['name'], font_item['file']))
+                        addMapping(font_family_name, font_item.get('bold', False),
+                                font_item.get('italic', False), font_item['name'])
+
+            # Old style: font name and file path
+            else:
+                pdfmetrics.registerFont(TTFont(font_family_name, fonts_or_file))

@@ -54,7 +54,8 @@ class ReportGenerator(GeraldoObject):
     _is_latest_page = True
     _current_top_position = 0
     _current_left_position = 0
-    _current_page_number = 1
+    _current_page_number = 1 # This variable is just used for generating, so, keep in mind it
+                             # has't the current number while rendering
     _current_object = None
     _current_queryset = None
     _generation_datetime = None
@@ -552,7 +553,7 @@ class ReportGenerator(GeraldoObject):
             first_object_on_page = True
 
             # Generate the report begin band
-            if self._current_page_number == 1:
+            if self._is_first_page:
                 self.render_begin()
 
             # Does generate objects if there is no details band
@@ -631,11 +632,11 @@ class ReportGenerator(GeraldoObject):
         """Do everything necessary to be done to start a new page"""
         self.append_new_page()
 
-        page        = self._rendered_pages[-1]
-        page_number = len(self._rendered_pages) + self.report.first_page_number - 1
-        generator   = self
-
-        self.report.do_on_new_page(page, page_number, generator)
+        self.report.do_on_new_page(
+                page=self._rendered_pages[-1],
+                page_number=len(self._rendered_pages) + self.first_page_number - 1,
+                generator=self,
+                )
 
         if with_header:
             self.render_page_header()

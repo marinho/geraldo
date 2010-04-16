@@ -1,0 +1,84 @@
+MANAGING PAGE NUMBERS
+=====================
+
+Most of tests related to page numbers are spread on many test files, but this test is
+a way to test all variants of this at once doc.
+
+    >>> import os
+    >>> cur_dir = os.path.dirname(os.path.abspath(__file__))
+
+    >>> from geraldo import Report, ReportBand, DetailBand, SubReport, ReportGroup,\
+    ...     Label, ObjectValue, SystemField, BAND_WIDTH
+    >>> from geraldo.utils import cm, A6, TA_RIGHT, TA_LEFT
+    >>> from geraldo.generators import PDFGenerator
+
+Data to test
+------------
+
+    >>> numbers = [{'number': number} for number in range(100)]
+    >>> letters = [{'letter': chr(ch)} for ch in range(65,91)] + [{'letter': chr(ch)} for ch in range(97,123)]
+
+Case 1: a simple report
+-----------------------
+
+Simple page numbers starting from 1 (default)
+
+    >>> class PageNumbersCase1(Report):
+    ...     page_size = A6
+    ...     class band_detail(DetailBand):
+    ...         height = 0.5*cm
+    ...         elements = [ObjectValue(expression='number')]
+    ...     class band_page_header(ReportBand):
+    ...         height = 0.5*cm
+    ...         elements = [SystemField(width=BAND_WIDTH,
+    ...             expression='Page: %(page_number)s - Count: %(page_count)s - First: %(first_page_number)s - Last: %(last_page_number)s')]
+    ...         borders = {'bottom': True}
+
+    >>> report_numbers = PageNumbersCase1(queryset=numbers)
+
+    >>> report_numbers.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/page-numbers-case-1.pdf'))
+
+Case 2: starting from another number
+------------------------------------
+
+    >>> report_numbers.generate_by(
+    ...     PDFGenerator,
+    ...     filename=os.path.join(cur_dir, 'output/page-numbers-case-2.pdf'),
+    ...     first_page_number=8,
+    ... )
+
+Case 3: other report with front/back
+------------------------------------
+
+    >>> class PageNumbersCase3(Report):
+    ...     page_size = A6
+    ...     class band_detail(DetailBand):
+    ...         height = 0.5*cm
+    ...         elements = [ObjectValue(expression='letter')]
+    ...     class band_page_header(ReportBand):
+    ...         height = 0.5*cm
+    ...         elements = [SystemField(width=BAND_WIDTH, name='page-number',
+    ...             expression='P: %(page_number)s - C: %(page_count)s - F: %(first_page_number)s - L: %(last_page_number)s')]
+    ...         borders = {'bottom': True}
+
+    >>> report_letters = PageNumbersCase3(queryset=letters)
+
+Event "on new page" to place page number widget aligned to left or right
+
+    >>> def on_new_page(self, page, page_number, generator):
+    ...     if page_number % 2:
+    ...         self.find_by_name('page-number').style = {'alignment': TA_RIGHT}
+    ...     else:
+    ...         self.find_by_name('page-number').style = {'alignment': TA_LEFT}
+    >>> report_letters.on_new_page = on_new_page
+
+    >>> report_letters.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/page-numbers-case-3.pdf'))
+
+Case 4: two merged reports
+--------------------------
+
+    >>> pages = report_numbers.generate_by(PDFGenerator, return_pages=True)
+
+    >>> report_letters.generate_by(PDFGenerator, pages=pages,
+    ...     filename=os.path.join(cur_dir, 'output/page-numbers-case-4.pdf'))
+

@@ -15,10 +15,11 @@ and ReportLab.
 Report class
 
     >>> class SimpleListReport(Report):
-    ...     title = 'Report with additional fonts'
+    ...     title = 'Report with <b>additional fonts</b>'
     ...     additional_fonts = {
-    ...         'HandGotDLig': os.path.join(cur_dir, 'handgotl.ttf'),  # full path to font file
-    ...         'Footlight MT Light': os.path.join(cur_dir, 'ftltlt.ttf'),
+    ...         'Footlight MT Light': os.path.join(cur_dir, 'ftltlt.ttf'),  # full path to font file
+    ...         'HandGotDLig': ({'file': os.path.join(cur_dir, 'handgotl.ttf'), 'name': 'HandGotDLig'},
+    ...                         {'file': os.path.join(cur_dir, 'handgotb.ttf'), 'name': 'HandGotDBold', 'bold': True}),
     ...     }
     ...     default_style = {'fontName': 'Footlight MT Light'}
     ... 
