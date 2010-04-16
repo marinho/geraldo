@@ -172,7 +172,7 @@ class BaseReport(GeraldoObject):
     default_fill_color = black
     borders = None
     
-    # Events (don't make a method with their names, override 'do_*' instead)
+    # Events - can be either a method or a regular function
     before_print = None         # |     before render
     before_generate = None      # |     after render / before generate
     after_print = None          # V     after generate
@@ -304,22 +304,34 @@ class BaseReport(GeraldoObject):
         called from their children and on..."""
         raise AttributeNotFound
 
-    # Events methods
+    # Events - can be either a method or a regular function
     def do_before_print(self, generator):
         if self.before_print:
-            self.before_print(self, generator)
+            if type(self.before_print) == types.MethodType:
+                self.before_print(generator)
+            else:
+                self.before_print(self, generator)
 
     def do_before_generate(self, generator):
         if self.before_generate:
-            self.before_generate(self, generator)
+            if type(self.before_generate) == types.MethodType:
+                self.before_generate(generator)
+            else:
+                self.before_generate(self, generator)
 
     def do_after_print(self, generator):
         if self.after_print:
-            self.after_print(self, generator)
+            if type(self.after_print) == types.MethodType:
+                self.after_print(generator)
+            else:
+                self.after_print(self, generator)
 
     def do_on_new_page(self, page, page_number, generator):
         if self.on_new_page:
-            self.on_new_page(page, page_number, generator)
+            if type(self.on_new_page) == types.MethodType:
+                self.on_new_page(page, page_number, generator)
+            else:
+                self.on_new_page(self, page, page_number, generator)
 
     def get_variable_value(self, name, system_fields):
         """Returns the value for a given variable name"""
@@ -660,7 +672,7 @@ class ReportBand(GeraldoObject):
     auto_expand_height = False
     is_detail = False
     
-    # Events (don't make a method with their names, override 'do_*' instead)
+    # Events - can be either a method or a regular function
     before_print = None
     after_print = None
 
@@ -734,11 +746,18 @@ class ReportBand(GeraldoObject):
     # Events methods
     def do_before_print(self, generator):
         if self.before_print:
-            self.before_print(self, generator)
+            if type(self.before_print) == types.MethodType:
+                self.before_print(generator)
+            else:
+                self.before_print(self, generator)
 
     def do_after_print(self, generator):
         if self.after_print:
-            self.after_print(self, generator)
+            if type(self.after_print) == types.MethodType:
+                self.after_print(generator)
+            else:
+                self.after_print(self, generator)
+
 
 class DetailBand(ReportBand):
     """You should use this class instead of ReportBand in detail bands.
@@ -814,7 +833,7 @@ class Element(GeraldoObject):
     _height = 0
     visible = True
     
-    # Events (don't make a method with their names, override 'do_*' instead)
+    # Events - can be either a method or a regular function
     before_print = None
     after_print = None
 
@@ -900,11 +919,17 @@ class Element(GeraldoObject):
     # Events methods
     def do_before_print(self, generator):
         if self.before_print:
-            self.before_print(self, generator)
+            if type(self.before_print) == types.MethodType:
+                self.before_print(generator)
+            else:
+                self.before_print(self, generator)
 
     def do_after_print(self, generator):
         if self.after_print:
-            self.after_print(self, generator)
+            if type(self.after_print) == types.MethodType:
+                self.after_print(generator)
+            else:
+                self.after_print(self, generator)
 
     _repr_for_cache_attrs = ('left','top','height','width','visible')
     def repr_for_cache_hash_key(self):
