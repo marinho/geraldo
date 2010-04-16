@@ -7,6 +7,8 @@ from reportlab.platypus import Paragraph, KeepInFrame
 from reportlab.lib.units import cm
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.lib.fonts import addMapping
+
 
 try:
     # Try to import pyPdf, a library to combine lots of PDF files
