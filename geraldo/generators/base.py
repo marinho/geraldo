@@ -529,7 +529,7 @@ class ReportGenerator(GeraldoObject):
             first_object_on_page = True
 
             # Generate the report begin band
-            if self._is_first_page: #_current_page_number == 1: XXX
+            if self._is_first_page:
                 self.render_begin()
 
             # Does generate objects if there is no details band

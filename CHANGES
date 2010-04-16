@@ -2,6 +2,7 @@
 --------------------------------
 * Fixed on_new_page to support real current page number, instead of internal number (thanks to Ari Caldeira)
 * Created a new test with all kinds of page number variations are possible
+* Additional fonts support to font families
 
 2010-04-11: Version 0.4-alpha-28
 --------------------------------
