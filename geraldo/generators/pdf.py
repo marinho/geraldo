@@ -503,5 +503,7 @@ class PDFGenerator(ReportGenerator):
         if not self.report.additional_fonts:
             return
 
-        for font_name, font_file in self.report.additional_fonts.items():
-            pdfmetrics.registerFont(TTFont(font_name, font_file))
+        for font_family_name, fonts in self.report.additional_fonts.iteritems():
+            for font_name, font_file, is_bold, is_italic in fonts:
+                pdfmetrics.registerFont(TTFont(font_name, font_file))
+                addMapping(font_family_name, is_bold, is_italic, font_name)
