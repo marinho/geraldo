@@ -123,7 +123,11 @@ class ObjectValue(Label):
 
         while True:
             f = EXP_QUOTED.findall(self.expression)
-            if not f: break
+            if not f:
+                # Replace simple attribute name or method to value("")
+                if '(' not in self.expression:
+                    self.expression = 'value("%s")' % self.expression
+                break
 
             self.expression = EXP_QUOTED.sub('("%s")'%(f[0]), self.expression, 1)
 
@@ -258,6 +262,7 @@ class ObjectValue(Label):
             global_vars = self.instance.__dict__
 
         global_vars.update({
+            'value': self.action_value,
             'count': self.action_count,
             'avg': self.action_avg,
             'min': self.action_min,

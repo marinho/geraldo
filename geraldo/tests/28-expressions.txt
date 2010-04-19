@@ -66,13 +66,14 @@ Report class
     ...         height = 0.7*cm
     ...         elements = [
     ...             ObjectValue(attribute_name='name'),
-    ...             ObjectValue(expression='age,', left=2*cm),
+    ...             ObjectValue(expression='age', left=2*cm),
     ...             ObjectValue(expression='weight', left=3.5*cm),
     ...             ObjectValue(expression='age * weight', left=5*cm),
     ...             ObjectValue(expression='age**2', left=6.5*cm),
-    ...             ObjectValue(attribute_name='name.upper', left=8*cm),
+    ...             ObjectValue(expression='name.upper', left=8*cm),
     ...             #ObjectValue(expression='name.upper[:3]', left=8*cm), TODO
     ...             ObjectValue(expression='age * weight ** 2', left=10.5*cm),
+    ...             ObjectValue(expression='name', left=12*cm, get_value=lambda self, inst: 'X'),
     ...         ]
     ... 
     ...     class band_summary(DetailBand):
