@@ -13,6 +13,10 @@ Report
  - after_print          # V     after generate
  - on_new_page
 
+ReportBand
+ - before_print
+ - after_print
+
 Element (widgets, graphics, etc.)
  - before_print
  - after_print
