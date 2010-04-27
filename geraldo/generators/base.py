@@ -408,6 +408,9 @@ class ReportGenerator(GeraldoObject):
         makes a new page if necessary"""
         if self.get_available_height() < height:
             self.force_new_page()
+            return True
+        
+        return False
 
     def append_new_page(self):
         self._rendered_pages.append(ReportPage())
@@ -753,12 +756,20 @@ class ReportGenerator(GeraldoObject):
         self._groups_working_values = self._groups_values
 
         # Loops on groups to render changed ones
+        new_page = False
         for group in self.report.groups:
-            if self._groups_changed.get(group, None) and\
-               group.band_header and\
-               group.band_header.visible:
-                self.force_blank_page_by_height(self.calculate_size(group.band_header.height))
-                self.render_band(group.band_header)
+            if self._groups_changed.get(group, None):
+                # If there is no space for group header band, forces a new page
+                if group.band_header and group.band_header.visible:
+                    new_page = self.force_blank_page_by_height(self.calculate_size(group.band_header.height))
+
+                # Forces a new page if this group is defined to do it
+                if not new_page and group.force_new_page and self._current_object_index > 0:
+                    self.force_new_page(insert_new_page=False)
+
+                # Renders the group header band
+                if group.band_header and group.band_header.visible:
+                    self.render_band(group.band_header)
 
     def render_groups_footers(self, force=False):
         """Renders the report footers using previous 'changed' definition calculated by

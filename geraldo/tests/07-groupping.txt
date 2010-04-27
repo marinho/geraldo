@@ -81,7 +81,10 @@ Report class
     ...         ]
     ... 
     ...     groups = [
-    ...         ReportGroup(attribute_name='is_superuser', 
+    ...         ReportGroup(
+    ...             attribute_name='is_superuser', 
+    ...             force_new_page=True,
+    ...             name='first-group',
     ...             band_header=ReportBand(
     ...                 height=0.7*cm,
     ...                 elements=[
@@ -108,7 +111,8 @@ Report class
     ...                 borders={'top': True},
     ...             ),
     ...         ),
-    ...         ReportGroup(attribute_name='is_staff', 
+    ...         ReportGroup(
+    ...             attribute_name='is_staff', 
     ...             band_header=ReportBand(
     ...                 height=0.7*cm,
     ...                 elements=[
@@ -151,6 +155,7 @@ PDF common generation with users
 
 Page with half height
 
+    >>> report.find_by_name('first-group').force_new_page = False
     >>> report.page_size = (A4[0], A4[1] / 2)
     >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/groupping-report-half-height.pdf'))
 

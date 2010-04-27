@@ -1,5 +1,0 @@
-LOCAL = True
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
-PROJECT_ROOT_URL = 'http://localhost:8000/'
-

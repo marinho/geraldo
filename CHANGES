@@ -1,3 +1,9 @@
+2010-04-27: Version 0.4.1-stable
+--------------------------------
+* Implementing ReportGroup to support 'force_new_page' to force a new page for each new
+  item on the groupper.
+* Implementing new function for expression 'coalesce' to set a default value.
+
 2010-04-18: Version 0.4-beta
 --------------------------------
 * Just releasing 0.4-beta

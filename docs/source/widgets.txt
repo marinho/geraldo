@@ -257,4 +257,10 @@ number, page count, etc.
         going to use two standards, this wouldn't be nice. If you want 
         to use Django's template filter, you can override the method
         **Report.format_date(date, expression)** and use it.
+    - %(var:VARIABLE_NAME)s - you can inform a variable here and declare it when
+      call generator, like the example below:
+
+        SystemField(expression='%(var:filter)s')
+        ...
+        report.generate_by(PDFGenerator, variables={'filter': 'My Filter'})
 

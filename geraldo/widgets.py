@@ -80,7 +80,7 @@ class Label(Widget):
 
         return new
 
-EXP_QUOTED = re.compile('\(([^\'"].+?[^\'"])\)')
+EXP_QUOTED = re.compile('\(([^\'"].+?[^\'"])(|,.*?)\)')
 EXP_TOKENS = re.compile('([\w\._]+|\*\*|\+|\-|\*|\/)')
 
 class ObjectValue(Label):
@@ -129,7 +129,7 @@ class ObjectValue(Label):
                     self.expression = 'value("%s")' % self.expression
                 break
 
-            self.expression = EXP_QUOTED.sub('("%s")'%(f[0]), self.expression, 1)
+            self.expression = EXP_QUOTED.sub('("%s"%s)'%(f[0][0], f[0][1]), self.expression, 1)
 
     def get_object_value(self, instance=None, attribute_name=None):
         """Return the attribute value for just an object"""
@@ -220,6 +220,10 @@ class ObjectValue(Label):
         values = filter(lambda v: v is not None, self.get_queryset_values(attribute_name))
         return len(set(values))
 
+    def action_coalesce(self, attribute_name=None, default=''):
+        value = self.get_object_value(attribute_name=attribute_name)
+        return value or unicode(default)
+
     def _text(self):
         if not self.stores_text_in_cache or self._cached_text is None:
             try: # Before all, tries to get the value using parent object
@@ -269,6 +273,7 @@ class ObjectValue(Label):
             'max': self.action_max,
             'sum': self.action_sum,
             'distinct_count': self.action_distinct_count,
+            'coalesce': self.action_coalesce,
             })
 
         if isinstance(self.report, SubReport):

@@ -749,6 +749,7 @@ class ReportGroup(GeraldoObject):
     attribute_name = None
     band_header = None
     band_footer = None
+    force_new_page = False
 
     def __init__(self, **kwargs):
         for k,v in kwargs.items():
