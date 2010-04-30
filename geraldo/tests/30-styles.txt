@@ -1,0 +1,39 @@
+STYLES
+======
+
+This test will be increased to support all kinds of report stylizing, including
+widgets and graphic styles and templating.
+
+    >>> import os
+    >>> cur_dir = os.path.dirname(os.path.abspath(__file__))
+
+    >>> from geraldo import Report, ReportBand, DetailBand, SubReport, ReportGroup,\
+    ...     Label, ObjectValue, SystemField, BAND_WIDTH
+    >>> from geraldo.utils import cm, A4, TA_RIGHT, TA_LEFT
+    >>> from geraldo.generators import PDFGenerator
+
+Data to test
+------------
+
+    >>> numbers = [{'number': number} for number in range(100)]
+    >>> letters = [{'letter': chr(ch)} for ch in range(65,91)] + [{'letter': chr(ch)} for ch in range(97,123)]
+
+A base report
+-------------
+
+Just a simple report to be inherited
+
+    >>> class BaseReport(Report):
+    ...     page_size = A4
+    ...     default_style = {'fontName': 'Helvetica'}
+
+    >>> class MyReport(BaseReport):
+    ...     default_style = {'fontSize': 6}
+    ...     class band_detail(DetailBand):
+    ...         height = 0.5*cm
+    ...         elements = [ObjectValue(expression='number')]
+
+    >>> report = MyReport(queryset=numbers)
+
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/testing-styles.pdf'))
+

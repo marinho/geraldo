@@ -1,3 +1,8 @@
+2010-04-29: Version 0.4.2-stable
+--------------------------------
+* Implemented support to merge default_style to inherite reports
+* Fixed ReportGroup.force_new_page that wasn't rendering page footer on the first page
+
 2010-04-27: Version 0.4.1-stable
 --------------------------------
 * Implementing ReportGroup to support 'force_new_page' to force a new page for each new

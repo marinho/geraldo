@@ -333,6 +333,17 @@ class ReportMetaclass(type):
     """This metaclass registers the declared classes to a local variable."""
     
     def __new__(cls, name, bases, attrs):
+        # Merges default_style with inherited report classes
+        if isinstance(attrs.get('default_style', None), dict):
+            default_style = {}
+
+            for base in bases:
+                if isinstance(getattr(base, 'default_style', None), dict):
+                    default_style.update(base.default_style)
+
+            default_style.update(attrs['default_style'])
+            attrs['default_style'] = default_style
+
         new_class = super(ReportMetaclass, cls).__new__(cls, name, bases, attrs)
 
         # Defines a registration ID
