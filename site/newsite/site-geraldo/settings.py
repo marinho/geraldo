@@ -21,7 +21,7 @@ ROOT_PATH = os.path.dirname(__file__)
 LOCAL = False
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
-PROJECT_ROOT_URL = 'http://geraldoreports.appspot.com/'
+PROJECT_ROOT_URL = 'http://www.geraldoreports.org/'
 
 ADMINS = (
     ('Marinho Brandao', 'marinho@gmail.com'),
