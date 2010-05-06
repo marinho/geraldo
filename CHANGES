@@ -1,3 +1,7 @@
+2010-05-06: Version 0.4.2-stable
+--------------------------------
+* Fixed cross reference matrix and expressions to avoid use existing object as dictionary
+
 2010-04-27: Version 0.4.1-stable
 --------------------------------
 * Implementing ReportGroup to support 'force_new_page' to force a new page for each new
