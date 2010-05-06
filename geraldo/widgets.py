@@ -136,6 +136,13 @@ class ObjectValue(Label):
         instance = instance or self.instance
         attribute_name = attribute_name or self.attribute_name
 
+        # Checks lambda and instance
+        if self.get_value and instance:
+            try:
+                return self.get_value(self, instance)
+            except TypeError:
+                return self.get_value(instance)
+
         # Checks this is an expression
         tokens = EXP_TOKENS.split(attribute_name)
         tokens = filter(bool, tokens) # Cleans empty parts
@@ -145,13 +152,6 @@ class ObjectValue(Label):
                 if not token in ('+','-','*','/','**') and not  token.isdigit():
                     values[token] = self.get_object_value(instance, token)
             return eval(attribute_name, values)
-
-        # Checks lambda and instance
-        if self.get_value and instance:
-            try:
-                return self.get_value(self, instance)
-            except TypeError:
-                return self.get_value(instance)
 
         # Gets value with function
         value = get_attr_value(instance, attribute_name)
@@ -235,7 +235,10 @@ class ObjectValue(Label):
                     value = getattr(self, 'action_'+self.action)()
 
             if self.get_text:
-                self._cached_text = unicode(self.get_text(self.instance, value))
+                try:
+                    self._cached_text = unicode(self.get_text(self, self.instance, value))
+                except TypeError:
+                    self._cached_text = unicode(self.get_text(self.instance, value))
             else:
                 self._cached_text = unicode(value)
             
@@ -261,9 +264,9 @@ class ObjectValue(Label):
         if not self.instance:
             global_vars = {}
         elif isinstance(self.instance, dict):
-            global_vars = self.instance
+            global_vars = self.instance.copy()
         else:
-            global_vars = self.instance.__dict__
+            global_vars = self.instance.__dict__.copy()
 
         global_vars.update({
             'value': self.action_value,
