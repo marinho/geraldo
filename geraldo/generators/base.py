@@ -765,6 +765,7 @@ class ReportGenerator(GeraldoObject):
 
                 # Forces a new page if this group is defined to do it
                 if not new_page and group.force_new_page and self._current_object_index > 0:
+                    self.render_page_footer()
                     self.force_new_page(insert_new_page=False)
 
                 # Renders the group header band
