@@ -80,7 +80,7 @@ class Label(Widget):
 
         return new
 
-EXP_QUOTED = re.compile('\(([^\'"].+?[^\'"])(|,.*?)\)')
+EXP_QUOTED = re.compile('\w\(([^\'"].+?[^\'"])(|,.*?)\)')
 EXP_TOKENS = re.compile('([\w\._]+|\*\*|\+|\-|\*|\/)')
 
 class ObjectValue(Label):
