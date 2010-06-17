@@ -1,3 +1,11 @@
+2010-06-17: Version 0.4.5-stable
+--------------------------------
+* Fixed expressions token replacing braces
+
+2010-06-17: Version 0.4.4-stable
+--------------------------------
+* Fixed bug on complex expressions with braces 
+
 2010-05-06: Version 0.4.3-stable
 --------------------------------
 * Fixed cross reference matrix and expressions to avoid use existing object as dictionary

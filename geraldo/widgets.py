@@ -81,6 +81,7 @@ class Label(Widget):
         return new
 
 EXP_QUOTED = re.compile('\w\(([^\'"].+?[^\'"])(|,.*?)\)')
+EXP_QUOTED_SUB = re.compile('\(([^\'"].+?[^\'"])(|,.*?)\)')
 EXP_TOKENS = re.compile('([\w\._]+|\*\*|\+|\-|\*|\/)')
 
 class ObjectValue(Label):
@@ -129,7 +130,7 @@ class ObjectValue(Label):
                     self.expression = 'value("%s")' % self.expression
                 break
 
-            self.expression = EXP_QUOTED.sub('("%s"%s)'%(f[0][0], f[0][1]), self.expression, 1)
+            self.expression = EXP_QUOTED_SUB.sub('("%s"%s)'%(f[0][0], f[0][1]), self.expression, 1)
 
     def get_object_value(self, instance=None, attribute_name=None):
         """Return the attribute value for just an object"""
