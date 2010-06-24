@@ -298,7 +298,7 @@ class ObjectValue(Label):
             if not callable(self.on_expression_error):
                 raise
 
-            return on_expression_error(self, e, expression, self.instance)
+            return self.on_expression_error(self, e, expression, self.instance)
 
 class SystemField(Label):
     """This shows system informations, like the report title, current date/time,
