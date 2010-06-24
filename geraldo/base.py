@@ -433,7 +433,6 @@ class Report(BaseReport):
         if not self.print_if_empty and not self.queryset:
             raise EmptyQueryset("This report doesn't accept empty queryset")
 
-        # TODO: use multiprocessing
         # Initialize generator instance
         generator = generator_class(self, *args, **kwargs)
 

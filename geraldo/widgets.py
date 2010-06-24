@@ -109,6 +109,11 @@ class ObjectValue(Label):
     converts_decimal_to_float = False
     converts_float_to_decimal = True
     _cached_text = None
+    on_expression_error = None # Expected arguments:
+                               #  - widget
+                               #  - instance
+                               #  - exception
+                               #  - expression
 
     def __init__(self, *args, **kwargs):
         super(ObjectValue, self).__init__(*args, **kwargs)
@@ -254,6 +259,7 @@ class ObjectValue(Label):
         new.objects = self.objects
         new.stores_text_in_cache = self.stores_text_in_cache
         new.expression = self.expression
+        new.on_expression_error = self.on_expression_error
 
         return new
 
@@ -286,7 +292,13 @@ class ObjectValue(Label):
                 'p': self.report.parent_object, # Just a short alias
                 })
 
-        return eval(expression, global_vars)
+        try:
+            return eval(expression, global_vars)
+        except Exception, e:
+            if not callable(self.on_expression_error):
+                raise
+
+            return on_expression_error(self, e, expression, self.instance)
 
 class SystemField(Label):
     """This shows system informations, like the report title, current date/time,

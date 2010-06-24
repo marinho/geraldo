@@ -329,7 +329,7 @@ class PDFGenerator(ReportGenerator):
 
             # Multiple canvas support (closes current and creates a new
             # once if reaches the max pages for temp file)
-            if num and self.multiple_canvas and num%self.temp_files_max_pages == 0:
+            if num and self.multiple_canvas and num % self.temp_files_max_pages == 0:
                 self.close_current_canvas()
                 del self.canvas
                 self.start_canvas()
