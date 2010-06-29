@@ -71,7 +71,8 @@ class ReportGenerator(GeraldoObject):
     _rendered_pages = None
     _page_rect = None
 
-    def __init__(self, report, first_page_number=1, variables=None, return_pages=False, pages=None, **kwargs):
+    def __init__(self, report, first_page_number=1, variables=None, return_pages=False,
+            pages=None, **kwargs):
         """This method should be overrided to receive others arguments"""
         self.report = report
 

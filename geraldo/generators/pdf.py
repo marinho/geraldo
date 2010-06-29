@@ -44,6 +44,8 @@ class PDFGenerator(ReportGenerator):
     temp_files_max_pages = 10
     temp_directory = DEFAULT_TEMP_DIR
 
+    mimetype = 'application/pdf'
+
     def __init__(self, report, filename=None, canvas=None, return_canvas=False,
             multiple_canvas=None, temp_directory=None, cache_enabled=None,
             **kwargs):

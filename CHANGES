@@ -1,3 +1,11 @@
+2010-06-29: Version 0.4.7-alpha
+--------------------------------
+* Implemented new generator CSV
+
+2010-06-25: Version 0.4.6-stable
+--------------------------------
+* Implemented new event on ObjectValue: on_expression_error
+
 2010-06-17: Version 0.4.5-stable
 --------------------------------
 * Fixed expressions token replacing braces

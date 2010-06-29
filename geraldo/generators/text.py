@@ -75,6 +75,8 @@ class TextGenerator(ReportGenerator):
     escapes_page_start = ''
     escapes_page_end = ''
 
+    mimetype = 'text/plain'
+
     def __init__(self, report, cache_enabled=None, **kwargs):
         super(TextGenerator, self).__init__(report, **kwargs)
 
@@ -161,8 +163,6 @@ class TextGenerator(ReportGenerator):
         if style:
             for k,v in style.items():
                 d_style[k] = v
-
-        import datetime
 
         return dict(name=datetime.datetime.now().strftime('%H%m%s'), **d_style)
 
