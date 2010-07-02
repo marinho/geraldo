@@ -1,4 +1,5 @@
 import random, shelve, os
+from decimal import Decimal
 
 from geraldo.utils import get_attr_value, calculate_size, memoize
 from geraldo.widgets import Widget, Label, SystemField
@@ -407,7 +408,7 @@ class ReportGenerator(GeraldoObject):
     def force_blank_page_by_height(self, height):
         """Check if the height is in client available report height and
         makes a new page if necessary"""
-        if self.get_available_height() < height:
+        if Decimal(str(self.get_available_height())) < Decimal(str(height)):
             self.force_new_page()
             return True
         
