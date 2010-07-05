@@ -205,6 +205,21 @@ with a mask or additional text.
     it as **True**, it will store the text on the first getting and use the
     stored text on next time(s) it be requested.
 
+**Events system**
+
+- **on_expression_error** - Default: None
+
+    Is called when Geraldo tries to interpret an expression and an exception is
+    raised. It must be a function with the following arguments:
+
+    - widget (or just 'self')
+    - exception (or just 'e')
+    - expression (or just 'expr')
+    - instance (or just 'inst')
+
+    This function can returns a default value or just call 'raise' to raise the
+    same exception.
+
 SystemField
 -----------
 

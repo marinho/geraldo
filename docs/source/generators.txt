@@ -167,3 +167,31 @@ Forcing the output to print out escape codes before/after report or page print:
     ...     escapes_page_end = ''
     >>> output = my_report_instance.generate_by(MyTextGenerator)
 
+CSV Generator
+--------------
+
+.. currentmodule:: geraldo.generators
+.. class:: CSVGenerator
+
+Path: **geraldo.generators.CSVGenerator**
+
+This generator is still in the development stage, but it already works well. It
+just makes a CSV (comma separated values) file with details band ObjectValue
+elements, ordered by their left positions.
+
+**Attributes:**
+
+- **writer** - Default: None
+
+    If you want to customize the CSV writer, set this with an object with same
+    methods that an instance that Python's csv.writer returns.
+
+- **writer_function** - Default: csv.writer
+
+    You can also set this attribute with a function that waits for a file object
+    as its only argument and returns a writer instance.
+
+- **first_row_with_column_names** - Default: False
+
+    To append a first row with column names, set this to True.
+

@@ -18,6 +18,7 @@ geraldo.barcodes.BarCode class barcodes.html
 geraldo.generators.TextGenerator class generators.html
 geraldo.utils.BAND_WIDTH data utils.html
 geraldo.graphics.Line class graphics.html
+geraldo.generators.CSVGenerator class generators.html
 geraldo.base.ManyElements class basic.html
 geraldo.utils.DISABLE_MULTIPROCESSING data utils.html
 geraldo.utils.memoize function utils.html

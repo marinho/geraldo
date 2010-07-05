@@ -1,3 +1,7 @@
+2010-07-05: Version 0.4.8-stable
+--------------------------------
+* Fixed problem on ReportGroup.force_new_page
+
 2010-07-02: Version 0.4.7-stable
 --------------------------------
 * Fixed problem with blank page when available height was the same needed

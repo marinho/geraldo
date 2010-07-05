@@ -557,7 +557,7 @@ class ReportGenerator(GeraldoObject):
                     self.render_groups_footers()
                     self._current_object = objects[self._current_object_index]
 
-                self.render_groups_headers()
+                self.render_groups_headers(first_object_on_page)
 
                 # Generate this band only if it is visible
                 # - "done True" means band was rendered ok
@@ -750,7 +750,7 @@ class ReportGenerator(GeraldoObject):
             if changed:
                 self._groups_stack.append(group)
 
-    def render_groups_headers(self):
+    def render_groups_headers(self, first_object_on_page=False):
         """Renders the report headers using 'changed' definition calculated by
         'calc_changed_groups'"""
 
@@ -766,7 +766,7 @@ class ReportGenerator(GeraldoObject):
                     new_page = self.force_blank_page_by_height(self.calculate_size(group.band_header.height))
 
                 # Forces a new page if this group is defined to do it
-                if not new_page and group.force_new_page and self._current_object_index > 0:
+                if not new_page and group.force_new_page and self._current_object_index > 0 and not first_object_on_page:
                     self.render_page_footer()
                     self.force_new_page(insert_new_page=False)
 
