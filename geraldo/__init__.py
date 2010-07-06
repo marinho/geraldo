@@ -60,6 +60,6 @@ from widgets import FIELD_ACTION_VALUE, FIELD_ACTION_COUNT, FIELD_ACTION_AVG,\
         FIELD_ACTION_MIN, FIELD_ACTION_MAX, FIELD_ACTION_SUM,\
         FIELD_ACTION_DISTINCT_COUNT, BAND_WIDTH
 from graphics import RoundRect, Rect, Line, Circle, Arc, Ellipse, Image
-from exceptions import EmptyQueryset, ObjectNotFound, ManyObjectsFound
+from exceptions import EmptyQueryset, ObjectNotFound, ManyObjectsFound, AbortEvent
 from cross_reference import CrossReferenceMatrix
 

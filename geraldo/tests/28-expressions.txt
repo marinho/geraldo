@@ -7,6 +7,7 @@ the "expression" attribute, that support complex math expressions and calculated
 This test aims to test all kinds of expressions, including them on summary, grouppings,
 subreports and detail bands even on math calculation, etc.
 
+    >>> from decimal import Decimal
     >>> import os
     >>> cur_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -57,6 +58,35 @@ TODO in the future
     >>> #run_expression(objects, 'distinct_count(genre)')
     >>> #run_expression(objects, 'sum(age * weight)')
     >>> #run_expression(objects, 'sum(age * weight) + age / weight')
+
+Testing decimal <-> conversion (useful sometimes)
+
+    >>> values = [None, 1, 2.0, Decimal('3')]
+
+    >>> el1 = ObjectValue(converts_decimal_to_float=False, converts_float_to_decimal=False)
+    >>> el2 = ObjectValue(converts_decimal_to_float=True, converts_float_to_decimal=False)
+    >>> el3 = ObjectValue(converts_decimal_to_float=False, converts_float_to_decimal=True)
+
+    >>> el1._clean_empty_values(values)
+    [0, 1, 2.0, Decimal('3')]
+
+    >>> el2._clean_empty_values(values)
+    [0, 1, 2.0, 3.0]
+
+    >>> el3._clean_empty_values(values)
+    [0, 1, Decimal('2.0'), Decimal('3')]
+
+    >>> try:
+    ...     sum(el1._clean_empty_values(values))
+    ... except TypeError, e:
+    ...     e.message
+    "unsupported operand type(s) for +: 'float' and 'Decimal'"
+
+    >>> sum(el2._clean_empty_values(values))
+    6.0
+
+    >>> sum(el3._clean_empty_values(values))
+    Decimal('6.0')
 
 Report class
 ------------

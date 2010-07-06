@@ -178,7 +178,7 @@ class ObjectValue(Label):
         return map(lambda obj: self.get_object_value(obj, attribute_name), objects)
 
     def _clean_empty_values(self, values):
-        def _clean(val):
+        def clean(val):
             if not val:
                 return 0
             elif isinstance(val, decimal.Decimal) and self.converts_decimal_to_float:
@@ -188,7 +188,7 @@ class ObjectValue(Label):
             
             return val
 
-        return map(_clean, values)
+        return map(clean, values)
 
     def action_value(self, attribute_name=None):
         return self.get_object_value(attribute_name=attribute_name)
@@ -249,7 +249,11 @@ class ObjectValue(Label):
                 self._cached_text = unicode(value)
             
         return self.display_format % self._cached_text
-    text = property(lambda self: self._text())
+
+    def _set_text(self, value):
+        self._cached_text = value
+
+    text = property(lambda self: self._text(), _set_text)
 
     def clone(self):
         new = super(ObjectValue, self).clone()

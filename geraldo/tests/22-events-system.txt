@@ -27,7 +27,7 @@ Element (widgets, graphics, etc.)
     >>> from geraldo.utils import A4, cm, TA_CENTER, TA_RIGHT
     
     >>> from geraldo import Report, ReportBand, Label, ObjectValue, SystemField,\
-    ...     FIELD_ACTION_COUNT, BAND_WIDTH
+    ...     FIELD_ACTION_COUNT, BAND_WIDTH, AbortEvent
 
 Report class
 
@@ -58,6 +58,8 @@ Report class
     ...         elements = [
     ...             ObjectValue(attribute_name='id', top=0, left=0, name='other-field-with-event'),
     ...             ObjectValue(attribute_name='name', top=0, left=3*cm, name='field-with-event'),
+    ...             ObjectValue(expression='age * unknown_field', top=0, left=7*cm, name='field-with-exception'),
+    ...             ObjectValue(expression='name', top=0, left=9*cm, name='field-with-abort-event'),
     ...         ]
 
     >>> class MyObject(object):
@@ -112,6 +114,20 @@ Report on new page event
 
     >>> report.on_new_page = report_on_new_page
 
+Band before print event
+
+    >>> def band_before_print(self, generator):
+    ...     print 'Before print band'
+
+    >>> report.band_page_header.before_print = band_before_print
+
+Band after print event
+
+    >>> def band_after_print(self, generator):
+    ...     print 'After print band'
+
+    >>> report.band_page_header.after_print = band_after_print
+
 Element with before print event
 
     >>> def element_before_print(self, generator):
@@ -136,12 +152,31 @@ Element with after print event, that works
 
     >>> report.find_by_name('other-field-with-event').after_print = element_after_print_2
 
+Element with bad expression
+
+    >>> def element_on_expression_error(self, exception, expression, instance):
+    ...     return 'invalid'
+
+    >>> report.find_by_name('field-with-exception').on_expression_error = element_on_expression_error
+
+Element with bad expression
+
+    >>> def element_abort_event(self, generator):
+    ...     if self.text[:1] == 'N':
+    ...         raise AbortEvent()
+    ...     else:
+    ...         self.text = self.text[:1]
+
+    >>> report.find_by_name('field-with-abort-event').before_print = element_abort_event
+
 PDF generation
 
     >>> from geraldo.generators import PDFGenerator
 
     >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/generated-with-events.pdf'))
     Printing page # 1!
+    Before print band
+    After print band
     Starting generating!
     After print ID 1
     After print ID 2
