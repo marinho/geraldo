@@ -113,8 +113,8 @@ class CSVGenerator(ReportGenerator):
 
                 cells.append(widget.text)
 
-                # Next object
-                self._current_object_index += 1
+            # Next object
+            self._current_object_index += 1
 
             self.writer.writerow(cells)
 
