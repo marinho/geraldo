@@ -1,0 +1,60 @@
+XML STRUCTURE SERIALIZER
+========================
+
+XML Structure serializer is not an ordinary generator because it does not generates
+reports, instead it just takes a Geraldo class/object and serialize it to XML or take
+an XML and deserialize it to objects.
+
+    >>> import os
+    >>> cur_dir = os.path.dirname(os.path.abspath(__file__))
+
+    >>> from geraldo import Report, ReportBand, DetailBand, SubReport, ReportGroup,\
+    ...     Label, ObjectValue, SystemField, BAND_WIDTH
+    >>> from geraldo.utils import cm, A4, TA_RIGHT, TA_LEFT
+    >>> from geraldo.generators import XMLStructSerializer
+
+A report class to serialize
+
+    >>> class MyReport(Report):
+    ...     # Report properties
+    ...     title = 'My Report to make an XML'
+    ...     author = 'Tarsila and Linus Corporation'
+    ...     subject = 'This is just a test stuff'
+    ...     keywords = 'I love Geraldo'
+    ... 
+    ...     # Page dimensions
+    ...     first_page_number = 1
+    ...     page_size = A4
+    ...     margin_top = 1*cm
+    ...     margin_bottom = 1*cm
+    ...     margin_left = 1*cm
+    ...     margin_right = 1*cm
+    ... 
+    ...     # Look and feel
+    ...     additional_fonts = {
+    ...         'Footlight MT Light': os.path.join(cur_dir, 'ftltlt.ttf'),  # full path to font file
+    ...         'HandGotDLig': ({'file': os.path.join(cur_dir, 'handgotl.ttf'), 'name': 'HandGotDLig'},
+    ...                         {'file': os.path.join(cur_dir, 'handgotb.ttf'), 'name': 'HandGotDBold', 'bold': True}),
+    ...     }
+    ...     default_style = {'fontName': 'Footlight MT Light'}
+    ... 
+    ...     class band_detail(DetailBand):
+    ...         height = 0.5*cm
+    ...         elements = [ObjectValue(expression='number')]
+
+Serializing the class
+
+    >>> serializer = XMLStructSerializer()
+
+    >>> data = serializer.serialize(MyReport)
+
+    >>> print data
+    xxx
+
+Deserializing the data buffer
+
+    >>> MyClass = serializer.deserialize(data)
+
+    >>> repr(MyClass) == repr(MyReport)
+    True
+

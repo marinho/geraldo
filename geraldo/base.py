@@ -150,6 +150,11 @@ class GeraldoObject(object):
         except AttributeError:
             raise AttributeNotFound()
 
+    @classmethod
+    def get_name_to_serialize(cls):
+        """Returns the name of the classe to be used as tag name or type on serialization."""
+        return getattr(cls, '_name_to_serialize', None) or cls.__name__
+
 class BaseReport(GeraldoObject):
     """Basic Report class, inherited and used to make reports adn subreports"""
 
@@ -372,6 +377,7 @@ class Report(BaseReport):
     
     Depends on ReportLab to work properly"""
 
+    _name_to_serialize = 'Report'
     __metaclass__ = ReportMetaclass
 
     # Report properties
@@ -640,6 +646,8 @@ class ReportBand(GeraldoObject):
     things on the top, on summary, on page header, on page footer or one time
     per object from queryset."""
 
+    _name_to_serialize = 'ReportBand'
+
     height = 1*cm
     width = None # Useful only on detail bands
     visible = True
@@ -739,6 +747,8 @@ class DetailBand(ReportBand):
     
      * display_inline: use it together attribute 'width' to specify that you
        want to make many detail bands per line. Useful to make labels."""
+
+    _name_to_serialize = 'DetailBand'
 
     margin_top = 0
     margin_bottom = 0
