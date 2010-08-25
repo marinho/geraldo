@@ -117,24 +117,28 @@ Getting data
 
 Building the chart
 
-    >>> import pylab
-    >>> from numpy import numarray
+    >>> try:
+    ...     import pylab
+    ...     from numpy import numarray
+    ... except ImportError:
+    ...     numarray = pylab = None
 
-    >>> user_ids = report.queryset.filter(id__in=[1,5,7,12]).values('id','username')
-    >>> labels = [user['username'] for user in user_ids]
-    >>> data = [user['id'] for user in user_ids]
-    >>> left = numarray.array(range(len(data))) + 0.5
-    >>> 
-    >>> tmp = pylab.bar(left, data, width=0.5)
-    >>> tmp = pylab.yticks(range(15))
-    >>> tmp = pylab.xticks(left+0.25, labels)
-    >>> tmp = pylab.title('Users IDs')
-    >>> pylab.gca().get_xaxis().tick_bottom()
-    >>> pylab.gca().get_yaxis().tick_left()
-    >>> pylab.savefig(os.path.join(cur_dir, 'output/matplotlib.png'), dpi=50)
+    >>> if pylab and numarray:
+    ...     user_ids = report.queryset.filter(id__in=[1,5,7,12]).values('id','username')
+    ...     labels = [user['username'] for user in user_ids]
+    ...     data = [user['id'] for user in user_ids]
+    ...     left = numarray.array(range(len(data))) + 0.5
+    ...     
+    ...     tmp = pylab.bar(left, data, width=0.5)
+    ...     tmp = pylab.yticks(range(15))
+    ...     tmp = pylab.xticks(left+0.25, labels)
+    ...     tmp = pylab.title('Users IDs')
+    ...     pylab.gca().get_xaxis().tick_bottom()
+    ...     pylab.gca().get_yaxis().tick_left()
+    ...     pylab.savefig(os.path.join(cur_dir, 'output/matplotlib.png'), dpi=50)
 
 PDF generation
 
-    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/charts-matplotlib-report.pdf'))
-
+    >>> if pylab and numarray:
+    ...     report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/charts-matplotlib-report.pdf'))
 

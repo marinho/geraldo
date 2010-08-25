@@ -5,13 +5,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Widgets Reference &mdash; Geraldo Reports Documentation v0.4-alpha-6 documentation</title>
+    <title>Widgets Reference &mdash; Geraldo Reports Documentation v0.4.1-stable documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.4-alpha-6',
+        VERSION:     '0.4.1-stable',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -19,7 +19,7 @@
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Geraldo Reports Documentation v0.4-alpha-6 documentation" href="index.html" />
+    <link rel="top" title="Geraldo Reports Documentation v0.4.1-stable documentation" href="index.html" />
     <link rel="next" title="Graphics Reference" href="graphics.html" />
     <link rel="prev" title="Basic Reference" href="basic.html" /> 
   </head>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="basic.html" title="Basic Reference"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Geraldo Reports Documentation v0.4-alpha-6 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Geraldo Reports Documentation v0.4.1-stable documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -76,6 +76,16 @@ own widgets, otherwise you shouldn&#8217;t use it directly.</p>
 <p>Set to <strong>False</strong> if you want to make it not visible.</p>
 </blockquote>
 </li>
+<li><p class="first"><strong>borders</strong> - Default: {&#8216;top&#8217;: None, &#8216;right&#8217;: None, &#8216;bottom&#8217;: None, &#8216;left&#8217;: None, &#8216;all&#8217;: None}</p>
+<blockquote>
+<p>Borders values can be of three types:</p>
+<ul class="simple">
+<li>Boolean (True/False) - just set if there is a border or not</li>
+<li>Integer - set there is a border and what is its stroke width. <strong>New on 0.4.</strong></li>
+<li>Graphic (instance of Rect, Line, RoundRect, etc.) - set a complex graphic to put along the border</li>
+</ul>
+</blockquote>
+</li>
 <li><p class="first"><strong>style</strong> - Default: {}</p>
 <blockquote>
 <p>This is a dictionary that uses the powerful ReportLab <strong>ParagraphStyle</strong>
@@ -97,10 +107,6 @@ class to set style settings for this widget.</p>
 <li><strong>textColor</strong> - Default:  black,</li>
 <li><strong>backColor</strong> - Default: None,</li>
 <li><strong>wordWrap</strong> - Default: None,</li>
-<li><strong>borderWidth</strong> - Default: 0,</li>
-<li><strong>borderPadding</strong> - Default: 0,</li>
-<li><strong>borderColor</strong> - Default: None,</li>
-<li><strong>borderRadius</strong> - Default: None,</li>
 <li><strong>allowWidows</strong> - Default: 1,</li>
 <li><strong>allowOrphans</strong> - Default: 0,</li>
 </ul>
@@ -269,6 +275,23 @@ stored text on next time(s) it be requested.</p>
 </blockquote>
 </li>
 </ul>
+<p><strong>Events system</strong></p>
+<ul>
+<li><p class="first"><strong>on_expression_error</strong> - Default: None</p>
+<blockquote>
+<p>Is called when Geraldo tries to interpret an expression and an exception is
+raised. It must be a function with the following arguments:</p>
+<ul class="simple">
+<li>widget (or just &#8216;self&#8217;)</li>
+<li>exception (or just &#8216;e&#8217;)</li>
+<li>expression (or just &#8216;expr&#8217;)</li>
+<li>instance (or just &#8216;inst&#8217;)</li>
+</ul>
+<p>This function can returns a default value or just call &#8216;raise&#8217; to raise the
+same exception.</p>
+</blockquote>
+</li>
+</ul>
 </div>
 <div class="section" id="systemfield">
 <h2>SystemField<a class="headerlink" href="#systemfield" title="Permalink to this headline">¶</a></h2>
@@ -331,6 +354,14 @@ template filter &#8216;date&#8217; to format datetime, but once we were
 going to use two standards, this wouldn&#8217;t be nice. If you want
 to use Django&#8217;s template filter, you can override the method
 <strong>Report.format_date(date, expression)</strong> and use it.</p>
+</blockquote>
+</li>
+<li><p class="first">%(var:VARIABLE_NAME)s - you can inform a variable here and declare it when
+call generator, like the example below:</p>
+<blockquote>
+<p>SystemField(expression=&#8217;%(var:filter)s&#8217;)
+...
+report.generate_by(PDFGenerator, variables={&#8216;filter&#8217;: &#8216;My Filter&#8217;})</p>
 </blockquote>
 </li>
 </ul>
@@ -397,7 +428,7 @@ to use Django&#8217;s template filter, you can override the method
         <li class="right" >
           <a href="basic.html" title="Basic Reference"
              >previous</a> |</li>
-        <li><a href="index.html">Geraldo Reports Documentation v0.4-alpha-6 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Geraldo Reports Documentation v0.4.1-stable documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

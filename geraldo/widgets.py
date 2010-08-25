@@ -88,7 +88,8 @@ class Label(Widget):
 
         return new
 
-EXP_QUOTED = re.compile('\(([^\'"].+?[^\'"])\)')
+EXP_QUOTED = re.compile('\w\(([^\'"].+?[^\'"])(|,.*?)\)')
+EXP_QUOTED_SUB = re.compile('\(([^\'"].+?[^\'"])(|,.*?)\)')
 EXP_TOKENS = re.compile('([\w\._]+|\*\*|\+|\-|\*|\/)')
 
 class ObjectValue(Label):
@@ -116,6 +117,11 @@ class ObjectValue(Label):
     converts_decimal_to_float = False
     converts_float_to_decimal = True
     _cached_text = None
+    on_expression_error = None # Expected arguments:
+                               #  - widget
+                               #  - instance
+                               #  - exception
+                               #  - expression
 
     def __init__(self, *args, **kwargs):
         super(ObjectValue, self).__init__(*args, **kwargs)
@@ -131,14 +137,25 @@ class ObjectValue(Label):
 
         while True:
             f = EXP_QUOTED.findall(self.expression)
-            if not f: break
+            if not f:
+                # Replace simple attribute name or method to value("")
+                if '(' not in self.expression:
+                    self.expression = 'value("%s")' % self.expression
+                break
 
-            self.expression = EXP_QUOTED.sub('("%s")'%(f[0]), self.expression, 1)
+            self.expression = EXP_QUOTED_SUB.sub('("%s"%s)'%(f[0][0], f[0][1]), self.expression, 1)
 
     def get_object_value(self, instance=None, attribute_name=None):
         """Return the attribute value for just an object"""
         instance = instance or self.instance
         attribute_name = attribute_name or self.attribute_name
+
+        # Checks lambda and instance
+        if self.get_value and instance:
+            try:
+                return self.get_value(self, instance)
+            except TypeError:
+                return self.get_value(instance)
 
         # Checks this is an expression
         tokens = EXP_TOKENS.split(attribute_name)
@@ -149,13 +166,6 @@ class ObjectValue(Label):
                 if not token in ('+','-','*','/','**') and not  token.isdigit():
                     values[token] = self.get_object_value(instance, token)
             return eval(attribute_name, values)
-
-        # Checks lambda and instance
-        if self.get_value and instance:
-            try:
-                return self.get_value(self, instance)
-            except TypeError:
-                return self.get_value(instance)
 
         # Gets value with function
         value = get_attr_value(instance, attribute_name)
@@ -176,7 +186,7 @@ class ObjectValue(Label):
         return map(lambda obj: self.get_object_value(obj, attribute_name), objects)
 
     def _clean_empty_values(self, values):
-        def _clean(val):
+        def clean(val):
             if not val:
                 return 0
             elif isinstance(val, decimal.Decimal) and self.converts_decimal_to_float:
@@ -186,7 +196,7 @@ class ObjectValue(Label):
             
             return val
 
-        return map(_clean, values)
+        return map(clean, values)
 
     def action_value(self, attribute_name=None):
         return self.get_object_value(attribute_name=attribute_name)
@@ -224,6 +234,10 @@ class ObjectValue(Label):
         values = filter(lambda v: v is not None, self.get_queryset_values(attribute_name))
         return len(set(values))
 
+    def action_coalesce(self, attribute_name=None, default=''):
+        value = self.get_object_value(attribute_name=attribute_name)
+        return value or unicode(default)
+
     def _text(self):
         if not self.stores_text_in_cache or self._cached_text is None:
             try: # Before all, tries to get the value using parent object
@@ -235,12 +249,19 @@ class ObjectValue(Label):
                     value = getattr(self, 'action_'+self.action)()
 
             if self.get_text:
-                self._cached_text = unicode(self.get_text(self.instance, value))
+                try:
+                    self._cached_text = unicode(self.get_text(self, self.instance, value))
+                except TypeError:
+                    self._cached_text = unicode(self.get_text(self.instance, value))
             else:
                 self._cached_text = unicode(value)
             
         return self.display_format % self._cached_text
-    text = property(lambda self: self._text())
+
+    def _set_text(self, value):
+        self._cached_text = value
+
+    text = property(lambda self: self._text(), _set_text)
 
     def clone(self):
         new = super(ObjectValue, self).clone()
@@ -250,6 +271,7 @@ class ObjectValue(Label):
         new.objects = self.objects
         new.stores_text_in_cache = self.stores_text_in_cache
         new.expression = self.expression
+        new.on_expression_error = self.on_expression_error
 
         return new
 
@@ -261,17 +283,19 @@ class ObjectValue(Label):
         if not self.instance:
             global_vars = {}
         elif isinstance(self.instance, dict):
-            global_vars = self.instance
+            global_vars = self.instance.copy()
         else:
-            global_vars = self.instance.__dict__
+            global_vars = self.instance.__dict__.copy()
 
         global_vars.update({
+            'value': self.action_value,
             'count': self.action_count,
             'avg': self.action_avg,
             'min': self.action_min,
             'max': self.action_max,
             'sum': self.action_sum,
             'distinct_count': self.action_distinct_count,
+            'coalesce': self.action_coalesce,
             })
 
         if isinstance(self.report, SubReport):
@@ -280,7 +304,13 @@ class ObjectValue(Label):
                 'p': self.report.parent_object, # Just a short alias
                 })
 
-        return eval(expression, global_vars)
+        try:
+            return eval(expression, global_vars)
+        except Exception, e:
+            if not callable(self.on_expression_error):
+                raise
+
+            return self.on_expression_error(self, e, expression, self.instance)
 
 class SystemField(Label):
     """This shows system informations, like the report title, current date/time,

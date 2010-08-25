@@ -345,6 +345,17 @@ class ReportMetaclass(type):
     """This metaclass registers the declared classes to a local variable."""
     
     def __new__(cls, name, bases, attrs):
+        # Merges default_style with inherited report classes
+        if isinstance(attrs.get('default_style', None), dict):
+            default_style = {}
+
+            for base in bases:
+                if isinstance(getattr(base, 'default_style', None), dict):
+                    default_style.update(base.default_style)
+
+            default_style.update(attrs['default_style'])
+            attrs['default_style'] = default_style
+
         new_class = super(ReportMetaclass, cls).__new__(cls, name, bases, attrs)
 
         # Defines a registration ID
@@ -434,7 +445,6 @@ class Report(BaseReport):
         if not self.print_if_empty and not self.queryset:
             raise EmptyQueryset("This report doesn't accept empty queryset")
 
-        # TODO: use multiprocessing
         # Initialize generator instance
         generator = generator_class(self, *args, **kwargs)
 
@@ -787,6 +797,7 @@ class ReportGroup(GeraldoObject):
     attribute_name = None
     band_header = None
     band_footer = None
+    force_new_page = False
 
     def __init__(self, **kwargs):
         for k,v in kwargs.items():

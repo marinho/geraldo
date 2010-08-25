@@ -293,6 +293,7 @@ values.
 
 - **name** - Default: None
 - **attribute_name** - Default: None
+- **force_new_page** - Default: False
 
 **Report bands**
 

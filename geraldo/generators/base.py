@@ -1,4 +1,5 @@
 import random, shelve, os
+from decimal import Decimal
 
 from geraldo.utils import get_attr_value, calculate_size, memoize
 from geraldo.widgets import Widget, Label, SystemField
@@ -71,7 +72,8 @@ class ReportGenerator(GeraldoObject):
     _rendered_pages = None
     _page_rect = None
 
-    def __init__(self, report, first_page_number=1, variables=None, return_pages=False, pages=None, **kwargs):
+    def __init__(self, report, first_page_number=1, variables=None, return_pages=False,
+            pages=None, **kwargs):
         """This method should be overrided to receive others arguments"""
         self.report = report
 
@@ -426,8 +428,11 @@ class ReportGenerator(GeraldoObject):
     def force_blank_page_by_height(self, height):
         """Check if the height is in client available report height and
         makes a new page if necessary"""
-        if self.get_available_height() < height:
+        if Decimal(str(self.get_available_height())) < Decimal(str(height)):
             self.force_new_page()
+            return True
+        
+        return False
 
     def append_new_page(self):
         self._rendered_pages.append(ReportPage())
@@ -576,7 +581,7 @@ class ReportGenerator(GeraldoObject):
                     self.render_groups_footers()
                     self._current_object = objects[self._current_object_index]
 
-                self.render_groups_headers()
+                self.render_groups_headers(first_object_on_page)
 
                 # Generate this band only if it is visible
                 # - "done True" means band was rendered ok
@@ -769,7 +774,7 @@ class ReportGenerator(GeraldoObject):
             if changed:
                 self._groups_stack.append(group)
 
-    def render_groups_headers(self):
+    def render_groups_headers(self, first_object_on_page=False):
         """Renders the report headers using 'changed' definition calculated by
         'calc_changed_groups'"""
 
@@ -777,12 +782,21 @@ class ReportGenerator(GeraldoObject):
         self._groups_working_values = self._groups_values
 
         # Loops on groups to render changed ones
+        new_page = False
         for group in self.report.groups:
-            if self._groups_changed.get(group, None) and\
-               group.band_header and\
-               group.band_header.visible:
-                self.force_blank_page_by_height(self.calculate_size(group.band_header.height))
-                self.render_band(group.band_header)
+            if self._groups_changed.get(group, None):
+                # If there is no space for group header band, forces a new page
+                if group.band_header and group.band_header.visible:
+                    new_page = self.force_blank_page_by_height(self.calculate_size(group.band_header.height))
+
+                # Forces a new page if this group is defined to do it
+                if not new_page and group.force_new_page and self._current_object_index > 0 and not first_object_on_page:
+                    self.render_page_footer()
+                    self.force_new_page(insert_new_page=False)
+
+                # Renders the group header band
+                if group.band_header and group.band_header.visible:
+                    self.render_band(group.band_header)
 
     def render_groups_footers(self, force=False):
         """Renders the report footers using previous 'changed' definition calculated by

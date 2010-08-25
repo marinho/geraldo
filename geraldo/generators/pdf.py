@@ -44,6 +44,8 @@ class PDFGenerator(ReportGenerator):
     temp_files_max_pages = 10
     temp_directory = DEFAULT_TEMP_DIR
 
+    mimetype = 'application/pdf'
+
     def __init__(self, report, filename=None, canvas=None, return_canvas=False,
             multiple_canvas=None, temp_directory=None, cache_enabled=None,
             **kwargs):
@@ -329,7 +331,7 @@ class PDFGenerator(ReportGenerator):
 
             # Multiple canvas support (closes current and creates a new
             # once if reaches the max pages for temp file)
-            if num and self.multiple_canvas and num%self.temp_files_max_pages == 0:
+            if num and self.multiple_canvas and num % self.temp_files_max_pages == 0:
                 self.close_current_canvas()
                 del self.canvas
                 self.start_canvas()

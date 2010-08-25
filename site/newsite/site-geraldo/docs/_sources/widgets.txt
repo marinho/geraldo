@@ -27,6 +27,14 @@ own widgets, otherwise you shouldn't use it directly.
 
     Set to **False** if you want to make it not visible.
 
+- **borders** - Default: {'top': None, 'right': None, 'bottom': None, 'left': None, 'all': None}
+
+    Borders values can be of three types:
+
+    - Boolean (True/False) - just set if there is a border or not
+    - Integer - set there is a border and what is its stroke width. **New on 0.4.**
+    - Graphic (instance of Rect, Line, RoundRect, etc.) - set a complex graphic to put along the border
+
 - **style** - Default: {}
 
     This is a dictionary that uses the powerful ReportLab **ParagraphStyle**
@@ -49,10 +57,6 @@ own widgets, otherwise you shouldn't use it directly.
     - **textColor** - Default:  black,
     - **backColor** - Default: None,
     - **wordWrap** - Default: None,
-    - **borderWidth** - Default: 0,
-    - **borderPadding** - Default: 0,
-    - **borderColor** - Default: None,
-    - **borderRadius** - Default: None,
     - **allowWidows** - Default: 1,
     - **allowOrphans** - Default: 0,
 
@@ -201,6 +205,21 @@ with a mask or additional text.
     it as **True**, it will store the text on the first getting and use the
     stored text on next time(s) it be requested.
 
+**Events system**
+
+- **on_expression_error** - Default: None
+
+    Is called when Geraldo tries to interpret an expression and an exception is
+    raised. It must be a function with the following arguments:
+
+    - widget (or just 'self')
+    - exception (or just 'e')
+    - expression (or just 'expr')
+    - instance (or just 'inst')
+
+    This function can returns a default value or just call 'raise' to raise the
+    same exception.
+
 SystemField
 -----------
 
@@ -253,4 +272,10 @@ number, page count, etc.
         going to use two standards, this wouldn't be nice. If you want 
         to use Django's template filter, you can override the method
         **Report.format_date(date, expression)** and use it.
+    - %(var:VARIABLE_NAME)s - you can inform a variable here and declare it when
+      call generator, like the example below:
+
+        SystemField(expression='%(var:filter)s')
+        ...
+        report.generate_by(PDFGenerator, variables={'filter': 'My Filter'})
 

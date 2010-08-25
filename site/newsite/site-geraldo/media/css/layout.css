@@ -152,4 +152,16 @@ dd {
     margin-bottom: 10px;
 }
 
+pre {
+    margin: 0.5em;
+}
+
+pre code {
+    background-color: white;
+    display: block;
+    border: 1px solid silver;
+    font-size: 0.8em;
+    overflow-x: scroll;
+    padding: 5px;
+}
 

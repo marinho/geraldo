@@ -1,3 +1,50 @@
+2010-07-05: Version 0.4.8-stable
+--------------------------------
+* Fixed problem on ReportGroup.force_new_page
+
+2010-07-02: Version 0.4.7-stable
+--------------------------------
+* Fixed problem with blank page when available height was the same needed
+
+2010-06-29: Version 0.4.7-alpha
+--------------------------------
+* Implemented new generator CSV
+
+2010-06-25: Version 0.4.6-stable
+--------------------------------
+* Implemented new event on ObjectValue: on_expression_error
+
+2010-06-17: Version 0.4.5-stable
+--------------------------------
+* Fixed expressions token replacing braces
+
+2010-06-17: Version 0.4.4-stable
+--------------------------------
+* Fixed bug on complex expressions with braces 
+
+2010-05-06: Version 0.4.3-stable
+--------------------------------
+* Fixed cross reference matrix and expressions to avoid use existing object as dictionary
+
+2010-04-29: Version 0.4.2-stable
+--------------------------------
+* Implemented support to merge default_style to inherite reports
+* Fixed ReportGroup.force_new_page that wasn't rendering page footer on the first page
+
+2010-04-27: Version 0.4.1-stable
+--------------------------------
+* Implementing ReportGroup to support 'force_new_page' to force a new page for each new
+  item on the groupper.
+* Implementing new function for expression 'coalesce' to set a default value.
+
+2010-04-18: Version 0.4-beta
+--------------------------------
+* Just releasing 0.4-beta
+
+2010-04-18: Version 0.4-alpha-30
+--------------------------------
+* Fixed expression to support get_value and children methods (like attribute_name)
+
 2010-04-16: Version 0.4-alpha-29
 --------------------------------
 * Fixed on_new_page to support real current page number, instead of internal number (thanks to Ari Caldeira)

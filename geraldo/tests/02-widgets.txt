@@ -37,6 +37,7 @@ Value, Count, Avg, Min, Max and Sum. Default action is "Value".
     >>> from geraldo import ObjectValue, FIELD_ACTION_VALUE
 
     >>> ObjectValue.attribute_name
+    >>> ObjectValue.expression
     >>> ObjectValue.action == FIELD_ACTION_VALUE
     True
 
