@@ -850,7 +850,7 @@ class ReportGenerator(GeraldoObject):
             self._current_queryset = subreport.get_objects_list()
 
             # Loops objects
-            for num, obj in enumerate(subreport.get_objects_list()):
+            for num, obj in enumerate(self._current_queryset):
                 # Renders the header band
                 if num == 0 and subreport.band_header:
                     # Forces new page if there is no available space
