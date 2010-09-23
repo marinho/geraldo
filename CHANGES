@@ -1,3 +1,7 @@
+2010-09-23: Version 0.4.10-stable
+--------------------------------
+* Fixed ReportGroup.force_new_page when works with child bands (with secondary detail pages)
+
 2010-09-23: Version 0.4.9-stable
 --------------------------------
 * Fixed a test related to ReportGroup.force_new_page
