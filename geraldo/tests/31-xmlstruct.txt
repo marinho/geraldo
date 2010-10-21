@@ -9,7 +9,7 @@ an XML and deserialize it to objects.
     >>> cur_dir = os.path.dirname(os.path.abspath(__file__))
 
     >>> from geraldo import Report, ReportBand, DetailBand, SubReport, ReportGroup,\
-    ...     Label, ObjectValue, SystemField, BAND_WIDTH
+    ...     Label, ObjectValue, SystemField, Rect, BAND_WIDTH
     >>> from geraldo.utils import cm, A4, TA_RIGHT, TA_LEFT
     >>> from geraldo.generators import XMLStructSerializer
 
@@ -29,6 +29,7 @@ A report class to serialize
     ...     margin_bottom = 1*cm
     ...     margin_left = 1*cm
     ...     margin_right = 1*cm
+    ...     borders = {'top': True, 'right': 0.2*cm, 'bottom': None, 'left': None, 'all': Rect(stroke=True)}
     ... 
     ...     # Look and feel
     ...     additional_fonts = {

@@ -647,6 +647,8 @@ class ReportBand(GeraldoObject):
     per object from queryset."""
 
     _name_to_serialize = 'ReportBand'
+    _serializable_attributes = ('height','width','visible','borders','elements','child_bands',
+            'force_new_page','default_style','auto_expand_height','is_detail') # 'before_print', 'after_print'
 
     height = 1*cm
     width = None # Useful only on detail bands
@@ -749,6 +751,8 @@ class DetailBand(ReportBand):
        want to make many detail bands per line. Useful to make labels."""
 
     _name_to_serialize = 'DetailBand'
+    _serializable_attributes = ReportBand._serializable_attributes + ('margin_top',
+            'margin_bottom','margin_left','margin_right','display_inline')
 
     margin_top = 0
     margin_bottom = 0
@@ -810,6 +814,8 @@ class ReportGroup(GeraldoObject):
     
 class Element(GeraldoObject):
     """The base class for widgets and graphics"""
+    _serializable_attributes = ('left','top','width','height','visible') # before_print, after_print
+
     left = 0
     top = 0
     _width = 0

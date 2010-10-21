@@ -16,6 +16,9 @@ from exceptions import AttributeNotFound
 
 class Widget(Element):
     """A widget is a value representation on the report"""
+
+    _serializable_attributes = Element._serializable_attributes + ('style','truncate_overflow') # get_value
+
     _height = 0 #0.5*cm
     _width = 5*cm
     style = {}
@@ -98,6 +101,10 @@ class ObjectValue(Label):
     
     Set 'stores_text_in_cache' to False if you want this widget get its value
     and text on render and generate moments."""
+
+    _serializable_attributes = Label._serializable_attributes + ('attribute_name','action',
+            'display_format','stores_text_in_cache','expression','converts_decimal_to_float',
+            'converts_float_to_decimal') # get_text, on_expression_error
 
     attribute_name = None
     action = FIELD_ACTION_VALUE
@@ -309,6 +316,9 @@ class SystemField(Label):
     page number, pages count, etc.
     
     'get_value' lambda must have 'expression' and 'fields' argument."""
+
+    _serializable_attributes = Label._serializable_attributes + ('expression',)
+
     expression = '%(report_title)s'
 
     fields = {

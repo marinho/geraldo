@@ -4,25 +4,9 @@ try:
     # Using lxml
     from lxml import etree
 except ImportError:
-    try:
-        # Python 2.5 - cElementTree
-        import xml.etree.cElementTree as etree
-    except ImportError:
-        try:
-            # Python 2.5 - ElementTree
-            import xml.etree.ElementTree as etree
-        except ImportError:
-            try:
-                # ElementTree usual setup
-                import cElementTree as etree
-            except ImportError:
-                try:
-                    # ElementTree usual setup
-                    import elementtree.ElementTree as etree
-                except ImportError:
-                    etree = None
+    etree = None
 
-from geraldo.base import GeraldoObject, Report
+from geraldo.base import GeraldoObject, Report, ReportBand
 from base import ReportGenerator
 
 class XMLStructSerializer(object):
@@ -35,7 +19,7 @@ class XMLStructSerializer(object):
 
     def __init__(self):
         if not etree:
-            raise Exception('There is no ElementTree installed. This serializer needs it to (de)serialize data.')
+            raise Exception('There is no lxml installed. This serializer needs it to (de)serialize data.')
 
     def serialize(self, object_tree, returns_string=True):
         """The argument 'object_tree' should receive a Python object or a list of them."""
@@ -71,7 +55,8 @@ class XMLStructSerializer(object):
 
         # Attributes
         for attr in dir(report):
-            if attr in ('author','keywords','subject','title','first_page_number','print_if_empty'):
+            if attr in ('author','keywords','subject','title','first_page_number','print_if_empty',
+                    'default_font_color','default_stroke_color','default_fill_color'):
                 attrs[attr] = unicode(getattr(report, attr))
 
         # Root node
@@ -113,11 +98,12 @@ class XMLStructSerializer(object):
                 attr_node.append(etree.Element('StyleKey', attrib={'name': name, 'value': value}))
 
             node.append(attr_node)
+        if report.borders:
+            node.append(self._serialize_borders(report.borders))
 
         # Complex children
         for attr in ('band_begin','band_summary','band_page_header','band_page_footer','band_detail',
-                'groups', #'default_font_color','default_stroke_color','default_fill_color','borders',
-                'subreports','cache_status','cache_prefix','cache_file_root'):
+                'groups','subreports','cache_status','cache_prefix','cache_file_root'):
             value = getattr(report, attr, None)
 
             if value is None:
@@ -158,10 +144,12 @@ class XMLStructSerializer(object):
         if obj is None:
             return
 
-        for attr in dir(obj):
-            if attr.startswith('_'):
-                continue
+        try:
+            serializable_attrs = obj._serializable_attributes
+        except AttributeError:
+            serializable_attrs = [attr for attr in dir(obj) if not attr.startswith('_')]
 
+        for attr in serializable_attrs:
             value = getattr(obj, attr)
 
             if isinstance(value, (basestring, int, float, Decimal, bool)):
@@ -170,10 +158,25 @@ class XMLStructSerializer(object):
                 attr_node = self._serialize_list(value, attrs={u'name': attr})
             elif isinstance(value, GeraldoObject):
                 attr_node = self._serialize_object(value, attrs={u'name': attr})
+            elif isinstance(obj, ReportBand) and attr == 'borders':
+                attr_node = self._serialize_borders(report.borders)
             else:
                 continue
             
             node.append(attr_node)
+
+    def _serialize_borders(self, borders):
+        node = etree.Element('Borders')
+
+        for k in borders.keys():
+            if isinstance(borders[k], (bool, int, basestring, float)):
+                attr_node = self._serialize_value(k, borders[k])
+            elif isinstance(borders[k], GeraldoObject):
+                attr_node = self._serialize_object(borders[k], attrs={u'name': k})
+
+            node.append(attr_node)
+
+        return node
 
     def deserialize(self, data):
         """The argument 'data' should receive a string with serialized XML from Geraldo's
