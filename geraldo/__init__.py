@@ -43,7 +43,7 @@ Packages Structure
 - tests - a package with automated doc tests.
 """
 
-VERSION = (0, 4, 7, 'stable')
+VERSION = (0, 4, 10, 'stable')
 
 def get_version():
     return '%d.%d.%d-%s'%VERSION

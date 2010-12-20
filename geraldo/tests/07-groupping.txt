@@ -155,12 +155,15 @@ PDF common generation with users
 
 Page with half height
 
+    >>> report.title = 'Groupping demonstration - half size'
     >>> report.find_by_name('first-group').force_new_page = False
     >>> report.page_size = (A4[0], A4[1] / 2)
     >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/groupping-report-half-height.pdf'))
 
 Page with half height with new group in the begin of second page
 
+    >>> report.title = 'Groupping demonstration - group at new page'
+    >>> report.find_by_name('first-group').force_new_page = True
     >>> report.queryset = report.queryset.exclude(username='Betty')
     >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/groupping-report-half-height-2.pdf'))
 

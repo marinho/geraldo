@@ -416,6 +416,7 @@ class ReportGenerator(GeraldoObject):
             if not child_band.visible:
                 continue
 
+            self.in_tests = True # XXX
             self.force_blank_page_by_height(self.calculate_size(child_band.height))
 
             self.render_band(child_band)
@@ -437,14 +438,10 @@ class ReportGenerator(GeraldoObject):
     def append_new_page(self):
         self._rendered_pages.append(ReportPage())
 
-    def force_new_page(self, insert_new_page=True):
+    def force_new_page(self):
         """Starts a new blank page"""
         # Ends the current page
         self._current_top_position = 0
-
-        # Creates the new page
-        if insert_new_page:
-            self.append_new_page()
 
         # Starts a new one
         self.start_new_page()
@@ -792,7 +789,7 @@ class ReportGenerator(GeraldoObject):
                 # Forces a new page if this group is defined to do it
                 if not new_page and group.force_new_page and self._current_object_index > 0 and not first_object_on_page:
                     self.render_page_footer()
-                    self.force_new_page(insert_new_page=False)
+                    self.force_new_page()
 
                 # Renders the group header band
                 if group.band_header and group.band_header.visible:
@@ -859,7 +856,7 @@ class ReportGenerator(GeraldoObject):
             # Forces new page if there is no available space
             if self.get_available_height() < self.calculate_size(height):
                 self.render_page_footer()
-                self.force_new_page(insert_new_page=False)
+                self.force_new_page()
 
         subreports = subreports or self.report.subreports or []
 
@@ -877,7 +874,7 @@ class ReportGenerator(GeraldoObject):
             self._current_queryset = subreport.get_objects_list()
 
             # Loops objects
-            for num, obj in enumerate(subreport.get_objects_list()):
+            for num, obj in enumerate(self._current_queryset):
                 # Renders the header band
                 if num == 0 and subreport.band_header:
                     # Forces new page if there is no available space
