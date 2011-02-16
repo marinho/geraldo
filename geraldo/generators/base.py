@@ -353,7 +353,7 @@ class ReportGenerator(GeraldoObject):
             temp_height = band.height + getattr(band, 'margin_top', 0) + getattr(band, 'margin_bottom', 0)
             self.update_top_pos(decrease=self.calculate_size(temp_height))
         else:
-            self.update_left_pos(set=0)
+            self.update_left_pos(set_position=0)
             left_position = self.get_left_pos()
 
         temp_top = top_position = top_position or self.get_top_pos()
@@ -388,7 +388,7 @@ class ReportGenerator(GeraldoObject):
         if getattr(band, 'display_inline', False):
             self.update_left_pos(band.width + self.calculate_size(getattr(band, 'margin_right', 0)))
         else:
-            self.update_left_pos(set=0)
+            self.update_left_pos(set_position=0)
 
         # Child bands
         for child_band in band.child_bands or []: # TODO This "or []" here is a quickfix
@@ -410,7 +410,7 @@ class ReportGenerator(GeraldoObject):
         """Check if the height is in client available report height and
         makes a new page if necessary"""
         if Decimal(str(self.get_available_height())) < Decimal(str(height)):
-            self.force_new_page()
+            self.start_new_page()
             return True
         
         return False
@@ -418,13 +418,31 @@ class ReportGenerator(GeraldoObject):
     def append_new_page(self):
         self._rendered_pages.append(ReportPage())
 
-    def force_new_page(self):
+    def start_new_page(self, with_header=True):
         """Starts a new blank page"""
         # Ends the current page
         self._current_top_position = 0
 
         # Starts a new one
-        self.start_new_page()
+        self.append_new_page()
+
+        self.report.do_on_new_page(
+                page=self._rendered_pages[-1],
+                page_number=len(self._rendered_pages) + self.first_page_number - 1,
+                generator=self,
+                )
+
+        if with_header:
+            self.render_page_header()
+
+        # Page borders
+        if self.report.borders:
+            if not self._page_rect:
+                self._page_rect = self.report.get_page_rect()
+                self._page_rect['top'] = self.calculate_size(self.report.page_size[1]) - self._page_rect['top']
+                self._page_rect['bottom'] = self.calculate_size(self.report.page_size[1]) - self._page_rect['bottom']
+
+            self.render_border(self.report.borders, self._page_rect)
 
         # Page footer
         self.render_page_footer()
@@ -505,7 +523,7 @@ class ReportGenerator(GeraldoObject):
 
         self._current_page_number += 1
         self._is_first_page = False
-        self.update_top_pos(set=0) # <---- update top position
+        self.update_top_pos(set_position=0) # <---- update top position
  
     def render_bands(self):
         """Loops into the objects list to create the report pages until the end"""
@@ -606,28 +624,6 @@ class ReportGenerator(GeraldoObject):
             # Increment page number
             self._current_page_number += 1
 
-    def start_new_page(self, with_header=True):
-        """Do everything necessary to be done to start a new page"""
-        self.append_new_page()
-
-        self.report.do_on_new_page(
-                page=self._rendered_pages[-1],
-                page_number=len(self._rendered_pages) + self.first_page_number - 1,
-                generator=self,
-                )
-
-        if with_header:
-            self.render_page_header()
-
-        # Page borders
-        if self.report.borders:
-            if not self._page_rect:
-                self._page_rect = self.report.get_page_rect()
-                self._page_rect['top'] = self.calculate_size(self.report.page_size[1]) - self._page_rect['top']
-                self._page_rect['bottom'] = self.calculate_size(self.report.page_size[1]) - self._page_rect['bottom']
-
-            self.render_border(self.report.borders, self._page_rect)
-
     def calculate_size(self, size):
         """Uses the function 'calculate_size' to calculate a size"""
         return calculate_size(size)
@@ -667,22 +663,22 @@ class ReportGenerator(GeraldoObject):
 
         return ret
 
-    def update_top_pos(self, increase=0, decrease=0, set=None):
+    def update_top_pos(self, increase=0, decrease=0, set_position=None):
         """Updates the current top position controller, increasing (by default),
         decreasing or setting it with a new value."""
-        if set is not None:
-            self._current_top_position = set
+        if set_position is not None:
+            self._current_top_position = set_position
         else:        
             self._current_top_position += increase
             self._current_top_position -= decrease
 
         return self._current_top_position
 
-    def update_left_pos(self, increase=0, decrease=0, set=None):
+    def update_left_pos(self, increase=0, decrease=0, set_position=None):
         """Updates the current left position controller, increasing (by default),
         decreasing or setting it with a new value."""
-        if set is not None:
-            self._current_left_position = set
+        if set_position is not None:
+            self._current_left_position = set_position
         else:        
             self._current_left_position += increase
             self._current_left_position -= decrease
@@ -765,7 +761,7 @@ class ReportGenerator(GeraldoObject):
                 # Forces a new page if this group is defined to do it
                 if not new_page and group.force_new_page and self._current_object_index > 0 and not first_object_on_page:
                     self.render_page_footer()
-                    self.force_new_page()
+                    self.start_new_page()
 
                 # Renders the group header band
                 if group.band_header and group.band_header.visible:
@@ -832,7 +828,7 @@ class ReportGenerator(GeraldoObject):
             # Forces new page if there is no available space
             if self.get_available_height() < self.calculate_size(height):
                 self.render_page_footer()
-                self.force_new_page()
+                self.start_new_page()
 
         for subreport in self.report.subreports:
             # Subreports must have detail band

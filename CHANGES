@@ -1,3 +1,9 @@
+2011-02-16: Version 0.4.11-alpha
+--------------------------------
+
+* Refactored force_new_page and start_new_page to be the same.
+* Fixed documentation about auto_expand_height
+
 2010-09-23: Version 0.4.10-stable
 --------------------------------
 * Fixed ReportGroup.force_new_page when works with child bands (with secondary detail pages)
