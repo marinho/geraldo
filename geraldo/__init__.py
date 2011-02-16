@@ -43,7 +43,11 @@ Packages Structure
 - tests - a package with automated doc tests.
 """
 
+<<<<<<< HEAD
 VERSION = (0, 4, 9, 'xmlstruct')
+=======
+VERSION = (0, 4, 8, 'stable')
+>>>>>>> a977166e60e8580e8b28d2db90dd6adae61157e4
 
 def get_version():
     return '%d.%d.%d-%s'%VERSION
