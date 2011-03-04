@@ -7,9 +7,9 @@ ways to install it:
 Option 1. Get the latest official version
 -----------------------------------------
 
-1. Get the latest tarball available from:
+1. Get the latest tarball available at:
 
-    https://sourceforge.net/projects/geraldo/files/geraldo/
+    http://pypi.python.org/pypi/Geraldo/
     
 2. Then you can do the following steps to install it:
 
@@ -90,4 +90,8 @@ To get PIL you can go to the following URL:
 
     http://www.pythonware.com/products/pil/
     
+**pyPDF library**
+
+Optional. We use it to concatenate many PDF files when you enable partial
+generation or merging reports.
 
