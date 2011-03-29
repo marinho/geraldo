@@ -1,3 +1,8 @@
+2011-03-29: Version 0.4.12-stable
+--------------------------------
+
+* SystemField changed to use method "_text" instead of "text" to allow override
+
 2011-02-16: Version 0.4.11-alpha
 --------------------------------
 

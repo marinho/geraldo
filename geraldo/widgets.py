@@ -329,7 +329,7 @@ class SystemField(Label):
 
         self.fields['current_datetime'] = datetime.datetime.now()
 
-    def text(self):
+    def _text(self):
         page_number = (self.fields.get('page_number') or self.generator._current_page_number) + self.generator.first_page_number - 1
         page_count = self.fields.get('page_count') or self.generator.get_page_count()
 
@@ -347,6 +347,8 @@ class SystemField(Label):
             return self.get_value(self.expression, fields)
 
         return self.expression%SystemFieldDict(self, fields)
+
+    def text(self): return self._text()
     text = property(text)
 
     def clone(self):
