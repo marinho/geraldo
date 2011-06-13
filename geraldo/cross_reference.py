@@ -47,7 +47,7 @@ class CrossReferenceMatrix(object):
 
     def __init__(self, objects_list, rows_attribute, cols_attribute, decimal_as_float=None,
             rows_values=None, cols_values=None):
-        self.objects_list = objects_list or []
+        self.objects_list = list(objects_list) or []
         self.rows_attr = rows_attribute
         self.cols_attr = cols_attribute
         self.rows_values = rows_values

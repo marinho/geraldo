@@ -1,3 +1,8 @@
+2011-06-13: Version 0.4.13-stable
+--------------------------------
+
+* Fixing CrossReferenceMatrix to force object_list to be a list (in case of a generator)
+
 2011-03-29: Version 0.4.12-stable
 --------------------------------
 
