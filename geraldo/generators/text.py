@@ -164,7 +164,7 @@ class TextGenerator(ReportGenerator):
             for k,v in style.items():
                 d_style[k] = v
 
-        return dict(name=datetime.datetime.now().strftime('%H%m%s'), **d_style)
+        return dict(name=datetime.datetime.now().strftime('%H%M%S'), **d_style)
 
     def keep_in_frame(self, widget, width, height, paragraphs, mode):
         # Doesn't nothing for a while: TODO
