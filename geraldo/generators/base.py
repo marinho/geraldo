@@ -156,7 +156,7 @@ class ReportGenerator(GeraldoObject):
 
         b_bottom = borders_dict.get('bottom', None)
         if b_bottom:
-            graphic = isinstance(b_right, Graphic) and b_right or Line()
+            graphic = isinstance(b_bottom, Graphic) and b_bottom or Line()
             graphic.set_rect(
                     left=rect_dict['left'], top=rect_dict['bottom'],
                     right=rect_dict['right'], bottom=rect_dict['bottom']

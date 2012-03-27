@@ -115,7 +115,7 @@ def calculate_size(size):
 
 @memoize
 def format_date(date, expression):
-    return date.strftime(expression)
+    return date.strftime(str(expression))
 
 # Tries to import class Process from multiprocessing library and sets
 # it as None if import fails
