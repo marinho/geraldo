@@ -647,6 +647,7 @@ class ReportBand(GeraldoObject):
     elements = None
     child_bands = None
     force_new_page = False
+    force_new_page_before = False
     default_style = None
     auto_expand_height = False
     is_detail = False
@@ -754,12 +755,13 @@ class TableBand(ReportBand): # TODO
     pass
 
 class ReportGroup(GeraldoObject):
-    """This a report grouper class. A report can be multiple groupped by
+    """This a report grouper class. A report can be multiple grouped by
     attribute values."""
     attribute_name = None
     band_header = None
     band_footer = None
     force_new_page = False
+    force_new_page_before = False
 
     def __init__(self, **kwargs):
         for k,v in kwargs.items():
