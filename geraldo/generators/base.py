@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from geraldo.utils import get_attr_value, calculate_size, memoize
 from geraldo.widgets import Widget, Label, SystemField
-from geraldo.graphics import Graphic, RoundRect, Rect, Line, Circle, Arc,\
+from geraldo.graphics import Graphic, RoundRect, Rect, Line, Rule, Circle, Arc,\
         Ellipse, Image
 from geraldo.barcodes import BarCode
 from geraldo.base import GeraldoObject, ManyElements
@@ -271,6 +271,9 @@ class ReportGenerator(GeraldoObject):
             elif isinstance(graphic, Rect):
                 graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
                 graphic.top = top_position - self.calculate_size(graphic.top) - self.calculate_size(graphic.height)
+            elif isinstance(graphic, Rule):
+                graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
+                graphic.top = top_position - self.calculate_size(graphic.top)
             elif isinstance(graphic, Line):
                 graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
                 graphic.top = top_position - self.calculate_size(graphic.top)
@@ -567,6 +570,7 @@ class ReportGenerator(GeraldoObject):
                 self._current_object = objects[self._current_object_index]
 
                 # If this object forces a new page before it renders, do that.
+                # not entirely sure this makes sense for a detail band.
                 if not first_object_on_page and d_band.force_new_page_before and d_band.visible:
                     self.render_page_footer()
                     self.start_new_page()
@@ -790,13 +794,16 @@ class ReportGenerator(GeraldoObject):
                           self._groups_stack[-1] == group ):
                 if group.band_footer and group.band_footer.visible:
                     # if this footer forces a new page before printing, do it.
-                    if not first_object_on_page and group.band_footer.force_new_page_before and group.band_footer.visible:
+                    if not first_object_on_page and group.band_footer.force_new_page_before:
                         self.render_page_footer()
                         self.start_new_page()
                     else:
                         # only need this if we haven't already forced it.
                         self.force_blank_page_by_height(self.calculate_size(group.band_footer.height))
                     self.render_band(group.band_footer)
+                    if group.band_footer.force_new_page:
+                        # need to consume all remaining space on page.
+                        self.update_top_pos(increase = self.get_available_height())
                     first_object_on_page = False
 
                 if self._groups_stack:

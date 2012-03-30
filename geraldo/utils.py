@@ -100,18 +100,13 @@ def calculate_size(size):
     """Calculates the informed size. If this is a string or unicode, it is
     converted to float using evaluation function"""
     if isinstance(size, basestring):
-        return eval(size) # If you are thinking this is a semanthic bug, you must
+        return eval(size) # If you are thinking this is a semantic bug, you must
                           # be aware this 'eval' is necessary to calculate sizes
                           # like '10*cm' or '15.8*rows'
                           # I want to check if eval is better way to do it than
                           # do a regex matching and calculate. TODO
     
     return size
-
-# Replaced by ReportLab landscape and portrait functions
-#@memoize
-#def landscape(page_size):
-#    return page_size[1], page_size[0]
 
 @memoize
 def format_date(date, expression):

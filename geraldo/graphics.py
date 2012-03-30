@@ -12,6 +12,8 @@ class Graphic(Element):
     fill = False
     fill_color = black
 
+    band = None
+
     _repr_for_cache_attrs = ('left','top','height','width','visible','stroke',
             'stroke_color','stroke_width','fill','fill_color')
 
@@ -62,6 +64,13 @@ class RoundRect(Rect):
         new.radius = self.radius
 
         return new
+
+class Rule(Graphic):
+    """A rule is a horizontal line with a position and width"""
+
+    _repr_for_cache_attrs = ('left','top','width','visible','stroke',
+                'stroke_color','stroke_width','fill','fill_color')
+
 
 class Fixed(Graphic):
     """A fixed graphic is base on right and bottom coordinates instead of width
