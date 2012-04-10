@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from geraldo.utils import get_attr_value, calculate_size, memoize
 from geraldo.widgets import Widget, Label, SystemField
-from geraldo.graphics import Graphic, RoundRect, Rect, Line, Circle, Arc,\
+from geraldo.graphics import Graphic, RoundRect, Rect, Line, Rule, Circle, Arc,\
         Ellipse, Image
 from geraldo.barcodes import BarCode
 from geraldo.base import GeraldoObject, ManyElements
@@ -62,7 +62,7 @@ class ReportGenerator(GeraldoObject):
     _generation_datetime = None
     _highest_height = 0
 
-    # Groupping
+    # Grouping
     _groups_values = None
     _groups_working_values = None
     _groups_changed = None
@@ -156,7 +156,7 @@ class ReportGenerator(GeraldoObject):
 
         b_bottom = borders_dict.get('bottom', None)
         if b_bottom:
-            graphic = isinstance(b_right, Graphic) and b_right or Line()
+            graphic = isinstance(b_bottom, Graphic) and b_bottom or Line()
             graphic.set_rect(
                     left=rect_dict['left'], top=rect_dict['bottom'],
                     right=rect_dict['right'], bottom=rect_dict['bottom']
@@ -271,6 +271,9 @@ class ReportGenerator(GeraldoObject):
             elif isinstance(graphic, Rect):
                 graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
                 graphic.top = top_position - self.calculate_size(graphic.top) - self.calculate_size(graphic.height)
+            elif isinstance(graphic, Rule):
+                graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
+                graphic.top = top_position - self.calculate_size(graphic.top)
             elif isinstance(graphic, Line):
                 graphic.left = band_rect['left'] + self.calculate_size(graphic.left)
                 graphic.top = top_position - self.calculate_size(graphic.top)
@@ -472,7 +475,12 @@ class ReportGenerator(GeraldoObject):
         self._groups_stack = []
 
         # Check to force new page if there is no available space
-        self.force_blank_page_by_height(self.calculate_size(self.report.band_summary.height))
+        # or if force_new_page_before is True
+        if self.report.band_summary.force_new_page_before:
+            self.render_page_footer()
+            self.start_new_page()
+        else:
+            self.force_blank_page_by_height(self.calculate_size(self.report.band_summary.height))
 
         # Call method that print the band area and its widgets
         self.render_band(self.report.band_summary)
@@ -561,6 +569,14 @@ class ReportGenerator(GeraldoObject):
                 # Get current object from list
                 self._current_object = objects[self._current_object_index]
 
+                # If this object forces a new page before it renders, do that.
+                # not entirely sure this makes sense for a detail band.
+                if not first_object_on_page and d_band.force_new_page_before and d_band.visible:
+                    self.render_page_footer()
+                    self.start_new_page()
+                    first_object_on_page = True
+                    continue
+
                 # Renders group bands for changed values
                 self.calc_changed_groups(first_object_on_page)
 
@@ -569,7 +585,7 @@ class ReportGenerator(GeraldoObject):
                     # object, so we have access, in groups' footers, to the last
                     # object before the group breaking
                     self._current_object = objects[self._current_object_index-1]
-                    self.render_groups_footers()
+                    self.render_groups_footers(first_object_on_page = first_object_on_page)
                     self._current_object = objects[self._current_object_index]
 
                 self.render_groups_headers(first_object_on_page)
@@ -612,7 +628,7 @@ class ReportGenerator(GeraldoObject):
             # Renders the finish group footer bands
             if self._is_latest_page:
                 self.calc_changed_groups(False)
-                self.render_groups_footers(force=True)
+                self.render_groups_footers(force=True, first_object_on_page = first_object_on_page)
 
             # Ends the current page, printing footer and summary and necessary
             self.render_end_current_page()
@@ -767,7 +783,7 @@ class ReportGenerator(GeraldoObject):
                 if group.band_header and group.band_header.visible:
                     self.render_band(group.band_header)
 
-    def render_groups_footers(self, force=False):
+    def render_groups_footers(self, force=False, first_object_on_page=False):
         """Renders the report footers using previous 'changed' definition calculated by
         'calc_changed_groups'"""
 
@@ -777,8 +793,18 @@ class ReportGenerator(GeraldoObject):
                           self._groups_stack and\
                           self._groups_stack[-1] == group ):
                 if group.band_footer and group.band_footer.visible:
-                    self.force_blank_page_by_height(self.calculate_size(group.band_footer.height))
+                    # if this footer forces a new page before printing, do it.
+                    if not first_object_on_page and group.band_footer.force_new_page_before:
+                        self.render_page_footer()
+                        self.start_new_page()
+                    else:
+                        # only need this if we haven't already forced it.
+                        self.force_blank_page_by_height(self.calculate_size(group.band_footer.height))
                     self.render_band(group.band_footer)
+                    if group.band_footer.force_new_page:
+                        # need to consume all remaining space on page.
+                        self.update_top_pos(increase = self.get_available_height())
+                    first_object_on_page = False
 
                 if self._groups_stack:
                     self._groups_working_values.pop(self._groups_stack[-1])
