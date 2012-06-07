@@ -22,5 +22,5 @@ setup(
     #download_url = 'http://ufpr.dl.sourceforge.net/sourceforge/geraldo/Geraldo-0.2-stable.tar.gz',
     license = 'GNU Lesser General Public License (LGPL)',
     packages = ['geraldo', 'geraldo.tests', 'geraldo.generators',],
-    #install_requires = ['reportlab','pil'],
+    install_requires = ['reportlab',],
 )
