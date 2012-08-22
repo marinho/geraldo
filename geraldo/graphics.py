@@ -1,7 +1,5 @@
-from reportlab.lib.colors import black
-from reportlab.lib.units import cm
-
 from base import BAND_WIDTH, BAND_HEIGHT, Element
+from utils import cm, black
 
 class Graphic(Element):
     """Base graphic class"""

@@ -43,10 +43,7 @@ Packages Structure
 - tests - a package with automated doc tests.
 """
 
-VERSION = (0, 4, 15)
-
-def get_version():
-    return '%d.%d.%d'%VERSION
+from version import VERSION, get_version
 
 __author__ = 'Marinho Brandao'
 __license__ = 'GNU Lesser General Public License (LGPL)'
