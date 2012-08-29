@@ -5,13 +5,10 @@ try:
 except NameError: 
     from sets import Set as set     # Python 2.3 fallback 
 
-from reportlab.lib.units import cm
-from reportlab.lib.colors import black
-
 from base import BAND_WIDTH, BAND_HEIGHT, Element, SubReport
 from utils import get_attr_value, SYSTEM_FIELD_CHOICES, FIELD_ACTION_VALUE, FIELD_ACTION_COUNT,\
         FIELD_ACTION_AVG, FIELD_ACTION_MIN, FIELD_ACTION_MAX, FIELD_ACTION_SUM,\
-        FIELD_ACTION_DISTINCT_COUNT
+        FIELD_ACTION_DISTINCT_COUNT, cm, black
 from exceptions import AttributeNotFound
 
 class Widget(Element):
@@ -355,6 +352,8 @@ class SystemField(Label):
             return self.get_value(self.expression, fields)
 
         return self.expression%SystemFieldDict(self, fields)
+
+    def text(self): return self._text()
     text = property(text)
 
     def clone(self):

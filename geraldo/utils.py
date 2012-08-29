@@ -1,8 +1,18 @@
 import sys
 
-from reportlab.lib.units import * # Check this - is the source of units
-from reportlab.lib.pagesizes import * # Check this - is the source of page sizes
-from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT # Check this also
+try:
+    import reportlab
+except ImportError:
+    cm = 28.346456692913385
+    A4 = (595.275590551181, 841.8897637795275)
+    black = None
+    TA_LEFT, TA_CENTER, TA_RIGHT = 0, 1, 2
+    landscape = lambda t:(t[1],t[0])
+else:
+    from reportlab.lib.units import * # Check this - is the source of units
+    from reportlab.lib.pagesizes import * # Check this - is the source of page sizes
+    from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT # Check this also
+    from reportlab.lib.colors import black
 
 from exceptions import AttributeNotFound
 

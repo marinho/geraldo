@@ -5,13 +5,9 @@ try:
 except NameError: 
     from sets import Set as set     # Python 2.3 fallback 
 
-from reportlab.lib.units import cm
-from reportlab.lib.pagesizes import A4
-from reportlab.lib.colors import black
-from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
-
 from utils import calculate_size, get_attr_value, landscape, format_date, memoize,\
-        BAND_WIDTH, BAND_HEIGHT, CROSS_COLS, CROSS_ROWS
+        BAND_WIDTH, BAND_HEIGHT, CROSS_COLS, CROSS_ROWS, cm, A4, black, TA_LEFT, TA_CENTER,\
+        TA_RIGHT
 from exceptions import EmptyQueryset, ObjectNotFound, ManyObjectsFound,\
         AttributeNotFound, NotYetImplemented
 from cache import DEFAULT_CACHE_STATUS, CACHE_BACKEND, CACHE_FILE_ROOT

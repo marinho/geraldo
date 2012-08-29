@@ -9,7 +9,7 @@ except:
     from setuptools import setup, find_packages
 
 from setuptools import setup
-from geraldo import get_version
+from geraldo.version import get_version
 
 setup(
     name = 'Geraldo',
@@ -18,9 +18,9 @@ setup(
     long_description = 'Geraldo is a Python and Django pluggable application that works with ReportLab to generate complex reports.',
     author = 'Marinho Brandao',
     author_email = 'marinho@gmail.com',
-    url = 'http://geraldo.sourceforge.net/',
+    url = 'http://www.geraldoreports.org/',
     #download_url = 'http://ufpr.dl.sourceforge.net/sourceforge/geraldo/Geraldo-0.2-stable.tar.gz',
     license = 'GNU Lesser General Public License (LGPL)',
     packages = ['geraldo', 'geraldo.tests', 'geraldo.generators',],
-    #install_requires = ['reportlab','pil'],
+    install_requires = ['reportlab',],
 )

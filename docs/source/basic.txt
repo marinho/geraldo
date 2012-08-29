@@ -247,9 +247,9 @@ queryset.
 - **default_style** - Default: None
 - **margin_top** - Default: 0
 - **margin_bottom** - Default: 0
-- **auto_expanded_height** - Default: False
+- **auto_expand_height** - Default: False
 
-    Use 'auto_expanded_height' to make flexible bands to fit their heights to 
+    Use 'auto_expand_height' to make flexible bands to fit their heights to 
     their elements.
 
 DetailBand

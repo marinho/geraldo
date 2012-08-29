@@ -1,3 +1,19 @@
+2011-06-13: Version 0.4.13-stable
+--------------------------------
+
+* Fixing CrossReferenceMatrix to force object_list to be a list (in case of a generator)
+
+2011-03-29: Version 0.4.12-stable
+--------------------------------
+
+* SystemField changed to use method "_text" instead of "text" to allow override
+
+2011-02-16: Version 0.4.11-alpha
+--------------------------------
+
+* Refactored force_new_page and start_new_page to be the same.
+* Fixed documentation about auto_expand_height
+
 2010-09-23: Version 0.4.10-stable
 --------------------------------
 * Fixed ReportGroup.force_new_page when works with child bands (with secondary detail pages)
