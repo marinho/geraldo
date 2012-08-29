@@ -188,6 +188,11 @@ class BaseReport(GeraldoObject):
         # Calls the method that set this as parent if their children
         self.set_parent_on_children()
 
+    def _set_band_attr_of_band_elements(self, band):
+        if band.elements:
+            for element in band.elements:
+                element.band = band
+
     def transform_classes_to_objects(self):
         """Finds all band classes in the report and instantiante them. This
         is important to have a safety on separe inherited reports each one
@@ -196,19 +201,24 @@ class BaseReport(GeraldoObject):
         # Basic bands
         if self.band_begin and not isinstance(self.band_begin, ReportBand):
             self.band_begin = self.band_begin()
+            self._set_band_attr_of_band_elements(self.band_begin)
 
         if self.band_summary and not isinstance(self.band_summary, ReportBand):
             self.band_summary = self.band_summary()
+            self._set_band_attr_of_band_elements(self.band_summary)
 
         if self.band_page_header and not isinstance(self.band_page_header, ReportBand):
             self.band_page_header = self.band_page_header()
+            self._set_band_attr_of_band_elements(self.band_page_header)
 
         if self.band_page_footer and not isinstance(self.band_page_footer, ReportBand):
             self.band_page_footer = self.band_page_footer()
+            self._set_band_attr_of_band_elements(self.band_page_footer)
 
         if self.band_detail and not isinstance(self.band_detail, ReportBand):
             self.band_detail = self.band_detail()
             self.band_detail.is_detail = True
+            self._set_band_attr_of_band_elements(self.band_detail)
 
         # Groups
         groups = self.groups
