@@ -154,6 +154,7 @@ class Image(Graphic):
     filename = None
     _image = None # PIL image object is stored here
     get_image = None # To be overrided
+    stretch = False
 
     _repr_for_cache_attrs = ('left','top','height','width','visible','stroke',
             'stroke_color','stroke_width','fill','fill_color','filename')

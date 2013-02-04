@@ -480,6 +480,7 @@ class PDFGenerator(ReportGenerator):
                     graphic.top,
                     graphic.width,
                     graphic.height,
+                    preserveAspectRatio=not graphic.stretch,
                     )
         elif isinstance(graphic, BarCode):
             barcode = graphic.render()
