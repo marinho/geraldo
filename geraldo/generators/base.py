@@ -392,16 +392,19 @@ class ReportGenerator(GeraldoObject):
                 widget_rect = self.make_widget_rect(widget, band_rect)                         
                 self.render_border(widget.borders or {}, widget_rect)
 
+        #
+        # Updates actual band height
+        #
+        if band.auto_expand_height:
+            band_height = self._highest_height
+        else:
+            band_height = self.calculate_size(band.height)
+
+        band_height += self.calculate_size(getattr(band, 'margin_top', 0))
+        band_height += self.calculate_size(getattr(band, 'margin_bottom', 0))
+
         # Updates top position
         if update_top:
-            if band.auto_expand_height:
-                band_height = self._highest_height
-            else:
-                band_height = self.calculate_size(band.height)
-
-            band_height += self.calculate_size(getattr(band, 'margin_top', 0))
-            band_height += self.calculate_size(getattr(band, 'margin_bottom', 0))
-
             self.update_top_pos(band_height)
 
         # Updates left position
@@ -421,8 +424,10 @@ class ReportGenerator(GeraldoObject):
 
             self.render_band(child_band)
 
-        # Calls the before_print event
+        # Calls the after_print event
         band.do_after_print(generator=self)
+
+        self.force_blank_page_by_height(self.calculate_size(band_height))
 
         return True
 
