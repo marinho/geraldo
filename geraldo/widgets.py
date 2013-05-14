@@ -258,6 +258,7 @@ class ObjectValue(Label):
         new.action = self.action
         new.display_format = self.display_format
         new.objects = self.objects
+        new.get_text = self.get_text
         new.stores_text_in_cache = self.stores_text_in_cache
         new.expression = self.expression
         new.on_expression_error = self.on_expression_error
