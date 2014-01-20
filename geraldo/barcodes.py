@@ -11,7 +11,8 @@ from reportlab.graphics.barcode.code39 import Extended39, Standard39
 from reportlab.graphics.barcode.code93 import Extended93, Standard93
 from reportlab.graphics.barcode.usps import FIM, POSTNET
 from reportlab.graphics.barcode.usps4s import USPS_4State
-from reportlab.graphics.barcode import createBarcodeDrawing 
+from reportlab.graphics.barcode.qr import QrCodeWidget
+from reportlab.graphics.barcode import createBarcodeDrawing
 
 SUPPORTED_BARCODE_TYPES = getCodeNames()
 BARCODE_CLASSES = {
@@ -29,7 +30,9 @@ BARCODE_CLASSES = {
     'Standard39': Standard39,
     'Standard93': Standard93,
     'USPS_4State': USPS_4State,
+    'QR': QrCodeWidget,
 }
+
 
 class BarCode(Graphic):
     """Class used by all barcode types generation. A barcode is just another graphic
@@ -41,7 +44,7 @@ class BarCode(Graphic):
     means you must have a value like 0.01*cm or less to have a good result).
 
     Another attribute is 'routing_attribute' used only by type 'USPS_4State'.
-    
+
     Also supports 'get_value' lambda attribute, like ObjectValue (with the argument
     'inst')"""
 
@@ -51,6 +54,7 @@ class BarCode(Graphic):
     attribute_name = None
     checksum = 0
     routing_attribute = None
+    aditional_barcode_params = {}
     get_value = None # A lambda function to get customized values
 
     def clone(self):
@@ -61,6 +65,7 @@ class BarCode(Graphic):
         new.get_value = self.get_value
         new.checksum = self.checksum
         new.routing_attribute = self.routing_attribute
+        new.aditional_barcode_params = self.aditional_barcode_params
 
         return new
 
@@ -73,13 +78,16 @@ class BarCode(Graphic):
 
     def render(self):
         if not getattr(self, '_rendered_drawing', None):
-            kwargs = {
-                'value': self.get_object_value(),
-                'barWidth': self.width,
-                'barHeight': self.height,
-                }
-            
-            if self.type in ('EAN13','EAN8',):
+            kwargs = self.aditional_barcode_params
+            kwargs['value'] = self.get_object_value()
+
+            if 'barWidth' not in kwargs:
+                kwargs['barWidth'] = self.width
+
+            if 'barHeight' not in kwargs:
+                kwargs['barHeight'] = self.height
+
+            if self.type in ('EAN13','EAN8','QR'):
                 self._rendered_drawing = createBarcodeDrawing(self.type, **kwargs)
             else:
                 cls = BARCODE_CLASSES[self.type]
