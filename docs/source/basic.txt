@@ -43,7 +43,7 @@ You can also override some methods to customize some things.
 
 **Report bands**
 
-A report band must be a class inherited from **ReportBand** or an instance of
+A report band must be an instance of
 **ReportBand** or a class inherited from **ReportBand**
 
 - **band_begin** - Default: None
