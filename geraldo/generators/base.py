@@ -248,6 +248,10 @@ class ReportGenerator(GeraldoObject):
             self._rendered_pages[-1].add_element(widget)
 
             # Borders
+            # FIXME: This fix a border related bug when using an array of values (table-like)
+            if widget.borders and 'all' in widget.borders and isinstance(widget.borders['all'], Rect):
+                widget.borders['all'] = widget.borders['all'].clone()
+
             self.render_border(widget.borders or {}, widget_rect)
 
         # Graphic element
