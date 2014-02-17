@@ -51,7 +51,7 @@ SYSTEM_FIELD_CHOICES = {
 def _get_memoized_value(func, args, kwargs):
     """Used internally by memoize decorator to get/store function results"""
     key = (repr(args), repr(kwargs))
-    
+
     if not key in func._cache_dict:
         ret = func(*args, **kwargs)
         func._cache_dict[key] = ret
@@ -77,9 +77,9 @@ def get_attr_value(obj, attr_path):
     is a method with no arguments (or arguments with default values) it calls
     the method. If the expression string has a path to a child attribute, it
     supports.
-    
+
     Examples:
-        
+
         attribute_name = 'name'
         attribute_name = 'name.upper'
         attribute_name = 'customer.name.lower'
@@ -90,7 +90,13 @@ def get_attr_value(obj, attr_path):
     parts = attr_path.split('.')
 
     try:
-        val = getattr(obj, parts[0])
+        if hasattr(obj, '_default_' + parts[0]):
+            default = getattr(obj, '_default_' + parts[0])
+            val = getattr(obj, parts[0], default)
+            if val is None:
+                val = default
+        else:
+            val = getattr(obj, parts[0])
     except AttributeError:
         try:
             val = obj[parts[0]]
@@ -102,7 +108,7 @@ def get_attr_value(obj, attr_path):
 
     if callable(val):
         val = val()
-        
+
     return val
 
 @memoize
@@ -115,7 +121,7 @@ def calculate_size(size):
                           # like '10*cm' or '15.8*rows'
                           # I want to check if eval is better way to do it than
                           # do a regex matching and calculate. TODO
-    
+
     return size
 
 # Replaced by ReportLab landscape and portrait functions
@@ -142,7 +148,7 @@ def run_under_process(func):
     """This is a decorator that uses multiprocessing library to run a
     function under a new process. To use it on Python 2.4 you need to
     install python-multiprocessing package.
-    
+
     Just remember that Process doesn't support returning value"""
 
     def _inner(*args, **kwargs):
