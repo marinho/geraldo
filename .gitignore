@@ -17,3 +17,4 @@ Geraldo.egg-info
 site/fonts
 site/layout
 *~
+.directory
