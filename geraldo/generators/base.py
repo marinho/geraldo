@@ -132,9 +132,13 @@ class ReportGenerator(GeraldoObject):
         if b_top:
             graphic = isinstance(b_top, Graphic) and b_top or Line()
             graphic.set_rect(
-                    left=rect_dict['left'], top=rect_dict['top'] - rect_dict['height'],
-                    right=rect_dict['right'], bottom=rect_dict['top'] - rect_dict['height']
+                    left=rect_dict['left'], top=rect_dict['top'],
+                    right=rect_dict['right'], bottom=rect_dict['top']
                     )
+            #graphic.set_rect(
+                    #left=rect_dict['left'], top=rect_dict['top'] - rect_dict['height'],
+                    #right=rect_dict['right'], bottom=rect_dict['top'] - rect_dict['height']
+                    #)
             # If border is a number, it is recognized as the stroke width
             if isinstance(b_top, (int, float)):
                 graphic.stroke_width = b_top
@@ -158,8 +162,8 @@ class ReportGenerator(GeraldoObject):
         if b_bottom:
             graphic = isinstance(b_right, Graphic) and b_right or Line()
             graphic.set_rect(
-                    left=rect_dict['left'], top=rect_dict['top'],
-                    right=rect_dict['right'], bottom=rect_dict['top']
+                    left=rect_dict['left'], top=rect_dict['top'] - rect_dict['height'],
+                    right=rect_dict['right'], bottom=rect_dict['top'] - rect_dict['height']
                     )
             # If border is a number, it is recognized as the stroke width
             if isinstance(b_bottom, (int, float)):
@@ -333,7 +337,7 @@ class ReportGenerator(GeraldoObject):
         # Calls the before_print event
         try:
             band.do_before_print(generator=self)
-        except AbortEvent:
+        except AbortEvent, TypeError:
             return False
 
         # Sets the current object
@@ -881,7 +885,7 @@ class ReportGenerator(GeraldoObject):
                     force_new_page(subreport.band_header.height)
 
                     # Renders the header band
-                    if subreport.band_header.visible:
+                    if subreport.band_header and subreport.band_header.visible:
                         self.render_band(subreport.band_header)
 
                 # Forces new page if there is no available space
