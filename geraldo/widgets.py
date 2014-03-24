@@ -126,6 +126,11 @@ class ObjectValue(Label):
         if self.expression:
             self.prepare_expression()
 
+        if 'default_object_value' in kwargs:
+            self.default_object_value = kwargs['default_object_value']
+        else:
+            self.default_object_value = ''
+
     def prepare_expression(self):
         if not self.expression:
             pass
@@ -152,7 +157,10 @@ class ObjectValue(Label):
             try:
                 return self.get_value(self, instance)
             except TypeError:
-                return self.get_value(instance)
+                try:
+                    return self.get_value(instance)
+                except:
+                    return self.default_object_value
 
         # Checks this is an expression
         tokens = EXP_TOKENS.split(attribute_name)
