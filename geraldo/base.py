@@ -1,16 +1,16 @@
-import copy, types, new
+import copy, types
 
 try: 
     set 
 except NameError: 
     from sets import Set as set     # Python 2.3 fallback 
 
-from utils import calculate_size, get_attr_value, landscape, format_date, memoize,\
+from geraldo.utils import calculate_size, get_attr_value, landscape, format_date, memoize,\
         BAND_WIDTH, BAND_HEIGHT, CROSS_COLS, CROSS_ROWS, cm, A4, black, TA_LEFT, TA_CENTER,\
         TA_RIGHT
-from exceptions import EmptyQueryset, ObjectNotFound, ManyObjectsFound,\
+from geraldo.exceptions import EmptyQueryset, ObjectNotFound, ManyObjectsFound,\
         AttributeNotFound, NotYetImplemented
-from cache import DEFAULT_CACHE_STATUS, CACHE_BACKEND, CACHE_FILE_ROOT
+from geraldo.cache import DEFAULT_CACHE_STATUS, CACHE_BACKEND, CACHE_FILE_ROOT
 
 class GeraldoObject(object):
     """Base class inherited by all report classes, including band, subreports,
