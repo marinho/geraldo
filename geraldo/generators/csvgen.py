@@ -10,7 +10,7 @@ from geraldo.exceptions import AbortEvent
 class CSVGenerator(ReportGenerator):
     """This is a generator to output data in CSV format. This format can be imported as a
     spreadsheet to Excel, OpenOffice Calc, Google Docs Spreadsheet, and others.
-    
+
     Attributes:
 
         * 'filename' - is the file path you can inform optionally to save text to.
@@ -90,6 +90,10 @@ class CSVGenerator(ReportGenerator):
         # First row with column names
         if self.first_row_with_column_names:
             cells = [(col.name or col.expression or col.attribute_name) for col in columns]
+            for i in range(len(cells)):
+                if isinstance(cell[i], unicode):
+                    cell[i] = cell[i].encode('utf-8')
+
             self.writer.writerow(cells)
 
         while self._current_object_index < len(objects):
@@ -111,7 +115,10 @@ class CSVGenerator(ReportGenerator):
                 widget.band = self.report.band_detail
                 widget.page = None
 
-                cells.append(widget.text)
+                if isinstance(widget.text, unicode):
+                    cells.append(widget.text.encode('utf-8'))
+                else:
+                    cells.append(widget.text)
 
             # Next object
             self._current_object_index += 1
