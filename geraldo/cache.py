@@ -3,7 +3,7 @@ system cache, and save time and performance."""
 
 import os
 
-from utils import memoize, get_attr_value
+from .utils import memoize, get_attr_value
 
 try:
     set
@@ -17,6 +17,9 @@ DEFAULT_CACHE_STATUS = CACHE_DISABLED
 
 CACHE_BACKEND = 'geraldo.cache.FileCacheBackend'
 CACHE_FILE_ROOT = '/tmp/'
+
+def unicode(o):
+    return o
 
 class BaseCacheBackend(object):
     """This is the base class (and abstract too) to be inherited by any cache backend

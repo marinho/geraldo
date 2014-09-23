@@ -1,6 +1,6 @@
 # TODO
 
-from base import ReportGenerator
+from .base import ReportGenerator
 
 class HTMLGenerator(ReportGenerator):
     """This is a generator to output a XHTML that uses CSS and best practices

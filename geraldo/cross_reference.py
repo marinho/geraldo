@@ -6,8 +6,8 @@ except:
     from sets import Set as set
 
 import random, decimal
-from utils import get_attr_value, memoize
-from base import ReportBand, GeraldoObject, CROSS_COLS, CROSS_ROWS
+from .utils import get_attr_value, memoize
+from .base import ReportBand, GeraldoObject, CROSS_COLS, CROSS_ROWS
 
 RANDOM_ROW_DEFAULT = RANDOM_COL_DEFAULT = ''.join([random.choice([chr(c) for c in range(48, 120)]) for i in range(100)])
 
