@@ -5,11 +5,14 @@ try:
 except NameError: 
     from sets import Set as set     # Python 2.3 fallback 
 
-from base import BAND_WIDTH, BAND_HEIGHT, Element, SubReport
-from utils import get_attr_value, SYSTEM_FIELD_CHOICES, FIELD_ACTION_VALUE, FIELD_ACTION_COUNT,\
+from .base import BAND_WIDTH, BAND_HEIGHT, Element, SubReport
+from .utils import get_attr_value, SYSTEM_FIELD_CHOICES, FIELD_ACTION_VALUE, FIELD_ACTION_COUNT,\
         FIELD_ACTION_AVG, FIELD_ACTION_MIN, FIELD_ACTION_MAX, FIELD_ACTION_SUM,\
         FIELD_ACTION_DISTINCT_COUNT, cm, black
-from exceptions import AttributeNotFound
+from .exceptions import AttributeNotFound
+
+def unicode(o):
+    return o
 
 class Widget(Element):
     """A widget is a value representation on the report"""
@@ -149,7 +152,7 @@ class ObjectValue(Label):
         # Checks this is an expression
         tokens = EXP_TOKENS.split(attribute_name)
         tokens = filter(bool, tokens) # Cleans empty parts
-        if len(tokens) > 1:
+        if len(list(tokens)) > 1:
             values = {}
             for token in tokens:
                 if not token in ('+','-','*','/','**') and not  token.isdigit():
@@ -243,7 +246,7 @@ class ObjectValue(Label):
                 except TypeError:
                     self._cached_text = unicode(self.get_text(self.instance, value))
             else:
-                self._cached_text = unicode(value)
+                self._cached_text = (value)
             
         return self.display_format % self._cached_text
 
@@ -295,7 +298,7 @@ class ObjectValue(Label):
 
         try:
             return eval(expression, global_vars)
-        except Exception, e:
+        except Exception as e:
             if not callable(self.on_expression_error):
                 raise
 

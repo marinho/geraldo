@@ -895,7 +895,7 @@ class ReportGenerator(GeraldoObject):
                 return True
                 
             # Write to file path
-            elif isinstance(self.filename, basestring):
+            elif isinstance(self.filename, str):
                 fp = file(self.filename, 'w')
                 fp.write(buffer)
                 fp.close()

@@ -1,5 +1,5 @@
 import datetime, os
-from base import ReportGenerator
+from .base import ReportGenerator
 
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.lib.styles import ParagraphStyle
@@ -143,7 +143,7 @@ class PDFGenerator(ReportGenerator):
             return
 
         # Gest canvas content to store in the cache
-        if isinstance(self.filename, basestring):
+        if isinstance(self.filename, str):
             fp = file(self.filename, 'rb')
             content = fp.read()
             fp.close()
@@ -198,7 +198,7 @@ class PDFGenerator(ReportGenerator):
 
             append_pdf(reader, output)
 
-        if isinstance(self.filename, basestring):
+        if isinstance(self.filename, str):
             fp = file(self.filename, 'wb')
         else:
             fp = self.filename

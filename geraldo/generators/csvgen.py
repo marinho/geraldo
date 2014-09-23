@@ -1,5 +1,5 @@
 import datetime, csv
-from base import ReportGenerator
+from .base import ReportGenerator
 
 from geraldo.utils import get_attr_value, calculate_size
 from geraldo.widgets import Widget, Label, SystemField, ObjectValue
@@ -50,7 +50,7 @@ class CSVGenerator(ReportGenerator):
 
         filename = filename or self.filename
 
-        if isinstance(filename, basestring):
+        if isinstance(filename, str):
             filename = file(filename, 'w')
 
         # Default writer uses comma as separator and quotes only when necessary

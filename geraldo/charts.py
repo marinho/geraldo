@@ -12,11 +12,14 @@ from reportlab.graphics.charts.spider import SpiderChart as OriginalSpiderChart
 from reportlab.graphics.charts.legends import Legend
 from reportlab.lib.colors import HexColor, getAllNamedColors
 
-from utils import cm, memoize, get_attr_value
-from cross_reference import CrossReferenceMatrix, CROSS_COLS, CROSS_ROWS
-from graphics import Graphic
+from .utils import cm, memoize, get_attr_value
+from .cross_reference import CrossReferenceMatrix, CROSS_COLS, CROSS_ROWS
+from .graphics import Graphic
 
 DEFAULT_TITLE_HEIGHT = 1*cm
+
+def unicode(o):
+    return o
 
 class BaseChart(Graphic):
     """Abstract chart class"""
@@ -193,7 +196,7 @@ class BaseChart(Graphic):
         # Calculated labels
         if callable(self.legend_labels):
             labels = [self.legend_labels(self, label, num) for num, label in enumerate(labels)]
-        elif isinstance(self.legend_labels, basestring):
+        elif isinstance(self.legend_labels, str):
             labels = [self.get_cross_data().first(self.legend_labels, col=label) for label in labels]
 
         return map(unicode, labels)
@@ -212,7 +215,7 @@ class BaseChart(Graphic):
         # Calculated labels
         if callable(self.axis_labels):
             labels = [self.axis_labels(self, label, num) for num, label in enumerate(labels)]
-        elif isinstance(self.axis_labels, basestring):
+        elif isinstance(self.axis_labels, str):
             if self.summarize_by == CROSS_ROWS:
                 labels = [self.get_cross_data().first(self.axis_labels, row=label) for label in labels]
             else:
@@ -243,7 +246,7 @@ class BaseChart(Graphic):
             data = data or self.data
 
             # Transforms data to cross-reference matrix
-            if isinstance(data, basestring):
+            if isinstance(data, str):
                 data = get_attr_value(self.instance, data)
 
             if not isinstance(data, CrossReferenceMatrix):

@@ -1,5 +1,5 @@
-from base import BAND_WIDTH, BAND_HEIGHT, Element
-from utils import cm, black
+from .base import BAND_WIDTH, BAND_HEIGHT, Element
+from .utils import cm, black
 
 class Graphic(Element):
     """Base graphic class"""
