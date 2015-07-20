@@ -1,0 +1,74 @@
+Barcodes Reference
+==================
+
+**New on 0.4**
+
+The BarCode element is just one, and it is used to show barcodes of many types
+on the report.
+
+This element is inherited from **geraldo.graphics.Graphic**
+
+BarCode
+-------
+
+.. currentmodule:: geraldo.barcodes
+.. class:: BarCode
+
+Path: **geraldo.barcodes.BarCode**
+
+This is the once class you can use to show bar codes. It supports the following
+bar code types, supplied by **ReportLab** barcodes library:
+
+* Codabar
+* Code11
+* Code128
+* EAN13
+* EAN8
+* Extended39
+* Extended93
+* FIM
+* I2of5
+* MSI
+* POSTNET
+* Standard39
+* Standard93
+* USPS_4State
+
+**Attributes**
+
+- **name** - Default: None
+- **visible** - Default: True
+
+    Set to **False** if you want to make it not visible.
+
+- **height** - Default: 1.5*cm
+- **width** - Default: 0.03*cm
+
+    This attribute **does not set the barcode width**, but the **bar width**,
+    what means it is the width of the minimum bar of a barcode. You should set
+    values like 0.02*cm or something like that (i.e. never 5*cm).
+
+- **attribute_name** - Default: None
+
+    As same as **geraldo.widgets.ObjectValue**, this attribute reffers to an
+    attribute, attribute path or method to get the barcode value.
+
+- **checksum** - Default: 0
+
+    Most of barcode types supports you set the number of digits for checksum.
+
+- **routing_attribute** - Default: None
+
+    Useful only for **USPS_4State** barcodes. Works like **attribute_name**, but
+    **routing** attribute of barcode.
+
+**Rendering attributes**
+
+They are read-only attributes you can use at render time.
+
+- **instance** - current object being rendered
+- **generator** - generator instance
+- **report** - report instance this element is in
+- **band** - band this element is in
+- **page** - current page
+

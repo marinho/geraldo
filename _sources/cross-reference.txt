@@ -1,0 +1,140 @@
+Cross-Reference Tables Reference
+================================
+
+**New on 0.4**
+
+According to [Wikipedia](http://en.wikipedia.org/wiki/Cross_reference):
+
+    A cross-reference (noun) is an instance within a document which refers to
+    related or synonymous information elsewhere, usually within the same work. To
+    cross-reference or to cross-refer (verb) is to make such connections.
+    The term "cross-reference" is often abbreviated as x-ref, xref, or, in
+    computer science, XR. Cross-referencing is usually employed to either verify
+    claims made by an author or to link to another piece of work that is of
+    related interest.
+
+**Translating to practical life**
+
+Cross-reference is when you have much data and want to cross the relation between
+two fields to get a third value.
+
+**Example**
+
+If you have an ERP system that supports many stores, selling many products, you
+can to need a report with "Product Sellings per Store", what means you have a
+bunch of data and 3 entities to base on: Products, Sellings and Stores, and you
+will have rows for Products, columns for Stores and the cells with an aggregation
+value about the Sellings that cross with a Product AND a Store, like the
+following::
+
+              | Store 1 | Store 2 | Store 3 | Average
+    --------------------------------------------------
+    Product 1 |   159   |     0   |   130   |    96
+    Product 1 |    49   |    20   |    30   |    30
+    Product 1 |   181   |   230   |    27   |   146
+    --------------------------------------------------
+      Totals  |   389   |   250   |   187   |   275
+
+As you probably noted, the first column of rows is the list of a coordinage X
+(the Products), the first row of columnss is the list of a coordinate Y (the
+Stores) and the cells are the crossed relation between Products and Stores
+(probably the count of sellings of each Product on each Store). The latest column
+is the average aggregation of cells of the same row, and the latest row is the
+average of cells of same column.
+
+CrossReferenceMatrix
+--------------------
+
+.. currentmodule:: geraldo.cross_reference
+.. class:: CrossReferenceMatrix
+
+Path: **geraldo.CrossReferenceMatrix**
+
+**The Solution**
+
+As you can realize, this is not an easy job, because you never know how many
+columns you will have, and there are many ways to collect cross-reference data.
+
+Some RDBMS's offers *out of box* ways to get a cross-reference among three
+fields in a select, but this is not only limited but is also not a definitive
+solution, because even if you have the matrix of data, you still have to
+prepare all elements on the report you are going to print.
+
+The solution on Geraldo is the class 'geraldo.cross_reference.CrossReferenceMatrix'.
+
+To instantiate this class, you must inform the objects list (not necessarily a
+matrix, because you can just give a Django queryset, or a list of dictionaries)
+and the names of the X and Y attributes (**row_attribute** and **col_attribute**).
+
+Once you create that instance, you can call many methods from it to get aggregated
+values, giving the third attribute you want to aggregate, and the filter for row
+and column directions.
+
+This instance can be used out of Geraldo's functions, like a template, e-mails,
+text files, whatever, it is not dependent on reports to work.
+
+**Methods**
+
+- **__init__(objects_list, rows_attribute, cols_attribute)**
+
+    When you make an instance of **CrossReferenceMatrix**, you must inform the objects
+    list and the attributes to cross: rows_attribute (X) and cols_attribute (Y).
+
+- **rows()**
+
+    Returns the values of row attribute in objects list, that means you get the list
+    of rows on the matrix.
+
+- **cols()**
+
+    Returns the values of column attribute on objects list, that means you get the list
+    of columns on the matrix.
+
+- **values(cell, row=RANDOM_ROW_DEFAULT, col=RANDOM_COL_DEFAULT)**
+
+    Returns the values (a list of them) crossed between a row and a column. If you just
+    let the argument 'row' or 'col' with default value, it will get all values according
+    to the filter you informed (i.e. if you just informed the 'col', you will get all
+    values for that col, in the sequence of the available rows).
+
+    This method is used by all of the others below.
+
+- **max(cell, row=RANDOM_ROW_DEFAULT, col=RANDOM_COL_DEFAULT)**
+
+    As same as method 'values', but this find the maximum value for that relation and
+    returns it.
+
+- **min(cell, row=RANDOM_ROW_DEFAULT, col=RANDOM_COL_DEFAULT)**
+
+    As same as method 'max', but returns the minimum value of them.
+
+- **sum(cell, row=RANDOM_ROW_DEFAULT, col=RANDOM_COL_DEFAULT)**
+
+    As same as method 'max', but returns the sum of found values.
+
+- **avg(cell, row=RANDOM_ROW_DEFAULT, col=RANDOM_COL_DEFAULT)**
+
+    As same as method 'max', but returns the average of found values.
+
+- **count(cell, row=RANDOM_ROW_DEFAULT, col=RANDOM_COL_DEFAULT)**
+
+    As same as method 'max', but returns the count of found values.
+
+- **distinct_count(cell, row=RANDOM_ROW_DEFAULT, col=RANDOM_COL_DEFAULT)**
+
+    As same as method 'count', but returns the count of not redundant values.
+
+- **first(cell, row=RANDOM_ROW_DEFAULT, col=RANDOM_COL_DEFAULT)**
+
+    Just returns the first value found for the relation.
+
+- **last(cell, row=RANDOM_ROW_DEFAULT, col=RANDOM_COL_DEFAULT)**
+
+    As same as method 'first', but returns the last value.
+
+- **matrix(cell, func='values')**
+
+    Returns a matrix with rows and columns with cross table values (including
+    headers).
+
+

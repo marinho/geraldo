@@ -1,0 +1,60 @@
+Inline Detail Band
+==================
+
+This report prints a detail band in "inline display", like an HTML <div> tag,
+with display: inline and float: left.
+
+It is useful to make labels::
+
+    import os
+    cur_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    from django.contrib.auth.models import User
+    
+    from reportlab.lib.pagesizes import LETTER
+    from reportlab.lib.units import cm
+    from reportlab.lib.enums import TA_CENTER, TA_RIGHT
+    
+    from geraldo import Report, ReportBand, Label, ObjectValue, SystemField,\
+        FIELD_ACTION_COUNT, BAND_WIDTH
+    
+    class LabelsReport(Report):
+        page_size = LETTER
+        margin_left = 0.48*cm
+        margin_right = 0.48*cm
+        margin_top = 1.27*cm
+        margin_bottom = 0.5*cm
+    
+        class band_detail(ReportBand):
+            height = 2.54*cm
+    
+            # This is a new attribute to force the band width
+            width = 6.67*cm
+    
+            # This attribute forces a distance at right side of the band
+            margin_right = 0.31*cm
+            
+            # With this attribute as True, the band will try to align in
+            # the same line
+            display_inline = True
+            
+            elements = [
+                ObjectValue(attribute_name='get_full_name', top=0, left=0, height=0.7*cm,
+                    get_value=lambda inst: inst.get_full_name() or inst.username,
+                    style={'fontName': 'Helvetica-Bold', 'fontSize': 13}),
+                Label(text='User ID:', top=0.6*cm, left=0),
+                ObjectValue(attribute_name='id', top=0.6*cm, left=1.5*cm),
+                Label(text='E-mail:', top=1.2*cm, left=0),
+                ObjectValue(attribute_name='email', top=1.2*cm, left=1.5*cm),
+            ]
+
+Generating PDF...
+
+    >>> report = LabelsReport(queryset=User.objects.order_by('id'))
+    >>> from geraldo.generators import PDFGenerator
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/inline-detail-report.pdf'))
+
+The Result
+
+- http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/inline-detail-report.pdf
+

@@ -1,0 +1,131 @@
+Cross-Reference Tables
+======================
+
+Cross-reference is the type of a report that shows a matrix of XYZ relations, where
+X and Y are groupping fields and Z is a field with a summary value of relation between
+X and Y.
+
+Z field could be just the first/once value of a relation, or could be an aggregation,
+like COUNT, DISTINCT COUNT, SUM, MAX, MIN, AVERAGE or a CONCATENATION, depending on
+its data type.
+
+So, just to keep the things clear:
+
+- X = **row_attribute** = is the row groupper attribute
+- Y = **col_attribute** = is the column groupper attribute
+- Z = **cell** = is the relation between X and Y. It is an aggregation or concatenation
+
+**Example**::
+
+    # We have a list of "Cities" in "States" where someones are the "Capitals" and
+    # others are not. Additionally, there are their respective "Government Types",
+    # "Populations" and "Areas"
+
+    from geraldo import Report, ObjectValue, Label, ReportBand, SystemField,\
+        BAND_WIDTH, FIELD_ACTION_COUNT, DetailBand, ManyElements, CROSS_COLS
+    from geraldo.cross_reference import CrossReferenceMatrix
+    from geraldo.utils import cm, TA_RIGHT, TA_CENTER
+
+    class MyReport(Report):
+        title = 'Population per state and their capitais/other cities'
+    
+        class band_page_header(ReportBand):
+            height = 1.7*cm
+            elements = [
+                SystemField(expression='%(report_title)s', top=0.1*cm, left=0, width=BAND_WIDTH,
+                    style={'fontName': 'Helvetica', 'fontSize': 14, 'alignment': TA_CENTER}),
+                Label(text='Capital', width=2.5*cm, top=1*cm),
+                ManyElements(
+                    element_class=Label,
+                    count=CROSS_COLS,
+                    start_left=4*cm,
+                    width=2*cm,
+                    top=1*cm,
+                    text=CROSS_COLS,
+                    ),
+                Label(text='Average', left=17*cm, width=3.5*cm, top=1*cm),
+            ]
+            borders = {'bottom': True}
+    
+        class band_detail(DetailBand):
+            height=0.6*cm
+            elements = [
+                ObjectValue(attribute_name='row', width=2.5*cm),
+                ManyElements( # Make one ObjectValue for each column and shows the max aggregation
+                    element_class=ObjectValue,
+                    count=CROSS_COLS,
+                    start_left=4*cm,
+                    width=2*cm,
+                    attribute_name=CROSS_COLS,
+                    get_value=lambda self, inst: inst.sum('population', self.attribute_name),
+                    ),
+                ObjectValue( # Calculates the average of this row
+                    attribute_name='row',
+                    left=17*cm,
+                    width=3.5*cm,
+                    get_value=lambda inst: inst.avg('population'),
+                    ),
+            ]
+    
+        class band_summary(ReportBand):
+            height = 0.5*cm
+            elements = [
+                Label(text='Totals', width=2.5*cm),
+                ManyElements(
+                    element_class=ObjectValue,
+                    count=CROSS_COLS,
+                    start_left=4*cm,
+                    width=2*cm,
+                    attribute_name=CROSS_COLS,
+                    get_value=lambda self, inst: inst.matrix.sum('population', col=self.attribute_name),
+                    ),
+                ObjectValue(
+                    attribute_name='row',
+                    left=17*cm,
+                    width=3.5*cm,
+                    get_value=lambda inst: inst.matrix.avg('population'),
+                    ),
+            ]
+            borders = {'top': True}
+    
+        class band_page_footer(ReportBand):
+            height = 0.5*cm
+            elements = [
+                Label(text='Created with Geraldo Reports', top=0.1*cm, left=0),
+                SystemField(expression='Page # %(page_number)d of %(page_count)d', top=0.1*cm,
+                    width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
+            ]
+            borders = {'top': True}
+
+    cities = [
+        {'city': 'New York City', 'state': 'NY', 'capital': False, 'population': 8363710, 'area': 468.9, 'government': 'Mayor'},
+        {'city': 'Albany', 'state': 'NY', 'capital': True, 'population': 95658, 'area': 21.8, 'government': 'Mayor'},
+        {'city': 'Austin', 'state': 'TX', 'capital': True, 'population': 757688, 'area': 296.2, 'government': 'Council-manager'},
+        {'city': 'Dallas', 'state': 'TX', 'capital': False, 'population': 1279910, 'area': 385.0, 'government': 'Council-manager'},
+        {'city': 'Houston', 'state': 'TX', 'capital': False, 'population': 2242193, 'area': 601.7, 'government': 'Mayor-council'},
+        {'city': 'San Francisco', 'state': 'CA', 'capital': False, 'population': 808976, 'area': 231.92, 'government': 'Mayor-council'},
+        {'city': 'Los Angeles', 'state': 'CA', 'capital': False, 'population': 3833995, 'area': 498.3, 'government': 'Mayor-council'},
+        {'city': 'Sacramento', 'state': 'CA', 'capital': True, 'population': 463794, 'area': 99.2, 'government': 'Mayor-council'},
+        {'city': 'Seattle', 'state': 'WA', 'capital': False, 'population': 602000, 'area': 142.5, 'government': 'Mayor-council'},
+    ]
+
+    cross = CrossReferenceMatrix(
+        objects_list=cities,
+        rows_attribute='capital',
+        cols_attribute='state',
+    )
+
+    if __name__ == '__main__':
+        # Generating the result report
+        report = MyReport(queryset=cross)
+
+        # PDF generation
+        import os
+        cur_dir = os.path.dirname(os.path.abspath(__file__))
+        from geraldo.generators import PDFGenerator
+        report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/cross-reference-table.pdf'))
+
+The Result
+
+- http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/cross-reference-table.pdf
+

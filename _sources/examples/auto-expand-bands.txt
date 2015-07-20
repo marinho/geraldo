@@ -1,0 +1,85 @@
+Auto expanding band height
+==========================
+
+This is an example of auto expanding function on bands. This means a band has the
+height flexible and adapted to its elements. It is useful to print long text
+data that can be short or long depending on the object::
+
+    import os
+    cur_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib.units import cm
+    from reportlab.lib.enums import TA_CENTER, TA_RIGHT
+    
+    from geraldo import Report, ReportBand, Label, ObjectValue, SystemField,\
+         FIELD_ACTION_COUNT, BAND_WIDTH
+    
+    class SimpleReport(Report):
+         title = 'Auto Expanded Bands Report'
+     
+         class band_begin(ReportBand):
+             height = 1*cm
+             elements = [
+                 Label(text='Look those permissions please', top=0.1*cm,
+                     left=8*cm),
+             ]
+     
+         class band_summary(ReportBand):
+             height = 0.7*cm
+             elements = [
+                 Label(text="That's all", top=0.1*cm, left=0),
+                 ObjectValue(attribute_name='city', top=0.1*cm, left=3*cm,\
+                     action=FIELD_ACTION_COUNT, display_format='%s permissions found'),
+             ]
+             borders = {'all': True}
+     
+         class band_page_header(ReportBand):
+             height = 1.3*cm
+             elements = [
+                 SystemField(expression='%(report_title)s', top=0.1*cm, left=0, width=BAND_WIDTH,
+                     style={'fontName': 'Helvetica-Bold', 'fontSize': 14, 'alignment': TA_CENTER}),
+                 Label(text="ID", top=0.8*cm, left=0),
+                 Label(text="Name", top=0.8*cm, left=3*cm),
+             ]
+             borders = {'bottom': True}
+     
+         class band_page_footer(ReportBand):
+             height = 0.5*cm
+             elements = [
+                 Label(text='Created with Geraldo Reports', top=0.1*cm, left=0),
+                 SystemField(expression='Page # %(page_number)d of %(page_count)d', top=0.1*cm,
+                     width=BAND_WIDTH, style={'alignment': TA_RIGHT}),
+             ]
+             borders = {'top': True}
+     
+         class band_detail(ReportBand):
+             height = 0.5*cm
+             auto_expand_height = True
+             margin_bottom = 0.4*cm
+             elements = [
+                 ObjectValue(attribute_name='city', top=0, left=0),
+                 ObjectValue(attribute_name='country', top=0, left=5*cm, width=5*cm),
+                 ObjectValue(attribute_name='about', top=0, left=10*cm, width=8*cm),
+             ]
+
+Objects list
+
+    >>> objects_list = [
+    ...     {'city': 'New York', 'country': 'USA', 'about': "New York is the most populous city in the United States, and the center of the New York metropolitan area, which is among the most populous urban areas in the world. A leading global city, New York exerts a powerful influence over worldwide commerce, finance, culture, fashion and entertainment. As host of the United Nations headquarters, it is also an important center for international affairs. The city is often referred to as New York City to differentiate it from the state of New York, of which it is a part."},
+    ...     {'city': 'London', 'country': 'UK', 'about': "London contains four World Heritage Sites: the Tower of London; the historic settlement of Greenwich; the Royal Botanic Gardens, Kew; and the site comprising the Palace of Westminster, Westminster Abbey and St. Margaret's Church."},
+    ...     {'city': 'Paris', 'country': 'FR', 'about': "An important settlement for more than two millennia, Paris is today one of the world's leading business and cultural centres, and its influence in politics, education, entertainment, media, fashion, science and the arts all contribute to its status as one of the world's major global cities.[8] According to 2005 estimates, the Paris urban area is Europe's biggest city economy,[9] and is fifth in the world's list of cities by GDP."},
+    ...     {'city': 'Moscow', 'country': 'RU', 'about': "A person from Moscow is called a Muscovite in English, Moskvich[8] in Russian."},
+    ... ]
+    >>> 
+    >>> report = SimpleReport(queryset=objects_list)
+
+PDF generation
+
+    >>> from geraldo.generators import PDFGenerator
+    >>> report.generate_by(PDFGenerator, filename=os.path.join(cur_dir, 'output/auto-expand-bands-report.pdf'))
+
+The Result
+
+- http://geraldo.svn.sourceforge.net/viewvc/geraldo/examples/auto-expand-bands-report.pdf
+

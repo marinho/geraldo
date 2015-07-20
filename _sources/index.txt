@@ -1,0 +1,140 @@
+Overview
+========
+
+Geraldo is a reports engine with its own API, created in Python language to
+output PDFs and other formats for complex reports.
+
+Its workflow is the following:
+
+1. You declare a Report class with your report structure and definitions;
+2. Instantiate your Report class, providing a queryset with a list of objects;
+3. Call report's 'generate_by' method, providing the generator class and
+   filename output (can be a filename or file output). It will generate a file
+   in hard disk or in memory;
+4. Do what you want with the output: you can return it in an HttpResponse, keep it
+   in a file, etc.
+
+Content
+-------
+
+.. toctree::
+    :maxdepth: 1
+
+    installing
+    tutorial-hello-world
+    tutorial-django
+    tutorial-web2py
+    basic
+    widgets
+    graphics
+    barcodes
+    cross-reference
+    generators
+    caching
+    utils
+    examples/index
+    backward-incompatible-changes
+    next-steps
+    authors
+
+Features
+--------
+
+Geraldo does most of what any reports engine does. It provides the following features:
+
+- A detail band, the report driver
+- Page header, Page footer, Report begin and Report summary bands
+- Grouping in multiple levels
+- SubReports to print childs
+- Multi-formats compatible in output (even if we only have PDF for a while)
+- Child bands, to attach helper bands to other ones
+- Support Django or any other Python framework/application
+- Graphic elements (including images and shapes)
+- System fields (to show report title, page numbers, current date/time, etc.)
+- Reports composition (you can reuse your bands for other reports)
+- Reports inheritance (you can use the same structure for a lot of reports)
+- A powerful stylizing support (colors, fonts, sizes, etc.)
+- Different page sizes
+- Flexibility to be easily customized
+- Aggregation functions
+- Hiding/showing bands and elements
+- Events system
+
+Dependencies
+------------
+
+Geraldo is fully dependent on ReportLab, not only because of its PDF generation,
+but also its units and styles library. We have tested with ReportLab version 2.1
+
+Geraldo is not Django-dependent, but it can work as a Django pluggable
+application.
+
+A very little demo of how Geraldo works
+-----------------------------------------
+
+::
+
+    from geraldo import Report, DetailBand, ObjectValue
+    from geraldo.utils import cm
+    from geraldo.generators import PDFGenerator
+    
+    names = ['Mychelle', 'Leticia', 'Tarsila', 'Marta', 'Vera', 'Leni']
+    
+    class MyReport(Report):
+        class band_detail(DetailBand):
+            height=0.7*cm
+            elements=[
+                ObjectValue(attribute_name='capitalize'),
+                ]
+    
+    report = MyReport(queryset=names)
+    report.generate_by(PDFGenerator, filename='female-names.pdf')
+
+This code above will output your report, driven by the queryset 'objects_list',
+into file 'cars_list.pdf'.
+
+Now, an example in a Django view:
+
+::
+
+    from django.http import HttpResponse
+    from geraldo import Report, DetailBand, ObjectValue
+    from geraldo.generators import PDFGenerator
+    from geraldo.utils import cm
+
+    class MyReport(Report):
+        class band_detail(DetailBand):
+            height=0.7*cm
+            elements=[
+                ObjectValue(attribute_name='username'),
+                ]
+
+    def my_view(request):
+        response = HttpResponse(mimetype='application/pdf')
+
+        objects_list = User.objects.all() # If you are using Django
+        report = MyReport(queryset=objects_list)
+
+        report.generate_by(PDFGenerator, filename=response)
+
+        return response
+
+As you can see, now returned the PDF output to HttpResponse, instead of a file.
+
+License
+-------
+
+Geraldo is under **Lesser Gnu Public License**, take a look on the following URL
+to read it:
+
+    http://www.gnu.org/copyleft/lesser.html
+
+Authors
+-------
+
+Geraldo has been created by **Marinho Brandao** a brazilian Django and Python
+enthusiast.
+
+Home page: **http://marinhobrandao.com/**
+
+E-mail: **marinho at gmail dot com**

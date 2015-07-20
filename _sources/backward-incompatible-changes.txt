@@ -1,0 +1,13 @@
+Backward Incompatible Changes
+=============================
+
+This section is to keep users informed about things that have been
+deprecated in favour of design improvements.
+
+1. Attribute 'detail_band' on class SubReport changed to 'band_detail'
+----------------------------------------------------------------------
+
+**Date:** 2009-04-16
+**Version:** 0.3.0-alpha-6
+**Reason:** class Report already had a 'band_*' signature on this kind of
+attribute

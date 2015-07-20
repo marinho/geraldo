@@ -1,0 +1,225 @@
+Graphics Reference
+==================
+
+Graphics elements are the way you have to draw images and shapes on the band
+canvas.
+
+They can be useful also to make customized borders in bands.
+
+Graphic
+-------
+
+.. currentmodule:: geraldo.graphics
+.. class:: Graphic
+
+Path: **geraldo.graphics.Graphic**
+
+This is the basic graphic class. You should use it only when inheriting to
+create your own graphic class, never use it directly.
+
+Its rect area is based on **left-width-top-height** dimensions.
+
+**Attributes**
+
+- **name** - Default: None
+- **visible** - Default: True
+
+    Set to **False** if you want to make it not visible.
+
+- **stroke** - Default: True
+- **stroke_color** - Default: reportlab.lib.colors.black
+- **stroke_width** - Default: 1
+- **fill** - Default: False
+- **fill_color** - Default: reportlab.lib.colors.black
+
+**Rendering attributes**
+
+They are read-only attributes you can use at render time.
+
+- **instance** - current object being rendered
+- **generator** - generator instance
+- **report** - report instance this element is in
+- **band** - band this element is in
+- **page** - current page
+
+**Events system**
+
+- **before_print** - Default: None
+
+    Is called by **do_before_print** method, before generate the graphic output.
+    Expect arguments **graphic** and **generator**.
+
+- **after_print** - Default: None
+
+    Is called by **do_after_print** method, after generate the graphic output.
+    Expect arguments **graphic** and **generator**.
+
+**Methods**
+
+- **set_rect(**kwargs)**
+
+    Used to generate a hard rectangle when rendering pages. Override it
+    to set your own rule if you need.
+
+Fixed
+-----
+
+.. currentmodule:: geraldo.graphics
+.. class:: Fixed
+
+Path: **geraldo.graphics.Fixed**
+
+In the same way as Graphic class, you should use this just to inherit and create
+your own graphic. This is a graphic with rect with **left-right-top-bottom**
+dimensioning.
+
+Rect
+----
+
+.. currentmodule:: geraldo.graphics
+.. class:: Rect
+
+Path: **geraldo.Rect**
+
+A rectangle with square borders on the canvas.
+
+**Example of use**
+
+    >>> Rect(left=1*cm, top=0.5*cm, width=10*cm, height=0.5*cm, fill=True, fill_color=yellow)
+
+**Attributes**
+
+- **left** - Required
+- **width** - Required
+- **top** - Required
+- **height** - Required
+
+RoundRect
+---------
+
+.. currentmodule:: geraldo.graphics
+.. class:: RoundRect
+
+Path: **geraldo.RoundRect**
+
+A rectangle with rounded borders on the canvas.
+
+**Example of use**
+
+    >>> RoundRect(left=1*cm, top=0.5*cm, width=10*cm, height=0.5*cm, stroke=True, stroke_width=3, stroke_color=blue)
+
+**Attributes**
+
+- **left** - Required
+- **width** - Required
+- **top** - Required
+- **height** - Required
+- **radius** - Required
+
+    Inform the radius number for the round corners.
+
+Line
+----
+
+.. currentmodule:: geraldo.graphics
+.. class:: Line
+
+Path: **geraldo.Line**
+
+**Example of use**
+
+    >>> Line(left=1*cm, top=0.5*cm, right=10*cm, bottom=0.5*cm)
+
+**Attributes**
+
+- **left** - Required
+- **width** - Required
+- **right** - Required
+- **bottom** - Required
+
+Circle
+------
+
+.. currentmodule:: geraldo.graphics
+.. class:: Circle
+
+Path: **geraldo.Circle**
+
+**Example of use**
+
+    >>> Circle(left_center=6*cm, top_center=3.5*cm, radius=3*cm)
+
+**Attributes**
+
+- **left_center** - Required
+- **top_center** - Required
+- **radius** - Required
+
+Arc
+---
+
+.. currentmodule:: geraldo.graphics
+.. class:: Arc
+
+Path: **geraldo.Arc**
+
+**Example of use**
+
+    >>> Arc(left=1*cm, top=0.5*cm, right=10*cm, bottom=0.5*cm, extent=50, start_angle=5)
+
+**Attributes**
+
+- **left** - Required
+- **width** - Required
+- **right** - Required
+- **bottom** - Required
+- **start_angle** - Default: 0
+- **extent** - Default: 90
+
+Ellipse
+-------
+
+.. currentmodule:: geraldo.graphics
+.. class:: Ellipse
+
+Path: **geraldo.Ellipse**
+
+**Example of use**
+
+    >>> Ellipse(left=1*cm, top=0.5*cm, right=10*cm, bottom=0.5*cm)
+
+**Attributes**
+
+- **left** - Required
+- **width** - Required
+- **right** - Required
+- **bottom** - Required
+
+Image
+-----
+
+.. currentmodule:: geraldo.graphics
+.. class:: Image
+
+Path: **geraldo.Image**
+
+**Example of use**
+
+    >>> Image(left=1*cm, top=0.5*cm, right=10*cm, bottom=0.5*cm, filename='path/to/file.jpg')
+
+**Attributes**
+
+- **left** - Required
+- **width** - Required
+- **top** - Required
+- **height** - Required
+- **filename** - Required
+
+    You can provide a filename path or a Python Imaging Library Image instance.
+    If the latter, then you have to have this library installed.
+
+- **get_image** - Default: None
+
+    You should provide a function or lambda object to this attribute when you
+    want to work with Images or Charts based on object values or logic.
+
