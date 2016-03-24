@@ -1,5 +1,6 @@
 # Geraldo setup
 
+import os.path
 # Downloads setuptools if not find it before try to import
 try:
     from setuptools import setup, find_packages
@@ -9,7 +10,11 @@ except:
     from setuptools import setup, find_packages
 
 from setuptools import setup
-from geraldo.version import get_version
+
+# Importing geraldo.version.get_version here would cause an attempt to import
+# `reportlab` (via, e.g., geraldo.graphics, imported from geraldo.__init__).
+# So we execfile the module directly instead, since it has no dependencies.
+execfile(os.path.join(os.path.dirname(__file__), "geraldo", "version.py"))
 
 setup(
     name = 'Geraldo',
