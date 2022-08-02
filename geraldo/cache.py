@@ -3,7 +3,7 @@ system cache, and save time and performance."""
 
 import os
 
-from utils import memoize, get_attr_value
+from .utils import memoize, get_attr_value
 
 try:
     set
@@ -66,7 +66,7 @@ class FileCacheBackend(BaseCacheBackend):
 
 @memoize
 def get_report_cache_attributes(report):
-    from widgets import ObjectValue
+    from .widgets import ObjectValue
 
     # Find widgets attributes
     widgets = [widget.attribute_name for widget in report.find_by_type(ObjectValue)]
@@ -124,11 +124,11 @@ def make_hash_key(report, objects_list):
 
         # Situation 2 - mostly queryset objects list
         else:
-            result.append(u'/'.join([unicode(get_attr_value(obj, attr)) for attr in report_attrs()]))
+            result.append('/'.join([str(get_attr_value(obj, attr)) for attr in report_attrs()]))
 
     # Makes the hash key
     m = hash_constructor()
-    m.update(u'\n'.join(result))
+    m.update('\n'.join(result))
 
     return '%s-%s'%(report.cache_prefix, m.hexdigest())
 

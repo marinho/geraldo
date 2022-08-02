@@ -5,11 +5,11 @@ try:
 except NameError: 
     from sets import Set as set     # Python 2.3 fallback 
 
-from base import BAND_WIDTH, BAND_HEIGHT, Element, SubReport
-from utils import get_attr_value, SYSTEM_FIELD_CHOICES, FIELD_ACTION_VALUE, FIELD_ACTION_COUNT,\
+from .base import BAND_WIDTH, BAND_HEIGHT, Element, SubReport
+from .utils import get_attr_value, SYSTEM_FIELD_CHOICES, FIELD_ACTION_VALUE, FIELD_ACTION_COUNT,\
         FIELD_ACTION_AVG, FIELD_ACTION_MIN, FIELD_ACTION_MAX, FIELD_ACTION_SUM,\
         FIELD_ACTION_DISTINCT_COUNT, cm, black
-from exceptions import AttributeNotFound
+from .exceptions import AttributeNotFound
 
 class Widget(Element):
     """A widget is a value representation on the report"""
@@ -29,7 +29,7 @@ class Widget(Element):
     def __init__(self, **kwargs):
         """This initializer is prepared to set arguments informed as attribute
         values."""
-        for k,v in kwargs.items():
+        for k,v in list(kwargs.items()):
             setattr(self, k, v)
 
     def clone(self):
@@ -148,7 +148,7 @@ class ObjectValue(Label):
 
         # Checks this is an expression
         tokens = EXP_TOKENS.split(attribute_name)
-        tokens = filter(bool, tokens) # Cleans empty parts
+        tokens = list(filter(bool, tokens)) # Cleans empty parts
         if len(tokens) > 1:
             values = {}
             for token in tokens:
@@ -172,7 +172,7 @@ class ObjectValue(Label):
         all objects in the objects list, as a list"""
 
         objects = self.generator.get_current_queryset()
-        return map(lambda obj: self.get_object_value(obj, attribute_name), objects)
+        return [self.get_object_value(obj, attribute_name) for obj in objects]
 
     def _clean_empty_values(self, values):
         def clean(val):
@@ -185,7 +185,7 @@ class ObjectValue(Label):
             
             return val
 
-        return map(clean, values)
+        return list(map(clean, values))
 
     def action_value(self, attribute_name=None):
         return self.get_object_value(attribute_name=attribute_name)
@@ -193,7 +193,7 @@ class ObjectValue(Label):
     def action_count(self, attribute_name=None):
         # Returns the total count of objects with valid values on informed attribute
         values = self.get_queryset_values(attribute_name)
-        return len(filter(lambda v: v is not None, values))
+        return len([v for v in values if v is not None])
 
     def action_avg(self, attribute_name=None):
         values = self.get_queryset_values(attribute_name)
@@ -220,12 +220,12 @@ class ObjectValue(Label):
         return sum(values)
 
     def action_distinct_count(self, attribute_name=None):
-        values = filter(lambda v: v is not None, self.get_queryset_values(attribute_name))
+        values = [v for v in self.get_queryset_values(attribute_name) if v is not None]
         return len(set(values))
 
     def action_coalesce(self, attribute_name=None, default=''):
         value = self.get_object_value(attribute_name=attribute_name)
-        return value or unicode(default)
+        return value or str(default)
 
     def _text(self):
         if not self.stores_text_in_cache or self._cached_text is None:
@@ -239,11 +239,11 @@ class ObjectValue(Label):
 
             if self.get_text:
                 try:
-                    self._cached_text = unicode(self.get_text(self, self.instance, value))
+                    self._cached_text = str(self.get_text(self, self.instance, value))
                 except TypeError:
-                    self._cached_text = unicode(self.get_text(self.instance, value))
+                    self._cached_text = str(self.get_text(self.instance, value))
             else:
-                self._cached_text = unicode(value)
+                self._cached_text = str(value)
             
         return self.display_format % self._cached_text
 
@@ -295,7 +295,7 @@ class ObjectValue(Label):
 
         try:
             return eval(expression, global_vars)
-        except Exception, e:
+        except Exception as e:
             if not callable(self.on_expression_error):
                 raise
 

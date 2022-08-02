@@ -1,6 +1,6 @@
 # TODO
 
-from base import ReportGenerator
+from .base import ReportGenerator
 
 class XMLStructGenerator(ReportGenerator):
     """This is an **exporter** to output a XML format, with the goal to be

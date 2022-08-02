@@ -1,5 +1,5 @@
 import datetime
-from base import ReportGenerator
+from .base import ReportGenerator
 
 from geraldo.base import cm, TA_CENTER, TA_RIGHT
 from geraldo.utils import get_attr_value, calculate_size
@@ -87,7 +87,7 @@ class TextGenerator(ReportGenerator):
             self.cache_enabled = bool(self.report.cache_status)
 
         # Specific attributes
-        for k,v in kwargs.items():
+        for k,v in list(kwargs.items()):
             setattr(self, k, v)
 
         self.update_escape_chars()
@@ -132,7 +132,7 @@ class TextGenerator(ReportGenerator):
 
     def calculate_size(self, size):
         """Uses the function 'calculate_size' to calculate a size"""
-        if isinstance(size, basestring):
+        if isinstance(size, str):
             if size.endswith('*cols') or size.endswith('*col'):
                 return int(size.split('*')[0]) * self.character_width
             elif size.endswith('*rows') or size.endswith('*row'):
@@ -157,11 +157,11 @@ class TextGenerator(ReportGenerator):
         d_style = self.report.default_style.copy()
 
         if band.default_style:
-            for k,v in band.default_style.items():
+            for k,v in list(band.default_style.items()):
                 d_style[k] = v
 
         if style:
-            for k,v in style.items():
+            for k,v in list(style.items()):
                 d_style[k] = v
 
         return dict(name=datetime.datetime.now().strftime('%H%m%s'), **d_style)
@@ -176,7 +176,7 @@ class TextGenerator(ReportGenerator):
     def generate_pages(self):
         """Specific method that generates the pages"""
         self._generation_datetime = datetime.datetime.now()
-        self._output = u''
+        self._output = ''
 
         # Escapes
         self.add_escapes_report_start();
@@ -185,7 +185,7 @@ class TextGenerator(ReportGenerator):
             # Escapes
             self.add_escapes_page_start(num);
 
-            _page_output = [u' ' * self.page_columns_count] * self.page_rows_count
+            _page_output = [' ' * self.page_columns_count] * self.page_rows_count
 
             self._current_page_number = num + 1
 
@@ -196,7 +196,7 @@ class TextGenerator(ReportGenerator):
                     self.generate_widget(element, _page_output, num)
 
             # Adds the page output to output string
-            self._output = ''.join([self._output, u'\n'.join(_page_output)])
+            self._output = ''.join([self._output, '\n'.join(_page_output)])
 
             # Escapes
             self.add_escapes_page_end(num);

@@ -43,20 +43,20 @@ Packages Structure
 - tests - a package with automated doc tests.
 """
 
-from version import VERSION, get_version
+from .version import VERSION, get_version
 
 __author__ = 'Marinho Brandao'
 __license__ = 'GNU Lesser General Public License (LGPL)'
 __url__ = 'http://geraldo.sourceforge.net/'
 __version__ = get_version()
 
-from base import Report, ReportBand, DetailBand, TableBand, ReportGroup,\
+from .base import Report, ReportBand, DetailBand, TableBand, ReportGroup,\
         SubReport, landscape, GeraldoObject, ManyElements, CROSS_COLS
-from widgets import Label, ObjectValue, SystemField
-from widgets import FIELD_ACTION_VALUE, FIELD_ACTION_COUNT, FIELD_ACTION_AVG,\
+from .widgets import Label, ObjectValue, SystemField
+from .widgets import FIELD_ACTION_VALUE, FIELD_ACTION_COUNT, FIELD_ACTION_AVG,\
         FIELD_ACTION_MIN, FIELD_ACTION_MAX, FIELD_ACTION_SUM,\
         FIELD_ACTION_DISTINCT_COUNT, BAND_WIDTH
-from graphics import RoundRect, Rect, Line, Circle, Arc, Ellipse, Image
-from exceptions import EmptyQueryset, ObjectNotFound, ManyObjectsFound, AbortEvent
-from cross_reference import CrossReferenceMatrix
+from .graphics import RoundRect, Rect, Line, Circle, Arc, Ellipse, Image
+from .exceptions import EmptyQueryset, ObjectNotFound, ManyObjectsFound, AbortEvent
+from .cross_reference import CrossReferenceMatrix
 
