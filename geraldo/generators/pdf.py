@@ -1,5 +1,5 @@
 import datetime, os
-from base import ReportGenerator
+from .base import ReportGenerator
 
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.lib.styles import ParagraphStyle
@@ -143,7 +143,7 @@ class PDFGenerator(ReportGenerator):
             return
 
         # Gest canvas content to store in the cache
-        if isinstance(self.filename, basestring):
+        if isinstance(self.filename, str):
             fp = file(self.filename, 'rb')
             content = fp.read()
             fp.close()
@@ -198,7 +198,7 @@ class PDFGenerator(ReportGenerator):
 
             append_pdf(reader, output)
 
-        if isinstance(self.filename, basestring):
+        if isinstance(self.filename, str):
             fp = file(self.filename, 'wb')
         else:
             fp = self.filename
@@ -300,11 +300,11 @@ class PDFGenerator(ReportGenerator):
         d_style = self.report.default_style.copy()
 
         if band.default_style:
-            for k,v in band.default_style.items():
+            for k,v in list(band.default_style.items()):
                 d_style[k] = v
 
         if style:
-            for k,v in style.items():
+            for k,v in list(style.items()):
                 d_style[k] = v
 
         return ParagraphStyle(name=datetime.datetime.now().strftime('%H%M%S'), **d_style)
@@ -507,7 +507,7 @@ class PDFGenerator(ReportGenerator):
         if not self.report.additional_fonts:
             return
 
-        for font_family_name, fonts_or_file in self.report.additional_fonts.iteritems():
+        for font_family_name, fonts_or_file in self.report.additional_fonts.items():
             # Supports font family with many styles (i.e: normal, italic, bold, bold-italic, etc.)
             if isinstance(fonts_or_file, (list, tuple, dict)):
                 for font_item in fonts_or_file:

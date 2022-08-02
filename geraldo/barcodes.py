@@ -1,7 +1,7 @@
 """Module with BarCodes functions on Geraldo."""
 
-from graphics import Graphic
-from utils import memoize, get_attr_value, cm
+from .graphics import Graphic
+from .utils import memoize, get_attr_value, cm
 
 from reportlab.graphics.barcode import getCodeNames
 from reportlab.graphics.barcode.common import Codabar, Code11, I2of5, MSI

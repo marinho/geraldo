@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "geraldo"
+version = "0.4.17.1"
+description = "Geraldo is a reports engine for Python and Django applications."
+authors = [
+    "Marinho Brandao <marinho@gmail.com>",
+    "SIG Informática Ltda <desenvolvimento@siginformatica.com.br>"
+]
+license = "LGPL-3"
+homepage = "http://geraldo.sourceforge.net/"
+packages = [
+    { include = "geraldo" }, 
+]
+include = ["AUTHOR", "CHANGES", "LICENSE", "README", "pyproject.toml", "setup.py"]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+Pillow = "^8.4.0"
+reportlab = "^3.6.8"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.build]
+generate-setup-file = false
+
+[[tool.poetry.source]]
+name = "pyrepo"
+url = "https://download.sigsolucoes.net.br/public/pyrepo/"

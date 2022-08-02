@@ -1,5 +1,5 @@
-from base import BAND_WIDTH, BAND_HEIGHT, Element
-from utils import cm, black
+from .base import BAND_WIDTH, BAND_HEIGHT, Element
+from .utils import cm, black
 
 class Graphic(Element):
     """Base graphic class"""
@@ -14,7 +14,7 @@ class Graphic(Element):
             'stroke_color','stroke_width','fill','fill_color')
 
     def __init__(self, **kwargs):
-        for k,v in kwargs.items():
+        for k,v in list(kwargs.items()):
             setattr(self, k, v)
 
     def set_rect(self, **kwargs):

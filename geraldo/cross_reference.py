@@ -6,8 +6,8 @@ except:
     from sets import Set as set
 
 import random, decimal
-from utils import get_attr_value, memoize
-from base import ReportBand, GeraldoObject, CROSS_COLS, CROSS_ROWS
+from .utils import get_attr_value, memoize
+from .base import ReportBand, GeraldoObject, CROSS_COLS, CROSS_ROWS
 
 RANDOM_ROW_DEFAULT = RANDOM_COL_DEFAULT = ''.join([random.choice([chr(c) for c in range(48, 120)]) for i in range(100)])
 
@@ -120,7 +120,7 @@ class CrossReferenceMatrix(object):
 
     @memoize
     def avg(self, cell, row=RANDOM_ROW_DEFAULT, col=RANDOM_COL_DEFAULT):
-        values = map(float, self.values(cell, row, col))
+        values = list(map(float, self.values(cell, row, col)))
 
         if row == RANDOM_ROW_DEFAULT and col == RANDOM_COL_DEFAULT:
             count = len(values)
