@@ -16,4 +16,5 @@ Geraldo.egg-info
 *$py.class
 site/fonts
 site/layout
-
+*~
+.directory

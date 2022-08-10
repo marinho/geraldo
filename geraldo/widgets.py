@@ -1,9 +1,9 @@
 import datetime, types, decimal, re
 
-try: 
-    set 
-except NameError: 
-    from sets import Set as set     # Python 2.3 fallback 
+try:
+    set
+except NameError:
+    from sets import Set as set     # Python 2.3 fallback
 
 from base import BAND_WIDTH, BAND_HEIGHT, Element, SubReport
 from utils import get_attr_value, SYSTEM_FIELD_CHOICES, FIELD_ACTION_VALUE, FIELD_ACTION_COUNT,\
@@ -17,7 +17,7 @@ class Widget(Element):
     _width = 5*cm
     style = {}
     truncate_overflow = False
-    
+
     get_value = None # A lambda function to get customized values
 
     instance = None
@@ -25,6 +25,10 @@ class Widget(Element):
     generator = None
     band = None
     borders = None
+    padding_top = 0
+    padding_bottom = 0
+    padding_left = 0
+    padding_right = 0
 
     def __init__(self, **kwargs):
         """This initializer is prepared to set arguments informed as attribute
@@ -44,12 +48,16 @@ class Widget(Element):
         new.generator = self.generator
         new.band = self.band
         new.borders = self.borders
+        new.padding_top = self.padding_top
+        new.padding_bottom = self.padding_bottom
+        new.padding_left = self.padding_left
+        new.padding_right = self.padding_right
 
         return new
 
 class Label(Widget):
     """A label is just a simple text.
-    
+
     'get_value' lambda must have 'text' argument."""
     _text = ''
 
@@ -84,15 +92,15 @@ EXP_TOKENS = re.compile('([\w\._]+|\*\*|\+|\-|\*|\/)')
 class ObjectValue(Label):
     """This shows the value from a method, field or property from objects got
     from the queryset.
-    
+
     You can inform an action to show the object value or an aggregation
     function on it.
-    
+
     You can also use 'display_format' attribute to set a friendly string
     formating, with a mask or additional text.
-    
+
     'get_value' and 'get_text' lambda attributes must have 'instance' argument.
-    
+
     Set 'stores_text_in_cache' to False if you want this widget get its value
     and text on render and generate moments."""
 
@@ -117,6 +125,11 @@ class ObjectValue(Label):
 
         if self.expression:
             self.prepare_expression()
+
+        if 'default_object_value' in kwargs:
+            self.default_object_value = kwargs['default_object_value']
+        else:
+            self.default_object_value = ''
 
     def prepare_expression(self):
         if not self.expression:
@@ -144,7 +157,10 @@ class ObjectValue(Label):
             try:
                 return self.get_value(self, instance)
             except TypeError:
-                return self.get_value(instance)
+                try:
+                    return self.get_value(instance)
+                except:
+                    return self.default_object_value
 
         # Checks this is an expression
         tokens = EXP_TOKENS.split(attribute_name)
@@ -182,7 +198,7 @@ class ObjectValue(Label):
                 return float(val)
             elif isinstance(val, float) and self.converts_float_to_decimal:
                 return decimal.Decimal(str(val))
-            
+
             return val
 
         return map(clean, values)
@@ -244,7 +260,7 @@ class ObjectValue(Label):
                     self._cached_text = unicode(self.get_text(self.instance, value))
             else:
                 self._cached_text = unicode(value)
-            
+
         return self.display_format % self._cached_text
 
     def _set_text(self, value):
@@ -261,6 +277,7 @@ class ObjectValue(Label):
         new.stores_text_in_cache = self.stores_text_in_cache
         new.expression = self.expression
         new.on_expression_error = self.on_expression_error
+        new.get_text = self.get_text
 
         return new
 
@@ -304,7 +321,7 @@ class ObjectValue(Label):
 class SystemField(Label):
     """This shows system informations, like the report title, current date/time,
     page number, pages count, etc.
-    
+
     'get_value' lambda must have 'expression' and 'fields' argument."""
     expression = '%(report_title)s'
 
@@ -327,8 +344,8 @@ class SystemField(Label):
         self.fields['current_datetime'] = datetime.datetime.now()
 
     def _text(self):
-        page_number = (self.fields.get('page_number') or self.generator._current_page_number) + self.generator.first_page_number - 1
-        page_count = self.fields.get('page_count') or self.generator.get_page_count()
+        page_number = (self.fields.get('page_number') or self.generator._current_page_number) + self.report.first_page_number - 1
+        page_count = (self.fields.get('page_count') or self.generator.get_page_count()) + self.report.first_page_number - 1
 
         fields = {
             'report_title': self.fields.get('report_title') or self.report.title,
@@ -339,7 +356,7 @@ class SystemField(Label):
             'current_datetime': self.fields.get('current_datetime') or datetime.datetime.now(),
             'report_author': self.fields.get('report_author') or self.report.author,
         }
-        
+
         if self.get_value:
             return self.get_value(self.expression, fields)
 

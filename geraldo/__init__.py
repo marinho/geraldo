@@ -59,4 +59,5 @@ from widgets import FIELD_ACTION_VALUE, FIELD_ACTION_COUNT, FIELD_ACTION_AVG,\
 from graphics import RoundRect, Rect, Line, Circle, Arc, Ellipse, Image
 from exceptions import EmptyQueryset, ObjectNotFound, ManyObjectsFound, AbortEvent
 from cross_reference import CrossReferenceMatrix
+from barcodes import BarCode
 

@@ -70,11 +70,11 @@ class PDFGenerator(ReportGenerator):
         # nor if return_canvas attribute is setted as True
         if canvas or self.return_canvas or self.return_pages:
             self.multiple_canvas = False
-            
+
         # Initializes multiple canvas controller variables
         elif self.multiple_canvas:
             self.temp_files = []
-            
+
             # Just a unique name (current time + id of this object + formatting string for counter + PDF extension)
             self.temp_file_name = datetime.datetime.now().strftime('%Y%m%d%H%M%s') + str(id(self)) + '_%s.pdf'
 
@@ -106,7 +106,7 @@ class PDFGenerator(ReportGenerator):
         # Check the cache
         if self.cached_before_generate():
             return
- 
+
         # Calls the "after render" event
         self.report.do_before_generate(generator=self)
 
@@ -202,7 +202,7 @@ class PDFGenerator(ReportGenerator):
             fp = file(self.filename, 'wb')
         else:
             fp = self.filename
-        
+
         output.write(fp)
 
         # Closes and clear objects
@@ -286,7 +286,7 @@ class PDFGenerator(ReportGenerator):
     def set_fill_color(self, color):
         """Sets the current fill on canvas. Used for fonts and shape fills"""
         self.canvas.setFillColor(color)
-    
+
     def set_stroke_color(self, color):
         """Sets the current stroke on canvas"""
         self.canvas.setStrokeColor(color)
@@ -341,21 +341,21 @@ class PDFGenerator(ReportGenerator):
                 # Widget element
                 if isinstance(element, Widget):
                     widget = element
-    
+
                     # Set element colors
                     self.set_fill_color(widget.font_color)
-    
+
                     self.generate_widget(widget, self.canvas, num)
-    
+
                 # Graphic element
                 elif isinstance(element, Graphic):
                     graphic = element
-    
+
                     # Set element colors
                     self.set_fill_color(graphic.fill_color)
                     self.set_stroke_color(graphic.stroke_color)
                     self.set_stroke_width(graphic.stroke_width)
-    
+
                     self.generate_graphic(graphic, self.canvas)
 
             self.canvas.showPage()
@@ -494,14 +494,14 @@ class PDFGenerator(ReportGenerator):
                 drawing.drawOn(canvas, graphic.left, graphic.top)
         else:
             return
- 
+
         # Calls the after_print event
         graphic.do_after_print(generator=self)
 
     def prepare_additional_fonts(self):
         """This method loads additional fonts and register them using ReportLab
         PDF metrics package.
-        
+
         Just supports TTF fonts, for a while."""
 
         if not self.report.additional_fonts:
@@ -526,4 +526,3 @@ class PDFGenerator(ReportGenerator):
             # Old style: font name and file path
             else:
                 pdfmetrics.registerFont(TTFont(font_family_name, fonts_or_file))
-
